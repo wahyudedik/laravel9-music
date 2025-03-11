@@ -179,71 +179,7 @@
         });
     </script>
 
-    <!-- Firebase -->
-    <!-- The core Firebase JS SDK is always required and must be listed first -->
-    <script src="https://www.gstatic.com/firebasejs/7.23.0/firebase.js"></script>
-    <script>
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyDK4QX0J55CAlgZJUjXyOOv1zeW9DX7Sns",
-            authDomain: "manajemen-spbe.firebaseapp.com",
-            projectId: "manajemen-spbe",
-            storageBucket: "manajemen-spbe.appspot.com",
-            messagingSenderId: "927871765892",
-            appId: "1:927871765892:web:59cf19bb05fd1ac10061d1",
-            measurementId: "G-KCQC957N29"
-          };
-
-        firebase.initializeApp(firebaseConfig);
-        const messaging = firebase.messaging();
-
-        function initFirebaseMessagingRegistration() {
-                messaging
-                .requestPermission()
-                .then(function () {
-                    console.log('token:');
-                    console.log(messaging.getToken({ vapidKey: 'BCTG0cKWPWwEFUJMnsmkrQ5PNf_j0e0ecRd6y2n0SiundvLQrD7ibPjaqdGZEKjRbE6zFwJLxbE0VxIw_iZctgs' }));
-                    return messaging.getToken({ vapidKey: 'BCTG0cKWPWwEFUJMnsmkrQ5PNf_j0e0ecRd6y2n0SiundvLQrD7ibPjaqdGZEKjRbE6zFwJLxbE0VxIw_iZctgs' })
-                })
-                .then(function(token) {
-                    console.log(token);
-
-                    $.ajaxSetup({
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        }
-                    });
-
-                    $.ajax({
-                        url: '{{ url("fcmtoken") }}',
-                        type: 'POST',
-                        data: {
-                            token: token
-                        },
-                        dataType: 'JSON',
-                        success: function (response) {
-                            console.log('Token saved successfully.');
-                        },
-                        error: function (err) {
-                            console.log('User Token Error'+ err);
-                        },
-                    });
-
-                }).catch(function (err) {
-                    console.log('User Token Error'+ err);
-                });
-         }
-
-        messaging.onMessage(function(payload) {
-            const noteTitle = payload.notification.title;
-            const noteOptions = {
-                body: payload.notification.body,
-                icon: payload.notification.icon,
-            };
-            new Notification(noteTitle, noteOptions);
-        });
-
-    </script>
+  
     <!-- / Firebase / -->
 
     <!-- OffCanvas -->
