@@ -19,14 +19,30 @@ class RedirectIfAuthenticated
      */
     public function handle(Request $request, Closure $next, ...$guards)
     {
+
         $guards = empty($guards) ? [null] : $guards;
 
         foreach ($guards as $guard) {
             if (Auth::guard($guard)->check()) {
-                return redirect(RouteServiceProvider::HOME);
+                // Check request path to determine redirect destination
+                if ($request->is('adminmusic*')) {
+                    return redirect('/adminmusic/dashboard');
+                }
+
+                return redirect('/user/dashboard'); // Default redirect
             }
         }
 
         return $next($request);
+
+        // $guards = empty($guards) ? [null] : $guards;
+
+        // foreach ($guards as $guard) {
+        //     if (Auth::guard($guard)->check()) {
+        //         return redirect(RouteServiceProvider::HOME);
+        //     }
+        // }
+
+        // return $next($request);
     }
 }
