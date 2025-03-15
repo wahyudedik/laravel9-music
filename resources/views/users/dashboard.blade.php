@@ -91,14 +91,42 @@
             @endforeach
         </ul>
 
+        <h3 class="mt-4">Lagu Populer</h3>
+        <ul>
+            @foreach ($popularSongs as $song)
+                <li>
+                    {{ $song->title }} - {{ $song->artist ? $song->artist->name : 'Unknown Artist' }} ({{ $song->stream_count }} streams)
+                </li>
+            @endforeach
+        </ul>
+
+        <h3 class="mt-4">Artis Populer</h3>
+        <ul>
+            @foreach ($popularArtists as $artist)
+                <li>
+                    {{ $artist->name }} ({{ $artist->stream_count }} streams)
+                </li>
+            @endforeach
+        </ul>
+
+        <h3 class="mt-4">Pencipta Populer</h3>
+        <ul>
+            @foreach ($popularComposers as $composer)
+                <li>
+                    {{ $composer->name }} ({{ $composer->stream_count }} streams)
+                </li>
+            @endforeach
+        </ul>
+
+        <h3 class="mt-4">Cover Creator Populer</h3>
+        <ul>
+            @foreach ($popularCoverCreators as $coverCreator)
+                <li>
+                    {{ $coverCreator->name }} ({{ $coverCreator->stream_count }} streams)
+                </li>
+            @endforeach
+        </ul>
+
         <h3 class="mt-4">🎶 Playlist Favorit</h3>
         <ul>
             <li>🎵 Lagu 1</li>
-            <li>🎵 Lagu 2</li>
-            <li>🎵 Lagu 3</li>
-        </ul>
-    </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>

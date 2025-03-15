@@ -27,6 +27,7 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             DummySongSeeder::class,
             AlbumsSeeder::class,
+            StreamSeeder::class,
         ]);
     }
 }
