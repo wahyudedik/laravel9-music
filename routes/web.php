@@ -1,10 +1,11 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Request;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\AdminController;
 
+use App\Http\Controllers\AdminController;
 use App\Http\Middleware\AdminAccessMiddleware;
 
 /*
@@ -23,6 +24,34 @@ use App\Http\Middleware\AdminAccessMiddleware;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/verifikasi-email', function () {
+    return view('auth.verifikasi-email');
+});
+Route::post('/email/verification-notification', [AuthController::class, 'resendVerification'])
+    ->name('verification.send');
+Route::get('/forgot-password', function () {
+    return view('auth.forgot-password');
+})->name('password.request');
+Route::post('/forgot-password', function () {
+    return back()->with('status', 'If your email exists in our system, you will receive a password reset link shortly.');
+})->name('password.email');
+
+Route::get('/reset-password/{token}', function (string $token) {
+    return view('auth.new-password', ['token' => $token]);
+})->name('password.reset');
+
+// Route for new-password.blade.php (Frontend only)
+Route::get('/reset-password/{token}', function (string $token, Request $request) {
+    return view('auth.new-password', ['token' => $token, 'request' => $request]);
+})->name('password.reset');
+
+// Dummy route for password update form submission (Frontend only)
+Route::post('/reset-password', function () {
+    return redirect()->route('login')->with('status', 'Your password has been reset successfully!');
+})->name('password.update');
+
+
 
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');

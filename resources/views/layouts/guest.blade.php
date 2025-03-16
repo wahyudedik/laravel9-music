@@ -18,6 +18,10 @@
             --text-color: #212529;
             --light-gray: #e9ecef;
             --dark-gray: #6c757d;
+            --success-color: #2ecc71;
+            --warning-color: #f39c12;
+            --danger-color: #e74c3c;
+            --info-color: #3498db;
         }
 
         body {
@@ -67,18 +71,42 @@
             margin-bottom: 0.5rem;
         }
 
+        .btn {
+            border-radius: 8px;
+            padding: 0.75rem 1.25rem;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
         .btn-primary {
             background-color: var(--primary-color);
             border: none;
-            border-radius: 8px;
-            padding: 0.75rem;
-            font-weight: 600;
-            transition: all 0.2s;
         }
 
         .btn-primary:hover {
             background-color: #3a56d4;
-            transform: translateY(-1px);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background-color: var(--light-gray);
+            color: var(--text-color);
+            border: none;
+        }
+
+        .btn-secondary:hover {
+            background-color: #dde2e6;
+            transform: translateY(-2px);
+        }
+
+        .btn-success {
+            background-color: var(--success-color);
+            border: none;
+        }
+
+        .btn-success:hover {
+            background-color: #27ae60;
+            transform: translateY(-2px);
         }
 
         .text-muted {
@@ -124,6 +152,22 @@
             font-size: 0.9rem;
         }
 
+        .alert {
+            border-radius: 8px;
+            border: none;
+            padding: 1rem;
+        }
+
+        .icon-circle {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+        }
+
         @media (max-width: 576px) {
             .auth-card {
                 border-radius: 0;
@@ -147,6 +191,8 @@
 
     <!-- Bootstrap JS Bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- SweetAlert2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         // Password visibility toggle
         document.addEventListener('DOMContentLoaded', function() {
@@ -161,6 +207,26 @@
                         '<i class="far fa-eye-slash"></i>';
                 });
             });
+
+            // Flash messages with SweetAlert
+            @if (session('success'))
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success',
+                    text: "{{ session('success') }}",
+                    showConfirmButton: false,
+                    timer: 3000
+                });
+            @endif
+
+            @if (session('error'))
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: "{{ session('error') }}",
+                    showConfirmButton: true
+                });
+            @endif
         });
     </script>
 </body>
