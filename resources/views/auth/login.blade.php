@@ -1,29 +1,64 @@
-@extends('layouts.app')
+@extends('layouts.guest')
 
 @section('content')
-<div class="container d-flex justify-content-center align-items-center vh-100">
-    <div class="card shadow p-4" style="width: 25rem;">
-        <h3 class="text-center mb-3">Login</h3>
+    <div class="auth-card">
+        <div class="brand-logo">MusicApp</div>
+
+        <h4 class="text-center mb-4">Login to your account</h4>
+
         <form method="POST" action="{{ route('login') }}">
             @csrf
             <div class="mb-3">
                 <label for="email" class="form-label">Email</label>
-                <input type="email" name="email" class="form-control" required autofocus>
-                @error('email') <small class="text-danger">{{ $message }}</small> @enderror
+                <input type="email" name="email" id="email" class="form-control" required autofocus>
+                @error('email')
+                    <small class="text-danger mt-1">{{ $message }}</small>
+                @enderror
             </div>
+
             <div class="mb-3">
                 <label for="password" class="form-label">Password</label>
-                <input type="password" name="password" class="form-control" required>
-                @error('password') <small class="text-danger">{{ $message }}</small> @enderror
+                <div class="position-relative">
+                    <input type="password" name="password" id="password" class="form-control" required>
+                    <span class="password-toggle"><i class="far fa-eye"></i></span>
+                </div>
+                @error('password')
+                    <small class="text-danger mt-1">{{ $message }}</small>
+                @enderror
             </div>
+
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="remember" id="remember">
+                    <label class="form-check-label text-muted" for="remember" style="font-size: 0.9rem;">
+                        Remember me
+                    </label>
+                </div>
+                <a href="#" class="link-primary" style="font-size: 0.9rem;">Forgot password?</a>
+            </div>
+
             <button type="submit" class="btn btn-primary w-100">Login</button>
         </form>
-        <div class="mt-3 text-center">
-            <div class="d-flex justify-content-between w-100">
-                <small><a class="text-decoration-none" href="{{ url('/') }}"><- Kembali</a> </small>
-                <small>Belum punya akun? <a href="{{ url('register') }}">Daftar</a></small>
-            </div>
+
+        <div class="divider">
+            <span>or</span>
+        </div>
+
+        <div class="d-grid gap-2">
+            <a href="#" class="btn btn-outline-secondary">
+                <i class="fab fa-google me-2"></i>Continue with Google
+            </a>
+        </div>
+
+        <div class="text-center mt-4">
+            <p class="mb-0 text-muted">Don't have an account? <a href="{{ url('register') }}" class="link-primary">Sign
+                    up</a></p>
+        </div>
+
+        <div class="text-center mt-3">
+            <a href="{{ url('/') }}" class="link-secondary" style="font-size: 0.9rem;">
+                <i class="fas fa-arrow-left me-1"></i> Back to home
+            </a>
         </div>
     </div>
-</div>
 @endsection
