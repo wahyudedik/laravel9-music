@@ -25,7 +25,9 @@ class DatabaseSeeder extends Seeder
             RoleSeeder::class,
             PermissionSeeder::class,
             UserSeeder::class,
+            DummySongSeeder::class,
+            AlbumsSeeder::class,
+            StreamSeeder::class,
         ]);
-
     }
 }

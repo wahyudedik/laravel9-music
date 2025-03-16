@@ -41,7 +41,6 @@
 </head>
 <body>
 
-    <!-- Navbar -->
     <nav class="navbar navbar-dark bg-dark">
         <div class="container-fluid">
             <a class="navbar-brand fw-bold" href="#">Dashboard User</a>
@@ -52,27 +51,82 @@
         </div>
     </nav>
 
-    <!-- Sidebar -->
     <div class="sidebar">
         <a href="{{ url('/') }}">🏠 Home</a>
         <a href="#">🎵 Playlist</a>
         <a href="#">👤 Profil</a>
     </div>
 
-    <!-- Main Content -->
     <div class="content">
         <h2 class="fw-bold">Selamat Datang, {{ auth()->user()->name }}!</h2>
         <p>Email: {{ auth()->user()->email }}</p>
         <p>Nomor HP: {{ auth()->user()->phone }}</p>
 
+        <form action="{{ route('user.dashboard') }}" method="GET" class="mt-4">
+            <div class="input-group">
+                <input type="text" name="q" value="{{ $query }}" class="form-control" placeholder="Cari lagu atau artis...">
+                <button type="submit" class="btn btn-primary">Cari</button>
+            </div>
+        </form>
+
+        @if (count($results) > 0)
+            <h3 class="mt-4">Hasil Pencarian</h3>
+            <ul>
+                @foreach ($results as $song)
+                    <li>
+                        {{ $song->title }} - {{ $song->artist ? $song->artist->name : 'Unknown Artist' }}
+                    </li>
+                @endforeach
+            </ul>
+        @elseif ($query)
+            <p class="mt-4">Tidak ada hasil ditemukan untuk "{{ $query }}".</p>
+        @endif
+
+        <h3 class="mt-4">Daftar Lagu</h3>
+        <ul>
+            @foreach ($allSongs as $song)
+                <li>
+                    {{ $song->title }} - {{ $song->artist ? $song->artist->name : 'Unknown Artist' }}
+                </li>
+            @endforeach
+        </ul>
+
+        <h3 class="mt-4">Lagu Populer</h3>
+        <ul>
+            @foreach ($popularSongs as $song)
+                <li>
+                    {{ $song->title }} - {{ $song->artist ? $song->artist->name : 'Unknown Artist' }} ({{ $song->stream_count }} streams)
+                </li>
+            @endforeach
+        </ul>
+
+        <h3 class="mt-4">Artis Populer</h3>
+        <ul>
+            @foreach ($popularArtists as $artist)
+                <li>
+                    {{ $artist->name }} ({{ $artist->stream_count }} streams)
+                </li>
+            @endforeach
+        </ul>
+
+        <h3 class="mt-4">Pencipta Populer</h3>
+        <ul>
+            @foreach ($popularComposers as $composer)
+                <li>
+                    {{ $composer->name }} ({{ $composer->stream_count }} streams)
+                </li>
+            @endforeach
+        </ul>
+
+        <h3 class="mt-4">Cover Creator Populer</h3>
+        <ul>
+            @foreach ($popularCoverCreators as $coverCreator)
+                <li>
+                    {{ $coverCreator->name }} ({{ $coverCreator->stream_count }} streams)
+                </li>
+            @endforeach
+        </ul>
+
         <h3 class="mt-4">🎶 Playlist Favorit</h3>
         <ul>
             <li>🎵 Lagu 1</li>
-            <li>🎵 Lagu 2</li>
-            <li>🎵 Lagu 3</li>
-        </ul>
-    </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
