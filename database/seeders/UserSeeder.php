@@ -42,7 +42,7 @@ class UserSeeder extends Seeder
                 'password' => 'superadmin123',
                 'phone' => '628575466521',
                 'city' => 'Jakarta',
-                'region' => 'DKI Jakarta',
+                'region' => 'DKI Jakarta', 
                 'country' => 'Indonesia',
                 'role' => 'Super Admin'
             ],

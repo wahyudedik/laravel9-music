@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Music Cool Poll</title>
+    <title>Music</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Google Fonts -->
@@ -29,75 +29,26 @@
             background-color: var(--secondary-color);
             color: var(--text-color);
             min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        .card {
-            border: none;
+        .auth-card {
+            background-color: white;
             border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            width: 100%;
+            max-width: 420px;
+            padding: 2rem;
         }
 
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-        }
-
-        .navbar {
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-        }
-
-        .navbar-brand {
+        .brand-logo {
             font-weight: 700;
-            color: var(--primary-color) !important;
-        }
-
-        .nav-link {
-            font-weight: 500;
-            padding: 0.5rem 1rem;
-            transition: all 0.2s;
-        }
-
-        .nav-link:hover {
-            color: var(--primary-color) !important;
-        }
-
-        .btn {
-            border-radius: 8px;
-            padding: 0.5rem 1.25rem;
-            font-weight: 500;
-            transition: all 0.2s;
-        }
-
-        .btn-primary {
-            background-color: var(--primary-color);
-            border: none;
-        }
-
-        .btn-primary:hover {
-            background-color: #3a56d4;
-            transform: translateY(-2px);
-        }
-
-        .btn-success {
-            background-color: var(--success-color);
-            border: none;
-        }
-
-        .btn-warning {
-            background-color: var(--warning-color);
-            border: none;
-        }
-
-        .btn-danger {
-            background-color: var(--danger-color);
-            border: none;
-        }
-
-        .btn-info {
-            background-color: var(--info-color);
-            border: none;
-            color: white;
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            text-align: center;
+            margin-bottom: 1.5rem;
         }
 
         .form-control {
@@ -120,27 +71,57 @@
             margin-bottom: 0.5rem;
         }
 
-        h1,
-        h2,
-        h3,
-        h4,
-        h5,
-        h6 {
-            font-weight: 600;
-        }
-
-        .text-primary {
-            color: var(--primary-color) !important;
-        }
-
-        .bg-primary {
-            background-color: var(--primary-color) !important;
-        }
-
-        .alert {
+        .btn {
             border-radius: 8px;
+            padding: 0.75rem 1.25rem;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
             border: none;
-            padding: 1rem;
+        }
+
+        .btn-primary:hover {
+            background-color: #3a56d4;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background-color: var(--light-gray);
+            color: var(--text-color);
+            border: none;
+        }
+
+        .btn-secondary:hover {
+            background-color: #dde2e6;
+            transform: translateY(-2px);
+        }
+
+        .btn-success {
+            background-color: var(--success-color);
+            border: none;
+        }
+
+        .btn-success:hover {
+            background-color: #27ae60;
+            transform: translateY(-2px);
+        }
+
+        .text-muted {
+            color: var(--dark-gray) !important;
+        }
+
+        .link-primary {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .link-primary:hover {
+            text-decoration: underline;
+            color: #3a56d4;
         }
 
         .password-toggle {
@@ -152,16 +133,54 @@
             color: var(--dark-gray);
         }
 
-        footer {
-            background-color: white;
-            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
-            padding: 1.5rem 0;
+        .divider {
+            display: flex;
+            align-items: center;
+            margin: 1.5rem 0;
         }
 
-        @media (max-width: 768px) {
-            .container {
-                padding-left: 1.25rem;
-                padding-right: 1.25rem;
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px solid var(--light-gray);
+        }
+
+        .divider span {
+            padding: 0 1rem;
+            color: var(--dark-gray);
+            font-size: 0.9rem;
+        }
+
+        .alert {
+            border-radius: 8px;
+            border: none;
+            padding: 1rem;
+        }
+
+        .icon-circle {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+        }
+
+        @media (max-width: 576px) {
+            .auth-card {
+                border-radius: 0;
+                box-shadow: none;
+                max-width: 100%;
+                height: 100vh;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+            }
+
+            body {
+                background-color: white;
             }
         }
     </style>
@@ -187,12 +206,6 @@
                     this.innerHTML = type === 'password' ? '<i class="far fa-eye"></i>' :
                         '<i class="far fa-eye-slash"></i>';
                 });
-            });
-
-            // Initialize tooltips
-            const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-            tooltipTriggerList.map(function(tooltipTriggerEl) {
-                return new bootstrap.Tooltip(tooltipTriggerEl);
             });
 
             // Flash messages with SweetAlert
