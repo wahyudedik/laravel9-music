@@ -2,8 +2,7 @@
 
 @section('content')
     <div class="auth-card">
-        <div class="brand-logo">MusicApp</div>
-
+        
         <div class="icon-circle bg-primary bg-opacity-10">
             <i class="fas fa-key text-primary fa-2x"></i>
         </div>
@@ -36,7 +35,7 @@
                     autofocus>
                 @error('email')
                     <div class="invalid-feedback">
-                        {{ $message }}
+                        {{ $message }} 
                     </div>
                 @enderror
             </div>

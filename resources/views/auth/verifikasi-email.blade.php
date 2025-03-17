@@ -2,7 +2,6 @@
 
 @section('content')
     <div class="auth-card">
-        <div class="brand-logo">MusicApp</div>
 
         <div class="icon-circle bg-primary bg-opacity-10">
             <i class="fas fa-envelope text-primary fa-2x"></i>
@@ -27,7 +26,7 @@
             </div>
         @endif
 
-        <form method="POST" action="{{ route('verification.send') }}" class="mb-3">
+        <form method="POST" action="{{ route('verification.resend') }}" class="mb-3">
             @csrf
             <div class="d-grid">
                 <button type="submit" class="btn btn-primary">
@@ -42,13 +41,10 @@
             </a>
         </div>
 
-        <div class="text-center">
-            <form method="POST" action="{{ route('logout') }}" class="d-inline">
-                @csrf
-                <button type="submit" class="btn btn-link text-muted p-0">
-                    Log Out
-                </button>
-            </form>
-        </div>
+        <form action="{{ route('logout', ['role' => 'User']) }}" method="POST">
+            @csrf
+            <button class="dropdown-item text-danger"><i class="fas fa-sign-out-alt me-2"></i>
+                Logout</button>
+        </form>
     </div>
 @endsection
