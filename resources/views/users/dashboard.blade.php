@@ -44,7 +44,11 @@
     <nav class="navbar navbar-dark bg-dark">
         <div class="container-fluid">
             <a class="navbar-brand fw-bold" href="#">Dashboard User</a>
-            <form action="{{ route('logout') }}" method="POST">
+            @php
+                $user = Auth::user();
+                $userRole = $user->getRoleNames()->first();
+            @endphp
+            <form action="{{ url('logout/'.$userRole) }}" method="POST">
                 @csrf
                 <button type="submit" class="btn btn-danger">Logout</button>
             </form>

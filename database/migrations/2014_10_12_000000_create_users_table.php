@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('name')->comment('User full name');
-            $table->string('username')->unique()->comment('nam username');
+            $table->string('username')->unique()->comment('nama username');
             $table->string('email')->unique()->comment('User email');
             $table->timestamp('email_verified_at')->nullable()->comment('tgl verifikasi email');
             $table->string('password');

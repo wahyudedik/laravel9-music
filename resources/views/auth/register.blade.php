@@ -12,19 +12,9 @@
                 @error('name') <small class="text-danger">{{ $message }}</small> @enderror
             </div>
             <div class="mb-3">
-                <label class="form-label">Username</label>
-                <input type="text" name="username" class="form-control" required>
-                @error('username') <small class="text-danger">{{ $message }}</small> @enderror
-            </div>
-            <div class="mb-3">
                 <label class="form-label">Email</label>
                 <input type="email" name="email" class="form-control" required>
                 @error('email') <small class="text-danger">{{ $message }}</small> @enderror
-            </div>
-            <div class="mb-3">
-                <label class="form-label">Phone</label>
-                <input type="text" name="phone" class="form-control" required>
-                @error('phone') <small class="text-danger">{{ $message }}</small> @enderror
             </div>
             <div class="mb-3">
                 <label class="form-label">Password</label>
