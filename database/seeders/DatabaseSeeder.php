@@ -22,11 +22,12 @@ class DatabaseSeeder extends Seeder
         // ]);
 
         $this->call([
+            SiteConfigsSeeder::class,
             RoleSeeder::class,
             PermissionSeeder::class,
             UserSeeder::class,
-            DummySongSeeder::class,
             AlbumsSeeder::class,
+            DummySongSeeder::class,
             StreamSeeder::class,
         ]);
     }

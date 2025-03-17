@@ -1,13 +1,15 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-    <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Music Cool Poll</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
+
 <body>
 
     <!-- Header -->
@@ -15,12 +17,19 @@
         <div class="container">
             <a class="navbar-brand fw-bold" href="#">Music Cool Poll</a>
             <div class="d-flex">
+
                 @auth
-                    <a href="{{ url('user/dashboard') }}" class="btn btn-outline-light me-2">User Dashboard</a>
                     @if (Auth::user()->hasRole(['Super Admin', 'Admin']))
                         <a href="{{ url('adminmusic/dashboard') }}" class="btn btn-outline-warning me-2">Admin Dashboard</a>
                     @endif
-                    <form action="{{ route('logout') }}" method="POST">
+                    @if (Auth::user()->hasRole(['User', 'Cover Creator', 'Artist', 'Composer']))
+                        <a href="{{ url('user/dashboard') }}" class="btn btn-outline-light me-2">User Dashboard</a>
+                    @endif
+                    @php
+                        $user = Auth::user();
+                        $userRole = $user->getRoleNames()->first();
+                    @endphp
+                    <form action="{{ url('logout/'.$userRole) }}" method="POST">
                         @csrf
                         <button type="submit" class="btn btn-danger">Logout</button>
                     </form>
@@ -90,5 +99,5 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-</html>
 
+</html>

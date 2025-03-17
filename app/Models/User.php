@@ -10,9 +10,10 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 use Symfony\Component\HttpFoundation\File\Stream;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Carbon\Carbon;
 
-
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
     use HasRoles, HasApiTokens, HasFactory, Notifiable, HasUuids;
 
@@ -28,8 +29,20 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'username',
         'email',
+        'reset_token',
+        'email_verified_at',
+        'email_verification_sent_at',
+        'email_verification_token',
         'password',
+        'phone',
+        'city',
+        'region',
+        'country',
+        'profile_picture',
+        'followers',
+        'following',
     ];
 
     /**
@@ -50,4 +63,10 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function recentlySentVerificationEmail()
+    {
+        return $this->email_verification_sent_at
+            && now()->diffInMinutes(Carbon::parse($this->email_verification_sent_at)) < 5;
+    }
 }
