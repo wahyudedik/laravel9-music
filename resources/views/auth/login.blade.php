@@ -4,6 +4,12 @@
 <div class="container d-flex justify-content-center align-items-center vh-100">
     <div class="card shadow p-4" style="width: 25rem;">
         <h3 class="text-center mb-3">Login</h3>
+
+        <!-- Tampilkan pesan sukses -->
+        @if (session('status'))
+            <div class="alert alert-success">{{ session('status') }}</div>
+        @endif
+
         <form method="POST" action="{{ route('login') }}">
             @csrf
             <div class="mb-3">
@@ -12,7 +18,10 @@
                 @error('email') <small class="text-danger">{{ $message }}</small> @enderror
             </div>
             <div class="mb-3">
-                <label for="password" class="form-label">Password</label>
+                <div class="d-flex justify-content-between">
+                    <label for="password" class="form-label">Password</label>
+                    <a class="text-decoration-none" href="{{url('password/reset')}}">Lupa Password</a>
+                </div>
                 <input type="password" name="password" class="form-control" required>
                 @error('password') <small class="text-danger">{{ $message }}</small> @enderror
             </div>
