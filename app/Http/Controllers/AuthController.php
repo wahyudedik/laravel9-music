@@ -10,13 +10,10 @@ use Illuminate\Support\Facades\URL;
 use Illuminate\Auth\Events\Verified;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Mail;
-
 use App\Mail\ResetPasswordMail;
 use App\Mail\VerifyEmailMail;
-
-use Illuminate\Support\Str;
+use Illuminate\Support\Str; 
 use Carbon\Carbon;
-
 use App\Models\User;
 
 
@@ -145,7 +142,7 @@ class AuthController extends Controller
     // Menampilkan halaman verifikasi email
     public function showVerifyEmail()
     {
-        return view('auth.verify-email');
+        return view('auth.verifikasi-email');
     }
 
     // Memverifikasi email setelah diklik dari email
@@ -211,7 +208,6 @@ class AuthController extends Controller
 
             return back()
                 ->with('status', 'Email verifikasi telah dikirim!');
-
         } catch (\Exception $e) {
             return back()->with('error', 'Gagal mengirim email: ' . $e->getMessage());
         }
@@ -224,7 +220,7 @@ class AuthController extends Controller
      */
     public function showEmailResetForm()
     {
-        return view('auth.password.reset');
+        return view('auth.forgot-password');
     }
 
     /**
@@ -252,7 +248,7 @@ class AuthController extends Controller
             Mail::to($user->email)->send(new ResetPasswordMail($token, $request->email));
 
             return back()->with('status', 'Email reset password telah dikirim!');
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return back()->with('error', 'Gagal mengirim email: ' . $e->getMessage());
         }
     }
@@ -262,7 +258,7 @@ class AuthController extends Controller
      */
     public function showPasswordUpdateForm($token, Request $request)
     {
-        return view('auth.password.update', ['token' => $token, 'email' => $request->query('email')]);
+        return view('auth.new-password', ['token' => $token, 'email' => $request->query('email')]);
     }
 
     /**

@@ -26,6 +26,6 @@ class AdminController extends Controller
 
     public function dashboard()
     {
-        return view('adminmusic.dashboard');
+        return view('admin.dashboard');
     }
 }

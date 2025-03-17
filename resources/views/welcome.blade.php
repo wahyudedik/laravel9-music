@@ -1,103 +1,194 @@
-<!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-<!DOCTYPE html>
-<html lang="id">
+@extends('layouts.landing-page')
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Music Cool Poll</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-
-<body>
-
-    <!-- Header -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+@section('content')
+    <!-- Hero Section -->
+    <div class="hero-section">
         <div class="container">
-            <a class="navbar-brand fw-bold" href="#">Music Cool Poll</a>
-            <div class="d-flex">
-
-                @auth
-                    @if (Auth::user()->hasRole(['Super Admin', 'Admin']))
-                        <a href="{{ url('adminmusic/dashboard') }}" class="btn btn-outline-warning me-2">Admin Dashboard</a>
-                    @endif
-                    @if (Auth::user()->hasRole(['User', 'Cover Creator', 'Artist', 'Composer']))
-                        <a href="{{ url('user/dashboard') }}" class="btn btn-outline-light me-2">User Dashboard</a>
-                    @endif
-                    @php
-                        $user = Auth::user();
-                        $userRole = $user->getRoleNames()->first();
-                    @endphp
-                    <form action="{{ url('logout/'.$userRole) }}" method="POST">
-                        @csrf
-                        <button type="submit" class="btn btn-danger">Logout</button>
-                    </form>
-                @else
-                    <a href="{{ route('login') }}" class="btn btn-outline-light me-2">Login</a>
-                    <a href="{{ route('register') }}" class="btn btn-primary">Register</a>
-                @endauth
-            </div>
-        </div>
-    </nav>
-
-    <!-- Jumbotron -->
-    <div class="bg-primary text-white text-center py-5">
-        <div class="container">
-            <h1 class="fw-bold">Streaming Musik Tanpa Batas</h1>
-            <p class="lead">Temukan musik favoritmu, dengarkan kapan saja, di mana saja.</p>
-            <a href="{{ route('register') }}" class="btn btn-light btn-lg">Mulai Sekarang</a>
+            <h1 class="hero-title">Musik untuk semua</h1>
+            <p class="hero-subtitle">Jutaan lagu. Tanpa kartu kredit.</p>
+            <a href="{{ route('register') }}" class="btn btn-light btn-lg px-5 py-3 fw-bold">DAPATKAN PLAYLIST MUSIC
+                GRATIS</a>
         </div>
     </div>
 
-    <!-- Card Section -->
+    <!-- Trending Songs Section -->
     <div class="container my-5">
+        <h2 class="section-title">Lagu Trending</h2>
         <div class="row">
-            <div class="col-md-3">
-                <div class="card shadow-sm">
-                    <img src="https://picsum.photos/300/200?random=1" class="card-img-top" alt="Music">
-                    <div class="card-body">
-                        <h5 class="card-title">Musik Terbaru</h5>
-                        <p class="card-text">Nikmati koleksi musik terbaru dari berbagai genre.</p>
+            @for ($i = 1; $i <= 8; $i++)
+                <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                    <div class="card shadow-sm h-100">
+                        <img src="https://picsum.photos/300/300?random={{ $i }}" class="card-img-top"
+                            alt="Music Cover">
+                        <div class="card-body">
+                            <h5 class="card-title">Judul Lagu Trending #{{ $i }}</h5>
+                            <p class="card-text">Artis Populer</p>
+                            <div class="play-button">
+                                <i class="fas fa-play"></i>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card shadow-sm">
-                    <img src="https://picsum.photos/300/200?random=2" class="card-img-top" alt="Playlist">
-                    <div class="card-body">
-                        <h5 class="card-title">Buat Playlist</h5>
-                        <p class="card-text">Kumpulkan lagu favoritmu dalam satu daftar putar.</p>
+            @endfor
+        </div>
+    </div>
+
+    <!-- Made For You Section -->
+    <div class="container my-5">
+        <h2 class="section-title">Dibuat untuk Kamu</h2>
+        <div class="row">
+            @for ($i = 9; $i <= 12; $i++)
+                <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                    <div class="card shadow-sm h-100">
+                        <img src="https://picsum.photos/300/300?random={{ $i }}" class="card-img-top"
+                            alt="Playlist Cover">
+                        <div class="card-body">
+                            <h5 class="card-title">Daily Mix {{ $i - 8 }}</h5>
+                            <p class="card-text">Dibuat khusus untukmu berdasarkan preferensimu</p>
+                            <div class="play-button">
+                                <i class="fas fa-play"></i>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card shadow-sm">
-                    <img src="https://picsum.photos/300/200?random=3" class="card-img-top" alt="Artist">
-                    <div class="card-body">
-                        <h5 class="card-title">Dukung Artist</h5>
-                        <p class="card-text">Temukan musisi baru dan dukung karya mereka.</p>
+            @endfor
+        </div>
+    </div>
+
+    <!-- Recently Played Section -->
+    <div class="container my-5">
+        <h2 class="section-title">Baru Saja Diputar</h2>
+        <div class="row">
+            @for ($i = 13; $i <= 16; $i++)
+                <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                    <div class="card shadow-sm h-100">
+                        <img src="https://picsum.photos/300/300?random={{ $i }}" class="card-img-top"
+                            alt="Album Cover">
+                        <div class="card-body">
+                            <h5 class="card-title">Album Populer #{{ $i - 12 }}</h5>
+                            <p class="card-text">Artis Terkenal</p>
+                            <div class="play-button">
+                                <i class="fas fa-play"></i>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card shadow-sm">
-                    <img src="https://picsum.photos/300/200?random=4" class="card-img-top" alt="Cover Creator">
-                    <div class="card-body">
-                        <h5 class="card-title">Cover Creator</h5>
-                        <p class="card-text">Dengarkan berbagai cover lagu dari kreator berbakat.</p>
-                    </div>
+            @endfor
+        </div>
+    </div>
+
+    <!-- Categories Section -->
+    <div class="container my-5">
+        <h2 class="section-title">Jelajahi Kategori</h2>
+        <div class="row">
+            <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                <div class="category-card" style="background-color: #e51e2f;">
+                    <h5>Pop</h5>
                 </div>
             </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                <div class="category-card" style="background-color: #8c1932;">
+                    <h5>Rock</h5>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                <div class="category-card" style="background-color: #b92b27;">
+                    <h5>Hip Hop</h5>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                <div class="category-card" style="background-color: #ff4b4b;">
+                    <h5>Indie</h5>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                <div class="category-card" style="background-color: #c41a29;">
+                    <h5>Jazz</h5>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                <div class="category-card" style="background-color: #ff3a4b;">
+                    <h5>Electronic</h5>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                <div class="category-card" style="background-color: #a71324;">
+                    <h5>R&B</h5>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                <div class="category-card" style="background-color: #d82738;">
+                    <h5>Classical</h5>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- New Releases Section -->
+    <div class="container my-5">
+        <h2 class="section-title">Rilis Terbaru</h2>
+        <div class="row">
+            @for ($i = 17; $i <= 20; $i++)
+                <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                    <div class="card shadow-sm h-100">
+                        <img src="https://picsum.photos/300/300?random={{ $i }}" class="card-img-top"
+                            alt="New Release Cover">
+                        <div class="card-body">
+                            <h5 class="card-title">Album Baru #{{ $i - 16 }}</h5>
+                            <p class="card-text">Artis Baru</p>
+                            <div class="play-button">
+                                <i class="fas fa-play"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @endfor
         </div>
     </div>
 
     <!-- Footer -->
-    <footer class="bg-dark text-white text-center py-3">
-        <p class="mb-0">&copy; 2025 Music Cool Poll. All rights reserved.</p>
+    <footer>
+        <div class="container">
+            <div class="footer-links">
+                <div class="row">
+                    <div class="col-md-3 col-sm-6">
+                        <h5>PERUSAHAAN</h5>
+                        <ul>
+                            <li><a href="#">Tentang</a></li>
+                            <li><a href="#">Pekerjaan</a></li>
+                            <li><a href="#">For the Record</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-md-3 col-sm-6">
+                        <h5>KOMUNITAS</h5>
+                        <ul>
+                            <li><a href="#">Untuk Artis</a></li>
+                            <li><a href="#">Pengembang</a></li>
+                            <li><a href="#">Periklanan</a></li>
+                            <li><a href="#">Investor</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-md-3 col-sm-6">
+                        <h5>TAUTAN BERGUNA</h5>
+                        <ul>
+                            <li><a href="#">Dukungan</a></li>
+                            <li><a href="#">Aplikasi Seluler</a></li>
+                            <li><a href="#">Player Web</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-md-3 col-sm-6">
+                        <h5>SOSIAL MEDIA</h5>
+                        <div class="social-links">
+                            <a href="#"><i class="fab fa-instagram"></i></a>
+                            <a href="#"><i class="fab fa-twitter"></i></a>
+                            <a href="#"><i class="fab fa-facebook"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="copyright text-center">
+                <p>&copy; 2025 Playlist Music Indonesia</p>
+            </div>
+        </div>
     </footer>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-
-</html>
+@endsection
