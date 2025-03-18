@@ -21,7 +21,7 @@ class AdminController extends Controller
             abort(403, 'Unauthorized Access');
         }
 
-        return view('adminmusic.login');
+        return view('admin.login');
     }
 
     public function dashboard()

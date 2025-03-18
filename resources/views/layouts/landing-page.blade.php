@@ -424,7 +424,7 @@
                 <div class="ms-auto d-flex align-items-center">
                     @auth
                         @if (Auth::user()->hasRole(['Super Admin', 'Admin']))
-                            <a href="{{ url('adminmusic/dashboard') }}" class="btn btn-outline-light me-2">Admin
+                            <a href="{{ url('admin/dashboard') }}" class="btn btn-outline-light me-2">Admin
                                 Dashboard</a>
                         @endif
                         @if (Auth::user()->hasRole(['User', 'Cover Creator', 'Artist', 'Composer']))

@@ -51,7 +51,11 @@
                                 <hr class="dropdown-divider">
                             </li>
                             <li>
-                                <form action="{{ route('admin.logout') }}" method="POST">
+                                @php
+                                    $user = Auth::user();
+                                    $userRole = $user->getRoleNames()->first();
+                                @endphp
+                                <form action="{{ route('logout', ['role' => $userRole]) }}" method="POST">
                                     @csrf
                                     <button class="dropdown-item text-danger"><i class="fas fa-sign-out-alt me-2"></i>
                                         Logout</button>

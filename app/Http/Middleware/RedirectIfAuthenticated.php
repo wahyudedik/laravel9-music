@@ -25,8 +25,8 @@ class RedirectIfAuthenticated
         foreach ($guards as $guard) {
             if (Auth::guard($guard)->check()) {
                 // Check request path to determine redirect destination
-                if ($request->is('adminmusic*')) {
-                    return redirect('/adminmusic/dashboard');
+                if ($request->is('admin*')) {
+                    return redirect('/admin/dashboard');
                 }
 
                 return redirect('/user/dashboard'); // Default redirect
