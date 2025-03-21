@@ -58,7 +58,7 @@ Route::middleware(['auth', 'role:Super Admin,Admin'])->group(function () {
     // Fitur global search di menu SuperAdmin
     Route::get('/admin/search', [AdminController::class, 'search'])->name('admin.search');
 
-    // CRUD Claims / Ticketing
+    // CRUD Claims / Ticketing System
     Route::get('/admin/claims/create', [AdminController::class, 'createClaim'])->name('admin.claims.create');
     Route::post('/admin/claims', [AdminController::class, 'storeClaim'])->name('admin.claims.store');
     Route::get('/admin/claims/{id}/edit', [AdminController::class, 'editClaim'])->name('admin.claims.edit');

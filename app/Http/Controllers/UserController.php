@@ -51,7 +51,7 @@ class UserController extends Controller
         // Pencipta Populer (berdasarkan jumlah stream lagu mereka)
         $popularComposers = User::select('users.*', DB::raw('COUNT(streams.song_id) as stream_count'))
             ->leftJoin('songs', 'users.id', '=', 'songs.composer_id')
-            ->leftJoin('streams', 'songs.id', '=', 'streams.song_id')
+            ->leftJoin('streams', 'songs.id', operator: '=', 'streams.song_id')
             ->whereNotNull('songs.composer_id')
             ->groupBy('users.id')
             ->orderByDesc('stream_count')
