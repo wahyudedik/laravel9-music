@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\ResetPasswordMail;
 use App\Mail\VerifyEmailMail;
-use Illuminate\Support\Str; 
+use Illuminate\Support\Str;
 use Carbon\Carbon;
 use App\Models\User;
 
@@ -40,8 +40,17 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials)) {
 
+            Auth::user()->update(['last_login' => now()]);
+
             session(['email' => Auth::user()->email]);
+
             $request->session()->regenerate();
+
+            $role = Auth::user()->getRoleNames()->first();
+
+            if($role=='Admin' || $role=='Super Admin' ){
+                return redirect('admin/dashboard')->with('success', 'Login berhasil!');
+            }
             return redirect('user/dashboard')->with('success', 'Login berhasil!');
         }
 
@@ -60,7 +69,7 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-            return redirect('/adminmusic/dashboard')->with('success', 'Login berhasil!');
+            return redirect('/admin/dashboard')->with('success', 'Login berhasil!');
         }
 
         return back()->withErrors(['email' => 'Email atau password salah'])->withInput();
@@ -307,20 +316,9 @@ class AuthController extends Controller
 
     public function logout($role, Request $request)
     {
-
-        $currentUrl = $request->url();
-
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-
-        // Redirect berdasarkan role
-        if ($role === 'Admin' || $role === 'Super Admin') {
-            return redirect('/adminmusic')->with('success', 'Berhasil logout.');
-        } elseif ($role === 'User' || $role === 'Cover Creator' || $role === 'Artist' || $role === 'Composer') {
-            return redirect('/login')->with('success', 'Berhasil logout.');
-        } else {
-            return redirect('/')->with('success', 'Berhasil logout.');
-        }
+        return redirect('/')->with('success', 'Berhasil logout.');
     }
 }
