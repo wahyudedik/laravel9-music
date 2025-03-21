@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Validator;
 use App\Models\User;
 use Illuminate\Support\Str;
 
+use App\Services\Admin\DashboardServices;
+
 class AdminController extends Controller
 {
 
@@ -24,8 +26,27 @@ class AdminController extends Controller
         return view('admin.login');
     }
 
-    public function dashboard()
+    public function dashboard(DashboardServices $DashboardServices)
     {
-        return view('admin.dashboard');
+        $totalUsers = number_format($DashboardServices->getTotalUsers());
+        $userGrowthPercentage = $DashboardServices->getUserGrowthPercentage();
+        $totalSongs = number_format($DashboardServices->getTotalSongs());
+        $songGrowthPercentage = $DashboardServices->getSongGrowthPercentage();
+        $totalRevenue = number_format($DashboardServices->getTotalRevenue(), 2);
+        $revenueGrowthPercentage = $DashboardServices->getRevenueGrowthPercentage();
+        $totalStreams = number_format($DashboardServices->getTotalStreams());
+        $streamGrowthPercentage = $DashboardServices->getStreamGrowthPercentage();
+
+        return view('admin.dashboard', compact(
+            'totalUsers',
+            'userGrowthPercentage',
+            'totalSongs',
+            'songGrowthPercentage',
+            'totalRevenue',
+            'revenueGrowthPercentage',
+            'totalStreams',
+            'streamGrowthPercentage'
+        ));
+
     }
 }
