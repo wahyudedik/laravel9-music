@@ -1,456 +1,720 @@
 @extends('layouts.app')
 
 @section('content')
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-white">
-        <div class="container">
-            <a class="navbar-brand" href="#">MusicApp</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+    <header class="navbar navbar-expand-md navbar-light d-print-none sticky-top">
+        <div class="container-xl">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-menu">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url('/') }}">
-                            <i class="fas fa-home me-1"></i> Home
+            <h1 class="navbar-brand navbar-brand-autodark d-none-navbar-horizontal pe-0 pe-md-3">
+                <a href="{{ url('/') }}" class="d-flex align-items-center">
+                    <i class="ti ti-music me-2 text-primary"></i>
+                    <span>MusicApp</span>
+                </a>
+            </h1>
+            <div class="navbar-nav flex-row order-md-last">
+                <div class="nav-item dropdown">
+                    <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown"
+                        aria-label="Open user menu">
+                        <span class="avatar avatar-sm"
+                            style="background-image: url(https://ui-avatars.com/api/?name={{ auth()->user()->name }}&background=e53935&color=fff)"></span>
+                        <div class="d-none d-xl-block ps-2">
+                            <div>{{ auth()->user()->name }}</div>
+                            <div class="mt-1 small text-muted">{{ ucfirst(auth()->user()->role) }}</div>
+                        </div>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                        <a href="#" class="dropdown-item">
+                            <i class="ti ti-user me-2"></i>Profile
                         </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" href="#">
-                            <i class="fas fa-tachometer-alt me-1"></i> Dashboard
+                        <a href="#" class="dropdown-item">
+                            <i class="ti ti-settings me-2"></i>Settings
                         </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <i class="fas fa-music me-1"></i> Playlist
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <i class="fas fa-user me-1"></i> Profile
-                        </a>
-                    </li><li class="nav-item">
-                 <a class="nav-link" href="{{ route('verification.form') }}">
-                     <i class="fas fa-music me-1"></i> Pengajuan Verifikasi
-                   </a>
-                 </li>
-                    
-
-                </ul>
-                <div class="d-flex align-items-center">
-                    <div class="dropdown">
-                        <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button"
-                            data-bs-toggle="dropdown" aria-expanded="false">
-                            <img src="https://ui-avatars.com/api/?name={{ auth()->user()->name }}&background=4361ee&color=fff"
-                                class="rounded-circle me-2" width="32" height="32" alt="Profile">
-                            <span>{{ auth()->user()->name }}</span>
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-end shadow-sm">
-                            <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i> Profile</a></li>
-                            <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i> Settings</a></li>
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
-                            <li>
-                                @php
-                                    $user = Auth::user();
-                                    $userRole = $user->getRoleNames()->first();
-                                @endphp
-                                <form action="{{ route('logout', ['role' => $userRole]) }}" method="POST">
-                                    @csrf
-                                    <button class="dropdown-item text-danger"><i class="fas fa-sign-out-alt me-2"></i>
-                                        Logout</button>
-                                </form>
-                            </li>
-                        </ul>
+                        <div class="dropdown-divider"></div>
+                        <form action="{{ route('logout', ['role' => 'User']) }}" method="POST">
+                            @csrf
+                            <button class="dropdown-item text-danger">
+                                <i class="ti ti-logout me-2"></i>Logout
+                            </button>
+                        </form>
                     </div>
                 </div>
             </div>
-        </div>
-    </nav>
-
-    <!-- Content -->
-    <div class="container py-4">
-        <!-- Header -->
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <div>
-                <h2 class="mb-1">Your Dashboard</h2>
-                <p class="text-muted mb-0">Welcome back, {{ auth()->user()->name }}</p>
+            <div class="collapse navbar-collapse" id="navbar-menu">
+                <div class="d-flex flex-column flex-md-row flex-fill align-items-stretch align-items-md-center">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url('/') }}">
+                                <i class="ti ti-home me-1"></i>Home
+                            </a>
+                        </li>
+                        <li class="nav-item active">
+                            <a class="nav-link" href="#">
+                                <i class="ti ti-dashboard me-1"></i>Dashboard
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                <i class="ti ti-playlist me-1"></i>Playlist
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                <i class="ti ti-user me-1"></i>Profile
+                            </a>
+                        </li>
+                    </ul>
+                </div>
             </div>
-            <div>
-                <button class="btn btn-primary">
-                    <i class="fas fa-plus me-2"></i> Create Playlist
-                </button>
-            </div>
         </div>
+    </header>
 
-        <!-- User Info Card -->
-        <div class="row mb-4">
-            <div class="col-md-4">
-                <div class="card h-100">
-                    <div class="card-body">
-                        <div class="text-center mb-3">
-                            <img src="https://ui-avatars.com/api/?name={{ auth()->user()->name }}&background=4361ee&color=fff&size=100"
-                                class="rounded-circle mb-3" alt="Profile">
-                            <h5 class="card-title">{{ auth()->user()->name }}</h5>
-                            <p class="card-text text-muted">{{ auth()->user()->email }}</p>
-                        </div>
-                        <div class="d-flex justify-content-between mb-2">
-                            <span class="text-muted">Phone:</span>
-                            <span>{{ auth()->user()->phone }}</span>
-                        </div>
-                        <div class="d-flex justify-content-between mb-2">
-                            <span class="text-muted">Member since:</span>
-                            <span>{{ auth()->user()->created_at->format('M d, Y') }}</span>
-                        </div>
-                        <div class="d-grid gap-2 mt-4">
-                            <a href="#" class="btn btn-outline-primary">
-                                <i class="fas fa-user-edit me-2"></i> Edit Profile
+    <div class="page-wrapper">
+        <div class="page-header d-print-none">
+            <div class="container-xl">
+                <div class="row g-2 align-items-center">
+                    <div class="col">
+                        <div class="page-pretitle">Overview</div>
+                        <h2 class="page-title">Dashboard</h2>
+                    </div>
+                    <div class="col-auto ms-auto">
+                        <div class="btn-list">
+                            <a href="#" class="btn btn-primary d-none d-sm-inline-block">
+                                <i class="ti ti-plus me-2"></i>Create Playlist
+                            </a>
+                            <a href="#" class="btn btn-primary d-sm-none btn-icon">
+                                <i class="ti ti-plus"></i>
                             </a>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
 
-            <div class="col-md-8">
-                <div class="card h-100">
-                    <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">
-                        <h5 class="mb-0">Search Music</h5>
-                    </div>
-                    <div class="card-body">
-                        <form action="{{ route('user.dashboard') }}" method="GET">
-                            <div class="input-group mb-4">
-                                <input type="text" name="q" value="{{ $query }}" class="form-control"
-                                    placeholder="Search for songs, artists, or albums...">
-                                <button type="submit" class="btn btn-primary">
-                                    <i class="fas fa-search me-1"></i> Search
-                                </button>
+        <div class="page-body">
+            <div class="container-xl">
+                <!-- User Info & Search -->
+                <div class="row mb-4">
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-body p-4 text-center">
+                                <span class="avatar avatar-xl mb-3 avatar-rounded"
+                                    style="background-image: url(https://ui-avatars.com/api/?name={{ auth()->user()->name }}&background=e53935&color=fff&size=100)"></span>
+                                <h3 class="m-0 mb-1">{{ auth()->user()->name }}</h3>
+                                <div class="text-muted">{{ auth()->user()->email }}</div>
+                                <div class="mt-3">
+                                    <span class="badge bg-purple-lt">
+                                        <i class="ti ti-phone me-1"></i> {{ auth()->user()->phone ?? 'Not set' }}
+                                    </span>
+                                    <span class="badge bg-blue-lt">
+                                        <i class="ti ti-calendar me-1"></i> Joined
+                                        {{ auth()->user()->created_at->format('M d, Y') }}
+                                    </span>
+                                </div>
+                                <div class="mt-4">
+                                    <a href="#" class="btn btn-outline-primary w-100">
+                                        <i class="ti ti-edit me-2"></i> Edit Profile
+                                    </a>
+                                </div>
                             </div>
-                        </form>
+                        </div>
+                    </div>
 
-                        @if (count($results) > 0)
-                            <h6 class="mb-3">Search Results for "{{ $query }}"</h6>
-                            <div class="list-group mb-4">
-                                @foreach ($results as $song)
-                                    <div class="list-group-item list-group-item-action d-flex align-items-center">
-                                        <img src="https://picsum.photos/40/40?random={{ $loop->iteration }}"
-                                            class="rounded me-3" alt="Song">
-                                        <div>
-                                            <h6 class="mb-0">{{ $song->title }}</h6>
-                                            <small
-                                                class="text-muted">{{ $song->artist ? $song->artist->name : 'Unknown Artist' }}</small>
+                    <div class="col-md-8">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">Search Music</h3>
+                            </div>
+                            <div class="card-body">
+                                <form action="{{ route('user.dashboard') }}" method="GET">
+                                    <div class="input-icon mb-3">
+                                        <input type="text" name="q" value="{{ $query ?? '' }}"
+                                            class="form-control" placeholder="Search for songs, artists, or albums...">
+                                        <span class="input-icon-addon">
+                                            <i class="ti ti-search"></i>
+                                        </span>
+                                    </div>
+                                    <div class="d-flex justify-content-end">
+                                        <button type="submit" class="btn btn-primary">
+                                            <i class="ti ti-search me-1"></i> Search
+                                        </button>
+                                    </div>
+                                </form>
+
+                                @if (isset($results) && count($results) > 0)
+                                    <h4 class="mt-4 mb-3">Search Results for "{{ $query }}"</h4>
+                                    <div class="list-group">
+                                        @foreach ($results as $song)
+                                            <div class="list-group-item">
+                                                <div class="row align-items-center">
+                                                    <div class="col-auto">
+                                                        <span class="avatar"
+                                                            style="background-image: url(https://picsum.photos/40/40?random={{ $loop->iteration }})"></span>
+                                                    </div>
+                                                    <div class="col">
+                                                        <div class="d-flex justify-content-between">
+                                                            <div>
+                                                                <div class="font-weight-medium">{{ $song->title }}</div>
+                                                                <div class="text-muted">
+                                                                    {{ $song->artist ? $song->artist->name : 'Unknown Artist' }}
+                                                                </div>
+                                                            </div>
+                                                            <div class="btn-list">
+                                                                <button class="btn btn-icon btn-sm btn-primary"
+                                                                    data-bs-toggle="tooltip" title="Play">
+                                                                    <i class="ti ti-player-play"></i>
+                                                                </button>
+                                                                <button class="btn btn-icon btn-sm btn-outline-secondary"
+                                                                    data-bs-toggle="tooltip" title="Add to playlist">
+                                                                    <i class="ti ti-plus"></i>
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                @elseif (isset($query))
+                                    <div class="empty mt-4">
+                                        <div class="empty-icon">
+                                            <i class="ti ti-mood-sad text-muted" style="font-size: 3rem"></i>
                                         </div>
-                                        <div class="ms-auto">
-                                            <button class="btn btn-sm btn-outline-primary rounded-circle"
-                                                data-bs-toggle="tooltip" title="Play">
-                                                <i class="fas fa-play"></i>
-                                            </button>
-                                            <button class="btn btn-sm btn-outline-secondary rounded-circle"
-                                                data-bs-toggle="tooltip" title="Add to playlist">
-                                                <i class="fas fa-plus"></i>
-                                            </button>
+                                        <p class="empty-title">No results found</p>
+                                        <p class="empty-subtitle text-muted">
+                                            No results found for "{{ $query }}". Try using different keywords.
+                                        </p>
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stats Cards -->
+                <div class="row mb-4">
+                    <div class="col-md-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center">
+                                    <div class="subheader">Total Plays</div>
+                                    <div class="ms-auto lh-1">
+                                        <div class="dropdown">
+                                            <a class="dropdown-toggle text-muted" href="#"
+                                                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                <i class="ti ti-dots-vertical"></i>
+                                            </a>
+                                            <div class="dropdown-menu dropdown-menu-end">
+                                                <a class="dropdown-item" href="#">Last 7 days</a>
+                                                <a class="dropdown-item" href="#">Last 30 days</a>
+                                                <a class="dropdown-item" href="#">Last 3 months</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="h1 mb-3">2,845</div>
+                                <div class="d-flex mb-2">
+                                    <div>Conversion rate</div>
+                                    <div class="ms-auto">
+                                        <span class="text-green d-inline-flex align-items-center lh-1">
+                                            7% <i class="ti ti-trending-up ms-1"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="progress progress-sm">
+                                    <div class="progress-bar bg-primary" style="width: 70%" role="progressbar"
+                                        aria-valuenow="70" aria-valuemin="0" aria-valuemax="100"
+                                        aria-label="70% Complete">
+                                        <span class="visually-hidden">70% Complete</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center">
+                                    <div class="subheader">Playlists</div>
+                                </div>
+                                <div class="h1 mb-3">8</div>
+                                <div class="d-flex mb-2">
+                                    <div>Growth</div>
+                                    <div class="ms-auto">
+                                        <span class="text-green d-inline-flex align-items-center lh-1">
+                                            9% <i class="ti ti-trending-up ms-1"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="progress progress-sm">
+                                    <div class="progress-bar bg-primary" style="width: 75%" role="progressbar"
+                                        aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"
+                                        aria-label="75% Complete">
+                                        <span class="visually-hidden">75% Complete</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center">
+                                    <div class="subheader">Followers</div>
+                                </div>
+                                <div class="h1 mb-3">1,253</div>
+                                <div class="d-flex mb-2">
+                                    <div>Growth</div>
+                                    <div class="ms-auto">
+                                        <span class="text-green d-inline-flex align-items-center lh-1">
+                                            12% <i class="ti ti-trending-up ms-1"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="progress progress-sm">
+                                    <div class="progress-bar bg-primary" style="width: 60%" role="progressbar"
+                                        aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                                        aria-label="60% Complete">
+                                        <span class="visually-hidden">60% Complete</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center">
+                                    <div class="subheader">Downloads</div>
+                                </div>
+                                <div class="h1 mb-3">452</div>
+                                <div class="d-flex mb-2">
+                                    <div>Growth</div>
+                                    <div class="ms-auto">
+                                        <span class="text-red d-inline-flex align-items-center lh-1">
+                                            -2% <i class="ti ti-trending-down ms-1"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="progress progress-sm">
+                                    <div class="progress-bar bg-primary" style="width: 40%" role="progressbar"
+                                        aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"
+                                        aria-label="40% Complete">
+                                        <span class="visually-hidden">40% Complete</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Popular Songs & Artists -->
+                <div class="row g-4 mb-4">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">
+                                    <i class="ti ti-music me-2 text-primary"></i>Popular Songs
+                                </h3>
+                                <div class="card-actions">
+                                    <a href="#" class="btn btn-link">View All</a>
+                                </div>
+                            </div>
+                            <div class="list-group list-group-flush">
+                                @foreach ($popularSongs ?? [] as $song)
+                                    <div class="list-group-item">
+                                        <div class="row align-items-center">
+                                            <div class="col-auto">
+                                                <span class="avatar">{{ $loop->iteration }}</span>
+                                            </div>
+                                            <div class="col-auto">
+                                                <span class="avatar"
+                                                    style="background-image: url(https://picsum.photos/40/40?random={{ $loop->iteration + 10 }})"></span>
+                                            </div>
+                                            <div class="col text-truncate">
+                                                <a href="#" class="text-reset d-block">{{ $song->title }}</a>
+                                                <div class="text-muted text-truncate mt-n1">
+                                                    {{ $song->artist ? $song->artist->name : 'Unknown Artist' }}</div>
+                                            </div>
+                                            <div class="col-auto">
+                                                <span class="badge bg-primary-lt">
+                                                    <i class="ti ti-headphones me-1"></i>
+                                                    {{ $song->stream_count ?? rand(1000, 9999) }}
+                                                </span>
+                                            </div>
+                                            <div class="col-auto">
+                                                <button class="btn btn-icon btn-sm btn-primary" data-bs-toggle="tooltip"
+                                                    title="Play">
+                                                    <i class="ti ti-player-play"></i>
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
                                 @endforeach
                             </div>
-                        @elseif ($query)
-                            <div class="alert alert-info">
-                                <i class="fas fa-info-circle me-2"></i> No results found for "{{ $query }}".
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">
+                                    <i class="ti ti-users me-2 text-primary"></i>Popular Artists
+                                </h3>
+                                <div class="card-actions">
+                                    <a href="#" class="btn btn-link">View All</a>
+                                </div>
                             </div>
-                        @endif
+                            <div class="list-group list-group-flush">
+                                @foreach ($popularArtists ?? [] as $artist)
+                                    <div class="list-group-item">
+                                        <div class="row align-items-center">
+                                            <div class="col-auto">
+                                                <span class="avatar">{{ $loop->iteration }}</span>
+                                            </div>
+                                            <div class="col-auto">
+                                                <span class="avatar"
+                                                    style="background-image: url(https://ui-avatars.com/api/?name={{ $artist->name }}&background=e53935&color=fff)"></span>
+                                            </div>
+                                            <div class="col text-truncate">
+                                                <a href="#" class="text-reset d-block">{{ $artist->name }}</a>
+                                                <div class="text-muted text-truncate mt-n1">Artist</div>
+                                            </div>
+                                            <div class="col-auto">
+                                                <span class="badge bg-primary-lt">
+                                                    <i class="ti ti-headphones me-1"></i>
+                                                    {{ $artist->stream_count ?? rand(10000, 99999) }}
+                                                </span>
+                                            </div>
+                                            <div class="col-auto">
+                                                <button class="btn btn-icon btn-sm btn-outline-primary"
+                                                    data-bs-toggle="tooltip" title="Follow">
+                                                    <i class="ti ti-user-plus"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </div>
 
-        <!-- Music Categories -->
-        <div class="row g-4">
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">
-                        <h5 class="mb-0">Popular Songs</h5>
-                        <a href="#" class="text-decoration-none">View All</a>
+                <!-- Popular Composers & Cover Creators -->
+                <div class="row g-4 mb-4">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">
+                                    <i class="ti ti-pencil me-2 text-primary"></i>Popular Composers
+                                </h3>
+                                <div class="card-actions">
+                                    <a href="#" class="btn btn-link">View All</a>
+                                </div>
+                            </div>
+                            <div class="list-group list-group-flush">
+                                @foreach ($popularComposers ?? [] as $composer)
+                                    <div class="list-group-item">
+                                        <div class="row align-items-center">
+                                            <div class="col-auto">
+                                                <span class="avatar">{{ $loop->iteration }}</span>
+                                            </div>
+                                            <div class="col-auto">
+                                                <span class="avatar"
+                                                    style="background-image: url(https://ui-avatars.com/api/?name={{ $composer->name }}&background=e53935&color=fff)"></span>
+                                            </div>
+                                            <div class="col text-truncate">
+                                                <a href="#" class="text-reset d-block">{{ $composer->name }}</a>
+                                                <div class="text-muted text-truncate mt-n1">Composer</div>
+                                            </div>
+                                            <div class="col-auto">
+                                                <span class="badge bg-primary-lt">
+                                                    <i class="ti ti-headphones me-1"></i>
+                                                    {{ $composer->stream_count ?? rand(10000, 99999) }}
+                                                </span>
+                                            </div>
+                                            <div class="col-auto">
+                                                <button class="btn btn-icon btn-sm btn-outline-primary"
+                                                    data-bs-toggle="tooltip" title="Follow">
+                                                    <i class="ti ti-user-plus"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
                     </div>
-                    <div class="card-body p-0">
-                        <ul class="list-group list-group-flush">
-                            @foreach ($popularSongs as $song)
-                                <li class="list-group-item d-flex align-items-center py-3">
-                                    <div class="me-3">{{ $loop->iteration }}</div>
-                                    <img src="https://picsum.photos/40/40?random={{ $loop->iteration + 10 }}"
-                                        class="rounded me-3" alt="Song">
-                                    <div>
-                                        <h6 class="mb-0">{{ $song->title }}</h6>
-                                        <small
-                                            class="text-muted">{{ $song->artist ? $song->artist->name : 'Unknown Artist' }}</small>
+
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">
+                                    <i class="ti ti-microphone-2 me-2 text-primary"></i>Popular Cover Creators
+                                </h3>
+                                <div class="card-actions">
+                                    <a href="#" class="btn btn-link">View All</a>
+                                </div>
+                            </div>
+                            <div class="list-group list-group-flush">
+                                @foreach ($popularCoverCreators ?? [] as $coverCreator)
+                                    <div class="list-group-item">
+                                        <div class="row align-items-center">
+                                            <div class="col-auto">
+                                                <span class="avatar">{{ $loop->iteration }}</span>
+                                            </div>
+                                            <div class="col-auto">
+                                                <span class="avatar"
+                                                    style="background-image: url(https://ui-avatars.com/api/?name={{ $coverCreator->name }}&background=e53935&color=fff)"></span>
+                                            </div>
+                                            <div class="col text-truncate">
+                                                <a href="#"
+                                                    class="text-reset d-block">{{ $coverCreator->name }}</a>
+                                                <div class="text-muted text-truncate mt-n1">Cover Creator</div>
+                                            </div>
+                                            <div class="col-auto">
+                                                <span class="badge bg-primary-lt">
+                                                    <i class="ti ti-headphones me-1"></i>
+                                                    {{ $coverCreator->stream_count ?? rand(10000, 99999) }}
+                                                </span>
+                                            </div>
+                                            <div class="col-auto">
+                                                <button class="btn btn-icon btn-sm btn-outline-primary"
+                                                    data-bs-toggle="tooltip" title="Follow">
+                                                    <i class="ti ti-user-plus"></i>
+                                                </button>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="ms-auto d-flex align-items-center">
-                                        <span class="badge bg-light text-dark me-3">
-                                            <i class="fas fa-headphones me-1"></i> {{ $song->stream_count }}
-                                        </span>
-                                        <button class="btn btn-sm btn-outline-primary rounded-circle"
-                                            data-bs-toggle="tooltip" title="Play">
-                                            <i class="fas fa-play"></i>
-                                        </button>
-                                    </div>
-                                </li>
-                            @endforeach
-                        </ul>
+                                @endforeach
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">
-                        <h5 class="mb-0">Popular Artists</h5>
-                        <a href="#" class="text-decoration-none">View All</a>
-                    </div>
-                    <div class="card-body p-0">
-                        <ul class="list-group list-group-flush">
-                            @foreach ($popularArtists as $artist)
-                                <li class="list-group-item d-flex align-items-center py-3">
-                                    <div class="me-3">{{ $loop->iteration }}</div>
-                                    <img src="https://ui-avatars.com/api/?name={{ $artist->name }}&background=4361ee&color=fff"
-                                        class="rounded-circle me-3" width="40" height="40" alt="Artist">
-                                    <div>
-                                        <h6 class="mb-0">{{ $artist->name }}</h6>
-                                        <small class="text-muted">Artist</small>
-                                    </div>
-                                    <div class="ms-auto">
-                                        <span class="badge bg-light text-dark">
-                                            <i class="fas fa-headphones me-1"></i> {{ $artist->stream_count }}
-                                        </span>
-                                    </div>
-                                </li>
-                            @endforeach
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">
-                        <h5 class="mb-0">Popular Composers</h5>
-                        <a href="#" class="text-decoration-none">View All</a>
-                    </div>
-                    <div class="card-body p-0">
-                        <ul class="list-group list-group-flush">
-                            @foreach ($popularComposers as $composer)
-                                <li class="list-group-item d-flex align-items-center py-3">
-                                    <div class="me-3">{{ $loop->iteration }}</div>
-                                    <img src="https://ui-avatars.com/api/?name={{ $composer->name }}&background=4361ee&color=fff"
-                                        class="rounded-circle me-3" width="40" height="40" alt="Composer">
-                                    <div>
-                                        <h6 class="mb-0">{{ $composer->name }}</h6>
-                                        <small class="text-muted">Composer</small>
-                                    </div>
-                                    <div class="ms-auto">
-                                        <span class="badge bg-light text-dark">
-                                            <i class="fas fa-headphones me-1"></i> {{ $composer->stream_count }}
-                                        </span>
-                                    </div>
-                                </li>
-                            @endforeach
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">
-                        <h5 class="mb-0">Popular Cover Creators</h5>
-                        <a href="#" class="text-decoration-none">View All</a>
-                    </div>
-                    <div class="card-body p-0">
-                        <ul class="list-group list-group-flush">
-                            @foreach ($popularCoverCreators as $coverCreator)
-                                <li class="list-group-item d-flex align-items-center py-3">
-                                    <div class="me-3">{{ $loop->iteration }}</div>
-                                    <img src="https://ui-avatars.com/api/?name={{ $coverCreator->name }}&background=4361ee&color=fff"
-                                        class="rounded-circle me-3" width="40" height="40" alt="Cover Creator">
-                                    <div>
-                                        <h6 class="mb-0">{{ $coverCreator->name }}</h6>
-                                        <small class="text-muted">Cover Creator</small>
-                                    </div>
-                                    <div class="ms-auto">
-                                        <span class="badge bg-light text-dark">
-                                            <i class="fas fa-headphones me-1"></i> {{ $coverCreator->stream_count }}
-                                        </span>
-                                    </div>
-                                </li>
-                            @endforeach
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">
-                        <h5 class="mb-0">Your Playlists</h5>
-                        <button class="btn btn-sm btn-primary">
-                            <i class="fas fa-plus me-1"></i> New Playlist
-                        </button>
+                <!-- Your Playlists -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <i class="ti ti-playlist me-2 text-primary"></i>Your Playlists
+                        </h3>
+                        <div class="card-actions">
+                            <button class="btn btn-primary">
+                                <i class="ti ti-plus me-2"></i>New Playlist
+                            </button>
+                        </div>
                     </div>
                     <div class="card-body">
                         <div class="row g-3">
-                            <div class="col-md-3">
-                                <div class="card h-100">
-                                    <img src="https://picsum.photos/300/150?random=20" class="card-img-top"
-                                        alt="Playlist">
+                            <div class="col-sm-6 col-lg-3">
+                                <div class="card card-sm">
+                                    <a href="#" class="d-block">
+                                        <img src="https://picsum.photos/300/150?random=20" class="card-img-top"
+                                            alt="Playlist">
+                                    </a>
                                     <div class="card-body">
-                                        <h6 class="card-title">My Favorites</h6>
-                                        <p class="card-text text-muted small">15 songs</p>
-                                    </div>
-                                    <div class="card-footer bg-white border-0">
-                                        <button class="btn btn-sm btn-primary w-100">
-                                            <i class="fas fa-play me-1"></i> Play
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="card h-100">
-                                    <img src="https://picsum.photos/300/150?random=21" class="card-img-top"
-                                        alt="Playlist">
-                                    <div class="card-body">
-                                        <h6 class="card-title">Workout Mix</h6>
-                                        <p class="card-text text-muted small">12 songs</p>
-                                    </div>
-                                    <div class="card-footer bg-white border-0">
-                                        <button class="btn btn-sm btn-primary w-100">
-                                            <i class="fas fa-play me-1"></i> Play
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="card h-100">
-                                    <img src="https://picsum.photos/300/150?random=22" class="card-img-top"
-                                        alt="Playlist">
-                                    <div class="card-body">
-                                        <h6 class="card-title">Chill Vibes</h6>
-                                        <p class="card-text text-muted small">8 songs</p>
-                                    </div>
-                                    <div class="card-footer bg-white border-0">
-                                        <button class="btn btn-sm btn-primary w-100">
-                                            <i class="fas fa-play me-1"></i> Play
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="card h-100 border-dashed d-flex justify-content-center align-items-center"
-                                    style="border-style: dashed; background-color: #f8f9fa;">
-                                    <div class="text-center p-4">
-                                        <div class="rounded-circle bg-white p-3 d-inline-block mb-3">
-                                            <i class="fas fa-plus text-primary fa-lg"></i>
+                                        <div class="d-flex align-items-center">
+                                            <div>
+                                                <div class="font-weight-medium">My Favorites</div>
+                                                <div class="text-muted">15 songs</div>
+                                            </div>
+                                            <div class="ms-auto">
+                                                <button class="btn btn-icon btn-primary" data-bs-toggle="tooltip"
+                                                    title="Play">
+                                                    <i class="ti ti-player-play"></i>
+                                                </button>
+                                            </div>
                                         </div>
-                                        <h6>Create New Playlist</h6>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 col-lg-3">
+                                <div class="card card-sm">
+                                    <a href="#" class="d-block">
+                                        <img src="https://picsum.photos/300/150?random=21" class="card-img-top"
+                                            alt="Playlist">
+                                    </a>
+                                    <div class="card-body">
+                                        <div class="d-flex align-items-center">
+                                            <div>
+                                                <div class="font-weight-medium">Workout Mix</div>
+                                                <div class="text-muted">12 songs</div>
+                                            </div>
+                                            <div class="ms-auto">
+                                                <button class="btn btn-icon btn-primary" data-bs-toggle="tooltip"
+                                                    title="Play">
+                                                    <i class="ti ti-player-play"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 col-lg-3">
+                                <div class="card card-sm">
+                                    <a href="#" class="d-block">
+                                        <img src="https://picsum.photos/300/150?random=22" class="card-img-top"
+                                            alt="Playlist">
+                                    </a>
+                                    <div class="card-body">
+                                        <div class="d-flex align-items-center">
+                                            <div>
+                                                <div class="font-weight-medium">Chill Vibes</div>
+                                                <div class="text-muted">8 songs</div>
+                                            </div>
+                                            <div class="ms-auto">
+                                                <button class="btn btn-icon btn-primary" data-bs-toggle="tooltip"
+                                                    title="Play">
+                                                    <i class="ti ti-player-play"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 col-lg-3">
+                                <div class="card card-sm card-link border-dashed d-flex flex-column justify-content-center align-items-center"
+                                    style="min-height: 100%;">
+                                    <div class="text-center p-4">
+                                        <span class="avatar avatar-md bg-primary-lt mb-3">
+                                            <i class="ti ti-plus text-primary"></i>
+                                        </span>
+                                        <div class="font-weight-medium">Create New Playlist</div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
 
-        <!-- Recently Played -->
-        <div class="row mt-4">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">
-                        <h5 class="mb-0">Recently Played</h5>
-                        <a href="#" class="text-decoration-none">View History</a>
-                    </div>
-                    <div class="card-body p-0">
-                        <div class="table-responsive">
-                            <table class="table table-hover align-middle mb-0">
-                                <thead class="table-light">
-                                    <tr>
-                                        <th scope="col" style="width: 50px">#</th>
-                                        <th scope="col">Title</th>
-                                        <th scope="col">Artist</th>
-                                        <th scope="col">Album</th>
-                                        <th scope="col">Duration</th>
-                                        <th scope="col">Played</th>
-                                        <th scope="col">Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach ($allSongs->take(5) as $index => $song)
-                                        <tr>
-                                            <td>{{ $index + 1 }}</td>
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <img src="https://picsum.photos/40/40?random={{ $index + 30 }}"
-                                                        class="rounded me-3" alt="Song">
-                                                    <div>{{ $song->title }}</div>
-                                                </div>
-                                            </td>
-                                            <td>{{ $song->artist ? $song->artist->name : 'Unknown Artist' }}</td>
-                                            <td>{{ $song->album ?? 'Single' }}</td>
-                                            <td>3:45</td>
-                                            <td>{{ now()->subHours(rand(1, 24))->diffForHumans() }}</td>
-                                            <td>
-                                                <div class="btn-group">
-                                                    <button type="button" class="btn btn-sm btn-outline-primary"
-                                                        data-bs-toggle="tooltip" title="Play">
-                                                        <i class="fas fa-play"></i>
-                                                    </button>
-                                                    <button type="button" class="btn btn-sm btn-outline-secondary"
-                                                        data-bs-toggle="tooltip" title="Add to playlist">
-                                                        <i class="fas fa-plus"></i>
-                                                    </button>
-                                                    <button type="button" class="btn btn-sm btn-outline-info"
-                                                        data-bs-toggle="tooltip" title="Download">
-                                                        <i class="fas fa-download"></i>
-                                                    </button>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
+                <!-- Recently Played -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <i class="ti ti-history me-2 text-primary"></i>Recently Played
+                        </h3>
+                        <div class="card-actions">
+                            <a href="#" class="btn btn-link">View History</a>
                         </div>
                     </div>
+                    <div class="card-body border-bottom-0 table-responsive">
+                        <table class="table table-vcenter card-table">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Title</th>
+                                    <th>Artist</th>
+                                    <th>Album</th>
+                                    <th>Duration</th>
+                                    <th>Played</th>
+                                    <th class="w-1"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($allSongs ?? [] as $index => $song)
+                                    <tr>
+                                        <td>{{ $index + 1 }}</td>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <span class="avatar me-2"
+                                                    style="background-image: url(https://picsum.photos/40/40?random={{ $index + 30 }})"></span>
+                                                <div>{{ $song->title }}</div>
+                                            </div>
+                                        </td>
+                                        <td>{{ $song->artist ? $song->artist->name : 'Unknown Artist' }}</td>
+                                        <td>{{ $song->album ?? 'Single' }}</td>
+                                        <td>3:45</td>
+                                        <td>{{ now()->subHours(rand(1, 24))->diffForHumans() }}</td>
+                                        <td>
+                                            <div class="btn-list flex-nowrap">
+                                                <button class="btn btn-icon btn-sm btn-primary" data-bs-toggle="tooltip"
+                                                    title="Play">
+                                                    <i class="ti ti-player-play"></i>
+                                                </button>
+                                                <div class="dropdown">
+                                                    <button class="btn btn-icon btn-sm btn-ghost-secondary"
+                                                        data-bs-toggle="dropdown">
+                                                        <i class="ti ti-dots-vertical"></i>
+                                                    </button>
+                                                    <div class="dropdown-menu dropdown-menu-end">
+                                                        <a href="#" class="dropdown-item">
+                                                            <i class="ti ti-plus me-2"></i>Add to playlist
+                                                        </a>
+                                                        <a href="#" class="dropdown-item">
+                                                            <i class="ti ti-download me-2"></i>Download
+                                                        </a>
+                                                        <a href="#" class="dropdown-item">
+                                                            <i class="ti ti-share me-2"></i>Share
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- Footer -->
-    <footer class="mt-5">
-        <div class="container">
-            <div class="d-flex flex-column flex-md-row justify-content-between align-items-center py-4">
-                <div class="mb-3 mb-md-0">
-                    <p class="mb-0">&copy; 2023 Music Cool Poll. All rights reserved.</p>
-                    <p class="text-muted mb-0 small">The ultimate music streaming platform</p>
-                </div>
-                <div class="d-flex gap-3">
-                    <a href="#" class="text-decoration-none text-muted">
-                        <i class="fab fa-facebook fa-lg"></i>
-                    </a>
-                    <a href="#" class="text-decoration-none text-muted">
-                        <i class="fab fa-twitter fa-lg"></i>
-                    </a>
-                    <a href="#" class="text-decoration-none text-muted">
-                        <i class="fab fa-instagram fa-lg"></i>
-                    </a>
-                    <a href="#" class="text-decoration-none text-muted">
-                        <i class="fab fa-youtube fa-lg"></i>
-                    </a>
+        <footer class="footer footer-transparent d-print-none">
+            <div class="container-xl">
+                <div class="row text-center align-items-center flex-row-reverse">
+                    <div class="col-lg-auto ms-lg-auto">
+                        <ul class="list-inline list-inline-dots mb-0">
+                            <li class="list-inline-item">
+                                <a href="#" class="link-secondary">Privacy Policy</a>
+                            </li>
+                            <li class="list-inline-item">
+                                <a href="#" class="link-secondary">Terms of Service</a>
+                            </li>
+                            <li class="list-inline-item">
+                                <a href="#" class="link-secondary">Contact Us</a>
+                            </li>
+                            <li class="list-inline-item">
+                                <a href="#" class="link-secondary">Help Center</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-12 col-lg-auto mt-3 mt-lg-0">
+                        <ul class="list-inline list-inline-dots mb-0">
+                            <li class="list-inline-item">
+                                &copy; 2023 <a href="." class="link-secondary">Music Cool Poll</a>.
+                                All rights reserved.
+                            </li>
+                            <li class="list-inline-item">
+                                <a href="#" class="link-secondary" rel="noopener">
+                                    v1.0.0
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
-            <div class="d-flex flex-column flex-md-row justify-content-center gap-4 py-3 border-top">
-                <a href="#" class="text-decoration-none text-muted small">Privacy Policy</a>
-                <a href="#" class="text-decoration-none text-muted small">Terms of Service</a>
-                <a href="#" class="text-decoration-none text-muted small">Contact Us</a>
-                <a href="#" class="text-decoration-none text-muted small">Help Center</a>
-            </div>
-        </div>
-    </footer>
+        </footer>
+    </div>
+@endsection
+
+@section('scripts')
+    <script>
+        // Additional dashboard-specific scripts
+        document.addEventListener('DOMContentLoaded', function() {
+            // Example of using SweetAlert for a welcome message
+            // Uncomment to enable
+            /*
+            Swal.fire({
+                title: 'Welcome back!',
+                text: 'Enjoy your music experience today',
+                icon: 'success',
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true
+            });
+            */
+        });
+    </script>
 @endsection
