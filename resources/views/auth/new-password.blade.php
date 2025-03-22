@@ -2,7 +2,6 @@
 
 @section('content')
     <div class="auth-card">
-        <div class="brand-logo">MusicApp</div>
 
         <div class="icon-circle bg-primary bg-opacity-10">
             <i class="fas fa-lock-open text-primary fa-2x"></i>
@@ -16,42 +15,36 @@
 
         <form method="POST" action="{{ route('password.update') }}">
             @csrf
-
-            <!-- Password Reset Token -->
-            <input type="hidden" name="token" value="{{ $request->route('token') }}">
-
-            <!-- Email Address -->
-            <div class="mb-3">
-                <label for="email" class="form-label">Email Address</label>
-                <input type="email" id="email" name="email"
-                    class="form-control @error('email') is-invalid @enderror" value="{{ old('email', $request->email) }}"
-                    required autofocus readonly>
-                @error('email')
-                    <div class="invalid-feedback">
-                        {{ $message }}
-                    </div>
-                @enderror
-            </div>
+            <input type="hidden" name="token" value="{{ $token }}">
+            <input type="hidden" name="email" value="{{ $email }}">
 
             <!-- Password -->
-            <div class="mb-3 position-relative">
+            <div class="mb-3">
                 <label for="password" class="form-label">New Password</label>
-                <input type="password" id="password" name="password"
-                    class="form-control @error('password') is-invalid @enderror" required>
-                <span class="password-toggle"><i class="far fa-eye"></i></span>
+                <div class="input-group">
+                    <input type="password" id="password" name="password"
+                        class="form-control @error('password') is-invalid @enderror" required>
+                    <span class="input-group-text">
+                        <i class="far fa-eye password-toggle" style="cursor: pointer;"></i>
+                    </span>
+                </div>
                 @error('password')
-                    <div class="invalid-feedback">
+                    <div class="invalid-feedback d-block">
                         {{ $message }}
                     </div>
                 @enderror
             </div>
 
             <!-- Confirm Password -->
-            <div class="mb-4 position-relative">
+            <div class="mb-4">
                 <label for="password_confirmation" class="form-label">Confirm Password</label>
-                <input type="password" id="password_confirmation" name="password_confirmation" class="form-control"
-                    required>
-                <span class="password-toggle"><i class="far fa-eye"></i></span>
+                <div class="input-group">
+                    <input type="password" id="password_confirmation" name="password_confirmation" class="form-control"
+                        required>
+                    <span class="input-group-text">
+                        <i class="far fa-eye password-toggle" style="cursor: pointer;"></i>
+                    </span>
+                </div>
             </div>
 
             <div class="d-grid mb-4">
@@ -61,10 +54,30 @@
             </div>
         </form>
 
-        <div class="text-center">
-            <a href="{{ route('login') }}" class="link-primary">
-                <i class="fas fa-arrow-left me-1"></i> Back to Login
-            </a>
-        </div>
+        
     </div>
+
+    <script>
+        // Perbaikan untuk password toggle
+        document.addEventListener('DOMContentLoaded', function() {
+            const toggles = document.querySelectorAll('.password-toggle');
+            toggles.forEach(toggle => {
+                toggle.addEventListener('click', function() {
+                    // Dapatkan input password (perlu naik ke parent dulu, lalu cari input)
+                    const inputGroup = this.closest('.input-group');
+                    const passwordInput = inputGroup.querySelector(
+                        'input[type="password"], input[type="text"]');
+
+                    // Toggle tipe input
+                    const type = passwordInput.getAttribute('type') === 'password' ? 'text' :
+                        'password';
+                    passwordInput.setAttribute('type', type);
+
+                    // Ganti ikon
+                    this.className = type === 'password' ? 'far fa-eye password-toggle' :
+                        'far fa-eye-slash password-toggle';
+                });
+            });
+        });
+    </script>
 @endsection

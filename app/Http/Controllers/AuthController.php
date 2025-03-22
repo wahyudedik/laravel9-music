@@ -10,13 +10,10 @@ use Illuminate\Support\Facades\URL;
 use Illuminate\Auth\Events\Verified;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Mail;
-
 use App\Mail\ResetPasswordMail;
 use App\Mail\VerifyEmailMail;
-
 use Illuminate\Support\Str;
 use Carbon\Carbon;
-
 use App\Models\User;
 
 
@@ -43,8 +40,19 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials)) {
 
-            session(['email' => Auth::user()->email]);
+            $user = Auth::user();
+
+            User::where('id', $user->id)->update(['last_login' => now()]);
+
+            session(['email' => $user->email]);
+
             $request->session()->regenerate();
+
+            $role = $user->getRoleNames()->first();
+
+            if ($role == 'Admin' || $role == 'Super Admin') {
+                return redirect('admin/dashboard')->with('success', 'Login berhasil!');
+            }
             return redirect('user/dashboard')->with('success', 'Login berhasil!');
         }
 
@@ -63,7 +71,7 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-            return redirect('/adminmusic/dashboard')->with('success', 'Login berhasil!');
+            return redirect('/admin/dashboard')->with('success', 'Login berhasil!');
         }
 
         return back()->withErrors(['email' => 'Email atau password salah'])->withInput();
@@ -145,7 +153,7 @@ class AuthController extends Controller
     // Menampilkan halaman verifikasi email
     public function showVerifyEmail()
     {
-        return view('auth.verify-email');
+        return view('auth.verifikasi-email');
     }
 
     // Memverifikasi email setelah diklik dari email
@@ -211,7 +219,6 @@ class AuthController extends Controller
 
             return back()
                 ->with('status', 'Email verifikasi telah dikirim!');
-
         } catch (\Exception $e) {
             return back()->with('error', 'Gagal mengirim email: ' . $e->getMessage());
         }
@@ -224,7 +231,7 @@ class AuthController extends Controller
      */
     public function showEmailResetForm()
     {
-        return view('auth.password.reset');
+        return view('auth.forgot-password');
     }
 
     /**
@@ -252,7 +259,7 @@ class AuthController extends Controller
             Mail::to($user->email)->send(new ResetPasswordMail($token, $request->email));
 
             return back()->with('status', 'Email reset password telah dikirim!');
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return back()->with('error', 'Gagal mengirim email: ' . $e->getMessage());
         }
     }
@@ -262,7 +269,7 @@ class AuthController extends Controller
      */
     public function showPasswordUpdateForm($token, Request $request)
     {
-        return view('auth.password.update', ['token' => $token, 'email' => $request->query('email')]);
+        return view('auth.new-password', ['token' => $token, 'email' => $request->query('email')]);
     }
 
     /**
@@ -311,20 +318,9 @@ class AuthController extends Controller
 
     public function logout($role, Request $request)
     {
-
-        $currentUrl = $request->url();
-
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-
-        // Redirect berdasarkan role
-        if ($role === 'Admin' || $role === 'Super Admin') {
-            return redirect('/adminmusic')->with('success', 'Berhasil logout.');
-        } elseif ($role === 'User' || $role === 'Cover Creator' || $role === 'Artist' || $role === 'Composer') {
-            return redirect('/login')->with('success', 'Berhasil logout.');
-        } else {
-            return redirect('/')->with('success', 'Berhasil logout.');
-        }
+        return redirect('/')->with('success', 'Berhasil logout.');
     }
 }

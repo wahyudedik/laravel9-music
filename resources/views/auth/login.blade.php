@@ -2,11 +2,14 @@
 
 @section('content')
     <div class="auth-card">
-        <div class="brand-logo">MusicApp</div>
-
+        <div class="brand-logo text-center mb-4">
+            <a href="{{ url('/') }}">
+                <img src="{{ asset('img/icon1.png') }}" alt="Logo" width="150" height="50">
+            </a>
+        </div>
         <h4 class="text-center mb-4">Login to your account</h4>
 
-        <form method="POST" action="{{ route('login') }}">
+        <form method="POST" action="{{ route('login') }}"> 
             @csrf
             <div class="mb-3">
                 <label for="email" class="form-label">Email</label>
@@ -34,7 +37,7 @@
                         Remember me
                     </label>
                 </div>
-                <a href="#" class="link-primary" style="font-size: 0.9rem;">Forgot password?</a>
+                <a href="{{ route('password.reset') }}" class="link-primary" style="font-size: 0.9rem;">Forgot password?</a>
             </div>
 
             <button type="submit" class="btn btn-primary w-100">Login</button>
@@ -53,12 +56,6 @@
         <div class="text-center mt-4">
             <p class="mb-0 text-muted">Don't have an account? <a href="{{ url('register') }}" class="link-primary">Sign
                     up</a></p>
-        </div>
-
-        <div class="text-center mt-3">
-            <a href="{{ url('/') }}" class="link-secondary" style="font-size: 0.9rem;">
-                <i class="fas fa-arrow-left me-1"></i> Back to home
-            </a>
         </div>
     </div>
 @endsection

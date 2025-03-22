@@ -4,7 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Music</title>
+    <title>Playlist Music</title>
+    <link rel="icon" type="image/x-icon" href="{{ asset('img/favicon.png') }}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('apple-touch-icon.png') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon-32x32.png') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('favicon-16x16.png') }}">
+    <link rel="manifest" href="{{ asset('site.webmanifest') }}">
+
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Google Fonts -->
@@ -13,7 +19,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --primary-color: #4361ee;
+            --primary-color: #fd2929;
             --secondary-color: #f8f9fa;
             --text-color: #212529;
             --light-gray: #e9ecef;
@@ -62,7 +68,7 @@
 
         .form-control:focus {
             border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.15);
+            box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.15);
         }
 
         .form-label {
@@ -84,7 +90,7 @@
         }
 
         .btn-primary:hover {
-            background-color: #3a56d4;
+            background-color: #c0392b;
             transform: translateY(-2px);
         }
 
@@ -121,7 +127,7 @@
 
         .link-primary:hover {
             text-decoration: underline;
-            color: #3a56d4;
+            color: #c0392b;
         }
 
         .password-toggle {
@@ -194,7 +200,7 @@
     <!-- SweetAlert2 JS -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-        // Password visibility toggle
+        // Password visibility toggle 
         document.addEventListener('DOMContentLoaded', function() {
             const toggles = document.querySelectorAll('.password-toggle');
             toggles.forEach(toggle => {

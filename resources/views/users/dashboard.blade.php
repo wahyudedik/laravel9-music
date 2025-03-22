@@ -29,7 +29,13 @@
                         <a class="nav-link" href="#">
                             <i class="fas fa-user me-1"></i> Profile
                         </a>
-                    </li>
+                    </li><li class="nav-item">
+                 <a class="nav-link" href="{{ route('verification.form') }}">
+                     <i class="fas fa-music me-1"></i> Pengajuan Verifikasi
+                   </a>
+                 </li>
+                    
+
                 </ul>
                 <div class="d-flex align-items-center">
                     <div class="dropdown">
@@ -46,7 +52,11 @@
                                 <hr class="dropdown-divider">
                             </li>
                             <li>
-                                <form action="{{ route('logout') }}" method="POST">
+                                @php
+                                    $user = Auth::user();
+                                    $userRole = $user->getRoleNames()->first();
+                                @endphp
+                                <form action="{{ route('logout', ['role' => $userRole]) }}" method="POST">
                                     @csrf
                                     <button class="dropdown-item text-danger"><i class="fas fa-sign-out-alt me-2"></i>
                                         Logout</button>

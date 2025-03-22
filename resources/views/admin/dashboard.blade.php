@@ -35,6 +35,14 @@
                             <i class="fas fa-cog me-1"></i> Settings
                         </a>
                     </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('admin.verifications.index') }}">
+                            <i class="fas fa-user me-1"></i> Approve User
+                        </a>
+                    </li>
+
+                    
                 </ul>
                 <div class="d-flex align-items-center">
                     <div class="dropdown">
@@ -51,7 +59,11 @@
                                 <hr class="dropdown-divider">
                             </li>
                             <li>
-                                <form action="{{ route('admin.logout') }}" method="POST">
+                                @php
+                                    $user = Auth::user();
+                                    $userRole = $user->getRoleNames()->first();
+                                @endphp
+                                <form action="{{ route('logout', ['role' => $userRole]) }}" method="POST">
                                     @csrf
                                     <button class="dropdown-item text-danger"><i class="fas fa-sign-out-alt me-2"></i>
                                         Logout</button>
@@ -89,8 +101,8 @@
                         </div>
                         <div>
                             <h6 class="card-title mb-0">Total Users</h6>
-                            <h3 class="mt-2 mb-0">1,254</h3>
-                            <p class="text-success mb-0 small"><i class="fas fa-arrow-up me-1"></i> 12% this month</p>
+                            <h3 class="mt-2 mb-0">{{ $totalUsers }}</h3>
+                            <p class="text-success mb-0 small"><i class="fas fa-arrow-up me-1"></i> {{ $userGrowthPercentage }}% this month</p>
                         </div>
                     </div>
                 </div>
@@ -103,8 +115,8 @@
                         </div>
                         <div>
                             <h6 class="card-title mb-0">Total Songs</h6>
-                            <h3 class="mt-2 mb-0">3,721</h3>
-                            <p class="text-success mb-0 small"><i class="fas fa-arrow-up me-1"></i> 8% this month</p>
+                            <h3 class="mt-2 mb-0">{{ $totalSongs }}</h3>
+                            <p class="text-success mb-0 small"><i class="fas fa-arrow-up me-1"></i> {{ $songGrowthPercentage }}% this month</p>
                         </div>
                     </div>
                 </div>
@@ -117,8 +129,8 @@
                         </div>
                         <div>
                             <h6 class="card-title mb-0">Revenue</h6>
-                            <h3 class="mt-2 mb-0">$12,845</h3>
-                            <p class="text-success mb-0 small"><i class="fas fa-arrow-up me-1"></i> 5% this month</p>
+                            <h3 class="mt-2 mb-0">Rp. {{ $totalRevenue }}</h3>
+                            <p class="text-success mb-0 small"><i class="fas fa-arrow-up me-1"></i> {{ $revenueGrowthPercentage }}% this month</p>
                         </div>
                     </div>
                 </div>
@@ -131,8 +143,8 @@
                         </div>
                         <div>
                             <h6 class="card-title mb-0">Streams</h6>
-                            <h3 class="mt-2 mb-0">87,239</h3>
-                            <p class="text-success mb-0 small"><i class="fas fa-arrow-up me-1"></i> 18% this month</p>
+                            <h3 class="mt-2 mb-0">{{ $totalStreams }}</h3>
+                            <p class="text-success mb-0 small"><i class="fas fa-arrow-up me-1"></i> {{ $streamGrowthPercentage }}% this month</p>
                         </div>
                     </div>
                 </div>
