@@ -40,15 +40,17 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials)) {
 
-            Auth::user()->update(['last_login' => now()]);
+            $user = Auth::user();
 
-            session(['email' => Auth::user()->email]);
+            User::where('id', $user->id)->update(['last_login' => now()]);
+
+            session(['email' => $user->email]);
 
             $request->session()->regenerate();
 
-            $role = Auth::user()->getRoleNames()->first();
+            $role = $user->getRoleNames()->first();
 
-            if($role=='Admin' || $role=='Super Admin' ){
+            if ($role == 'Admin' || $role == 'Super Admin') {
                 return redirect('admin/dashboard')->with('success', 'Login berhasil!');
             }
             return redirect('user/dashboard')->with('success', 'Login berhasil!');
