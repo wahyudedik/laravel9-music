@@ -29,7 +29,13 @@
                         <a class="nav-link" href="#">
                             <i class="fas fa-user me-1"></i> Profile
                         </a>
-                    </li>
+                    </li><li class="nav-item">
+                 <a class="nav-link" href="{{ route('verification.form') }}">
+                     <i class="fas fa-music me-1"></i> Pengajuan Verifikasi
+                   </a>
+                 </li>
+                    
+
                 </ul>
                 <div class="d-flex align-items-center">
                     <div class="dropdown">

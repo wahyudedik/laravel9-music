@@ -68,6 +68,18 @@ class UserSeeder extends Seeder
                 'country' => 'Indonesia',
                 'role' => 'User'
             ],
+
+            [
+                'name' => 'Agung Tester',
+                'username' => 'useragung',
+                'email' => 'agung.nex.edp@gmail.com',
+                'password' => 'user123',
+                'phone' => '6281384010384',
+                'city' => 'Tangerang',
+                'region' => 'Banten',
+                'country' => 'Indonesia',
+                'role' => 'User'
+            ],
             [
                 'name' => 'John Composer',
                 'username' => 'composerjohn',

@@ -1,10 +1,14 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Request;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AdminVerificationController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\AdminController;
+use App\Http\Controllers\UserVerificationController;
+use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\Route;
+
+
 
 /*
 |--------------------------------------------------------------------------
@@ -50,6 +54,10 @@ Route::middleware(['auth', 'role:User,Cover Creator,Artist,Composer,Super Admin,
 // User Dashboard Routes
 Route::middleware(['auth', 'role:User,Cover Creator,Artist,Composer', 'verified'])->group(function () {
     Route::get('/user/dashboard', [UserController::class, 'dashboard'])->name('user.dashboard');
+
+    // Fitur untuk pengajuan verification status user
+    Route::get('/verification/form', [UserVerificationController::class, 'showVerificationForm'])->name('verification.form');
+    Route::post('/verification/submit', [UserVerificationController::class, 'submitVerification'])->name('verification.submit');
 });
 
 // Admin Routes
@@ -64,4 +72,11 @@ Route::middleware(['auth', 'role:Super Admin,Admin'])->group(function () {
     Route::get('/admin/claims/{id}/edit', [AdminController::class, 'editClaim'])->name('admin.claims.edit');
     Route::put('/admin/claims/{id}', [AdminController::class, 'updateClaim'])->name('admin.claims.update');
     Route::delete('/admin/claims/{id}', [AdminController::class, 'deleteClaim'])->name('admin.claims.delete');
+
+    // Verifikasi Pengguna oleh admin
+    Route::prefix('admin/verifications')->group(function () {
+        Route::get('/', [AdminVerificationController::class, 'index'])->name('admin.verifications.index');
+        Route::post('/{id}/approve', [AdminVerificationController::class, 'approve'])->name('admin.verifications.approve');
+        Route::post('/{id}/reject', [AdminVerificationController::class, 'reject'])->name('admin.verifications.reject');
+    });
 });

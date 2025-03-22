@@ -51,7 +51,6 @@ class AdminController extends Controller
             'totalStreams',
             'streamGrowthPercentage'
         ));
-
     }
 
     public function search(Request $request)

@@ -35,6 +35,14 @@
                             <i class="fas fa-cog me-1"></i> Settings
                         </a>
                     </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('admin.verifications.index') }}">
+                            <i class="fas fa-user me-1"></i> Approve User
+                        </a>
+                    </li>
+
+                    
                 </ul>
                 <div class="d-flex align-items-center">
                     <div class="dropdown">
