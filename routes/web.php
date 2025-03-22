@@ -17,9 +17,25 @@ use App\Http\Controllers\AdminController;
 | 
 */
 
+// Landing Page atau Home
 Route::get('/', function () {
     return view('welcome');
-});
+})->name('welcome');
+Route::get('/popular-songs', function () {
+    return view('popular-songs');
+})->name('popular-songs');
+Route::get('/artists', function () {
+    return view('artists');
+})->name('artists');
+Route::get('/composers', function () {
+    return view('composers');
+})->name('composers');
+Route::get('/covers', function () {
+    return view('covers');
+})->name('covers');
+
+// Route Dashboard User
+
 
 // Guest Routes
 Route::middleware('guest')->group(function () {
