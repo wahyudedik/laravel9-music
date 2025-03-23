@@ -2,17 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use App\Models\Album;
 use App\Models\Song;
 use App\Models\User;
+use App\Models\Album;
+use App\Models\Claim;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Str;
 
 use App\Services\Admin\DashboardServices;
+use Illuminate\Support\Facades\Validator;
 
 class AdminController extends Controller
 {
@@ -41,6 +42,11 @@ class AdminController extends Controller
         $totalStreams = number_format($DashboardServices->getTotalStreams());
         $streamGrowthPercentage = $DashboardServices->getStreamGrowthPercentage();
 
+        $recentClaims = Claim::with(['user', 'song'])
+            ->latest()
+            ->take(5)
+            ->get();
+
         return view('admin.dashboard', compact(
             'totalUsers',
             'userGrowthPercentage',
@@ -49,7 +55,8 @@ class AdminController extends Controller
             'totalRevenue',
             'revenueGrowthPercentage',
             'totalStreams',
-            'streamGrowthPercentage'
+            'streamGrowthPercentage',
+            'recentClaims',
         ));
     }
 

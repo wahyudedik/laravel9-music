@@ -12,27 +12,32 @@ class UserVerificationController extends Controller
 {
     public function showVerificationForm()
     {
-        return view('users.verification');
+        // Cek apakah user sudah mengajukan verifikasi
+        $existingVerification = Verification::where('user_id', auth()->id())->latest()->first();
+        
+        return view('users.verification', compact('existingVerification'));
     }
 
     public function submitVerification(Request $request)
     {
-        // Validasi
-        // $validator = Validator::make($request->all(), [
-        //     'type' => 'required|in:composer,artist,cover',
-        //     'document_ktp' => 'required|image|mimes:pdf,jpeg,png,jpg|max:2048',
-        //     'document_npwp' => 'image|mimes:pdf,jpeg,png,jpg|max:2048',
-        // ]);
+        // Cek apakah user sudah memiliki pengajuan yang pending
+        $pendingVerification = Verification::where('user_id', auth()->id())
+            ->where('status', 'pending')
+            ->first();
+            
+        if ($pendingVerification) {
+            return redirect()->back()->with('error', 'Anda sudah memiliki pengajuan verifikasi yang sedang diproses.');
+        }
 
         $rules = [
             'type' => 'required|in:composer,artist,cover',
-            'document_ktp' => 'required|image|mimes:pdf,jpeg,png,jpg|max:2048',
-            'document_npwp' => 'image|mimes:pdf,jpeg,png,jpg|max:2048',
+            'document_ktp' => 'required|file|mimes:pdf,jpeg,png,jpg|max:2048',
+            'document_npwp' => 'nullable|file|mimes:pdf,jpeg,png,jpg|max:2048',
         ];
 
         // Tambahkan validasi bersyarat untuk document_npwp jika type adalah composer
         if ($request->input('type') === 'composer') {
-            $rules['document_npwp'] = 'required|image|mimes:pdf,jpeg,png,jpg|max:2048';
+            $rules['document_npwp'] = 'required|file|mimes:pdf,jpeg,png,jpg|max:2048';
         }
 
         $validator = Validator::make($request->all(), $rules);
@@ -59,6 +64,13 @@ class UserVerificationController extends Controller
             'status' => 'pending',
         ]);
 
-        return view('users.verification', ['message' => 'Verifikasi berhasil diajukan!']);
+        return redirect()->route('verification.form')->with('success', 'Verifikasi berhasil diajukan! Silahkan tunggu persetujuan dari admin.');
+    }
+    
+    public function checkStatus()
+    {
+        $verification = Verification::where('user_id', auth()->id())->latest()->first();
+        
+        return view('users.verification_status', compact('verification'));
     }
 }

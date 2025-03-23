@@ -1,12 +1,13 @@
 <?php
 
-use App\Http\Controllers\AdminController;
-use App\Http\Controllers\AdminVerificationController;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Request;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AdminClaimController;
 use App\Http\Controllers\UserVerificationController;
-use Illuminate\Support\Facades\Request;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AdminVerificationController;
 
 
 
@@ -21,7 +22,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Landing Page atau Home
+// Route dibuat frontend Landing Page atau Home
 Route::get('/', function () {
     return view('welcome');
 })->name('welcome');
@@ -38,7 +39,8 @@ Route::get('/covers', function () {
     return view('covers');
 })->name('covers');
 
-// Route Dashboard User
+// Route dibuat frontend Dashboard User
+// Route dibuat frontend Dashboard admin
 
 
 // Guest Routes
@@ -74,25 +76,156 @@ Route::middleware(['auth', 'role:User,Cover Creator,Artist,Composer', 'verified'
     // Fitur untuk pengajuan verification status user
     Route::get('/verification/form', [UserVerificationController::class, 'showVerificationForm'])->name('verification.form');
     Route::post('/verification/submit', [UserVerificationController::class, 'submitVerification'])->name('verification.submit');
+    Route::get('/verification/status', [UserVerificationController::class, 'checkStatus'])->name('verification.status');
+
+    
 });
 
 // Admin Routes
 Route::middleware(['auth', 'role:Super Admin,Admin'])->group(function () {
     Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+
     // Fitur global search di menu SuperAdmin
     Route::get('/admin/search', [AdminController::class, 'search'])->name('admin.search');
 
-    // CRUD Claims / Ticketing System
-    Route::get('/admin/claims/create', [AdminController::class, 'createClaim'])->name('admin.claims.create');
-    Route::post('/admin/claims', [AdminController::class, 'storeClaim'])->name('admin.claims.store');
-    Route::get('/admin/claims/{id}/edit', [AdminController::class, 'editClaim'])->name('admin.claims.edit');
-    Route::put('/admin/claims/{id}', [AdminController::class, 'updateClaim'])->name('admin.claims.update');
-    Route::delete('/admin/claims/{id}', [AdminController::class, 'deleteClaim'])->name('admin.claims.delete');
+    // Claims Management - Add these lines
+    Route::resource('admin/claims', AdminClaimController::class, ['as' => 'admin']);
+    Route::post('/admin/claims/{claim}/unclaim', [AdminClaimController::class, 'unclaimSong'])->name('admin.claims.unclaim');
 
     // Verifikasi Pengguna oleh admin
-    Route::prefix('admin/verifications')->group(function () {
-        Route::get('/', [AdminVerificationController::class, 'index'])->name('admin.verifications.index');
-        Route::post('/{id}/approve', [AdminVerificationController::class, 'approve'])->name('admin.verifications.approve');
-        Route::post('/{id}/reject', [AdminVerificationController::class, 'reject'])->name('admin.verifications.reject');
+    Route::prefix('admin')->name('admin.')->group(function () {
+        Route::get('/verifications', [AdminVerificationController::class, 'index'])->name('verifications.index');
+        Route::post('/verifications', [AdminVerificationController::class, 'store'])->name('verifications.store');
+        Route::get('/verifications/{id}/details', [AdminVerificationController::class, 'getDetails']);
+        Route::put('/verifications/{id}', [AdminVerificationController::class, 'update'])->name('verifications.update');
+        Route::delete('/verifications/{id}', [AdminVerificationController::class, 'destroy'])->name('verifications.destroy');
+        Route::post('/verifications/{id}/approve', [AdminVerificationController::class, 'approve'])->name('verifications.approve');
+        Route::post('/verifications/{id}/reject', [AdminVerificationController::class, 'reject'])->name('verifications.reject');
     });
+
+    // User Management Routes
+    Route::prefix('admin/users')->group(function () {
+        Route::get('/', function () {
+            $users = \App\Models\User::with('roles')->paginate(10);
+            return view('admin.users.index', compact('users'));
+        })->name('admin.users.index');
+
+        Route::get('/create', function () {
+            $roles = \Spatie\Permission\Models\Role::all();
+            return view('admin.users.create', compact('roles'));
+        })->name('admin.users.create');
+
+        Route::get('/{user}/edit', function ($id) {
+            $user = \App\Models\User::findOrFail($id);
+            $roles = \Spatie\Permission\Models\Role::all();
+            return view('admin.users.edit', compact('user', 'roles'));
+        })->name('admin.users.edit');
+
+        Route::get('/{user}', function ($id) {
+            $user = \App\Models\User::with('roles')->findOrFail($id);
+            return view('admin.users.show', compact('user'));
+        })->name('admin.users.show');
+    });
+
+    // Roles & Permissions Routes
+    Route::prefix('admin/roles')->group(function () {
+        Route::get('/', function () {
+            $roles = \Spatie\Permission\Models\Role::with('permissions')->paginate(10);
+            return view('admin.roles.index', compact('roles'));
+        })->name('admin.roles.index');
+
+        Route::get('/create', function () {
+            $permissions = \Spatie\Permission\Models\Permission::all();
+            return view('admin.roles.create', compact('permissions'));
+        })->name('admin.roles.create');
+
+        Route::get('/{role}/edit', function ($id) {
+            $role = \Spatie\Permission\Models\Role::with('permissions')->findOrFail($id);
+            $permissions = \Spatie\Permission\Models\Permission::all();
+            return view('admin.roles.edit', compact('role', 'permissions'));
+        })->name('admin.roles.edit');
+
+        Route::get('/permissions', function () {
+            $permissions = \Spatie\Permission\Models\Permission::paginate(15);
+            return view('admin.roles.permissions', compact('permissions'));
+        })->name('admin.permissions.index');
+    });
+
+    // Song Management Routes
+    Route::prefix('admin/songs')->group(function () {
+        Route::get('/', function () {
+            return view('admin.songs.index');
+        })->name('admin.songs.index');
+
+        Route::get('/create', function () {
+            return view('admin.songs.create');
+        })->name('admin.songs.create');
+
+        Route::get('/{id}/edit', function ($id) {
+            return view('admin.songs.edit', compact('id'));
+        })->name('admin.songs.edit');
+
+        Route::get('/{id}', function ($id) {
+            return view('admin.songs.show', compact('id'));
+        })->name('admin.songs.show');
+    });
+
+    // Album and Genre routes
+    Route::get('/admin/albums', function () {
+        return view('admin.albums.index');
+    })->name('admin.albums.index');
+
+    Route::get('/admin/genres', function () {
+        return view('admin.genres.index');
+    })->name('admin.genres.index');
+
+    // Admin User Profile Management Route
+    Route::get('/admin/user-profiles', function () {
+        return view('admin.user-profiles.index');
+    })->name('admin.user-profiles.index');
+
+    Route::get('/admin/user-profiles/{id}', function ($id) {
+        // In a real implementation, you would fetch the user by ID
+        return view('admin.user-profiles.show', compact('id'));
+    })->name('admin.user-profiles.show');
+
+    // Withdraw Verification Routes
+    Route::get('/admin/withdrawals', function () {
+        return view('admin.withdrawals.index');
+    })->name('admin.withdrawals.index');
+
+    Route::get('/admin/withdrawals/{id}', function ($id) {
+        return view('admin.withdrawals.show', compact('id'));
+    })->name('admin.withdrawals.show');
+
+    // User Data Listing Routes
+    Route::get('/admin/song-list', function () {
+        return view('admin.listings.songs');
+    })->name('admin.listings.songs');
+
+    Route::get('/admin/cover-list', function () {
+        return view('admin.listings.covers');
+    })->name('admin.listings.covers');
+
+    Route::get('/admin/published-songs', function () {
+        return view('admin.listings.published');
+    })->name('admin.listings.published');
+
+    Route::get('/admin/draft-songs', function () {
+        return view('admin.listings.drafts');
+    })->name('admin.listings.drafts');
+
+    // Add this in the Admin Routes section
+    Route::get('/admin/notifications', function () {
+        return view('admin.notifications');
+    })->name('admin.notifications');
+
+    // Add these in the Admin Routes section
+    Route::get('/admin/profile', function () {
+        return view('admin.profile');
+    })->name('admin.profile');
+
+    Route::get('/admin/settings', function () {
+        return view('admin.settings');
+    })->name('admin.settings');
 });

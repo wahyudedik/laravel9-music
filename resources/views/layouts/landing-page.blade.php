@@ -95,7 +95,7 @@
                             </a>
                             <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
                                 @if (Auth::user()->hasRole(['Super Admin', 'Admin']))
-                                    <a href="{{ url('adminmusic/dashboard') }}" class="dropdown-item">Admin Dashboard</a>
+                                    <a href="{{ url('admin/dashboard') }}" class="dropdown-item">Admin Dashboard</a>
                                 @endif
                                 @if (Auth::user()->hasRole(['User', 'Cover Creator', 'Artist', 'Composer']))
                                     <a href="{{ url('user/dashboard') }}" class="dropdown-item">User Dashboard</a>
