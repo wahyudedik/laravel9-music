@@ -171,6 +171,8 @@
             }
         }
     </style>
+    @stack('styles')
+
 </head>
 
 <body>
@@ -222,6 +224,7 @@
             @endif
         });
     </script>
+    @stack('scripts')
 </body>
 
 </html>

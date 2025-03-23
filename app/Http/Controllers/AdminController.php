@@ -36,6 +36,10 @@ class AdminController extends Controller
         $revenueGrowthPercentage = $DashboardServices->getRevenueGrowthPercentage();
         $totalStreams = number_format($DashboardServices->getTotalStreams());
         $streamGrowthPercentage = $DashboardServices->getStreamGrowthPercentage();
+        $recentSongs = $DashboardServices->getRecentSongs();
+        $topGenres = $DashboardServices->getSongGenre();
+        $topGenres = collect($topGenres)->sortByDesc(fn($genre) => $genre->percentage)->toArray();
+        $recentActivities = $DashboardServices->getRecentActivities();
 
         return view('admin.dashboard', compact(
             'totalUsers',
@@ -45,7 +49,10 @@ class AdminController extends Controller
             'totalRevenue',
             'revenueGrowthPercentage',
             'totalStreams',
-            'streamGrowthPercentage'
+            'streamGrowthPercentage',
+            'recentSongs',
+            'topGenres',
+            'recentActivities'
         ));
 
     }

@@ -2,71 +2,7 @@
 
 @section('content')
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-white">
-        <div class="container">
-            <a class="navbar-brand" href="#">MusicApp</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url('/') }}">
-                            <i class="fas fa-home me-1"></i> Home
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" href="#">
-                            <i class="fas fa-tachometer-alt me-1"></i> Dashboard
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <i class="fas fa-users me-1"></i> Users
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <i class="fas fa-music me-1"></i> Songs
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <i class="fas fa-cog me-1"></i> Settings
-                        </a>
-                    </li>
-                </ul>
-                <div class="d-flex align-items-center">
-                    <div class="dropdown">
-                        <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button"
-                            data-bs-toggle="dropdown" aria-expanded="false">
-                            <img src="https://ui-avatars.com/api/?name={{ Auth::user()->name }}&background=4361ee&color=fff"
-                                class="rounded-circle me-2" width="32" height="32" alt="Profile">
-                            <span>{{ Auth::user()->name }}</span>
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-end shadow-sm">
-                            <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i> Profile</a></li>
-                            <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i> Settings</a></li>
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
-                            <li>
-                                @php
-                                    $user = Auth::user();
-                                    $userRole = $user->getRoleNames()->first();
-                                @endphp
-                                <form action="{{ route('logout', ['role' => $userRole]) }}" method="POST">
-                                    @csrf
-                                    <button class="dropdown-item text-danger"><i class="fas fa-sign-out-alt me-2"></i>
-                                        Logout</button>
-                                </form>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </nav>
+    @include('layouts.includes.admin.navbar');
 
     <!-- Content -->
     <div class="container py-4">
@@ -165,18 +101,33 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    @foreach($recentSongs as $song)
+
                                     <tr>
                                         <td>
                                             <div class="d-flex align-items-center">
                                                 <img src="https://picsum.photos/40/40?random=1" class="rounded me-3"
                                                     alt="Song">
-                                                <div>Blinding Lights</div>
+                                                <div>{{ $song->title }}</div>
                                             </div>
                                         </td>
-                                        <td>The Weeknd</td>
-                                        <td>Pop</td>
-                                        <td>Today</td>
-                                        <td><span class="badge bg-success">Active</span></td>
+                                        <td>{{ $song->name }}</td>
+                                        <td>{{ $song->genre }}</td>
+                                        <td>{{ $song->uploaded  }}</td>
+                                        <td>
+                                            @php
+                                                $status = $song->status;
+                                                $bgColor = 'bg-success';
+                                                if($status=='Active'){
+                                                    $bgColor = 'bg-success';
+                                                }elseif($status=='Inactive'){
+                                                    $bgColor = 'bg-danger';
+                                                }else{
+                                                    $bgColor = 'bg-warning';
+                                                }
+                                            @endphp
+                                            <span class="badge bg-success">{{ $song->status  }}</span>
+                                        </td>
                                         <td>
                                             <div class="btn-group">
                                                 <button type="button" class="btn btn-sm btn-outline-secondary"
@@ -190,7 +141,10 @@
                                             </div>
                                         </td>
                                     </tr>
-                                    <tr>
+
+                                    @endforeach
+
+                                    {{-- <tr>
                                         <td>
                                             <div class="d-flex align-items-center">
                                                 <img src="https://picsum.photos/40/40?random=2" class="rounded me-3"
@@ -289,7 +243,7 @@
                                                 </button>
                                             </div>
                                         </td>
-                                    </tr>
+                                    </tr> --}}
                                 </tbody>
                             </table>
                         </div>
@@ -303,7 +257,31 @@
                         <h5 class="mb-0">Top Genres</h5>
                     </div>
                     <div class="card-body">
-                        <div class="mb-3">
+                        @php
+                            $bgClasses = ['bg-primary', 'bg-warning', 'bg-success', 'bg-danger', 'bg-secondary', 'bg-info', 'bg-dark'];
+                            $number = 0;
+                        @endphp
+
+                        @foreach ($topGenres as $genreName => $genreData)
+                            @php
+                                $progressBg = $bgClasses[$number];
+                                if($number>6){
+                                    $number=0;
+                                }
+                                $number++;
+                            @endphp
+                            <div class="mb-3">
+                                <div class="d-flex justify-content-between mb-1">
+                                    <span>{{ $genreName }}</span>
+                                    <span>{{ $genreData['percentage']  }}%</span>
+                                </div>
+                                <div class="progress" style="height: 8px;">
+                                    <div class="progress-bar {{ $progressBg }}" role="progressbar" style="width: {{ $genreData['percentage']  }}%"></div>
+                                </div>
+                            </div>
+                        @endforeach
+
+                        {{-- <div class="mb-3">
                             <div class="d-flex justify-content-between mb-1">
                                 <span>Pop</span>
                                 <span>45%</span>
@@ -338,7 +316,10 @@
                             <div class="progress" style="height: 8px;">
                                 <div class="progress-bar bg-danger" role="progressbar" style="width: 10%"></div>
                             </div>
-                        </div>
+                        </div> --}}
+
+
+
                     </div>
                 </div>
 
@@ -348,16 +329,22 @@
                     </div>
                     <div class="card-body p-0">
                         <ul class="list-group list-group-flush">
+                            @foreach($recentActivities as $activity)
+
                             <li class="list-group-item d-flex align-items-center py-3">
                                 <div class="rounded-circle bg-primary bg-opacity-10 p-2 me-3">
-                                    <i class="fas fa-upload text-primary"></i>
+                                    <i class="fab fa-creative-commons-by"></i>
                                 </div>
                                 <div>
-                                    <p class="mb-0">New song uploaded</p>
-                                    <small class="text-muted">30 minutes ago</small>
+                                    <p class="mb-0">{{ $activity->description }} </p>
+                                    <small class="text-muted">{{ $activity->created_at->diffForHumans() }}</small>
                                 </div>
                             </li>
-                            <li class="list-group-item d-flex align-items-center py-3">
+
+                             @endforeach
+
+
+                            {{-- <li class="list-group-item d-flex align-items-center py-3">
                                 <div class="rounded-circle bg-success bg-opacity-10 p-2 me-3">
                                     <i class="fas fa-user-plus text-success"></i>
                                 </div>
@@ -392,7 +379,7 @@
                                     <p class="mb-0">System settings updated</p>
                                     <small class="text-muted">1 day ago</small>
                                 </div>
-                            </li>
+                            </li> --}}
                         </ul>
                     </div>
                 </div>
@@ -401,15 +388,5 @@
     </div>
 
     <!-- Footer -->
-    <footer class="mt-5">
-        <div class="container">
-            <div class="d-flex justify-content-between align-items-center">
-                <p class="mb-0">&copy; 2023 Music Cool Poll. All rights reserved.</p>
-                <div>
-                    <a href="#" class="text-decoration-none text-muted me-3">Privacy Policy</a>
-                    <a href="#" class="text-decoration-none text-muted">Terms of Service</a>
-                </div>
-            </div>
-        </div>
-    </footer>
+    @include('layouts.includes.footer');
 @endsection

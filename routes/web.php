@@ -2,9 +2,12 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AdminUserController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -55,4 +58,19 @@ Route::middleware(['auth', 'role:User,Cover Creator,Artist,Composer', 'verified'
 // Admin Routes
 Route::middleware(['auth', 'role:Super Admin,Admin'])->group(function () {
     Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+
+    //User Management
+    Route::get('/admin/user', [AdminUserController::class, 'index'])->name('admin.user.index'); // List User
+    Route::get('/admin/user/create', [AdminUserController::class, 'create'])->name('admin.user.create'); // Form Tambah User
+    Route::post('/admin/user', [AdminUserController::class, 'store'])->name('admin.user.store'); // Simpan User Baru
+    Route::get('/admin/user/{id}/edit', [AdminUserController::class, 'edit'])->name('admin.user.edit'); // Form Edit User
+    Route::put('/admin/user/{id}', [AdminUserController::class, 'update'])->name('admin.user.update'); // Update User
+    Route::delete('/admin/user/{id}', [AdminUserController::class, 'destroy'])->name('admin.user.destroy'); // Hapus User
+
+});
+
+//Utility Route
+Route::get('/regions', function () {
+    $json = Storage::disk('local')->get('data/regions.json');
+    return response()->json(json_decode($json));
 });
