@@ -1,6 +1,7 @@
 @extends('layouts.app-admin')
 
 @section('content')
+    @include('layouts.includes.admin.navbar');
     <div class="page-header d-print-none">
         <div class="container-xl">
             <div class="row g-2 align-items-center">
@@ -136,11 +137,40 @@
                     <div class="pagination-container">
                         {{ $users->onEachSide(1)->links('pagination.tabler') }}
                     </div>
+
+                
+                </div>
+            </div>
+
+
+        </div>
+
+    </div>
+
+    <div class="modal" id="modal-confirm-delete" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Delete</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="delete-message">Apakah akan menghapus data ini?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary btnDelete" data-delete=""
+                        onclick="confirmDelete()">Delete</button>
                 </div>
             </div>
         </div>
     </div>
 
+
+@push('styles')
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+@endpush
+@section('scripts')
     <script>
         function confirmDelete(userId) {
             Swal.fire({
@@ -155,13 +185,66 @@
                 if (result.isConfirmed) {
                     // Here you would submit a form or make an AJAX request
                     // For now, we'll just show a success message
-                    Swal.fire(
-                        'Deleted!',
-                        'The user has been deleted.',
-                        'success'
-                    );
+                    
+                    fetch(`{{ url('/admin/user/') }}/${userId}`, {
+                        method: "DELETE",
+                        headers: {
+                            "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content"),
+                            "Content-Type": "application/json"
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+
+                        if(data.error){
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: `${data.error}`,
+                                showConfirmButton: false,
+                            });
+                        }
+                        if(data.success){
+                           Swal.fire({
+                                title: 'Deleted!',
+                                text: 'The user has been deleted.',
+                                icon: 'success',
+                                timer: 1000,
+                                showConfirmButton: false
+                            }).then(() => {
+                                location.reload();
+                            });
+                         }
+
+                    })
+                    .catch(error => console.error("Error:", error));
+                    
+
                 }
             });
         }
     </script>
+    <script>
+
+        @if (session('success'))
+            Swal.fire({
+                icon: 'success',
+                title: 'Success',
+                text: "{{ session('success') }}",
+                showConfirmButton: false,
+                timer: 3000
+            });
+        @endif
+
+        @if (session('error'))
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: "{{ session('error') }}",
+                showConfirmButton: true
+            });
+        @endif
+
+    </script>
+
 @endsection
