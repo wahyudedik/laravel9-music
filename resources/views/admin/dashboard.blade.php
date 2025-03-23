@@ -2,9 +2,7 @@
 
 @section('content')
 
-<!-- Navbar -->
-@include('layouts.includes.admin.navbar');
-    
+
     <div class="page-header d-print-none">
         <div class="container-xl">
             <div class="row g-2 align-items-center">
@@ -222,7 +220,7 @@
 
                                     @endforeach
 
-                                    
+
                                 </tbody>
                             </table>
                         </div>
@@ -261,7 +259,7 @@
                                   <h5 class="mb-0">Top Genres</h5>
                               </div>
                                 <div class="card-body">
-                                
+
                                   @php
                                       $bgClasses = ['bg-primary', 'bg-warning', 'bg-success', 'bg-danger', 'bg-secondary', 'bg-info', 'bg-dark'];
                                       $number = 0;
@@ -285,19 +283,21 @@
                                             </div>
                                         </div>
                                     @endforeach
-                                    
+
                                 </div>
                             </div>
                         </div>
 
                         <div class="col-12">
+
                             <div class="card">
                                 <div class="card-header">
                                     <h3 class="card-title">Recent Activities</h3>
                                 </div>
+
                                 <div class="list-group list-group-flush">
                                     @foreach($recentActivities as $activity)
-                                    
+
                                     <div class="list-group-item">
                                         <div class="row align-items-center">
                                             <div class="col-auto">
@@ -307,16 +307,18 @@
                                             </div>
                                             <div class="col">
                                                 <div class="text-body">{{ $activity->description }}</div>
-                                                <div class="text-muted">{{ $activity->created_at->diffForHumans() }}/div>
+                                                <div class="text-muted">
+                                                    {{ $activity->created_at->diffForHumans() }}
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                    
+
                                     @endforeach
-                                    
-                                    
+
                                 </div>
                             </div>
+
                         </div>
 
                         <div class="col-12">
@@ -492,7 +494,7 @@
             }
         });
     </script>
-    
+
 
   <!-- Footer -->
     @include('layouts.includes.footer');
