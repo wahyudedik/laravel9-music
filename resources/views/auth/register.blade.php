@@ -18,7 +18,7 @@
                     <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
             </div>
-            
+
             <div class="mb-3">
                 <label class="form-label">Username</label>
                 <input type="text" name="username" class="form-control @error('username') is-invalid @enderror" value="{{ old('username') }}" required>
@@ -26,7 +26,7 @@
                     <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
             </div>
-            
+
             <div class="mb-3">
                 <label class="form-label">Email</label>
                 <input type="email" name="email" class="form-control @error('email') is-invalid @enderror" value="{{ old('email') }}" required>
@@ -34,7 +34,7 @@
                     <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
             </div>
-            
+
             <div class="mb-3">
                 <label class="form-label">Phone</label>
                 <input type="text" name="phone" class="form-control @error('phone') is-invalid @enderror" value="{{ old('phone') }}" required>
@@ -42,7 +42,7 @@
                     <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
             </div>
-            
+
             <div class="mb-3">
                 <label class="form-label">Password</label>
                 <div class="position-relative">
@@ -53,7 +53,7 @@
                     <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
             </div>
-            
+
             <div class="mb-4">
                 <label class="form-label">Confirm Password</label>
                 <div class="position-relative">
@@ -61,7 +61,7 @@
                     <span class="password-toggle"><i class="far fa-eye"></i></span>
                 </div>
             </div>
-            
+
             <button type="submit" class="btn btn-primary w-100 mb-3">Register</button>
         </form>
 
@@ -70,7 +70,7 @@
         </div>
 
         <div class="d-grid gap-2 mb-4">
-            <a href="#" class="btn btn-outline-secondary">
+            <a href="{{route('google.login')}}" class="btn btn-outline-secondary">
                 <i class="fab fa-google me-2"></i>Continue with Google
             </a>
         </div>

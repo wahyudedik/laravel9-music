@@ -9,7 +9,7 @@
         </div>
         <h4 class="text-center mb-4">Login to your account</h4>
 
-        <form method="POST" action="{{ route('login') }}"> 
+        <form method="POST" action="{{ route('login') }}">
             @csrf
             <div class="mb-3">
                 <label for="email" class="form-label">Email</label>
@@ -48,7 +48,7 @@
         </div>
 
         <div class="d-grid gap-2">
-            <a href="#" class="btn btn-outline-secondary">
+            <a href="{{route('google.login')}}" class="btn btn-outline-secondary">
                 <i class="fab fa-google me-2"></i>Continue with Google
             </a>
         </div>
