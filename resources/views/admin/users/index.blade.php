@@ -1,7 +1,9 @@
 @extends('layouts.app-admin')
 
 @section('content')
-    @include('layouts.includes.admin.navbar');
+
+    {{-- @include('layouts.includes.admin.navbar'); --}}
+
     <div class="page-header d-print-none">
         <div class="container-xl">
             <div class="row g-2 align-items-center">
@@ -138,7 +140,7 @@
                         {{ $users->onEachSide(1)->links('pagination.tabler') }}
                     </div>
 
-                
+
                 </div>
             </div>
 
@@ -166,7 +168,7 @@
         </div>
     </div>
 
-
+@endsection
 @push('styles')
     <meta name="csrf-token" content="{{ csrf_token() }}">
 @endpush
@@ -185,7 +187,7 @@
                 if (result.isConfirmed) {
                     // Here you would submit a form or make an AJAX request
                     // For now, we'll just show a success message
-                    
+
                     fetch(`{{ url('/admin/user/') }}/${userId}`, {
                         method: "DELETE",
                         headers: {
@@ -218,7 +220,7 @@
 
                     })
                     .catch(error => console.error("Error:", error));
-                    
+
 
                 }
             });
