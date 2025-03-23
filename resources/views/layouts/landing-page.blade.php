@@ -9,469 +9,244 @@
     <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('apple-touch-icon.png') }}">
     <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon-32x32.png') }}">
     <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('favicon-16x16.png') }}">
-    <link rel="manifest" href="{{ asset('site.webmanifest') }}">
 
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Tabler CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta17/dist/css/tabler.min.css">
+    <!-- Tabler Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.30.0/tabler-icons.min.css">
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
         :root {
-            --primary-color: #e51e2f;
-            --primary-dark: #c41a29;
-            --primary-light: #ff3a4b;
-            --dark-bg: #121212;
-            --card-bg: #181818;
-            --text-color: #ffffff;
-            --text-muted: #b3b3b3;
-            --hover-bg: #282828;
-            --sidebar-bg: #000000;
-            --topbar-bg: rgba(0, 0, 0, 0.7);
+            --tblr-primary: #e53935;
+            --tblr-primary-rgb: 229, 57, 53;
         }
-
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-            background-color: var(--dark-bg);
-            color: var(--text-color);
-            min-height: 100vh;
-            margin: 0;
-            padding: 0;
-        }
-
-        /* Layout */
-        .main-container {
-            display: flex;
-            height: 100vh;
-        }
-
-        .sidebar {
-            width: 240px;
-            background-color: var(--sidebar-bg);
-            padding: 24px 12px;
-            overflow-y: auto;
-            flex-shrink: 0;
-        }
-
-        .content-area {
-            flex-grow: 1;
-            overflow-y: auto;
-            background: linear-gradient(to bottom, #3a1214, var(--dark-bg) 400px);
-        }
-
-        .topbar {
-            height: 64px;
-            background-color: var(--topbar-bg);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            display: flex;
-            align-items: center;
-            padding: 0 32px;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        /* Navbar */
-        .navbar {
-            background-color: transparent !important;
-            padding: 16px 0;
-        }
-
-        .navbar-brand {
-            font-size: 24px;
-            font-weight: 700;
-            color: var(--text-color) !important;
-        }
-
-        .logo-container {
-            padding: 0 12px 24px 12px;
-        }
-
-        /* Buttons */
-        .btn {
-            border-radius: 500px;
-            padding: 8px 32px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1.2px;
-            font-size: 0.8rem;
-        }
-
         .btn-primary {
-            background-color: var(--primary-color);
-            border-color: var(--primary-color);
+            background-color: var(--tblr-primary);
+            border-color: var(--tblr-primary);
         }
-
-        .btn-primary:hover {
-            background-color: var(--primary-dark);
-            border-color: var(--primary-dark);
-            transform: scale(1.04);
+        .btn-primary:hover, .btn-primary:focus {
+            background-color: #d32f2f;
+            border-color: #d32f2f;
         }
-
-        .btn-outline-light {
-            color: var(--text-color);
-            border-color: var(--text-color);
+        .btn-outline-primary {
+            color: var(--tblr-primary);
+            border-color: var(--tblr-primary);
         }
-
-        .btn-outline-light:hover {
-            background-color: rgba(255, 255, 255, 0.1);
-            color: var(--text-color);
-            transform: scale(1.04);
+        .btn-outline-primary:hover, .btn-outline-primary:focus {
+            background-color: var(--tblr-primary);
+            border-color: var(--tblr-primary);
         }
-
-        /* Hero Section */
-        .hero-section {
-            padding: 120px 0;
-            text-align: center;
+        .text-primary {
+            color: var(--tblr-primary) !important;
         }
-
-        .hero-title {
-            font-size: 60px;
-            font-weight: 900;
-            margin-bottom: 24px;
+        .bg-primary {
+            background-color: var(--tblr-primary) !important;
         }
-
-        .hero-subtitle {
-            font-size: 24px;
-            margin-bottom: 32px;
-            color: var(--text-muted);
+        .navbar-brand-image {
+            height: 2rem;
+            width: auto;
         }
-
-        /* Cards */
-        .card {
-            background-color: var(--card-bg);
-            border: none;
-            border-radius: 8px;
-            transition: all 0.3s ease;
-            margin-bottom: 20px;
-            overflow: hidden;
-            position: relative;
+        .btn-danger {
+            background-color: var(--tblr-primary);
+            border-color: var(--tblr-primary);
         }
-
-        .card:hover {
-            background-color: var(--hover-bg);
-            transform: translateY(-5px);
+        .btn-danger:hover {
+            background-color: #d32f2f;
+            border-color: #d32f2f;
         }
-
-        .card-img-top {
-            border-radius: 8px 8px 0 0;
+        .page-item.active .page-link {
+            background-color: var(--tblr-primary);
+            border-color: var(--tblr-primary);
         }
-
-        .card-body {
-            padding: 16px;
-        }
-
-        .card-title {
-            font-weight: 700;
-            font-size: 16px;
-            margin-bottom: 8px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .card-text {
-            color: var(--text-muted);
-            font-size: 14px;
-        }
-
-        .play-button {
-            position: absolute;
-            bottom: 16px;
-            right: 16px;
-            background-color: var(--primary-color);
-            color: white;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            transform: translateY(10px);
-            transition: all 0.3s ease;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
-        }
-
-        .card:hover .play-button {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .play-button:hover {
-            transform: scale(1.1);
-            background-color: var(--primary-light);
-        }
-
-        /* Section Titles */
-        .section-title {
-            font-size: 24px;
-            font-weight: 700;
-            margin-bottom: 24px;
-            padding-left: 16px;
-        }
-
-        /* Sidebar Navigation */
-        .nav-item {
-            margin-bottom: 8px;
-        }
-
-        .nav-link {
-            color: var(--text-muted);
-            font-weight: 600;
-            padding: 12px 16px;
-            border-radius: 4px;
-            transition: all 0.2s;
-            display: flex;
-            align-items: center;
-        }
-
-        .nav-link:hover,
         .nav-link.active {
-            color: var(--text-color);
-            background-color: rgba(255, 255, 255, 0.1);
-        }
-
-        .nav-link i {
-            margin-right: 16px;
-            font-size: 20px;
-        }
-
-        /* Category Cards */
-        .category-card {
-            height: 180px;
-            display: flex;
-            align-items: flex-end;
-            padding: 20px;
-            background-size: cover;
-            background-position: center;
-            border-radius: 8px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .category-card::before {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 50%;
-            background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
-            z-index: 1;
-        }
-
-        .category-card h5 {
-            position: relative;
-            z-index: 2;
-            font-weight: 700;
-            font-size: 24px;
-        }
-
-        /* Footer */
-        footer {
-            background-color: var(--dark-bg);
-            padding: 60px 0 20px;
-            color: var(--text-muted);
-        }
-
-        .footer-links {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 40px;
-        }
-
-        .footer-links h5 {
-            color: var(--text-color);
-            font-size: 14px;
-            font-weight: 700;
-            margin-bottom: 20px;
-        }
-
-        .footer-links ul {
-            list-style: none;
-            padding: 0;
-        }
-
-        .footer-links li {
-            margin-bottom: 12px;
-        }
-
-        .footer-links a {
-            color: var(--text-muted);
-            text-decoration: none;
-            font-size: 14px;
-        }
-
-        .footer-links a:hover {
-            color: var(--text-color);
-        }
-
-        .social-links a {
-            color: var(--text-color);
-            margin-right: 15px;
-            font-size: 18px;
-        }
-
-        .copyright {
-            border-top: 1px solid #333;
-            padding-top: 20px;
-            font-size: 12px;
-        }
-
-        /* Responsive */
-        @media (max-width: 992px) {
-            .sidebar {
-                width: 80px;
-            }
-
-            .sidebar .nav-link span {
-                display: none;
-            }
-
-            .sidebar .nav-link i {
-                margin-right: 0;
-                font-size: 24px;
-            }
-
-            .logo-text {
-                display: none;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .main-container {
-                flex-direction: column;
-            }
-
-            .sidebar {
-                width: 100%;
-                height: auto;
-                padding: 12px;
-            }
-
-            .content-area {
-                height: calc(100vh - 60px);
-            }
-
-            .hero-title {
-                font-size: 40px;
-            }
-
-            .hero-subtitle {
-                font-size: 18px;
-            }
+            color: var(--tblr-primary) !important;
         }
     </style>
 </head>
 
 <body>
-    <div class="main-container">
-        <!-- Sidebar -->
-        <div class="sidebar d-none d-md-block">
-            <div class="logo-container">
-                <a class="navbar-brand d-flex align-items-center" href="{{ url('/') }}">
-                    <img src="{{ asset('img/favicon.png') }}" alt="Logo" width="40" height="40"
-                        class="me-2">
-                    <span class="logo-text">Playlist Music</span>
-                </a>
-            </div>
-            <ul class="nav flex-column">
-                <li class="nav-item">
-                    <a class="nav-link active" href="#">
-                        <i class="fas fa-home"></i>
-                        <span>Beranda</span>
+    <div class="page">
+        <!-- Combined Navbar -->
+        <header class="navbar navbar-expand-md navbar-light d-print-none">
+            <div class="container-xl">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-menu"
+                    aria-controls="navbar-menu" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <h1 class="navbar-brand navbar-brand-autodark d-none-navbar-horizontal pe-0 pe-md-3">
+                    <a href="{{ url('/') }}" class="d-flex align-items-center">
+                        <img src="{{ asset('img/favicon.png') }}" width="32" height="32" alt="Logo"
+                            class="navbar-brand-image me-2">
+                        <span class="font-weight-bold">Playlist Music</span>
                     </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">
-                        <i class="fas fa-search"></i>
-                        <span>Cari</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">
-                        <i class="fas fa-book"></i>
-                        <span>Koleksi Kamu</span>
-                    </a>
-                </li>
-                <li class="nav-item mt-4">
-                    <a class="nav-link" href="#">
-                        <i class="fas fa-plus-square"></i>
-                        <span>Buat Playlist</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">
-                        <i class="fas fa-heart"></i>
-                        <span>Lagu yang Disukai</span>
-                    </a>
-                </li>
-            </ul>
-        </div>
-
-        <!-- Main Content -->
-        <div class="content-area">
-            <!-- Top Navigation Bar -->
-            <div class="topbar">
-                <div class="d-flex d-md-none">
-                    <a class="navbar-brand" href="{{ url('/') }}">
-                        <img src="{{ asset('img/favicon.png') }}" alt="Logo" width="30" height="30">
-                    </a>
-                </div>
-                <div class="ms-auto d-flex align-items-center">
+                </h1>
+                <div class="navbar-nav flex-row order-md-last">
                     @auth
-                        @if (Auth::user()->hasRole(['Super Admin', 'Admin']))
-                            <a href="{{ url('admin/dashboard') }}" class="btn btn-outline-light me-2">Admin
-                                Dashboard</a>
-                        @endif
-                        @if (Auth::user()->hasRole(['User', 'Cover Creator', 'Artist', 'Composer']))
-                            <a href="{{ url('user/dashboard') }}" class="btn btn-outline-light me-2">User Dashboard</a>
-                        @endif
-                        @php
-                            $user = Auth::user();
-                            $userRole = $user->getRoleNames()->first();
-                        @endphp
-                        <form action="{{ url('logout/' . $userRole) }}" method="POST">
-                            @csrf
-                            <button type="submit" class="btn btn-primary">Logout</button>
-                        </form>
+                        <div class="nav-item dropdown">
+                            <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown"
+                                aria-label="Open user menu">
+                                <span class="avatar avatar-sm bg-primary-lt">{{ substr(Auth::user()->name, 0, 2) }}</span>
+                                <div class="d-none d-xl-block ps-2">
+                                    <div>{{ Auth::user()->name }}</div>
+                                    <div class="mt-1 small text-muted">{{ Auth::user()->getRoleNames()->first() }}</div>
+                                </div>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                                @if (Auth::user()->hasRole(['Super Admin', 'Admin']))
+                                    <a href="{{ url('admin/dashboard') }}" class="dropdown-item">Admin Dashboard</a>
+                                @endif
+                                @if (Auth::user()->hasRole(['User', 'Cover Creator', 'Artist', 'Composer']))
+                                    <a href="{{ url('user/dashboard') }}" class="dropdown-item">User Dashboard</a>
+                                @endif
+                                <div class="dropdown-divider"></div>
+                                @php
+                                    $user = Auth::user();
+                                    $userRole = $user->getRoleNames()->first();
+                                @endphp
+                                <form action="{{ url('logout/' . $userRole) }}" method="POST">
+                                    @csrf
+                                    <button type="submit" class="dropdown-item">Logout</button>
+                                </form>
+                            </div>
+                        </div>
                     @else
-                        <a href="{{ route('login') }}" class="btn btn-outline-light me-3">Login</a>
-                        <a href="{{ route('register') }}" class="btn btn-primary">Register</a>
+                        <div class="d-flex">
+                            <a href="{{ route('login') }}" class="btn btn-outline-primary me-2">
+                                <i class="ti ti-login me-1"></i> Login
+                            </a>
+                            <a href="{{ route('register') }}" class="btn btn-primary">
+                                <i class="ti ti-user-plus me-1"></i> Register
+                            </a>
+                        </div>
                     @endauth
                 </div>
+                <div class="collapse navbar-collapse" id="navbar-menu">
+                    <div class="d-flex flex-column flex-md-row flex-fill align-items-stretch align-items-md-center">
+                        <ul class="navbar-nav">
+                            <li class="nav-item {{ Request::is('/') ? 'active' : '' }}">
+                                <a class="nav-link" href="{{ url('/') }}">
+                                    <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                        <i class="ti ti-home"></i>
+                                    </span>
+                                    <span class="nav-link-title">Beranda</span>
+                                </a>
+                            </li>
+                            <li class="nav-item {{ Request::is('popular-songs') ? 'active' : '' }}">
+                                <a class="nav-link" href="{{ route('popular-songs') }}">
+                                    <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                        <i class="ti ti-music"></i>
+                                    </span>
+                                    <span class="nav-link-title">Lagu Populer</span>
+                                </a>
+                            </li>
+                            <li class="nav-item {{ Request::is('artists') ? 'active' : '' }}">
+                                <a class="nav-link" href="{{ route('artists') }}">
+                                    <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                        <i class="ti ti-microphone"></i>
+                                    </span>
+                                    <span class="nav-link-title">Artis</span>
+                                </a>
+                            </li>
+                            <li class="nav-item {{ Request::is('covers') ? 'active' : '' }}">
+                                <a class="nav-link" href="{{ route('covers') }}">
+                                    <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                        <i class="ti ti-disc"></i>
+                                    </span>
+                                    <span class="nav-link-title">Cover</span>
+                                </a>
+                            </li>
+                            <li class="nav-item {{ Request::is('composers') ? 'active' : '' }}">
+                                <a class="nav-link" href="{{ route('composers') }}">
+                                    <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                        <i class="ti ti-note"></i>
+                                    </span>
+                                    <span class="nav-link-title">Pencipta</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <div class="page-wrapper">
+            <!-- Content -->
+            <div class="page-body">
+                <div class="container-xl">
+                    @yield('content')
+                </div>
             </div>
 
-            <!-- Content -->
-            <div class="container py-4">
-                @yield('content')
-            </div>
+            <!-- Footer -->
+            <footer class="footer footer-transparent d-print-none">
+                <div class="container-xl">
+                    <div class="row text-center align-items-center flex-row-reverse">
+                        <div class="col-lg-auto ms-lg-auto">
+                            <ul class="list-inline list-inline-dots mb-0">
+                                <li class="list-inline-item"><a href="#" class="link-secondary">Tentang</a>
+                                </li>
+                                <li class="list-inline-item"><a href="#" class="link-secondary">Dukungan</a>
+                                </li>
+                                <li class="list-inline-item"><a href="#" class="link-secondary">Privasi</a>
+                                </li>
+                                <li class="list-inline-item"><a href="#" class="link-secondary">Ketentuan</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-12 col-lg-auto mt-3 mt-lg-0">
+                            <ul class="list-inline list-inline-dots mb-0">
+                                <li class="list-inline-item">
+                                    <a href="#" class="link-secondary">
+                                        <i class="ti ti-brand-instagram"></i>
+                                    </a>
+                                </li>
+                                <li class="list-inline-item">
+                                    <a href="#" class="link-secondary">
+                                        <i class="ti ti-brand-twitter"></i>
+                                    </a>
+                                </li>
+                                <li class="list-inline-item">
+                                    <a href="#" class="link-secondary">
+                                        <i class="ti ti-brand-facebook"></i>
+                                    </a>
+                                </li>
+                                <li class="list-inline-item">
+                                    <a href="#" class="link-secondary">
+                                        <i class="ti ti-brand-youtube"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-12 col-lg-auto mt-3 mt-lg-0">
+                            <div class="d-flex">
+                                <i class="ti ti-copyright me-1"></i> 2025 Playlist Music Indonesia
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </footer>
         </div>
     </div>
 
-    <!-- Bootstrap JS Bundle -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- SweetAlert2 JS -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- Tabler Core JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta17/dist/js/tabler.min.js"></script>
+    <!-- SweetAlert2 JS - Latest Version -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.all.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Initialize tooltips
-            const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-            tooltipTriggerList.map(function(tooltipTriggerEl) {
-                return new bootstrap.Tooltip(tooltipTriggerEl);
-            });
-
-            // Flash messages with SweetAlert
             @if (session('success'))
                 Swal.fire({
                     icon: 'success',
                     title: 'Success',
                     text: "{{ session('success') }}",
                     showConfirmButton: false,
-                    timer: 3000
+                    timer: 3000,
+                    timerProgressBar: true,
+                    toast: true,
+                    position: 'top-end'
                 });
             @endif
 
@@ -480,7 +255,8 @@
                     icon: 'error',
                     title: 'Error',
                     text: "{{ session('error') }}",
-                    showConfirmButton: true
+                    showConfirmButton: true,
+                    confirmButtonColor: '#e53935'
                 });
             @endif
         });

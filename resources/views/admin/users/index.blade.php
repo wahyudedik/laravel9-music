@@ -1,127 +1,144 @@
-@extends('layouts.app')
+@extends('layouts.app-admin')
 
 @section('content')
     @include('layouts.includes.admin.navbar');
-
-    <div class="container py-4">
-
-        <!-- Header -->
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <div>
-                <h2 class="mb-1">User</h2>
-                {{-- <p class="text-muted mb-0">list view</p> --}}
-            </div>
-            <div>
-                <a href="{{ url('admin/user/create') }}" class="btn btn-primary">
-                    <i class="fas fa-plus me-2"></i> New User
-                </a>
+    <div class="page-header d-print-none">
+        <div class="container-xl">
+            <div class="row g-2 align-items-center">
+                <div class="col">
+                    <h2 class="page-title">
+                        User Management
+                    </h2>
+                    <div class="text-muted mt-1">Manage all users in the system</div>
+                </div>
+                <div class="col-auto ms-auto d-print-none">
+                    <div class="btn-list">
+                        <a href="{{ route('admin.users.create') }}" class="btn btn-primary d-none d-sm-inline-block">
+                            <i class="ti ti-plus"></i>
+                            Create new user
+                        </a>
+                        <a href="{{ route('admin.users.create') }}" class="btn btn-primary d-sm-none btn-icon">
+                            <i class="ti ti-plus"></i>
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
+    </div>
 
-        @php
-
-        @endphp
-
-        <div class="row g-4">
-            <div class="col-md-12">
-                <div class="card">
-                    <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">
-                        <h5 class="mb-0">List View</h5>
-                        <div class="d-flex align-items-center">
-                            <div></div>
-                        </div>
-                        {{-- <a href="#" class="text-decoration-none">View All</a> --}}
+    <div class="page-body">
+        <div class="container-xl">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Users</h3>
+                    <div class="card-actions">
+                        <form action="{{ route('admin.users.index') }}" method="GET">
+                            <div class="input-group">
+                                <input type="text" name="search" class="form-control" placeholder="Search users..."
+                                    value="{{ request('search') }}">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="ti ti-search"></i>
+                                </button>
+                            </div>
+                        </form>
                     </div>
-                    <div class="card-body p-0">
-                        <div class="table-responsive">
-                            <table class="table table-hover align-middle mb-0">
-                                <thead class="table-light">
-                                    <tr>
-                                        <th scope="col">User</th>
-                                        <th scope="col">Region</th>
-                                        <th scope="col">Follow</th>
-                                        <th scope="col">Last Login</th>
-                                        <th scope="col">Create at</th>
-                                        <th scope="col">Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-
-                                    @foreach ($users as $user)
-                                        <tr>
-                                            <td>
-                                                <div class="d-flex align-items-start">
-                                                    <img src="https://picsum.photos/40/40?random=2" class="rounded me-3"
-                                                        alt="Song">
-                                                    <div class="d-flex flex-column">
-                                                        <div>{{ $user->name }}</div>
-                                                        <div class="small text-secondary">{{ $user->username }}</div>
-                                                        <div class="small text-secondary">{{ $user->email }}</div>
-
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="d-flex flex-column">
-                                                    <div>{{ $user->country }}</div>
-                                                    <div class="small text-secondary">{{ $user->region }}</div>
-                                                    <div class="small text-secondary">{{ $user->city }}</div>
-                                                </div>
-
-                                            </td>
-                                            <td>
-                                                <div class="d-flex flex-column small">
-                                                    <div>followers {{ $user->followers }}</div>
-                                                    <div>following {{ $user->following }}</div>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="small">
-                                                    @if ($user->last_login)
-                                                        {{ \Carbon\Carbon::parse($user->last_login)->diffForHumans() }}
-                                                    @else
-                                                        -
-                                                    @endif
-                                                </div>
-
-                                            </td>
-                                            <td class="small">
-                                                {{ \Carbon\Carbon::parse($user->created_at)->format('d-m-Y H:i') }}
-                                            </td>
-                                            <td>
-                                                <div class="btn-group">
-                                                    <a type="button"
-                                                        href="{{ url('/admin/user/' . $user->id . '/edit') }}"
-                                                        class="btn btn-sm btn-outline-secondary" data-bs-toggle="tooltip"
-                                                        title="Edit">
-                                                        <i class="fas fa-edit"></i>
-                                                    </a>
-                                                    <button type="button" class="btn btn-sm btn-outline-danger"
-                                                        data-bs-toggle="tooltip" title="Delete"
-                                                        onclick="delData('{{ $user->id }}','{{ $user->name }}')">
-                                                        <i class="fas fa-trash"></i>
-                                                    </button>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-
-                                </tbody>
-                                @if ($users->hasPages())
-                                    {{-- pagination front end ngebug --}}
-                                    {{-- <tfoot>
-                                        <tr>
-                                            <td colspan="20">
-                                                <div class="p-3">
-                                                    {{ $users->links() }}
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    </tfoot> --}}
-                                @endif
-                            </table>
+                </div>
+                <div class="card-body border-bottom py-3">
+                    <div class="d-flex">
+                        <div class="text-muted">
+                            Show
+                            <div class="mx-2 d-inline-block">
+                                <select class="form-select form-select-sm" name="perPage" onchange="this.form.submit()">
+                                    <option value="10" {{ request('perPage') == 10 ? 'selected' : '' }}>10</option>
+                                    <option value="25" {{ request('perPage') == 25 ? 'selected' : '' }}>25</option>
+                                    <option value="50" {{ request('perPage') == 50 ? 'selected' : '' }}>50</option>
+                                    <option value="100" {{ request('perPage') == 100 ? 'selected' : '' }}>100</option>
+                                </select>
+                            </div>
+                            entries
                         </div>
                     </div>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-vcenter card-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Role</th>
+                                <th>Status</th>
+                                <th>Created</th>
+                                <th class="w-1">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse($users as $user)
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <span class="avatar me-2"
+                                                style="background-image: url(https://ui-avatars.com/api/?name={{ urlencode($user->name) }}&background=e53935&color=fff)"></span>
+                                            <div>
+                                                <div class="font-weight-medium">{{ $user->name }}</div>
+                                                <div class="text-muted">ID: {{ $user->id }}</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <i class="ti ti-mail text-muted me-1"></i>
+                                            {{ $user->email }}
+                                        </div>
+                                    </td>
+                                    <td>
+                                        @foreach ($user->roles as $role)
+                                            <span class="badge bg-primary-lt">{{ $role->name }}</span>
+                                        @endforeach
+                                    </td>
+                                    <td>
+                                        @if ($user->email_verified_at)
+                                            <span class="badge bg-success">Verified</span>
+                                        @else
+                                            <span class="badge bg-warning">Unverified</span>
+                                        @endif
+                                    </td>
+                                    <td>{{ $user->created_at->format('M d, Y') }}</td>
+                                    <td>
+                                        <div class="btn-list flex-nowrap">
+                                            <a href="{{ route('admin.users.show', $user->id) }}"
+                                                class="btn btn-sm btn-outline-primary">
+                                                <i class="ti ti-eye"></i>
+                                            </a>
+                                            <a href="{{ route('admin.users.edit', $user->id) }}"
+                                                class="btn btn-sm btn-outline-primary">
+                                                <i class="ti ti-edit"></i>
+                                            </a>
+                                            <button class="btn btn-sm btn-outline-danger"
+                                                onclick="confirmDelete({{ $user->id }})">
+                                                <i class="ti ti-trash"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="6" class="text-center">No users found</td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+                <div class="card-footer d-flex align-items-center justify-content-between">
+                    <p class="m-0 text-muted">
+                        Showing <span class="fw-bold">{{ $users->firstItem() ?? 0 }}</span>
+                        to <span class="fw-bold">{{ $users->lastItem() ?? 0 }}</span>
+                        of <span class="fw-bold">{{ $users->total() }}</span> entries
+                    </p>
+                    <div class="pagination-container">
+                        {{ $users->onEachSide(1)->links('pagination.tabler') }}
+                    </div>
+
+                
                 </div>
             </div>
 
@@ -150,61 +167,64 @@
     </div>
 
 
-    <div class="container w-100 " style="height: 100px;"></div>
-
-    @include('layouts.includes.footer');
-@endsection
 @push('styles')
     <meta name="csrf-token" content="{{ csrf_token() }}">
 @endpush
-@push('scripts')
+@section('scripts')
     <script>
-        function delData(userId, userName) {
-            document.querySelector('.delete-message').innerText = `Are you sure you want to delete "${userName}"?`;
-            document.querySelector('.btnDelete').setAttribute('data-delete', userId);
-            var modal = new bootstrap.Modal(document.getElementById('modal-confirm-delete'));
-            modal.show();
+        function confirmDelete(userId) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "This action cannot be undone!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#e53935',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Here you would submit a form or make an AJAX request
+                    // For now, we'll just show a success message
+                    
+                    fetch(`{{ url('/admin/user/') }}/${userId}`, {
+                        method: "DELETE",
+                        headers: {
+                            "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content"),
+                            "Content-Type": "application/json"
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+
+                        if(data.error){
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: `${data.error}`,
+                                showConfirmButton: false,
+                            });
+                        }
+                        if(data.success){
+                           Swal.fire({
+                                title: 'Deleted!',
+                                text: 'The user has been deleted.',
+                                icon: 'success',
+                                timer: 1000,
+                                showConfirmButton: false
+                            }).then(() => {
+                                location.reload();
+                            });
+                         }
+
+                    })
+                    .catch(error => console.error("Error:", error));
+                    
+
+                }
+            });
         }
-
-        function confirmDelete() {
-            let userId = document.querySelector('.btnDelete').getAttribute('data-delete');
-            fetch(`{{ url('/admin/user/') }}/${userId}`, {
-                    method: "DELETE",
-                    headers: {
-                        "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content"),
-                        "Content-Type": "application/json"
-                    }
-                })
-                .then(response => response.json())
-                .then(data => {
-
-                    if(data.error){
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error',
-                            text: `${data.error}`,
-                            showConfirmButton: false,
-                        });
-                    }
-                    if(data.success){
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Success',
-                            text: `${data.success}`,
-                            showConfirmButton: false,
-                            timer: 1000
-                        }).then(() => {
-                            location.reload();
-                        });
-                    }
-
-                })
-                .catch(error => console.error("Error:", error));
-
-            var modal = bootstrap.Modal.getInstance(document.getElementById('modal-confirm-delete'));
-            modal.hide();
-        }
-
+    </script>
+    <script>
 
         @if (session('success'))
             Swal.fire({
@@ -227,4 +247,4 @@
 
     </script>
 
-@endpush
+@endsection

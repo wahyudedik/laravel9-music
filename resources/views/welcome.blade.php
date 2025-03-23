@@ -2,29 +2,83 @@
 
 @section('content')
     <!-- Hero Section -->
-    <div class="hero-section">
-        <div class="container">
-            <h1 class="hero-title">Musik untuk semua</h1>
-            <p class="hero-subtitle">Jutaan lagu. Tanpa kartu kredit.</p>
-            <a href="{{ route('register') }}" class="btn btn-light btn-lg px-5 py-3 fw-bold">DAPATKAN PLAYLIST MUSIC
-                GRATIS</a>
+    <div class="card mb-4 bg-primary-lt">
+        <div class="card-body py-5">
+            <div class="row align-items-center">
+                <div class="col-md-7">
+                    <h1 class="display-5 fw-bold mb-3">Temukan Musik Terbaik</h1>
+                    <p class="fs-3 text-muted">Platform musik Indonesia untuk mendengarkan, membuat cover, dan berbagi karya
+                        musik.</p>
+
+                    <!-- Search Section -->
+                    <form action="#" method="GET" class="mt-4">
+                        <div class="input-icon mb-3">
+                            <input type="text" class="form-control form-control-lg"
+                                placeholder="Cari judul lagu, nama artis...">
+                            <span class="input-icon-addon">
+                                <i class="ti ti-search"></i>
+                            </span>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-md-5 d-none d-md-block">
+                    <img src="{{ asset('img/hero.png') }}" class="img-fluid" alt="Music Illustration">
+                </div>
+            </div>
         </div>
     </div>
 
-    <!-- Trending Songs Section -->
-    <div class="container my-5">
-        <h2 class="section-title">Lagu Trending</h2>
-        <div class="row">
-            @for ($i = 1; $i <= 8; $i++)
-                <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
-                    <div class="card shadow-sm h-100">
-                        <img src="https://picsum.photos/300/300?random={{ $i }}" class="card-img-top"
-                            alt="Music Cover">
-                        <div class="card-body">
-                            <h5 class="card-title">Judul Lagu Trending #{{ $i }}</h5>
-                            <p class="card-text">Artis Populer</p>
-                            <div class="play-button">
-                                <i class="fas fa-play"></i>
+    <!-- Popular Songs Section -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center">
+                    <i class="ti ti-music me-2 text-primary"></i>
+                    <h3 class="card-title mb-0">Lagu Populer</h3>
+                </div>
+            </div>
+            <div class="d-flex justify-content-end">
+                <a href="{{ route('popular-songs') }}" class="btn btn-link text-primary">
+                    Lihat Semua <i class="ti ti-chevron-right ms-1"></i>
+                </a>
+            </div>
+        </div>
+        <div class="list-group list-group-flush">
+            @for ($i = 1; $i <= 5; $i++)
+                <div class="list-group-item">
+                    <div class="row g-3 align-items-center">
+                        <div class="col-auto">
+                            <span class="avatar avatar-sm bg-primary-lt">{{ $i }}</span>
+                        </div>
+                        <div class="col-auto">
+                            <div class="position-relative">
+                                <img src="https://picsum.photos/300/300?random={{ $i + 50 }}"
+                                    class="avatar avatar-lg rounded" alt="Song Cover">
+                                <span class="badge bg-primary position-absolute" style="bottom: 5px; right: 5px;">
+                                    <i class="ti ti-player-play"></i>
+                                </span>
+                                @guest
+                                    <span class="badge bg-dark position-absolute" style="top: 5px; right: 5px;">
+                                        <i class="ti ti-lock"></i>
+                                    </span>
+                                @endguest
+                            </div>
+                        </div>
+                        <div class="col">
+                            <h4 class="text-truncate mb-1">Judul Lagu Populer #{{ $i }}</h4>
+                            <div class="text-muted text-truncate">Artis Populer #{{ $i }}</div>
+                        </div>
+                        <div class="col-auto">
+                            <div class="d-flex gap-3 align-items-center">
+                                <div class="text-muted">
+                                    <i class="ti ti-player-play me-1"></i> {{ rand(1, 50) }}M
+                                </div>
+                                <div class="text-muted">
+                                    <i class="ti ti-heart me-1"></i> {{ rand(100, 999) }}K
+                                </div>
+                                <div class="text-muted d-none d-md-block">
+                                    <i class="ti ti-calendar me-1"></i> {{ rand(1, 12) }} bulan lalu
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -33,162 +87,153 @@
         </div>
     </div>
 
-    <!-- Made For You Section -->
-    <div class="container my-5">
-        <h2 class="section-title">Dibuat untuk Kamu</h2>
-        <div class="row">
-            @for ($i = 9; $i <= 12; $i++)
-                <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
-                    <div class="card shadow-sm h-100">
-                        <img src="https://picsum.photos/300/300?random={{ $i }}" class="card-img-top"
-                            alt="Playlist Cover">
-                        <div class="card-body">
-                            <h5 class="card-title">Daily Mix {{ $i - 8 }}</h5>
-                            <p class="card-text">Dibuat khusus untukmu berdasarkan preferensimu</p>
-                            <div class="play-button">
-                                <i class="fas fa-play"></i>
+    <!-- Popular Artists Section -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <div class="d-flex justify-content-between align-items-center">
+                <h3 class="card-title">
+                    <i class="ti ti-microphone me-2 text-primary"></i>Artis Populer
+                </h3>
+            </div>
+            <div class="d-flex justify-content-end">
+                <a href="{{ route('artists') }}" class="btn btn-link text-primary">
+                    Lihat Semua <i class="ti ti-chevron-right ms-1"></i>
+                </a>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="row row-cards">
+                @for ($i = 21; $i <= 28; $i++)
+                    <div class="col-md-6 col-lg-3">
+                        <div class="card card-sm">
+                            <div class="card-body p-4 text-center">
+                                <span class="avatar avatar-xl mb-3 avatar-rounded">
+                                    <img src="https://picsum.photos/300/300?random={{ $i }}" alt="Artist">
+                                </span>
+                                <h3 class="m-0 mb-1">Artis Populer #{{ $i - 20 }}</h3>
+                                <div class="text-muted">{{ rand(5, 30) }} Lagu</div>
+                                <div class="mt-3">
+                                    <span class="badge bg-purple-lt">
+                                        <i class="ti ti-users me-1"></i> {{ rand(1, 10) }}M
+                                    </span>
+                                    <span class="badge bg-blue-lt">
+                                        <i class="ti ti-player-play me-1"></i> {{ rand(10, 500) }}M
+                                    </span>
+                                </div>
+                                <div class="mt-3">
+                                    <a href="#" class="btn btn-primary">
+                                        <i class="ti ti-user me-1"></i> Lihat Profil
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            @endfor
+                @endfor
+            </div>
         </div>
     </div>
 
-    <!-- Recently Played Section -->
-    <div class="container my-5">
-        <h2 class="section-title">Baru Saja Diputar</h2>
-        <div class="row">
-            @for ($i = 13; $i <= 16; $i++)
-                <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
-                    <div class="card shadow-sm h-100">
-                        <img src="https://picsum.photos/300/300?random={{ $i }}" class="card-img-top"
-                            alt="Album Cover">
-                        <div class="card-body">
-                            <h5 class="card-title">Album Populer #{{ $i - 12 }}</h5>
-                            <p class="card-text">Artis Terkenal</p>
-                            <div class="play-button">
-                                <i class="fas fa-play"></i>
+    <!-- Popular Covers Section -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <div class="d-flex justify-content-between align-items-center">
+                <h3 class="card-title">
+                    <i class="ti ti-disc me-2 text-primary"></i>Cover Populer
+                </h3>
+            </div>
+            <div class="d-flex justify-content-end">
+                <a href="{{ route('covers') }}" class="btn btn-link text-primary">
+                    Lihat Semua <i class="ti ti-chevron-right ms-1"></i>
+                </a>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="row row-cards">
+                @for ($i = 41; $i <= 48; $i++)
+                    <div class="col-md-6 col-lg-3">
+                        <div class="card">
+                            <img src="https://picsum.photos/300/300?random={{ $i }}" class="card-img-top"
+                                alt="Cover Art">
+                            <div class="card-body">
+                                <h3 class="card-title">Cover Lagu #{{ $i - 40 }}</h3>
+                                <div class="text-muted mb-3">Oleh: Cover Artist {{ $i - 40 }}</div>
+                                <div class="d-flex justify-content-between">
+                                    <a href="#" class="btn btn-icon btn-primary">
+                                        <i class="ti ti-player-play"></i>
+                                    </a>
+                                    @guest
+                                        <span class="badge bg-dark">
+                                            <i class="ti ti-lock me-1"></i> Login untuk mendengarkan
+                                        </span>
+                                    @endguest
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            @endfor
-        </div>
-    </div>
-
-    <!-- Categories Section -->
-    <div class="container my-5">
-        <h2 class="section-title">Jelajahi Kategori</h2>
-        <div class="row">
-            <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
-                <div class="category-card" style="background-color: #e51e2f;">
-                    <h5>Pop</h5>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
-                <div class="category-card" style="background-color: #8c1932;">
-                    <h5>Rock</h5>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
-                <div class="category-card" style="background-color: #b92b27;">
-                    <h5>Hip Hop</h5>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
-                <div class="category-card" style="background-color: #ff4b4b;">
-                    <h5>Indie</h5>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
-                <div class="category-card" style="background-color: #c41a29;">
-                    <h5>Jazz</h5>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
-                <div class="category-card" style="background-color: #ff3a4b;">
-                    <h5>Electronic</h5>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
-                <div class="category-card" style="background-color: #a71324;">
-                    <h5>R&B</h5>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
-                <div class="category-card" style="background-color: #d82738;">
-                    <h5>Classical</h5>
-                </div>
+                @endfor
             </div>
         </div>
     </div>
 
-    <!-- New Releases Section -->
-    <div class="container my-5">
-        <h2 class="section-title">Rilis Terbaru</h2>
-        <div class="row">
-            @for ($i = 17; $i <= 20; $i++)
-                <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
-                    <div class="card shadow-sm h-100">
-                        <img src="https://picsum.photos/300/300?random={{ $i }}" class="card-img-top"
-                            alt="New Release Cover">
-                        <div class="card-body">
-                            <h5 class="card-title">Album Baru #{{ $i - 16 }}</h5>
-                            <p class="card-text">Artis Baru</p>
-                            <div class="play-button">
-                                <i class="fas fa-play"></i>
+    <!-- Popular Composers Section -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <div class="d-flex justify-content-between align-items-center">
+                <h3 class="card-title">
+                    <i class="ti ti-note me-2 text-primary"></i>Pencipta Lagu Teratas
+                </h3>
+            </div>
+            <div class="d-flex justify-content-end">
+                <a href="{{ route('composers') }}" class="btn btn-link text-primary">
+                    Lihat Semua <i class="ti ti-chevron-right ms-1"></i>
+                </a>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="row row-cards">
+                @for ($i = 31; $i <= 38; $i++)
+                    <div class="col-md-6 col-lg-3">
+                        <div class="card card-sm">
+                            <div class="card-body p-4 text-center">
+                                <span class="avatar avatar-xl mb-3 avatar-rounded">
+                                    <img src="https://picsum.photos/300/300?random={{ $i }}" alt="Composer">
+                                </span>
+                                <h3 class="m-0 mb-1">Pencipta #{{ $i - 30 }}</h3>
+                                <div class="text-muted">{{ rand(20, 100) }} Lagu</div>
+                                <div class="mt-3">
+                                    <span class="badge bg-purple-lt">
+                                        <i class="ti ti-users me-1"></i> {{ rand(100, 900) }}K
+                                    </span>
+                                    <span class="badge bg-blue-lt">
+                                        <i class="ti ti-player-play me-1"></i> {{ rand(50, 800) }}M
+                                    </span>
+                                </div>
+                                <div class="mt-3">
+                                    <a href="#" class="btn btn-primary">
+                                        <i class="ti ti-user me-1"></i> Lihat Profil
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            @endfor
+                @endfor
+            </div>
         </div>
     </div>
 
-    <!-- Footer -->
-    <footer>
-        <div class="container">
-            <div class="footer-links">
-                <div class="row">
-                    <div class="col-md-3 col-sm-6">
-                        <h5>PERUSAHAAN</h5>
-                        <ul>
-                            <li><a href="#">Tentang</a></li>
-                            <li><a href="#">Pekerjaan</a></li>
-                            <li><a href="#">For the Record</a></li>
-                        </ul>
-                    </div>
-                    <div class="col-md-3 col-sm-6">
-                        <h5>KOMUNITAS</h5>
-                        <ul>
-                            <li><a href="#">Untuk Artis</a></li>
-                            <li><a href="#">Pengembang</a></li>
-                            <li><a href="#">Periklanan</a></li>
-                            <li><a href="#">Investor</a></li>
-                        </ul>
-                    </div>
-                    <div class="col-md-3 col-sm-6">
-                        <h5>TAUTAN BERGUNA</h5>
-                        <ul>
-                            <li><a href="#">Dukungan</a></li>
-                            <li><a href="#">Aplikasi Seluler</a></li>
-                            <li><a href="#">Player Web</a></li>
-                        </ul>
-                    </div>
-                    <div class="col-md-3 col-sm-6">
-                        <h5>SOSIAL MEDIA</h5>
-                        <div class="social-links">
-                            <a href="#"><i class="fab fa-instagram"></i></a>
-                            <a href="#"><i class="fab fa-twitter"></i></a>
-                            <a href="#"><i class="fab fa-facebook"></i></a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="copyright text-center">
-                <p>&copy; 2025 Playlist Music Indonesia</p>
+    <!-- Call to Action -->
+    <div class="card bg-primary-lt mb-4">
+        <div class="card-body text-center py-4">
+            <h2 class="mb-3">Bergabunglah dengan Komunitas Musik Kami</h2>
+            <p class="text-muted fs-4 mb-4">Dengarkan, buat cover, dan bagikan karya musik Anda dengan dunia.</p>
+            <div class="d-flex justify-content-center gap-3">
+                <a href="{{ route('register') }}" class="btn btn-lg btn-primary">
+                    <i class="ti ti-user-plus me-2"></i> Daftar Sekarang
+                </a>
+                <a href="{{ route('login') }}" class="btn btn-lg btn-outline-primary">
+                    <i class="ti ti-login me-2"></i> Login
+                </a>
             </div>
         </div>
-    </footer>
+    </div>
 @endsection
