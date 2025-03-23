@@ -42,7 +42,7 @@ class UserSeeder extends Seeder
                 'password' => 'superadmin123',
                 'phone' => '628575466521',
                 'city' => 'Jakarta',
-                'region' => 'DKI Jakarta', 
+                'region' => 'DKI Jakarta',
                 'country' => 'Indonesia',
                 'role' => 'Super Admin'
             ],
@@ -65,6 +65,18 @@ class UserSeeder extends Seeder
                 'phone' => '6281234567890',
                 'city' => 'Bandung',
                 'region' => 'Jawa Barat',
+                'country' => 'Indonesia',
+                'role' => 'User'
+            ],
+
+            [
+                'name' => 'Agung Tester',
+                'username' => 'useragung',
+                'email' => 'agung.nex.edp@gmail.com',
+                'password' => 'user123',
+                'phone' => '6281384010384',
+                'city' => 'Tangerang',
+                'region' => 'Banten',
                 'country' => 'Indonesia',
                 'role' => 'User'
             ],
