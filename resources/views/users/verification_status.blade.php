@@ -200,6 +200,48 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                            <div>
+                                                @if ($verification->type != 'artist' && !($verification->type == 'composer' && $verification->status == 'approved'))
+                                                    <div class="mt-4">
+                                                        <form action="{{ route('verification.submit.artist') }}"
+                                                            method="POST" enctype="multipart/form-data">
+                                                            @csrf
+                                                            <input type="hidden" name="type" value="artist">
+                                                            <input type="hidden" name="status" value="pending">
+                                                            <div class="mb-3">
+                                                                <label class="form-label">Upgrade Verifikasi ke
+                                                                    Artis</label>
+                                                                <input type="file" name="document_ktp"
+                                                                    class="form-control" accept="image/*" required>
+                                                            </div>
+                                                            <button type="submit" class="btn btn-primary">Ajukan Upgrade
+                                                                Artis</button>
+                                                        </form>
+                                                    </div>
+                                                @elseif ($verification->type == 'artist' && $verification->status == 'approved')
+                                                    <div class="mt-4">
+                                                        <form action="{{ route('verification.submit.composer') }}"
+                                                            method="POST" enctype="multipart/form-data">
+                                                            @csrf
+                                                            <input type="hidden" name="type" value="composer">
+                                                            <input type="hidden" name="status" value="pending">
+                                                            <div class="mb-3">
+                                                                <label class="form-label">Upgrade Verifikasi ke
+                                                                    Composer</label>
+                                                                <input type="file" name="document_ktp"
+                                                                    class="form-control" accept="image/*" required>
+                                                            </div>
+                                                            <div class="mb-3">
+                                                                <label class="form-label">Dokumen NPWP</label>
+                                                                <input type="file" name="document_npwp"
+                                                                    class="form-control" accept="image/*" required>
+                                                            </div>
+                                                            <button type="submit" class="btn btn-primary">Ajukan Upgrade
+                                                                Composer</button>
+                                                        </form>
+                                                    </div>
+                                                @endif
+                                            </div>
                                         </div>
                                     @else
                                         <div class="alert alert-info" role="alert">

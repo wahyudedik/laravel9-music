@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\Verification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Spatie\Permission\Models\Role;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+use Spatie\Permission\Models\Role;
 
 class AdminVerificationController extends Controller
 {
@@ -16,10 +17,10 @@ class AdminVerificationController extends Controller
     {
         // Change from get() to paginate()
         $verifications = Verification::with('user')->paginate(10); // 10 items per page
-        
+
         // Get users for the create verification form
         $users = User::all();
-        
+
         return view('admin.verification', compact('verifications', 'users'));
     }
 
@@ -73,9 +74,9 @@ class AdminVerificationController extends Controller
 
         return redirect()->route('admin.verifications.index')->with('success', 'Verifikasi ditolak.');
     }
-    
+
     // Add these methods for CRUD functionality
-    
+
     public function store(Request $request)
     {
         $request->validate([
@@ -86,30 +87,31 @@ class AdminVerificationController extends Controller
             'status' => 'required|in:pending,approved,rejected',
             'notes' => 'nullable|string|max:500',
         ]);
-        
+
         $verification = new Verification();
+        $verification->id = Str::uuid();
         $verification->user_id = $request->user_id;
         $verification->type = $request->type;
         $verification->status = $request->status;
         $verification->notes = $request->notes;
-        
+
         if ($request->hasFile('document_ktp')) {
             $verification->document_ktp = $request->file('document_ktp')->store('verifications/ktp', 'public');
         }
-        
+
         if ($request->hasFile('document_npwp')) {
             $verification->document_npwp = $request->file('document_npwp')->store('verifications/npwp', 'public');
         }
-        
+
         $verification->save();
-        
+
         return redirect()->route('admin.verifications.index')->with('success', 'Verification request created successfully.');
     }
-    
+
     public function update(Request $request, $id)
     {
         $verification = Verification::findOrFail($id);
-        
+
         $request->validate([
             'type' => 'required|in:artist,composer,cover',
             'document_ktp' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
@@ -117,11 +119,11 @@ class AdminVerificationController extends Controller
             'status' => 'required|in:pending,approved,rejected',
             'notes' => 'nullable|string|max:500',
         ]);
-        
+
         $verification->type = $request->type;
         $verification->status = $request->status;
         $verification->notes = $request->notes;
-        
+
         if ($request->hasFile('document_ktp')) {
             // Delete old file if exists
             if ($verification->document_ktp) {
@@ -129,7 +131,7 @@ class AdminVerificationController extends Controller
             }
             $verification->document_ktp = $request->file('document_ktp')->store('verifications/ktp', 'public');
         }
-        
+
         if ($request->hasFile('document_npwp')) {
             // Delete old file if exists
             if ($verification->document_npwp) {
@@ -137,30 +139,30 @@ class AdminVerificationController extends Controller
             }
             $verification->document_npwp = $request->file('document_npwp')->store('verifications/npwp', 'public');
         }
-        
+
         $verification->save();
-        
+
         return redirect()->route('admin.verifications.index')->with('success', 'Verification request updated successfully.');
     }
-    
+
     public function destroy($id)
     {
         $verification = Verification::findOrFail($id);
-        
+
         // Delete associated files
         if ($verification->document_ktp) {
             Storage::disk('public')->delete($verification->document_ktp);
         }
-        
+
         if ($verification->document_npwp) {
             Storage::disk('public')->delete($verification->document_npwp);
         }
-        
+
         $verification->delete();
-        
+
         return redirect()->route('admin.verifications.index')->with('success', 'Verification request deleted successfully.');
     }
-    
+
     public function getDetails($id)
     {
         $verification = Verification::with('user')->findOrFail($id);
