@@ -75,6 +75,8 @@
             box-shadow: 0 0 0 2px #fff;
         }
     </style>
+    @stack('styles')
+
 </head>
 
 <body class="theme-light">
@@ -409,8 +411,8 @@
             @endif
         });
     </script>
-
     @yield('scripts')
+
 </body>
 
 </html>

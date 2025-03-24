@@ -1,13 +1,22 @@
+
 <?php
 
-use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Request;
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AdminClaimController;
-use App\Http\Controllers\UserVerificationController;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AdminUserController;
 use App\Http\Controllers\AdminVerificationController;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\SongController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\UserVerificationController;
+use App\Models\Role;
+use App\Models\User;
+use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
+use Spatie\Permission\Models\Permission;
+
+
 
 
 
@@ -76,6 +85,8 @@ Route::middleware(['auth', 'role:User,Cover Creator,Artist,Composer', 'verified'
     // Fitur untuk pengajuan verification status user
     Route::get('/verification/form', [UserVerificationController::class, 'showVerificationForm'])->name('verification.form');
     Route::post('/verification/submit', [UserVerificationController::class, 'submitVerification'])->name('verification.submit');
+    Route::post('/verification/submit/artist', [UserVerificationController::class, 'submitArtistVerification'])->name('verification.submit.artist');
+    Route::post('/verification/submit/composer', [UserVerificationController::class, 'submitComposerVerification'])->name('verification.submit.composer');
     Route::get('/verification/status', [UserVerificationController::class, 'checkStatus'])->name('verification.status');
 
     // Profile
@@ -206,6 +217,7 @@ Route::middleware(['auth', 'role:User,Cover Creator,Artist,Composer', 'verified'
 // Admin Routes
 Route::middleware(['auth', 'role:Super Admin,Admin'])->group(function () {
     Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+
 
     // Fitur global search di menu SuperAdmin
     Route::get('/admin/search', [AdminController::class, 'search'])->name('admin.search');

@@ -1,6 +1,10 @@
 @extends('layouts.app-admin')
 
 @section('content')
+
+<!-- Navbar -->
+@include('layouts.includes.admin.navbar');
+    
     <div class="page-header d-print-none">
         <div class="container-xl">
             <div class="row g-2 align-items-center">
@@ -169,18 +173,33 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    @foreach($recentSongs as $song)
+
                                     <tr>
                                         <td>
                                             <div class="d-flex align-items-center">
                                                 <span class="avatar me-2"
                                                     style="background-image: url(https://picsum.photos/40/40?random=1)"></span>
-                                                <div>Blinding Lights</div>
+                                                <div>{{ $song->title }}</div>
                                             </div>
                                         </td>
-                                        <td>The Weeknd</td>
-                                        <td>Pop</td>
-                                        <td>Today</td>
-                                        <td><span class="badge bg-success">Active</span></td>
+                                        <td>{{ $song->name }}</td>
+                                        <td>{{ $song->genre }}</td>
+                                        <td>{{ $song->uploaded  }}</td>
+                                        <td>
+                                            @php
+                                                $status = $song->status;
+                                                $bgColor = 'bg-success';
+                                                if($status=='Active'){
+                                                    $bgColor = 'bg-success';
+                                                }elseif($status=='Inactive'){
+                                                    $bgColor = 'bg-danger';
+                                                }else{
+                                                    $bgColor = 'bg-warning';
+                                                }
+                                            @endphp
+                                            <span class="badge bg-success">{{ $song->status  }}</span>
+                                        </td>
                                         <td>
                                             <div class="dropdown">
                                                 <button class="btn btn-icon btn-ghost-secondary" data-bs-toggle="dropdown">
@@ -200,137 +219,14 @@
                                             </div>
                                         </td>
                                     </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="d-flex align-items-center">
-                                                <span class="avatar me-2"
-                                                    style="background-image: url(https://picsum.photos/40/40?random=2)"></span>
-                                                <div>Save Your Tears</div>
-                                            </div>
-                                        </td>
-                                        <td>The Weeknd</td>
-                                        <td>Pop</td>
-                                        <td>Yesterday</td>
-                                        <td><span class="badge bg-success">Active</span></td>
-                                        <td>
-                                            <div class="dropdown">
-                                                <button class="btn btn-icon btn-ghost-secondary"
-                                                    data-bs-toggle="dropdown">
-                                                    <i class="ti ti-dots-vertical"></i>
-                                                </button>
-                                                <div class="dropdown-menu dropdown-menu-end">
-                                                    <a href="#" class="dropdown-item">
-                                                        <i class="ti ti-edit me-2"></i>Edit
-                                                    </a>
-                                                    <a href="#" class="dropdown-item">
-                                                        <i class="ti ti-player-play me-2"></i>Preview
-                                                    </a>
-                                                    <a href="#" class="dropdown-item text-danger">
-                                                        <i class="ti ti-trash me-2"></i>Delete
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="d-flex align-items-center">
-                                                <span class="avatar me-2"
-                                                    style="background-image: url(https://picsum.photos/40/40?random=3)"></span>
-                                                <div>Levitating</div>
-                                            </div>
-                                        </td>
-                                        <td>Dua Lipa</td>
-                                        <td>Pop</td>
-                                        <td>2 days ago</td>
-                                        <td><span class="badge bg-warning text-dark">Pending</span></td>
-                                        <td>
-                                            <div class="dropdown">
-                                                <button class="btn btn-icon btn-ghost-secondary"
-                                                    data-bs-toggle="dropdown">
-                                                    <i class="ti ti-dots-vertical"></i>
-                                                </button>
-                                                <div class="dropdown-menu dropdown-menu-end">
-                                                    <a href="#" class="dropdown-item">
-                                                        <i class="ti ti-edit me-2"></i>Edit
-                                                    </a>
-                                                    <a href="#" class="dropdown-item">
-                                                        <i class="ti ti-player-play me-2"></i>Preview
-                                                    </a>
-                                                    <a href="#" class="dropdown-item text-danger">
-                                                        <i class="ti ti-trash me-2"></i>Delete
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="d-flex align-items-center">
-                                                <span class="avatar me-2"
-                                                    style="background-image: url(https://picsum.photos/40/40?random=4)"></span>
-                                                <div>Stay</div>
-                                            </div>
-                                        </td>
-                                        <td>Justin Bieber</td>
-                                        <td>Pop</td>
-                                        <td>3 days ago</td>
-                                        <td><span class="badge bg-success">Active</span></td>
-                                        <td>
-                                            <div class="dropdown">
-                                                <button class="btn btn-icon btn-ghost-secondary"
-                                                    data-bs-toggle="dropdown">
-                                                    <i class="ti ti-dots-vertical"></i>
-                                                </button>
-                                                <div class="dropdown-menu dropdown-menu-end">
-                                                    <a href="#" class="dropdown-item">
-                                                        <i class="ti ti-edit me-2"></i>Edit
-                                                    </a>
-                                                    <a href="#" class="dropdown-item">
-                                                        <i class="ti ti-player-play me-2"></i>Preview
-                                                    </a>
-                                                    <a href="#" class="dropdown-item text-danger">
-                                                        <i class="ti ti-trash me-2"></i>Delete
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="d-flex align-items-center">
-                                                <span class="avatar me-2"
-                                                    style="background-image: url(https://picsum.photos/40/40?random=5)"></span>
-                                                <div>Industry Baby</div>
-                                            </div>
-                                        </td>
-                                        <td>Lil Nas X</td>
-                                        <td>Hip Hop</td>
-                                        <td>5 days ago</td>
-                                        <td><span class="badge bg-danger">Inactive</span></td>
-                                        <td>
-                                            <div class="dropdown">
-                                                <button class="btn btn-icon btn-ghost-secondary"
-                                                    data-bs-toggle="dropdown">
-                                                    <i class="ti ti-dots-vertical"></i>
-                                                </button>
-                                                <div class="dropdown-menu dropdown-menu-end">
-                                                    <a href="#" class="dropdown-item">
-                                                        <i class="ti ti-edit me-2"></i>Edit
-                                                    </a>
-                                                    <a href="#" class="dropdown-item">
-                                                        <i class="ti ti-player-play me-2"></i>Preview
-                                                    </a>
-                                                    <a href="#" class="dropdown-item text-danger">
-                                                        <i class="ti ti-trash me-2"></i>Delete
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </td>
-                                    </tr>
+
+                                    @endforeach
+
+                                    
                                 </tbody>
                             </table>
                         </div>
+
                         <div class="card-footer d-flex align-items-center">
                             <p class="m-0 text-muted">Showing <span>1</span> to <span>5</span> of <span>25</span> entries
                             </p>
@@ -357,52 +253,39 @@
 
                 <div class="col-lg-4">
                     <div class="row row-cards">
+
+
                         <div class="col-12">
                             <div class="card">
-                                <div class="card-header">
-                                    <h3 class="card-title">Top Genres</h3>
-                                </div>
+                                <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">
+                                  <h5 class="mb-0">Top Genres</h5>
+                              </div>
                                 <div class="card-body">
-                                    <div class="mb-3">
-                                        <div class="d-flex justify-content-between mb-1">
-                                            <span>Pop</span>
-                                            <span>45%</span>
-                                        </div>
-                                        <div class="progress" style="height: 8px;">
-                                            <div class="progress-bar bg-primary" role="progressbar" style="width: 45%">
+                                
+                                  @php
+                                      $bgClasses = ['bg-primary', 'bg-warning', 'bg-success', 'bg-danger', 'bg-secondary', 'bg-info', 'bg-dark'];
+                                      $number = 0;
+                                  @endphp
+
+                                  @foreach ($topGenres as $genreName => $genreData)
+                                        @php
+                                            $progressBg = $bgClasses[$number];
+                                            if($number>6){
+                                                $number=0;
+                                            }
+                                            $number++;
+                                        @endphp
+                                        <div class="mb-3">
+                                            <div class="d-flex justify-content-between mb-1">
+                                                <span>{{ $genreName }}</span>
+                                                <span>{{ $genreData['percentage']  }}%</span>
+                                            </div>
+                                            <div class="progress" style="height: 8px;">
+                                                <div class="progress-bar {{ $progressBg }}" role="progressbar" style="width: {{ $genreData['percentage']  }}%"></div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="mb-3">
-                                        <div class="d-flex justify-content-between mb-1">
-                                            <span>Hip Hop</span>
-                                            <span>30%</span>
-                                        </div>
-                                        <div class="progress" style="height: 8px;">
-                                            <div class="progress-bar bg-success" role="progressbar" style="width: 30%">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="mb-3">
-                                        <div class="d-flex justify-content-between mb-1">
-                                            <span>Rock</span>
-                                            <span>15%</span>
-                                        </div>
-                                        <div class="progress" style="height: 8px;">
-                                            <div class="progress-bar bg-warning" role="progressbar" style="width: 15%">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="mb-3">
-                                        <div class="d-flex justify-content-between mb-1">
-                                            <span>Electronic</span>
-                                            <span>10%</span>
-                                        </div>
-                                        <div class="progress" style="height: 8px;">
-                                            <div class="progress-bar bg-danger" role="progressbar" style="width: 10%">
-                                            </div>
-                                        </div>
-                                    </div>
+                                    @endforeach
+                                    
                                 </div>
                             </div>
                         </div>
@@ -413,6 +296,8 @@
                                     <h3 class="card-title">Recent Activities</h3>
                                 </div>
                                 <div class="list-group list-group-flush">
+                                    @foreach($recentActivities as $activity)
+                                    
                                     <div class="list-group-item">
                                         <div class="row align-items-center">
                                             <div class="col-auto">
@@ -421,63 +306,15 @@
                                                 </div>
                                             </div>
                                             <div class="col">
-                                                <div class="text-body">New song uploaded</div>
-                                                <div class="text-muted">30 minutes ago</div>
+                                                <div class="text-body">{{ $activity->description }}</div>
+                                                <div class="text-muted">{{ $activity->created_at->diffForHumans() }}/div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="list-group-item">
-                                        <div class="row align-items-center">
-                                            <div class="col-auto">
-                                                <div class="avatar avatar-rounded bg-success-lt">
-                                                    <i class="ti ti-user-plus text-success"></i>
-                                                </div>
-                                            </div>
-                                            <div class="col">
-                                                <div class="text-body">New user registered</div>
-                                                <div class="text-muted">1 hour ago</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="list-group-item">
-                                        <div class="row align-items-center">
-                                            <div class="col-auto">
-                                                <div class="avatar avatar-rounded bg-warning-lt">
-                                                    <i class="ti ti-credit-card text-warning"></i>
-                                                </div>
-                                            </div>
-                                            <div class="col">
-                                                <div class="text-body">New payment received</div>
-                                                <div class="text-muted">3 hours ago</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="list-group-item">
-                                        <div class="row align-items-center">
-                                            <div class="col-auto">
-                                                <div class="avatar avatar-rounded bg-danger-lt">
-                                                    <i class="ti ti-alert-triangle text-danger"></i>
-                                                </div>
-                                            </div>
-                                            <div class="col">
-                                                <div class="text-body">System alert detected</div>
-                                                <div class="text-muted">5 hours ago</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="list-group-item">
-                                        <div class="row align-items-center">
-                                            <div class="col-auto">
-                                                <div class="avatar avatar-rounded bg-info-lt">
-                                                    <i class="ti ti-settings text-info"></i>
-                                                </div>
-                                            </div>
-                                            <div class="col">
-                                                <div class="text-body">System settings updated</div>
-                                                <div class="text-muted">1 day ago</div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    
+                                    @endforeach
+                                    
+                                    
                                 </div>
                             </div>
                         </div>
@@ -579,6 +416,7 @@
                                         </div>
                                     @endforelse
                                 </div>
+
                                 @if (isset($recentClaims) && count($recentClaims) > 0)
                                     <div class="card-footer">
                                         <a href="{{ route('admin.claims.create') }}" class="btn btn-primary w-100">
@@ -588,12 +426,16 @@
                                 @endif
                             </div>
                         </div>
+
+
+
                     </div>
                 </div>
             </div>
         </div>
     </div>
 @endsection
+
 
 @section('scripts')
     <script>
@@ -650,4 +492,8 @@
             }
         });
     </script>
+    
+
+  <!-- Footer -->
+    @include('layouts.includes.footer');
 @endsection

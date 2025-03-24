@@ -14,7 +14,10 @@ use App\Mail\ResetPasswordMail;
 use App\Mail\VerifyEmailMail;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
+use Spatie\Activitylog\Models\Activity;
+
 use App\Models\User;
+
 
 
 class AuthController extends Controller
@@ -24,6 +27,7 @@ class AuthController extends Controller
      */
     public function showLoginForm()
     {
+        activity()->withProperties(['ip' => request()->ip()])->log('user visited login form');
         return view('auth.login');
     }
 
@@ -32,6 +36,7 @@ class AuthController extends Controller
      */
     public function login(Request $request)
     {
+        activity()->withProperties(['ip' => request()->ip()])->log('user tries to login');
 
         $credentials = $request->validate([
             'email' => 'required|email',
@@ -42,7 +47,10 @@ class AuthController extends Controller
 
             $user = Auth::user();
 
-            User::where('id', $user->id)->update(['last_login' => now()]);
+            User::where('id', $user->id)->update([
+                'last_login' => now(),
+                'ip_address' => request()->ip()
+            ]);
 
             session(['email' => $user->email]);
 
@@ -50,9 +58,13 @@ class AuthController extends Controller
 
             $role = $user->getRoleNames()->first();
 
+            activity()->withProperties(['ip' => request()->ip()])->log($user->name.' login');
+
             if ($role == 'Admin' || $role == 'Super Admin') {
+                activity()->withProperties(['ip' => request()->ip()])->log($user->name.' visited admin dashboard');
                 return redirect('admin/dashboard')->with('success', 'Login berhasil!');
             }
+            activity()->withProperties(['ip' => request()->ip()])->log($user->name.' visited user dashboard');
             return redirect('user/dashboard')->with('success', 'Login berhasil!');
         }
 
@@ -82,6 +94,7 @@ class AuthController extends Controller
      */
     public function showRegisterForm()
     {
+        activity()->withProperties(['ip' => request()->ip()])->log('user visited register page');
         return view('auth.register');
     }
 
@@ -90,6 +103,9 @@ class AuthController extends Controller
      */
     public function register(Request $request)
     {
+
+        activity()->withProperties(['ip' => request()->ip()])->log('user try to register');
+
         // Validasi input
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
@@ -126,6 +142,7 @@ class AuthController extends Controller
             'email_verified_at' => null, // Email belum diverifikasi
             'email_verification_token' => $verificationToken, // Simpan token di database
             'email_verification_sent_at' => now(),
+            'ip_address' => $request->ip(),
             'created_at' => now(),
             'updated_at' => now(),
         ]);
@@ -141,6 +158,8 @@ class AuthController extends Controller
 
             session(['email' => $user->email]);
 
+            activity()->withProperties(['ip' => request()->ip()])->log($user->name.' registers');
+
             // Redirect ke halaman pemberitahuan
             return redirect()->route('verification.notice')
                 ->with('status', 'Email verifikasi telah dikirim!');
@@ -153,6 +172,8 @@ class AuthController extends Controller
     // Menampilkan halaman verifikasi email
     public function showVerifyEmail()
     {
+        activity()->withProperties(['ip' => request()->ip()])->log('user visited mail verification page');
+
         return view('auth.verifikasi-email');
     }
 
@@ -163,6 +184,8 @@ class AuthController extends Controller
         $user = User::where('email', $request->email)
             ->where('email_verification_token', $request->token)
             ->first();
+
+        activity()->withProperties(['ip' => request()->ip()])->log($user->name.' verifies email');
 
         if (!$user) {
             abort(403, 'Kode verifikasi tidak valid.');
@@ -175,6 +198,13 @@ class AuthController extends Controller
 
         Auth::login($user);
 
+        User::where('id', $user->id)->update([
+            'last_login' => now(),
+            'ip_address' => request()->ip()
+        ]);
+
+        activity()->withProperties(['ip' => request()->ip()])->log($user->name.' email has been verified');
+
         return redirect('/user/dashboard')->with('status', 'Email Anda berhasil diverifikasi!');
     }
 
@@ -184,6 +214,8 @@ class AuthController extends Controller
 
         $user = User::where('email', $request->email)
             ->first();
+
+        activity()->withProperties(['ip' => request()->ip()])->log($user->name.' resend email verification');
 
         if (!$user) {
             return back()->with('error', 'Email tidak ditemukan.');
@@ -217,6 +249,8 @@ class AuthController extends Controller
 
             session(['email' => $user->email]);
 
+            activity()->withProperties(['ip' => request()->ip()])->log($user->name.' verification email has been sent');
+
             return back()
                 ->with('status', 'Email verifikasi telah dikirim!');
         } catch (\Exception $e) {
@@ -231,6 +265,8 @@ class AuthController extends Controller
      */
     public function showEmailResetForm()
     {
+        activity()->withProperties(['ip' => request()->ip()])->log(' user visited forgot password form');
+
         return view('auth.forgot-password');
     }
 
@@ -239,6 +275,9 @@ class AuthController extends Controller
      */
     public function sendPasswordResetEmail(Request $request)
     {
+
+        activity()->withProperties(['ip' => request()->ip()])->log('user sends password reset email');
+
         $validator = validator($request->all(), [
             'email' => 'required|email|exists:users,email',
         ], [
@@ -258,6 +297,8 @@ class AuthController extends Controller
         try {
             Mail::to($user->email)->send(new ResetPasswordMail($token, $request->email));
 
+            activity()->withProperties(['ip' => request()->ip()])->log($user->name.' email password has been sent');
+
             return back()->with('status', 'Email reset password telah dikirim!');
         } catch (\Exception $e) {
             return back()->with('error', 'Gagal mengirim email: ' . $e->getMessage());
@@ -269,6 +310,9 @@ class AuthController extends Controller
      */
     public function showPasswordUpdateForm($token, Request $request)
     {
+
+        activity()->withProperties(['ip' => request()->ip()])->log(' user visited update password form');
+
         return view('auth.new-password', ['token' => $token, 'email' => $request->query('email')]);
     }
 
@@ -277,6 +321,8 @@ class AuthController extends Controller
      */
     public function updatePassword(Request $request)
     {
+        activity()->withProperties(['ip' => request()->ip()])->log('user updates password');
+
 
         $validator = Validator::make($request->all(), [
             'email' => 'required|email|exists:users,email',
@@ -310,6 +356,8 @@ class AuthController extends Controller
         $user->reset_token = null; // Hapus token setelah digunakan
         $user->save();
 
+        activity()->withProperties(['ip' => request()->ip()])->log($user->name.' successfully updated password');
+
         return redirect('/login')->with('status', 'Password berhasil direset. Silakan login dengan password baru.');
     }
 
@@ -318,6 +366,9 @@ class AuthController extends Controller
 
     public function logout($role, Request $request)
     {
+        $user = Auth::user();
+        activity()->withProperties(['ip' => request()->ip()])->log($user->name.' has logged out');
+
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();

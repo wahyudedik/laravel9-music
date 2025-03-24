@@ -41,6 +41,10 @@ class AdminController extends Controller
         $revenueGrowthPercentage = $DashboardServices->getRevenueGrowthPercentage();
         $totalStreams = number_format($DashboardServices->getTotalStreams());
         $streamGrowthPercentage = $DashboardServices->getStreamGrowthPercentage();
+        $recentSongs = $DashboardServices->getRecentSongs();
+        $topGenres = $DashboardServices->getSongGenre();
+        $topGenres = collect($topGenres)->sortByDesc(fn($genre) => $genre->percentage)->toArray();
+        $recentActivities = $DashboardServices->getRecentActivities();
 
         $recentClaims = Claim::with(['user', 'song'])
             ->latest()
@@ -57,6 +61,9 @@ class AdminController extends Controller
             'totalStreams',
             'streamGrowthPercentage',
             'recentClaims',
+            'recentSongs',
+            'topGenres',
+            'recentActivities'
         ));
     }
 

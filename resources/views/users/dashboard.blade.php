@@ -27,7 +27,7 @@
         <div class="page-body">
             <div class="container-xl">
                 <!-- User Info & Search -->
-                <div class="row mb-4"> 
+                <div class="row mb-4">
                     <div class="col-md-4">
                         <div class="card">
                             <div class="card-body p-4 text-center">
@@ -101,13 +101,15 @@
                                                     <div class="col">
                                                         <div class="d-flex justify-content-between">
                                                             <div>
-                                                                <div class="font-weight-medium">{{ $song->title }}</div>
+                                                                <div class="font-weight-medium">{{ $song->title }}
+                                                                </div>
                                                                 <div class="text-muted">
                                                                     {{ $song->artist ? $song->artist->name : 'Unknown Artist' }}
                                                                 </div>
                                                             </div>
                                                             <div class="btn-list">
-                                                                <button class="btn btn-icon btn-sm btn-primary"
+                                                                <button class="btn btn-icon btn-sm btn-primary play-song"
+                                                                    data-song-id="{{ $song->id }}"
                                                                     data-bs-toggle="tooltip" title="Play">
                                                                     <i class="ti ti-player-play"></i>
                                                                 </button>
@@ -117,7 +119,14 @@
                                                                 </button>
                                                             </div>
                                                         </div>
+
                                                     </div>
+
+                                                    <audio id="audio-player" controls style="display: none;"></audio>
+
+                                                    </body>
+
+                                                    </html>
                                                 </div>
                                             </div>
                                         @endforeach
@@ -626,6 +635,31 @@
                 timerProgressBar: true
             });
             */
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const audioPlayer = document.getElementById('audio-player');
+            const playButtons = document.querySelectorAll('.play-song');
+
+            playButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const songId = this.getAttribute('data-song-id');
+
+                    fetch(`/user/dashboard/play/${songId}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.url) {
+                                audioPlayer.src = data.url;
+                                audioPlayer.play();
+                            } else {
+                                console.error(data.error || 'Gagal memutar lagu.');
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                        });
+                });
+            });
         });
     </script>
 @endsection
