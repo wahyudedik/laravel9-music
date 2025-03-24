@@ -570,7 +570,7 @@
                                                     </a>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div> 
                                     @empty
                                         <div class="list-group-item">
                                             <div class="text-center py-3">

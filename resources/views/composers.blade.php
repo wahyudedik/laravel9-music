@@ -16,7 +16,7 @@
                     </span>
                 </div>
             </div>
-        </div>
+        </div> 
     </div>
 
     <!-- Filter Options -->

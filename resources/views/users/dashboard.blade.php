@@ -58,9 +58,9 @@
                                     </span>
                                 @endif
 
-                                <div class="mt-4">
-                                    <a href="#" class="btn btn-outline-primary w-100">
-                                        <i class="ti ti-edit me-2"></i> Edit Profile
+                                <div class="mt-3">
+                                    <a href="{{ route('profile.my-assets') }}" class="btn btn-outline-primary w-100">
+                                        <i class="ti ti-music me-2"></i> My Music Assets
                                     </a>
                                 </div>
                             </div>

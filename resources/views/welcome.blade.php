@@ -17,7 +17,7 @@
                                 placeholder="Cari judul lagu, nama artis...">
                             <span class="input-icon-addon">
                                 <i class="ti ti-search"></i>
-                            </span>
+                            </span> 
                         </div>
                     </form>
                 </div>

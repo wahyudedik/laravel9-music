@@ -155,6 +155,21 @@
                 </div>
 
                 <div class="navbar-nav flex-row order-md-last">
+                    <!-- Home -->
+                    <div class="nav-item d-none d-md-flex me-3">
+                        <a href="{{ url('/') }}" class="nav-link px-0" data-bs-toggle="tooltip" title="Home">
+                            <i class="ti ti-home"></i>
+                        </a>
+                    </div>
+
+                    <!-- Live Chat -->
+                    <div class="nav-item d-none d-md-flex me-3">
+                        <a href="#" class="nav-link px-0" data-bs-toggle="tooltip" title="Live Chat">
+                            <i class="ti ti-messages"></i>
+                            <span class="badge bg-red"></span>
+                        </a>
+                    </div>
+
                     <!-- Notifications -->
                     <div class="nav-item dropdown d-none d-md-flex me-3">
                         <a href="#" class="nav-link px-0" data-bs-toggle="dropdown" tabindex="-1"
@@ -355,12 +370,36 @@
                                     </a>
                                 </div>
                             </li>
+
+                            <li class="nav-item dropdown {{ request()->is('admin/reports*') ? 'active' : '' }}">
+                                <a class="nav-link dropdown-toggle" href="#navbar-reports" data-bs-toggle="dropdown"
+                                    data-bs-auto-close="outside" role="button" aria-expanded="false">
+                                    <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                        <i class="ti ti-report"></i>
+                                    </span>
+                                    <span class="nav-link-title">Reports</span>
+                                </a>
+                                <div class="dropdown-menu">
+                                    <a class="dropdown-item" href="{{ route('admin.reports') }}">
+                                        <i class="ti ti-dashboard me-2"></i>Overview
+                                    </a>
+                                    <a class="dropdown-item" href="{{ route('admin.reports.users') }}">
+                                        <i class="ti ti-users me-2"></i>User Reports
+                                    </a>
+                                    <a class="dropdown-item" href="{{ route('admin.reports.revenue') }}">
+                                        <i class="ti ti-currency-dollar me-2"></i>Revenue Reports
+                                    </a>
+                                    <a class="dropdown-item" href="{{ route('admin.reports.content') }}">
+                                        <i class="ti ti-music me-2"></i>Content Reports
+                                    </a>
+                                </div>
+                            </li>
                         </ul>
-                        <div class="my-2 my-md-0 flex-grow-1 flex-md-grow-0 order-first order-md-last">
+                        {{-- <div class="my-2 my-md-0 flex-grow-1 flex-md-grow-0 order-first order-md-last">
                             <a href="{{ url('/') }}" class="btn btn-outline-primary">
                                 <i class="ti ti-home me-2"></i>Back to Site
                             </a>
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
             </div>

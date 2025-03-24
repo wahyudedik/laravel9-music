@@ -78,7 +78,129 @@ Route::middleware(['auth', 'role:User,Cover Creator,Artist,Composer', 'verified'
     Route::post('/verification/submit', [UserVerificationController::class, 'submitVerification'])->name('verification.submit');
     Route::get('/verification/status', [UserVerificationController::class, 'checkStatus'])->name('verification.status');
 
-    
+    // Profile
+    Route::get('/profile/edit', function () {
+        return view('users.profile.edit');
+    })->name('profile.edit');
+
+    // MyAsset Profile Route
+    Route::get('/profile/my-assets', function () {
+        return view('users.profile.my-assets');
+    })->name('profile.my-assets');
+
+    Route::get('/profile/my-assets/purchased', function () {
+        return view('users.profile.purchased-songs');
+    })->name('profile.purchased');
+
+    Route::get('/profile/my-assets/covers', function () {
+        return view('users.profile.my-covers');
+    })->name('profile.covers');
+
+    Route::get('/profile/my-assets/releases', function () {
+        return view('users.profile.my-releases');
+    })->name('profile.releases');
+
+    Route::get('/profile/my-assets/drafts', function () {
+        return view('users.profile.my-drafts');
+    })->name('profile.drafts');
+
+    Route::get('/profile/my-assets/uploads', function () {
+        return view('users.profile.my-uploads');
+    })->name('profile.uploads');
+
+    // playlist route
+    Route::get('/playlist', function () {
+        return view('users.playlist');
+    })->name('playlist.index');
+
+    Route::get('/playlist/{id}', function ($id) {
+        return view('users.playlist-detail');
+    })->name('playlist.detail');
+
+    // Notifikasi Route
+    Route::get('/notifications', function () {
+        return view('users.notifications');
+    })->name('notifications');
+
+    // live chat route
+    Route::get('chat', function () {
+        return view('users.chat');
+    })->name('user.chat');
+
+    // Shopping Cart Routes
+    Route::get('/cart', function () {
+        return view('users.cart');
+    })->name('user.cart');
+
+    Route::get('/checkout', function () {
+        return view('users.checkout');
+    })->name('user.checkout');
+
+    // Wishlist Route
+    Route::get('/wishlist', function () {
+        // Create dummy data for the wishlist
+        $wishlistItems = [];
+
+        for ($i = 1; $i <= 9; $i++) {
+            $wishlistItems[] = [
+                'id' => $i,
+                'title' => 'Song Title ' . $i,
+                'artist' => 'Artist Name ' . ($i % 3 + 1),
+                'album' => 'Album ' . ceil($i / 3),
+                'type' => $i % 3 == 0 ? 'Album' : ($i % 2 == 0 ? 'Single' : 'EP'),
+                'price' => $i % 4 == 0 ? null : 'Rp. ' . (rand(15, 50) * 1000) . ',00',
+                'image' => 'https://picsum.photos/200/200?random=' . $i,
+                'added_date' => now()->subDays(rand(1, 30))->diffForHumans()
+            ];
+        }
+
+        return view('users.wishlist', compact('wishlistItems'));
+    })->name('wishlist.index');
+
+    // Report Route
+    Route::get('/report', function () {
+        return view('users.report');
+    })->name('report.index');
+
+    // Settings Route
+    Route::get('/settings', function () {
+        return view('users.settings');
+    })->name('user.settings');
+
+    // Help Center Route
+    Route::get('/help-center', function () {
+        return view('users.help-center');
+    })->name('help.center');
+
+    // Copyright Claim Ticketing Routes
+    Route::get('/ticket/copyright', function () {
+        return view('users.tickets.copyright');
+    })->name('ticket.copyright');
+
+    Route::get('/ticket/my-claims', function () {
+        return view('users.tickets.my-claims');
+    })->name('ticket.my-claims');
+
+    Route::get('/ticket/claim/{id}', function ($id) {
+        return view('users.tickets.claim-detail', compact('id'));
+    })->name('ticket.claim.detail');
+
+    // Wallet & Withdraw Routes
+    Route::get('/wallet', function () {
+        return view('users.wallet.index');
+    })->name('user.wallet');
+
+    Route::get('/wallet/history', function () {
+        return view('users.wallet.history');
+    })->name('user.wallet.history');
+
+    Route::get('/wallet/withdraw', function () {
+        return view('users.wallet.withdraw');
+    })->name('user.wallet.withdraw');
+
+    Route::get('/wallet/withdraw/history', function () {
+        return view('users.wallet.withdraw-history');
+    })->name('user.wallet.withdraw.history');
 });
 
 // Admin Routes
@@ -228,4 +350,31 @@ Route::middleware(['auth', 'role:Super Admin,Admin'])->group(function () {
     Route::get('/admin/settings', function () {
         return view('admin.settings');
     })->name('admin.settings');
+
+    // Live Chat Route
+    Route::get('/admin/chat', function () {
+        return view('admin.chat');
+    })->name('admin.chat');
+
+    // Reports Routes
+    Route::get('/admin/reports', function () {
+        return view('admin.reports');
+    })->name('admin.reports');
+
+    Route::get('/admin/reports/users', function () {
+        return view('admin.reports.users');
+    })->name('admin.reports.users');
+
+    Route::get('/admin/reports/revenue', function () {
+        return view('admin.reports.revenue');
+    })->name('admin.reports.revenue');
+
+    Route::get('/admin/reports/content', function () {
+        return view('admin.reports.content');
+    })->name('admin.reports.content');
+
+    // play song
+    Route::get('/play-song/{id}', function ($id) {
+        return view('play-song', compact('id'));
+    })->name('play-song');
 });
