@@ -75,6 +75,10 @@ Route::middleware(['auth', 'role:User,Cover Creator,Artist,Composer,Super Admin,
 
 // User Dashboard Routes
 Route::middleware(['auth', 'role:User,Cover Creator,Artist,Composer', 'verified'])->group(function () {
+
+    Route::get('/user', function () {
+        return redirect()->route('user.dashboard');
+    });
     Route::get('/user/dashboard', [UserController::class, 'dashboard'])->name('user.dashboard');
 
     // Fitur untuk pengajuan verification status user
@@ -87,9 +91,11 @@ Route::middleware(['auth', 'role:User,Cover Creator,Artist,Composer', 'verified'
 
 // Admin Routes
 Route::middleware(['auth', 'role:Super Admin,Admin'])->group(function () {
+
+    Route::get('/admin', function () {
+        return redirect()->route('admin.dashboard');
+    });
     Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
-
-
     // Fitur global search di menu SuperAdmin
     Route::get('/admin/search', [AdminController::class, 'search'])->name('admin.search');
 
