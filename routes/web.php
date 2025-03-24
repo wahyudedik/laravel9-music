@@ -1,16 +1,24 @@
 
 <?php
 
-use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Request;
-use Illuminate\Support\Facades\Storage;
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AdminClaimController;
-use App\Http\Controllers\UserVerificationController;
-use App\Http\Controllers\AdminVerificationController;
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AdminUserController;
+use App\Http\Controllers\AdminVerificationController;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\SongController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\UserVerificationController;
+use App\Models\Role;
+use App\Models\User;
+use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
+use Spatie\Permission\Models\Permission;
+
+
+
+
 
 /*
 |--------------------------------------------------------------------------
@@ -80,6 +88,9 @@ Route::middleware(['auth', 'role:User,Cover Creator,Artist,Composer', 'verified'
     Route::post('/verification/submit/artist', [UserVerificationController::class, 'submitArtistVerification'])->name('verification.submit.artist');
     Route::post('/verification/submit/composer', [UserVerificationController::class, 'submitComposerVerification'])->name('verification.submit.composer');
     Route::get('/verification/status', [UserVerificationController::class, 'checkStatus'])->name('verification.status');
+
+    // Untuk memutar lagu di halaman user setelah login dan menu search
+    Route::get('/user/dashboard/play/{id}', [UserController::class, 'play'])->name('user.dashboard.play');
 });
 
 // Admin Routes
