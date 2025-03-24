@@ -14,8 +14,10 @@ class Song extends Model
     use HasFactory, HasUuids;
 
     protected $fillable = [
+        'id',
         'title',
         'version',
+        'genre',
         'album_id',
         'composer_id',
         'artist_id',
@@ -28,6 +30,7 @@ class Song extends Model
         'cover_image',
         'file_path',
         'duration',
+        'status',
     ];
 
     protected $casts = [

@@ -1,0 +1,990 @@
+@extends('layouts.app-admin')
+
+@section('content')
+    <div class="page-header d-print-none">
+        <div class="container-xl">
+            <div class="row g-2 align-items-center">
+                <div class="col">
+                    <div class="page-pretitle">
+                        User Profile
+                    </div>
+                    <h2 class="page-title">
+                        User {{ $id }} Details
+                    </h2>
+                </div>
+                <div class="col-auto ms-auto d-print-none">
+                    <div class="btn-list">
+                        <a href="{{ route('admin.user-profiles.index') }}"
+                            class="btn btn-outline-primary d-none d-sm-inline-block">
+                            <i class="ti ti-arrow-left me-2"></i>
+                            Back to List
+                        </a>
+                        <div class="dropdown">
+                            <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                <i class="ti ti-settings me-2"></i>
+                                Actions
+                            </button>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" href="#" data-bs-toggle="modal"
+                                    data-bs-target="#editUserModal">
+                                    <i class="ti ti-edit me-2"></i>Edit Profile
+                                </a>
+                                <a class="dropdown-item" href="#">
+                                    <i class="ti ti-mail me-2"></i>Send Email
+                                </a>
+                                <a class="dropdown-item" href="#">
+                                    <i class="ti ti-key me-2"></i>Reset Password
+                                </a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item text-danger" href="#" data-bs-toggle="modal"
+                                    data-bs-target="#suspendUserModal">
+                                    <i class="ti ti-ban me-2"></i>Suspend Account
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-body">
+        <div class="container-xl">
+            <div class="row">
+                <!-- User Info Card -->
+                <div class="col-lg-4">
+                    <div class="card">
+                        <div class="card-body p-4 text-center">
+                            <span class="avatar avatar-xl mb-3 rounded"
+                                style="background-image: url(https://ui-avatars.com/api/?name=User+{{ $id }}&background=e53935&color=fff)"></span>
+                            <h3 class="m-0 mb-1">User {{ $id }}</h3>
+                            <div class="text-muted">user{{ $id }}@example.com</div>
+                            <div class="mt-2">
+                                @if ($id % 4 == 0)
+                                    <span class="badge bg-purple">Artist</span>
+                                @elseif($id % 4 == 1)
+                                    <span class="badge bg-blue">Composer</span>
+                                @elseif($id % 4 == 2)
+                                    <span class="badge bg-green">Cover Creator</span>
+                                @else
+                                    <span class="badge bg-secondary">Regular User</span>
+                                @endif
+
+                                @if ($id % 3 != 0)
+                                    <span class="badge bg-success">Verified</span>
+                                @endif
+                            </div>
+                        </div>
+                        <div class="d-flex">
+                            <a href="#" class="card-btn" data-bs-toggle="modal" data-bs-target="#editUserModal">
+                                <i class="ti ti-edit me-2"></i>Edit
+                            </a>
+                            <a href="#" class="card-btn">
+                                <i class="ti ti-mail me-2"></i>Email
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="card mt-3">
+                        <div class="card-header">
+                            <h3 class="card-title">User Information</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <div class="text-muted mb-1">Full Name</div>
+                                <div>User {{ $id }} Full Name</div>
+                            </div>
+                            <div class="mb-3">
+                                <div class="text-muted mb-1">Email</div>
+                                <div>user{{ $id }}@example.com</div>
+                            </div>
+                            <div class="mb-3">
+                                <div class="text-muted mb-1">Phone</div>
+                                <div>+1 ({{ rand(100, 999) }}) {{ rand(100, 999) }}-{{ rand(1000, 9999) }}</div>
+                            </div>
+                            <div class="mb-3">
+                                <div class="text-muted mb-1">Location</div>
+                                <div>{{ ['New York', 'Los Angeles', 'Chicago', 'Houston', 'Miami'][$id % 5] }}, USA</div>
+                            </div>
+                            <div class="mb-3">
+                                <div class="text-muted mb-1">Member Since</div>
+                                <div>{{ date('F d, Y', strtotime('-' . rand(1, 365) . ' days')) }}</div>
+                            </div>
+                            <div class="mb-3">
+                                <div class="text-muted mb-1">Last Login</div>
+                                <div>{{ date('F d, Y H:i', strtotime('-' . rand(0, 10) . ' days')) }}</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card mt-3">
+                        <div class="card-header">
+                            <h3 class="card-title">Account Statistics</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="row g-3">
+                                <div class="col-6">
+                                    <div class="border rounded p-3 text-center">
+                                        <div class="h3 m-0">{{ rand(10, 50) }}</div>
+                                        <div class="text-muted">Songs</div>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="border rounded p-3 text-center">
+                                        <div class="h3 m-0">{{ rand(5, 30) }}</div>
+                                        <div class="text-muted">Covers</div>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="border rounded p-3 text-center">
+                                        <div class="h3 m-0">{{ rand(100, 5000) }}</div>
+                                        <div class="text-muted">Streams</div>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="border rounded p-3 text-center">
+                                        <div class="h3 m-0">{{ rand(10, 500) }}</div>
+                                        <div class="text-muted">Followers</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card mt-3">
+                        <div class="card-header">
+                            <h3 class="card-title">Verification Status</h3>
+                        </div>
+                        <div class="card-body">
+                            @if ($id % 3 == 0)
+                                <div class="alert alert-warning">
+                                    <div class="d-flex">
+                                        <div>
+                                            <i class="ti ti-clock me-2"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="alert-title">Pending Verification</h4>
+                                            <div class="text-muted">This user has a pending verification request as an
+                                                {{ ['Artist', 'Composer', 'Cover Creator'][$id % 3] }}.</div>
+                                        </div>
+                                    </div>
+                                    <div class="btn-list mt-3">
+                                        <a href="#" class="btn btn-success btn-sm">Approve</a>
+                                        <a href="#" class="btn btn-danger btn-sm">Reject</a>
+                                    </div>
+                                </div>
+                            @elseif($id % 5 == 0)
+                                <div class="alert alert-danger">
+                                    <div class="d-flex">
+                                        <div>
+                                            <i class="ti ti-ban me-2"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="alert-title">Account Suspended</h4>
+                                            <div class="text-muted">This account has been suspended due to policy
+                                                violations.</div>
+                                        </div>
+                                    </div>
+                                    <div class="btn-list mt-3">
+                                        <a href="#" class="btn btn-success btn-sm">Reactivate Account</a>
+                                    </div>
+                                </div>
+                            @else
+                                <div class="alert alert-success">
+                                    <div class="d-flex">
+                                        <div>
+                                            <i class="ti ti-check me-2"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="alert-title">Verified Account</h4>
+                                            <div class="text-muted">This user has been verified as a
+                                                {{ ['Artist', 'Composer', 'Cover Creator', 'Regular User'][$id % 4] }}.
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Content Tabs -->
+                <div class="col-lg-8">
+                    <div class="card">
+                        <div class="card-header">
+                            <ul class="nav nav-tabs card-header-tabs" data-bs-toggle="tabs">
+                                <li class="nav-item">
+                                    <a href="#songs" class="nav-link active" data-bs-toggle="tab">
+                                        <i class="ti ti-music me-2"></i>Songs
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#covers" class="nav-link" data-bs-toggle="tab">
+                                        <i class="ti ti-microphone me-2"></i>Covers
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#published" class="nav-link" data-bs-toggle="tab">
+                                        <i class="ti ti-player-play me-2"></i>Published
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#activity" class="nav-link" data-bs-toggle="tab">
+                                        <i class="ti ti-history me-2"></i>Activity
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="card-body">
+                            <div class="tab-content">
+                                <!-- Songs Tab -->
+                                <div class="tab-pane active show" id="songs">
+                                    <div class="d-flex justify-content-between mb-3">
+                                        <h4 class="card-title">User's Songs</h4>
+                                        <div class="d-flex">
+                                            <div class="me-2">
+                                                <input type="text" class="form-control form-control-sm"
+                                                    placeholder="Search songs...">
+                                            </div>
+                                            <a href="#" class="btn btn-primary btn-sm" data-bs-toggle="modal"
+                                                data-bs-target="#addSongModal">
+                                                <i class="ti ti-plus me-1"></i>Add Song
+                                            </a>
+                                        </div>
+                                    </div>
+
+                                    <div class="table-responsive">
+                                        <table class="table table-vcenter card-table table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>Title</th>
+                                                    <th>Genre</th>
+                                                    <th>Duration</th>
+                                                    <th>Uploaded</th>
+                                                    <th>Status</th>
+                                                    <th class="w-1">Actions</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @for ($i = 1; $i <= 5; $i++)
+                                                    <tr>
+                                                        <td>
+                                                            <div class="d-flex align-items-center">
+                                                                <span class="avatar me-2"
+                                                                    style="background-image: url(https://picsum.photos/40/40?random={{ $i }})"></span>
+                                                                <div>Song Title {{ $i }}</div>
+                                                            </div>
+                                                        </td>
+                                                        <td>{{ ['Pop', 'Rock', 'Hip Hop', 'Electronic', 'Jazz'][$i % 5] }}
+                                                        </td>
+                                                        <td>{{ rand(2, 5) }}:{{ sprintf('%02d', rand(0, 59)) }}</td>
+                                                        <td>{{ date('M d, Y', strtotime('-' . rand(1, 30) . ' days')) }}
+                                                        </td>
+                                                        <td>
+                                                            @if ($i % 3 == 0)
+                                                                <span class="badge bg-warning text-dark">Pending</span>
+                                                            @elseif($i % 3 == 1)
+                                                                <span class="badge bg-success">Published</span>
+                                                            @else
+                                                                <span class="badge bg-secondary">Draft</span>
+                                                            @endif
+                                                        </td>
+                                                        <td>
+                                                            <div class="dropdown">
+                                                                <button class="btn btn-icon btn-ghost-secondary"
+                                                                    data-bs-toggle="dropdown">
+                                                                    <i class="ti ti-dots-vertical"></i>
+                                                                </button>
+                                                                <div class="dropdown-menu dropdown-menu-end">
+                                                                    <a href="#" class="dropdown-item"
+                                                                        data-bs-toggle="modal"
+                                                                        data-bs-target="#editSongModal">
+                                                                        <i class="ti ti-edit me-2"></i>Edit
+                                                                    </a>
+                                                                    <a href="#" class="dropdown-item">
+                                                                        <i class="ti ti-player-play me-2"></i>Preview
+                                                                    </a>
+                                                                    @if ($i % 3 != 1)
+                                                                        <a href="#"
+                                                                            class="dropdown-item text-success">
+                                                                            <i class="ti ti-check me-2"></i>Publish
+                                                                        </a>
+                                                                    @endif
+                                                                    <a href="#" class="dropdown-item text-danger">
+                                                                        <i class="ti ti-trash me-2"></i>Delete
+                                                                    </a>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                @endfor
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <!-- Covers Tab -->
+                                <div class="tab-pane" id="covers">
+                                    <div class="d-flex justify-content-between mb-3">
+                                        <h4 class="card-title">User's Covers</h4>
+                                        <div class="d-flex">
+                                            <div class="me-2">
+                                                <select class="form-select form-select-sm">
+                                                    <option value="">All Genres</option>
+                                                    <option value="pop">Pop</option>
+                                                    <option value="rock">Rock</option>
+                                                    <option value="hiphop">Hip Hop</option>
+                                                    <option value="electronic">Electronic</option>
+                                                    <option value="jazz">Jazz</option>
+                                                </select>
+                                            </div>
+                                            <a href="#" class="btn btn-primary btn-sm">
+                                                <i class="ti ti-plus me-1"></i>Add Cover
+                                            </a>
+                                        </div>
+                                    </div>
+
+                                    <div class="row row-cards">
+                                        @for ($i = 1; $i <= 6; $i++)
+                                            <div class="col-sm-6 col-lg-4">
+                                                <div class="card card-sm">
+                                                    <a href="#" class="d-block">
+                                                        <img src="https://picsum.photos/400/300?random={{ $i + 10 }}"
+                                                            class="card-img-top">
+                                                    </a>
+                                                    <div class="card-body">
+                                                        <div class="d-flex align-items-center">
+                                                            <span class="avatar me-2"
+                                                                style="background-image: url(https://ui-avatars.com/api/?name=User+{{ $id }}&background=e53935&color=fff)"></span>
+                                                            <div>
+                                                                <div>Cover of
+                                                                    "{{ ['Blinding Lights', 'Save Your Tears', 'Levitating', 'Stay', 'Industry Baby', 'Good 4 U'][$i - 1] }}"
+                                                                </div>
+                                                                <div class="text-muted">Original by
+                                                                    {{ ['The Weeknd', 'The Weeknd', 'Dua Lipa', 'Justin Bieber', 'Lil Nas X', 'Olivia Rodrigo'][$i - 1] }}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="d-flex align-items-center mt-3">
+                                                            <div>
+                                                                <div class="text-muted">
+                                                                    <i class="ti ti-eye me-1"></i> {{ rand(100, 9999) }}
+                                                                    <i class="ti ti-thumb-up ms-2 me-1"></i>
+                                                                    {{ rand(10, 999) }}
+                                                                </div>
+                                                            </div>
+                                                            <div class="ms-auto">
+                                                                <div class="dropdown">
+                                                                    <button class="btn btn-icon btn-ghost-secondary"
+                                                                        data-bs-toggle="dropdown">
+                                                                        <i class="ti ti-dots-vertical"></i>
+                                                                    </button>
+                                                                    <div class="dropdown-menu dropdown-menu-end">
+                                                                        <a href="#" class="dropdown-item">
+                                                                            <i class="ti ti-edit me-2"></i>Edit
+                                                                        </a>
+                                                                        <a href="#" class="dropdown-item">
+                                                                            <i class="ti ti-player-play me-2"></i>Preview
+                                                                        </a>
+                                                                        <a href="#"
+                                                                            class="dropdown-item text-danger">
+                                                                            <i class="ti ti-trash me-2"></i>Delete
+                                                                        </a>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endfor
+                                    </div>
+                                </div>
+
+                                <!-- Published Tab -->
+                                <div class="tab-pane" id="published">
+                                    <div class="d-flex justify-content-between mb-3">
+                                        <h4 class="card-title">Published Content</h4>
+                                        <div class="btn-group">
+                                            <button type="button" class="btn btn-outline-primary active">All</button>
+                                            <button type="button" class="btn btn-outline-primary">Songs</button>
+                                            <button type="button" class="btn btn-outline-primary">Covers</button>
+                                            <button type="button" class="btn btn-outline-primary">Albums</button>
+                                        </div>
+                                    </div>
+
+                                    <div class="table-responsive">
+                                        <table class="table table-vcenter card-table table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>Content</th>
+                                                    <th>Type</th>
+                                                    <th>Published</th>
+                                                    <th>Stats</th>
+                                                    <th class="w-1">Actions</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @for ($i = 1; $i <= 8; $i++)
+                                                    <tr>
+                                                        <td>
+                                                            <div class="d-flex align-items-center">
+                                                                <span class="avatar me-2"
+                                                                    style="background-image: url(https://picsum.photos/40/40?random={{ $i + 20 }})"></span>
+                                                                <div>
+                                                                    <div>{{ ['Song', 'Cover', 'Album'][$i % 3] }} Title
+                                                                        {{ $i }}</div>
+                                                                    @if ($i % 3 == 1)
+                                                                        <div class="text-muted">Original by
+                                                                            {{ ['The Weeknd', 'Dua Lipa', 'Justin Bieber', 'Lil Nas X'][$i % 4] }}
+                                                                        </div>
+                                                                    @endif
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            @if ($i % 3 == 0)
+                                                                <span class="badge bg-blue">Song</span>
+                                                            @elseif($i % 3 == 1)
+                                                                <span class="badge bg-green">Cover</span>
+                                                            @else
+                                                                <span class="badge bg-purple">Album</span>
+                                                            @endif
+                                                        </td>
+                                                        <td>{{ date('M d, Y', strtotime('-' . rand(1, 60) . ' days')) }}
+                                                        </td>
+                                                        <td>
+                                                            <div class="text-muted">
+                                                                <i class="ti ti-eye me-1"></i>
+                                                                {{ number_format(rand(100, 50000)) }}
+                                                                <i class="ti ti-thumb-up ms-2 me-1"></i>
+                                                                {{ number_format(rand(10, 5000)) }}
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <div class="dropdown">
+                                                                <button class="btn btn-icon btn-ghost-secondary"
+                                                                    data-bs-toggle="dropdown">
+                                                                    <i class="ti ti-dots-vertical"></i>
+                                                                </button>
+                                                                <div class="dropdown-menu dropdown-menu-end">
+                                                                    <a href="#" class="dropdown-item">
+                                                                        <i class="ti ti-edit me-2"></i>Edit
+                                                                    </a>
+                                                                    <a href="#" class="dropdown-item">
+                                                                        <i class="ti ti-player-play me-2"></i>Preview
+                                                                    </a>
+                                                                    <a href="#" class="dropdown-item text-warning">
+                                                                        <i class="ti ti-eye-off me-2"></i>Unpublish
+                                                                    </a>
+                                                                    <a href="#" class="dropdown-item text-danger">
+                                                                        <i class="ti ti-trash me-2"></i>Delete
+                                                                    </a>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                @endfor
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <!-- Activity Tab -->
+                                <div class="tab-pane" id="activity">
+                                    <div class="d-flex justify-content-between mb-3">
+                                        <h4 class="card-title">Recent Activity</h4>
+                                        <div class="btn-group">
+                                            <button type="button"
+                                                class="btn btn-sm btn-outline-primary active">All</button>
+                                            <button type="button" class="btn btn-sm btn-outline-primary">Content</button>
+                                            <button type="button" class="btn btn-sm btn-outline-primary">Login</button>
+                                            <button type="button"
+                                                class="btn btn-sm btn-outline-primary">Payments</button>
+                                        </div>
+                                    </div>
+
+                                    <div class="list-group list-group-flush">
+                                        @for ($i = 1; $i <= 10; $i++)
+                                            <div class="list-group-item">
+                                                <div class="row align-items-center">
+                                                    <div class="col-auto">
+                                                        @if ($i % 4 == 0)
+                                                            <div class="avatar avatar-rounded bg-primary-lt">
+                                                                <i class="ti ti-upload text-primary"></i>
+                                                            </div>
+                                                        @elseif($i % 4 == 1)
+                                                            <div class="avatar avatar-rounded bg-success-lt">
+                                                                <i class="ti ti-player-play text-success"></i>
+                                                            </div>
+                                                        @elseif($i % 4 == 2)
+                                                            <div class="avatar avatar-rounded bg-warning-lt">
+                                                                <i class="ti ti-credit-card text-warning"></i>
+                                                            </div>
+                                                        @else
+                                                            <div class="avatar avatar-rounded bg-info-lt">
+                                                                <i class="ti ti-login text-info"></i>
+                                                            </div>
+                                                        @endif
+                                                    </div>
+                                                    <div class="col">
+                                                        <div class="text-body">
+                                                            @if ($i % 4 == 0)
+                                                                Uploaded a new {{ ['song', 'cover', 'album'][$i % 3] }}:
+                                                                "{{ ['Blinding Lights', 'Save Your Tears', 'Levitating', 'Stay', 'Industry Baby'][$i % 5] }}"
+                                                            @elseif($i % 4 == 1)
+                                                                Published {{ ['song', 'cover', 'album'][$i % 3] }}:
+                                                                "{{ ['Blinding Lights', 'Save Your Tears', 'Levitating', 'Stay', 'Industry Baby'][$i % 5] }}"
+                                                            @elseif($i % 4 == 2)
+                                                                Made a payment of ${{ rand(5, 50) }}.{{ rand(10, 99) }}
+                                                                for
+                                                                {{ ['license', 'subscription', 'premium features'][$i % 3] }}
+                                                            @else
+                                                                Logged in from
+                                                                {{ ['Chrome on Windows', 'Safari on macOS', 'Firefox on Linux', 'Mobile App on Android', 'Mobile App on iOS'][$i % 5] }}
+                                                            @endif
+                                                        </div>
+                                                        <div class="text-muted">{{ rand(1, 24) }}
+                                                            {{ ['minutes', 'hours', 'days'][$i % 3] }} ago</div>
+                                                    </div>
+                                                    <div class="col-auto">
+                                                        <div class="dropdown">
+                                                            <button class="btn btn-icon btn-ghost-secondary"
+                                                                data-bs-toggle="dropdown">
+                                                                <i class="ti ti-dots-vertical"></i>
+                                                            </button>
+                                                            <div class="dropdown-menu dropdown-menu-end">
+                                                                <a href="#" class="dropdown-item">
+                                                                    <i class="ti ti-eye me-2"></i>View Details
+                                                                </a>
+                                                                <a href="#" class="dropdown-item text-danger">
+                                                                    <i class="ti ti-trash me-2"></i>Delete Record
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endfor
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Edit User Modal -->
+                <div class="modal modal-blur fade" id="editUserModal" tabindex="-1" role="dialog" aria-hidden="true">
+                    <div class="modal-dialog modal-lg" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Edit User Profile</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="row mb-3">
+                                    <div class="col-lg-3 text-center">
+                                        <div class="mb-3">
+                                            <span class="avatar avatar-xl mb-3 rounded"
+                                                style="background-image: url(https://ui-avatars.com/api/?name=User+{{ $id }}&background=e53935&color=fff)"></span>
+                                            <div>
+                                                <a href="#" class="btn btn-sm btn-primary">Change</a>
+                                                <a href="#" class="btn btn-sm btn-danger">Remove</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-9">
+                                        <div class="row">
+                                            <div class="col-lg-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label">First Name</label>
+                                                    <input type="text" class="form-control" value="User">
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Last Name</label>
+                                                    <input type="text" class="form-control"
+                                                        value="{{ $id }}">
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Email</label>
+                                                    <input type="email" class="form-control"
+                                                        value="user{{ $id }}@example.com">
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Phone</label>
+                                                    <input type="text" class="form-control"
+                                                        value="+1 ({{ rand(100, 999) }}) {{ rand(100, 999) }}-{{ rand(1000, 9999) }}">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="hr-text">Account Information</div>
+
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">Username</label>
+                                            <input type="text" class="form-control" value="user{{ $id }}">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">Role</label>
+                                            <select class="form-select">
+                                                <option value="user" {{ $id % 4 == 3 ? 'selected' : '' }}>Regular User
+                                                </option>
+                                                <option value="artist" {{ $id % 4 == 0 ? 'selected' : '' }}>Artist
+                                                </option>
+                                                <option value="composer" {{ $id % 4 == 1 ? 'selected' : '' }}>Composer
+                                                </option>
+                                                <option value="cover_creator" {{ $id % 4 == 2 ? 'selected' : '' }}>Cover
+                                                    Creator</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">Status</label>
+                                            <select class="form-select">
+                                                <option value="active" {{ $id % 5 != 0 ? 'selected' : '' }}>Active
+                                                </option>
+                                                <option value="suspended" {{ $id % 5 == 0 ? 'selected' : '' }}>Suspended
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">Verification</label>
+                                            <select class="form-select">
+                                                <option value="verified" {{ $id % 3 != 0 ? 'selected' : '' }}>Verified
+                                                </option>
+                                                <option value="pending" {{ $id % 3 == 0 ? 'selected' : '' }}>Pending
+                                                    Verification</option>
+                                                <option value="unverified">Unverified</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="hr-text">Additional Information</div>
+
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">Location</label>
+                                            <input type="text" class="form-control"
+                                                value="{{ ['New York', 'Los Angeles', 'Chicago', 'Houston', 'Miami'][$id % 5] }}, USA">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">Website</label>
+                                            <input type="text" class="form-control"
+                                                value="https://example.com/user{{ $id }}">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <div class="mb-3">
+                                            <label class="form-label">Bio</label>
+                                            <textarea class="form-control" rows="3">This is a sample bio for User {{ $id }}. The user has been on the platform since {{ date('F Y', strtotime('-' . rand(1, 36) . ' months')) }} and has published multiple songs and covers.</textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-link link-secondary"
+                                    data-bs-dismiss="modal">Cancel</button>
+                                <button type="button" class="btn btn-primary ms-auto">Save changes</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Suspend User Modal -->
+                <div class="modal modal-blur fade" id="suspendUserModal" tabindex="-1" role="dialog"
+                    aria-hidden="true">
+                    <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-body">
+                                <div class="modal-title">Are you sure?</div>
+                                <div>You are about to suspend this user account. The user will not be able to log in or use
+                                    any features until the account is reactivated.</div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-link link-secondary me-auto"
+                                    data-bs-dismiss="modal">Cancel</button>
+                                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Yes, suspend
+                                    account</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Add Song Modal -->
+                <div class="modal modal-blur fade" id="addSongModal" tabindex="-1" role="dialog" aria-hidden="true">
+                    <div class="modal-dialog modal-lg" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Add New Song</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="mb-3">
+                                    <label class="form-label">Song Title</label>
+                                    <input type="text" class="form-control" placeholder="Enter song title">
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">Genre</label>
+                                            <select class="form-select">
+                                                <option value="">Select Genre</option>
+                                                <option value="pop">Pop</option>
+                                                <option value="rock">Rock</option>
+                                                <option value="hiphop">Hip Hop</option>
+                                                <option value="electronic">Electronic</option>
+                                                <option value="jazz">Jazz</option>
+                                                <option value="classical">Classical</option>
+                                                <option value="country">Country</option>
+                                                <option value="rnb">R&B</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">Album (Optional)</label>
+                                            <select class="form-select">
+                                                <option value="">Select Album</option>
+                                                <option value="album1">Album 1</option>
+                                                <option value="album2">Album 2</option>
+                                                <option value="album3">Album 3</option>
+                                                <option value="new">Create New Album...</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Song File</label>
+                                    <input type="file" class="form-control">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Cover Image</label>
+                                    <input type="file" class="form-control">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Release Date</label>
+                                    <input type="date" class="form-control" value="{{ date('Y-m-d') }}">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Description</label>
+                                    <textarea class="form-control" rows="3" placeholder="Enter song description"></textarea>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Lyrics (Optional)</label>
+                                    <textarea class="form-control" rows="5" placeholder="Enter song lyrics"></textarea>
+                                </div>
+                                <div class="mb-3">
+                                    <div class="form-label">Status</div>
+                                    <div>
+                                        <label class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="status" value="draft"
+                                                checked>
+                                            <span class="form-check-label">Draft</span>
+                                        </label>
+                                        <label class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="status"
+                                                value="published">
+                                            <span class="form-check-label">Published</span>
+                                        </label>
+                                        <label class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="status"
+                                                value="scheduled">
+                                            <span class="form-check-label">Schedule Release</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-link link-secondary"
+                                    data-bs-dismiss="modal">Cancel</button>
+                                <button type="button" class="btn btn-primary ms-auto">Add Song</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Edit Song Modal -->
+                <div class="modal modal-blur fade" id="editSongModal" tabindex="-1" role="dialog" aria-hidden="true">
+                    <div class="modal-dialog modal-lg" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Edit Song</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="mb-3">
+                                    <label class="form-label">Song Title</label>
+                                    <input type="text" class="form-control" value="Song Title 1">
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">Genre</label>
+                                            <select class="form-select">
+                                                <option value="">Select Genre</option>
+                                                <option value="pop" selected>Pop</option>
+                                                <option value="rock">Rock</option>
+                                                <option value="hiphop">Hip Hop</option>
+                                                <option value="electronic">Electronic</option>
+                                                <option value="jazz">Jazz</option>
+                                                <option value="classical">Classical</option>
+                                                <option value="country">Country</option>
+                                                <option value="rnb">R&B</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">Album (Optional)</label>
+                                            <select class="form-select">
+                                                <option value="">Select Album</option>
+                                                <option value="album1" selected>Album 1</option>
+                                                <option value="album2">Album 2</option>
+                                                <option value="album3">Album 3</option>
+                                                <option value="new">Create New Album...</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <div class="d-flex align-items-center mb-2">
+                                        <label class="form-label mb-0 me-auto">Current Song File</label>
+                                        <a href="#" class="text-muted">
+                                            <i class="ti ti-player-play me-1"></i>Preview
+                                        </a>
+                                    </div>
+                                    <div class="form-control-plaintext">song_file_1.mp3</div>
+                                    <div class="form-check mt-1">
+                                        <input class="form-check-input" type="checkbox" id="replace-song">
+                                        <label class="form-check-label" for="replace-song">
+                                            Replace song file
+                                        </label>
+                                    </div>
+                                    <input type="file" class="form-control mt-2" disabled>
+                                </div>
+                                <div class="mb-3">
+                                    <div class="d-flex align-items-center mb-2">
+                                        <label class="form-label mb-0 me-auto">Current Cover Image</label>
+                                    </div>
+                                    <div class="d-flex align-items-center">
+                                        <img src="https://picsum.photos/100/100?random=1" class="rounded me-3"
+                                            style="width: 100px; height: 100px; object-fit: cover;">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="replace-cover">
+                                            <label class="form-check-label" for="replace-cover">
+                                                Replace cover image
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <input type="file" class="form-control mt-2" disabled>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Release Date</label>
+                                    <input type="date" class="form-control"
+                                        value="{{ date('Y-m-d', strtotime('-5 days')) }}">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Description</label>
+                                    <textarea class="form-control" rows="3">This is a sample description for Song Title 1. It was released on {{ date('F d, Y', strtotime('-5 days')) }} and has been gaining popularity since then.</textarea>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Lyrics (Optional)</label>
+                                    <textarea class="form-control" rows="5">These are sample lyrics for Song Title 1.
+Verse 1:
+Lorem ipsum dolor sit amet
+Consectetur adipiscing elit
+Sed do eiusmod tempor incididunt
+
+Chorus:
+Ut labore et dolore magna aliqua
+Ut enim ad minim veniam
+Quis nostrud exercitation ullamco</textarea>
+                                </div>
+                                <div class="mb-3">
+                                    <div class="form-label">Status</div>
+                                    <div>
+                                        <label class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="edit-status"
+                                                value="draft">
+                                            <span class="form-check-label">Draft</span>
+                                        </label>
+                                        <label class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="edit-status"
+                                                value="published" checked>
+                                            <span class="form-check-label">Published</span>
+                                        </label>
+                                        <label class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="edit-status"
+                                                value="scheduled">
+                                            <span class="form-check-label">Schedule Release</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-link link-secondary"
+                                    data-bs-dismiss="modal">Cancel</button>
+                                <button type="button" class="btn btn-primary ms-auto">Save Changes</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @endsection
+
+            @section('scripts')
+                <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        // Toggle file upload when replace checkbox is checked
+                        const replaceCheckboxes = document.querySelectorAll('#replace-song, #replace-cover');
+                        replaceCheckboxes.forEach(checkbox => {
+                            checkbox.addEventListener('change', function() {
+                                const fileInput = this.closest('.mb-3').querySelector('input[type="file"]');
+                                fileInput.disabled = !this.checked;
+                            });
+                        });
+
+                        // Confirm delete action
+                        window.confirmDelete = function(id) {
+                            Swal.fire({
+                                title: 'Are you sure?',
+                                text: "You won't be able to revert this!",
+                                icon: 'warning',
+                                showCancelButton: true,
+                                confirmButtonColor: '#e53935',
+                                cancelButtonColor: '#6c757d',
+                                confirmButtonText: 'Yes, delete it!'
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    Swal.fire(
+                                        'Deleted!',
+                                        'The song has been deleted.',
+                                        'success'
+                                    );
+                                }
+                            });
+                        };
+                    });
+                </script>
+            @endsection

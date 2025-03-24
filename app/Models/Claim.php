@@ -19,7 +19,7 @@ class Claim extends Model
         'user_id',
         'song_id',
         'status',
-        'document'
+        'document' 
     ];
 
     protected $casts = [

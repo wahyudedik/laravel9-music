@@ -1,28 +1,20 @@
 <?php
-
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
+return new class extends Migration {
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->string('ktp')->nullable()->comment('Nomor KTP pengguna');
-            $table->string('npwp')->nullable()->comment('Nomor NPWP pengguna');
+            $table->string('ip_address')->nullable()->after('last_login')->comment('Alamat IP terakhir pengguna');
         });
     }
 
     public function down()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn(['ktp', 'npwp']);
+            $table->dropColumn(['ip_address']);
         });
     }
 };
