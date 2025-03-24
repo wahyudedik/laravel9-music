@@ -22,7 +22,7 @@ class Verification extends Model
         'document_ktp',
         'document_npwp',
         'status',
-        'notes',
+        // 'notes',
     ];
 
     public function user()

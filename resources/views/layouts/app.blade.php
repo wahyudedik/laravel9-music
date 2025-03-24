@@ -267,10 +267,12 @@
                                 @elseif($verification->status == 'approved')
                                     <a href="{{ route('verification.status') }}" class="dropdown-item text-success">
                                         <i class="ti ti-check me-2"></i>Akun Terverifikasi
+                                        ({{ ucfirst($verification->type) }})
                                     </a>
                                 @elseif($verification->status == 'rejected')
-                                    <a href="{{ route('verification.form') }}" class="dropdown-item text-danger">
-                                        <i class="ti ti-x me-2"></i>Verifikasi Ditolak
+                                    <a href="{{ route('verification.status') }}" class="dropdown-item text-danger">
+                                        <i class="ti ti-x me-2"></i>Verifikasi {{ ucfirst($verification->type) }}
+                                        Ditolak
                                     </a>
                                 @endif
                             @endif

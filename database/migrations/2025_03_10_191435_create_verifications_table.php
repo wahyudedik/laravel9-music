@@ -11,7 +11,7 @@ return new class extends Migration
      *
      * @return void
      */
-    public function up()
+    public function up() 
     {
         Schema::create('verifications', function (Blueprint $table) {
             $table->uuid('id')->primary()->comment('ID unik untuk setiap verifikasi akun');

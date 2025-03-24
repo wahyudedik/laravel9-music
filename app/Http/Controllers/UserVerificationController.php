@@ -60,11 +60,11 @@ class UserVerificationController extends Controller
             'user_id' => $userId,
             'type' => $request->type,
             'document_ktp' => $ktpPath,
-            //'document_npwp' => $npwpPath,
+            'document_npwp' => $npwpPath,
             'status' => 'pending',
         ]);
 
-        return redirect()->route('verification.form')->with('success', 'Verifikasi berhasil diajukan! Silahkan tunggu persetujuan dari admin.');
+        return redirect()->route('verification.status')->with('success', 'Verifikasi berhasil diajukan! Silahkan tunggu persetujuan dari admin.');
     }
 
     public function submitArtistVerification(Request $request)
@@ -80,7 +80,7 @@ class UserVerificationController extends Controller
 
         $rules = [
             'type' => 'required|in:artist',
-            'status'    => 'required|in:pending',
+            'status' => 'required|in:pending',
             'document_ktp' => 'required|file|mimes:pdf,jpeg,png,jpg|max:2048',
         ];
 
@@ -99,7 +99,7 @@ class UserVerificationController extends Controller
             'user_id' => $userId,
             'type' => $request->type,
             'document_ktp' => $ktpPath,
-            //'document_npwp' => $npwpPath,
+            'document_npwp' => null,
             'status' => 'pending',
         ]);
 
@@ -118,15 +118,10 @@ class UserVerificationController extends Controller
         }
 
         $rules = [
-            'type' => 'required|in:composer,artist,cover',
+            'type' => 'required|in:composer',
             'document_ktp' => 'required|file|mimes:pdf,jpeg,png,jpg|max:2048',
-            'document_npwp' => 'nullable|file|mimes:pdf,jpeg,png,jpg|max:2048',
+            'document_npwp' => 'required|file|mimes:pdf,jpeg,png,jpg|max:2048',
         ];
-
-        // Tambahkan validasi bersyarat untuk document_npwp jika type adalah composer
-        if ($request->input('type') === 'composer') {
-            $rules['document_npwp'] = 'required|file|mimes:pdf,jpeg,png,jpg|max:2048';
-        }
 
         $validator = Validator::make($request->all(), $rules);
 
@@ -135,11 +130,7 @@ class UserVerificationController extends Controller
         }
 
         $ktpPath = $request->file('document_ktp')->store('uploads/verifications', 'public');
-
-        $npwpPath = null;
-        if ($request->hasFile('document_npwp')) {
-            $npwpPath = $request->file('document_npwp')->store('uploads/verifications', 'public');
-        }
+        $npwpPath = $request->file('document_npwp')->store('uploads/verifications', 'public');
 
         $userId = auth()->id();
 
@@ -148,13 +139,12 @@ class UserVerificationController extends Controller
             'user_id' => $userId,
             'type' => $request->type,
             'document_ktp' => $ktpPath,
-            //'document_npwp' => $npwpPath,
+            'document_npwp' => $npwpPath,
             'status' => 'pending',
         ]);
 
         return redirect()->route('verification.status')->with('success', 'Verifikasi berhasil diajukan! Silahkan tunggu persetujuan dari admin.');
     }
-
 
     public function checkStatus()
     {

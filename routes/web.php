@@ -83,11 +83,19 @@ Route::middleware(['auth', 'role:User,Cover Creator,Artist,Composer', 'verified'
     Route::get('/user/dashboard', [UserController::class, 'dashboard'])->name('user.dashboard');
 
     // Fitur untuk pengajuan verification status user
-    Route::get('/verification/form', [UserVerificationController::class, 'showVerificationForm'])->name('verification.form');
-    Route::post('/verification/submit', [UserVerificationController::class, 'submitVerification'])->name('verification.submit');
-    Route::post('/verification/submit/artist', [UserVerificationController::class, 'submitArtistVerification'])->name('verification.submit.artist');
-    Route::post('/verification/submit/composer', [UserVerificationController::class, 'submitComposerVerification'])->name('verification.submit.composer');
-    Route::get('/verification/status', [UserVerificationController::class, 'checkStatus'])->name('verification.status');
+    Route::get('/verification/form', [UserVerificationController::class, 'showVerificationForm'])
+        ->name('verification.form');
+    Route::post('/verification/submit', [UserVerificationController::class, 'submitVerification'])
+        ->name('verification.submit');
+    Route::post('/verification/submit/artist', [UserVerificationController::class, 'submitArtistVerification'])
+        ->name('verification.submit.artist');
+    Route::post('/verification/submit/composer', [UserVerificationController::class, 'submitComposerVerification'])
+        ->name('verification.submit.composer');
+    Route::get('/verification/status', [UserVerificationController::class, 'checkStatus'])
+        ->name('verification.status');
+
+    // Untuk memutar lagu di halaman user setelah login dan menu search
+    Route::get('/user/dashboard/play/{id}', [UserController::class, 'play'])->name('user.dashboard.play');
 
     // Profile
     Route::get('/profile/edit', function () {
