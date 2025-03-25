@@ -19,7 +19,7 @@
     
     <style>
         :root {
-            --tblr-primary: #e53935;
+            --tblr-primary: #e53935; 
             --tblr-primary-rgb: 229, 57, 53;
         }
         .btn-primary {

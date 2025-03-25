@@ -134,9 +134,19 @@
                                             </div>
                                         </div>
                                         <div class="mt-4 text-center">
-                                            <a href="{{ route('verification.form') }}" class="btn btn-primary">
-                                                <i class="ti ti-refresh me-1"></i> Ajukan Ulang
-                                            </a>
+                                            @if ($verification->type == 'cover')
+                                                <a href="{{ route('verification.form') }}" class="btn btn-primary">
+                                                    <i class="ti ti-refresh me-1"></i> Ajukan Ulang Verifikasi Cover
+                                                </a>
+                                            @elseif($verification->type == 'artist')
+                                                <button type="button" class="btn btn-primary" id="btnAjukanUlangArtist">
+                                                    <i class="ti ti-refresh me-1"></i> Ajukan Ulang Verifikasi Artist
+                                                </button>
+                                            @elseif($verification->type == 'composer')
+                                                <button type="button" class="btn btn-primary" id="btnAjukanUlangComposer">
+                                                    <i class="ti ti-refresh me-1"></i> Ajukan Ulang Verifikasi Composer
+                                                </button>
+                                            @endif
                                         </div>
                                     @elseif($verification->status == 'approved')
                                         <div class="alert alert-success" role="alert">
@@ -199,6 +209,25 @@
                                                         </div>
                                                     </div>
                                                 </div>
+                                            </div>
+                                            <div>
+                                                @if ($verification->type != 'artist' && !($verification->type == 'composer' && $verification->status == 'approved'))
+                                                    <div class="mt-4">
+                                                        <button type="button" class="btn btn-primary"
+                                                            id="btnUpgradeArtist">
+                                                            <i class="ti ti-arrow-up-circle me-1"></i> Upgrade ke
+                                                            Verifikasi Artist
+                                                        </button>
+                                                    </div>
+                                                @elseif ($verification->type == 'artist' && $verification->status == 'approved')
+                                                    <div class="mt-4">
+                                                        <button type="button" class="btn btn-primary"
+                                                            id="btnUpgradeComposer">
+                                                            <i class="ti ti-arrow-up-circle me-1"></i> Upgrade ke
+                                                            Verifikasi Composer
+                                                        </button>
+                                                    </div>
+                                                @endif
                                             </div>
                                         </div>
                                     @else
@@ -337,4 +366,354 @@
                 </div>
             </div>
         </div>
-    @endsection
+    </div>
+
+    <!-- Hidden Forms for SweetAlert2 -->
+    <form id="formArtistVerification" action="{{ route('verification.submit.artist') }}" method="POST"
+        enctype="multipart/form-data" style="display: none;">
+        @csrf
+        <input type="hidden" name="type" value="artist">
+        <input type="hidden" name="status" value="pending">
+        <input type="file" id="artistKtpFile" name="document_ktp" accept="image/*,application/pdf" required>
+    </form>
+
+    <form id="formComposerVerification" action="{{ route('verification.submit.composer') }}" method="POST"
+        enctype="multipart/form-data" style="display: none;">
+        @csrf
+        <input type="hidden" name="type" value="composer">
+        <input type="hidden" name="status" value="pending">
+        <input type="file" id="composerKtpFile" name="document_ktp" accept="image/*,application/pdf" required>
+        <input type="file" id="composerNpwpFile" name="document_npwp" accept="image/*,application/pdf" required>
+    </form>
+@endsection
+
+@section('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Validasi untuk semua input file
+            const validateFileSize = (file) => {
+                if (file && file.size > 2 * 1024 * 1024) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'File terlalu besar',
+                        text: 'Ukuran file maksimal adalah 2MB',
+                    });
+                    return false;
+                }
+                return true;
+            };
+
+            // Fungsi untuk menangani pengajuan ulang verifikasi Artist
+            const btnAjukanUlangArtist = document.getElementById('btnAjukanUlangArtist');
+            if (btnAjukanUlangArtist) {
+                btnAjukanUlangArtist.addEventListener('click', function() {
+                    Swal.fire({
+                        title: 'Ajukan Ulang Verifikasi Artist',
+                        html: `
+                        <div class="mb-3">
+                            <label class="form-label text-start d-block">Dokumen KTP</label>
+                            <input type="file" id="swal-ktp-artist" class="form-control" accept="image/*,application/pdf">
+                            <small class="text-muted text-start d-block">Format yang didukung: PDF, JPG, PNG, GIF (Max 2MB)</small>
+                        </div>
+                    `,
+                        showCancelButton: true,
+                        confirmButtonText: 'Ajukan Ulang',
+                        cancelButtonText: 'Batal',
+                        confirmButtonColor: '#e53935',
+                        cancelButtonColor: '#6c757d',
+                        didOpen: () => {
+                            const fileInput = document.getElementById('swal-ktp-artist');
+                            fileInput.addEventListener('change', function() {
+                                validateFileSize(this.files[0]);
+                            });
+                        },
+                        preConfirm: () => {
+                            const fileInput = document.getElementById('swal-ktp-artist');
+                            if (!fileInput.files[0]) {
+                                Swal.showValidationMessage('Dokumen KTP wajib diisi');
+                                return false;
+                            }
+                            if (!validateFileSize(fileInput.files[0])) {
+                                return false;
+                            }
+                            return true;
+                        }
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            const fileInput = document.getElementById('swal-ktp-artist');
+                            const artistKtpFile = document.getElementById('artistKtpFile');
+
+                            // Transfer file dari SweetAlert ke form tersembunyi
+                            const dataTransfer = new DataTransfer();
+                            dataTransfer.items.add(fileInput.files[0]);
+                            artistKtpFile.files = dataTransfer.files;
+
+                            // Submit form
+                            document.getElementById('formArtistVerification').submit();
+
+                            // Tampilkan loading
+                            Swal.fire({
+                                title: 'Mengirim Pengajuan',
+                                html: 'Mohon tunggu...',
+                                allowOutsideClick: false,
+                                didOpen: () => {
+                                    Swal.showLoading();
+                                }
+                            });
+                        }
+                    });
+                });
+            }
+
+            // Fungsi untuk menangani pengajuan ulang verifikasi Composer
+            const btnAjukanUlangComposer = document.getElementById('btnAjukanUlangComposer');
+            if (btnAjukanUlangComposer) {
+                btnAjukanUlangComposer.addEventListener('click', function() {
+                    Swal.fire({
+                        title: 'Ajukan Ulang Verifikasi Composer',
+                        html: `
+                        <div class="mb-3">
+                            <label class="form-label text-start d-block">Dokumen KTP</label>
+                            <input type="file" id="swal-ktp-composer" class="form-control" accept="image/*,application/pdf">
+                            <small class="text-muted text-start d-block">Format yang didukung: PDF, JPG, PNG, GIF (Max 2MB)</small>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label text-start d-block">Dokumen NPWP</label>
+                            <input type="file" id="swal-npwp-composer" class="form-control" accept="image/*,application/pdf">
+                            <small class="text-muted text-start d-block">Format yang didukung: PDF, JPG, PNG, GIF (Max 2MB)</small>
+                        </div>
+                    `,
+                        showCancelButton: true,
+                        confirmButtonText: 'Ajukan Ulang',
+                        cancelButtonText: 'Batal',
+                        confirmButtonColor: '#e53935',
+                        cancelButtonColor: '#6c757d',
+                        didOpen: () => {
+                            const ktpInput = document.getElementById('swal-ktp-composer');
+                            const npwpInput = document.getElementById('swal-npwp-composer');
+
+                            ktpInput.addEventListener('change', function() {
+                                validateFileSize(this.files[0]);
+                            });
+
+                            npwpInput.addEventListener('change', function() {
+                                validateFileSize(this.files[0]);
+                            });
+                        },
+                        preConfirm: () => {
+                            const ktpInput = document.getElementById('swal-ktp-composer');
+                            const npwpInput = document.getElementById('swal-npwp-composer');
+
+                            if (!ktpInput.files[0]) {
+                                Swal.showValidationMessage('Dokumen KTP wajib diisi');
+                                return false;
+                            }
+
+                            if (!npwpInput.files[0]) {
+                                Swal.showValidationMessage('Dokumen NPWP wajib diisi');
+                                return false;
+                            }
+
+                            if (!validateFileSize(ktpInput.files[0]) || !validateFileSize(
+                                    npwpInput.files[0])) {
+                                return false;
+                            }
+
+                            return true;
+                        }
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            const ktpInput = document.getElementById('swal-ktp-composer');
+                            const npwpInput = document.getElementById('swal-npwp-composer');
+
+                            const composerKtpFile = document.getElementById('composerKtpFile');
+                            const composerNpwpFile = document.getElementById('composerNpwpFile');
+
+                            // Transfer file KTP dari SweetAlert ke form tersembunyi
+                            let dataTransfer = new DataTransfer();
+                            dataTransfer.items.add(ktpInput.files[0]);
+                            composerKtpFile.files = dataTransfer.files;
+
+                            // Transfer file NPWP dari SweetAlert ke form tersembunyi
+                            dataTransfer = new DataTransfer();
+                            dataTransfer.items.add(npwpInput.files[0]);
+                            composerNpwpFile.files = dataTransfer.files;
+
+                            // Submit form
+                            document.getElementById('formComposerVerification').submit();
+
+                            // Tampilkan loading
+                            Swal.fire({
+                                title: 'Mengirim Pengajuan',
+                                html: 'Mohon tunggu...',
+                                allowOutsideClick: false,
+                                didOpen: () => {
+                                    Swal.showLoading();
+                                }
+                            });
+                        }
+                    });
+                });
+            }
+
+            // Fungsi untuk menangani upgrade ke Artist
+            const btnUpgradeArtist = document.getElementById('btnUpgradeArtist');
+            if (btnUpgradeArtist) {
+                btnUpgradeArtist.addEventListener('click', function() {
+                    Swal.fire({
+                        title: 'Upgrade ke Verifikasi Artist',
+                        html: `
+                        <div class="mb-3">
+                            <label class="form-label text-start d-block">Dokumen KTP</label>
+                            <input type="file" id="swal-ktp-upgrade-artist" class="form-control" accept="image/*,application/pdf">
+                            <small class="text-muted text-start d-block">Format yang didukung: PDF, JPG, PNG, GIF (Max 2MB)</small>
+                        </div>
+                    `,
+                        showCancelButton: true,
+                        confirmButtonText: 'Ajukan Upgrade',
+                        cancelButtonText: 'Batal',
+                        confirmButtonColor: '#e53935',
+                        cancelButtonColor: '#6c757d',
+                        didOpen: () => {
+                            const fileInput = document.getElementById(
+                            'swal-ktp-upgrade-artist');
+                            fileInput.addEventListener('change', function() {
+                                validateFileSize(this.files[0]);
+                            });
+                        },
+                        preConfirm: () => {
+                            const fileInput = document.getElementById(
+                            'swal-ktp-upgrade-artist');
+                            if (!fileInput.files[0]) {
+                                Swal.showValidationMessage('Dokumen KTP wajib diisi');
+                                return false;
+                            }
+                            if (!validateFileSize(fileInput.files[0])) {
+                                return false;
+                            }
+                            return true;
+                        }
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            const fileInput = document.getElementById('swal-ktp-upgrade-artist');
+                            const artistKtpFile = document.getElementById('artistKtpFile');
+
+                            // Transfer file dari SweetAlert ke form tersembunyi
+                            const dataTransfer = new DataTransfer();
+                            dataTransfer.items.add(fileInput.files[0]);
+                            artistKtpFile.files = dataTransfer.files;
+
+                            // Submit form
+                            document.getElementById('formArtistVerification').submit();
+
+                            // Tampilkan loading
+                            Swal.fire({
+                                title: 'Mengirim Pengajuan',
+                                html: 'Mohon tunggu...',
+                                allowOutsideClick: false,
+                                didOpen: () => {
+                                    Swal.showLoading();
+                                }
+                            });
+                        }
+                    });
+                });
+            }
+
+            // Fungsi untuk menangani upgrade ke Composer
+            const btnUpgradeComposer = document.getElementById('btnUpgradeComposer');
+            if (btnUpgradeComposer) {
+                btnUpgradeComposer.addEventListener('click', function() {
+                    Swal.fire({
+                        title: 'Upgrade ke Verifikasi Composer',
+                        html: `
+                        <div class="mb-3">
+                            <label class="form-label text-start d-block">Dokumen KTP</label>
+                            <input type="file" id="swal-ktp-upgrade-composer" class="form-control" accept="image/*,application/pdf">
+                            <small class="text-muted text-start d-block">Format yang didukung: PDF, JPG, PNG, GIF (Max 2MB)</small>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label text-start d-block">Dokumen NPWP</label>
+                            <input type="file" id="swal-npwp-upgrade-composer" class="form-control" accept="image/*,application/pdf">
+                            <small class="text-muted text-start d-block">Format yang didukung: PDF, JPG, PNG, GIF (Max 2MB)</small>
+                        </div>
+                    `,
+                        showCancelButton: true,
+                        confirmButtonText: 'Ajukan Upgrade',
+                        cancelButtonText: 'Batal',
+                        confirmButtonColor: '#e53935',
+                        cancelButtonColor: '#6c757d',
+                        didOpen: () => {
+                            const ktpInput = document.getElementById(
+                                'swal-ktp-upgrade-composer');
+                            const npwpInput = document.getElementById(
+                                'swal-npwp-upgrade-composer');
+
+                            ktpInput.addEventListener('change', function() {
+                                validateFileSize(this.files[0]);
+                            });
+
+                            npwpInput.addEventListener('change', function() {
+                                validateFileSize(this.files[0]);
+                            });
+                        },
+                        preConfirm: () => {
+                            const ktpInput = document.getElementById(
+                                'swal-ktp-upgrade-composer');
+                            const npwpInput = document.getElementById(
+                                'swal-npwp-upgrade-composer');
+
+                            if (!ktpInput.files[0]) {
+                                Swal.showValidationMessage('Dokumen KTP wajib diisi');
+                                return false;
+                            }
+
+                            if (!npwpInput.files[0]) {
+                                Swal.showValidationMessage('Dokumen NPWP wajib diisi');
+                                return false;
+                            }
+
+                            if (!validateFileSize(ktpInput.files[0]) || !validateFileSize(
+                                    npwpInput.files[0])) {
+                                return false;
+                            }
+
+                            return true;
+                        }
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            const ktpInput = document.getElementById('swal-ktp-upgrade-composer');
+                            const npwpInput = document.getElementById('swal-npwp-upgrade-composer');
+
+                            const composerKtpFile = document.getElementById('composerKtpFile');
+                            const composerNpwpFile = document.getElementById('composerNpwpFile');
+
+                            // Transfer file KTP dari SweetAlert ke form tersembunyi
+                            let dataTransfer = new DataTransfer();
+                            dataTransfer.items.add(ktpInput.files[0]);
+                            composerKtpFile.files = dataTransfer.files;
+
+                            // Transfer file NPWP dari SweetAlert ke form tersembunyi
+                            dataTransfer = new DataTransfer();
+                            dataTransfer.items.add(npwpInput.files[0]);
+                            composerNpwpFile.files = dataTransfer.files;
+
+                            // Submit form
+                            document.getElementById('formComposerVerification').submit();
+
+                            // Tampilkan loading
+                            Swal.fire({
+                                title: 'Mengirim Pengajuan',
+                                html: 'Mohon tunggu...',
+                                allowOutsideClick: false,
+                                didOpen: () => {
+                                    Swal.showLoading();
+                                }
+                            });
+                        }
+                    });
+                });
+            }
+        });
+    </script>
+@endsection
