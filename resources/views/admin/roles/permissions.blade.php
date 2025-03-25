@@ -47,12 +47,16 @@
                     <div class="text-muted">
                         Show
                         <div class="mx-2 d-inline-block">
-                            <select class="form-select form-select-sm" name="perPage" onchange="this.form.submit()">
-                                <option value="10" {{ request('perPage') == 10 ? 'selected' : '' }}>10</option>
-                                <option value="25" {{ request('perPage') == 25 ? 'selected' : '' }}>25</option>
-                                <option value="50" {{ request('perPage') == 50 ? 'selected' : '' }}>50</option>
-                                <option value="100" {{ request('perPage') == 100 ? 'selected' : '' }}>100</option>
-                            </select>
+                            <form method="GET" action="{{ route('admin.permissions.index') }}">
+                                <input type="hidden" name="search" value="{{ request('search') }}">
+                                <select class="form-select form-select-sm" name="perPage" onchange="this.form.submit()">
+                                    <option value="10" {{ request('perPage') == 10 ? 'selected' : '' }}>10</option>
+                                    <option value="25" {{ request('perPage') == 25 ? 'selected' : '' }}>25</option>
+                                    <option value="50" {{ request('perPage') == 50 ? 'selected' : '' }}>50</option>
+                                    <option value="100" {{ request('perPage') == 100 ? 'selected' : '' }}>100
+                                    </option>
+                                </select>
+                            </form>
                         </div>
                         entries
                     </div>
@@ -98,13 +102,13 @@
                                         $roles = \Spatie\Permission\Models\Role::permission($permission->name)->take(5)->get();
                                         $totalRoles = \Spatie\Permission\Models\Role::permission($permission->name)->count();
                                     @endphp
-                                    
+
                                     @foreach($roles as $role)
                                         <span class="avatar avatar-xs rounded bg-{{ ['primary', 'success', 'danger', 'warning', 'info'][crc32($role->name) % 5] }}-lt" title="{{ $role->name }}">
                                             {{ substr($role->name, 0, 1) }}
                                         </span>
                                     @endforeach
-                                    
+
                                     @if($totalRoles > 5)
                                         <span class="avatar avatar-xs rounded bg-primary">+{{ $totalRoles - 5 }}</span>
                                     @endif
@@ -112,11 +116,11 @@
                             </td>
                             <td>
                                 <div class="btn-list flex-nowrap">
-                                    <button class="btn btn-sm btn-outline-primary" onclick="editPermission('{{ $permission->id }}', '{{ $permission->name }}')">
+                                    <button class="btn btn-sm btn-outline-primary" onclick="editPermission('{{ $permission->id }}', '{{ $permission->name }}', '{{ $permission->description }}')">
                                         <i class="ti ti-edit"></i>
                                         Edit
                                     </button>
-                                    <button class="btn btn-sm btn-outline-danger" onclick="confirmDelete('{{ $permission->id }}', '{{ $permission->name }}')">
+                                    <button class="btn btn-sm btn-outline-danger" onclick="confirmDelete('{{ $permission->id }}', '{{ $permission->name }}', '{{ $permission->description }}')">
                                         <i class="ti ti-trash"></i>
                                         Delete
                                     </button>
@@ -146,7 +150,7 @@
                 <h5 class="modal-title">Add New Permission</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form action="#" method="POST">
+            <form action="{{route('admin.permissions.store')}}" method="POST">
                 @csrf
                 <div class="modal-body">
                     <div class="mb-3">
@@ -185,7 +189,7 @@
                 <h5 class="modal-title">Edit Permission</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form action="#" method="POST" id="edit-permission-form">
+            <form action="# " method="POST" id="edit-permission-form">
                 @csrf
                 @method('PUT')
                 <input type="hidden" name="permission_id" id="edit-permission-id">
@@ -219,15 +223,17 @@
 </div>
 
 <script>
-    function editPermission(id, name) {
+    var baseUrl = "{{ url('/') }}";
+    function editPermission(id, name, description) {
         document.getElementById('edit-permission-id').value = id;
         document.getElementById('edit-permission-name').value = name;
-        
+        document.getElementById('edit-permission-description').value = description;
+        document.getElementById('edit-permission-form').action = `${baseUrl}/admin/roles/permissions/${id}`;
         // Open the modal
         const modal = new bootstrap.Modal(document.getElementById('modal-edit-permission'));
         modal.show();
     }
-    
+
     function confirmDelete(id, name) {
         Swal.fire({
             title: 'Are you sure?',
@@ -241,13 +247,69 @@
             if (result.isConfirmed) {
                 // Here you would submit a form or make an AJAX request
                 // For now, we'll just show a success message
-                Swal.fire(
-                    'Deleted!',
-                    `The permission "${name}" has been deleted.`,
-                    'success'
-                );
+
+                fetch(`{{ url('/admin/roles/permissions') }}/${id}`, {
+                    method: "DELETE",
+                    headers: {
+                        "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute(
+                            "content"),
+                        "Content-Type": "application/json"
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+
+                    if (data.error) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: `${data.error}`,
+                            showConfirmButton: false,
+                        });
+                    }
+                    if (data.success) {
+                        Swal.fire({
+                            title: 'Deleted!',
+                            text: `The permission "${name}" has been deleted.`,
+                            icon: 'success',
+                            timer: 1000,
+                            showConfirmButton: false
+                        }).then(() => {
+                            location.reload();
+                        });
+                    }
+
+                })
+                .catch(error => console.error("Error:", error));
+
+
             }
         });
     }
 </script>
+
+<script>
+    @if (session('success'))
+        Swal.fire({
+            icon: 'success',
+            title: 'Success',
+            text: "{{ session('success') }}",
+            showConfirmButton: false,
+            timer: 3000
+        });
+    @endif
+
+    @if (session('error'))
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: "{{ session('error') }}",
+            showConfirmButton: true
+        });
+    @endif
+</script>
+
 @endsection
+@push('styles')
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+@endpush

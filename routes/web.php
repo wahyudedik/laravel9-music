@@ -1,6 +1,4 @@
-
 <?php
-
 use App\Http\Controllers\AdminClaimController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AdminUserController;
@@ -15,10 +13,6 @@ use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 use Spatie\Permission\Models\Permission;
-
-
-
-
 
 /*
 |--------------------------------------------------------------------------
@@ -56,6 +50,8 @@ Route::get('/covers', function () {
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
     Route::post('/login', [AuthController::class, 'login']);
+    Route::get('/auth/google', [AuthController::class, 'redirectToGoogle'])->name('google.login');
+    Route::get('/auth/google/callback', [AuthController::class, 'handleGoogleCallback']);
     Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
     Route::post('/register', [AuthController::class, 'register']);
 });
@@ -80,6 +76,10 @@ Route::middleware(['auth', 'role:User,Cover Creator,Artist,Composer,Super Admin,
 
 // User Dashboard Routes
 Route::middleware(['auth', 'role:User,Cover Creator,Artist,Composer', 'verified'])->group(function () {
+
+    Route::get('/user', function () {
+        return redirect()->route('user.dashboard');
+    });
     Route::get('/user/dashboard', [UserController::class, 'dashboard'])->name('user.dashboard');
 
     // Fitur untuk pengajuan verification status user
@@ -224,9 +224,11 @@ Route::middleware(['auth', 'role:User,Cover Creator,Artist,Composer', 'verified'
 
 // Admin Routes
 Route::middleware(['auth', 'role:Super Admin,Admin'])->group(function () {
+
+    Route::get('/admin', function () {
+        return redirect()->route('admin.dashboard');
+    });
     Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
-
-
     // Fitur global search di menu SuperAdmin
     Route::get('/admin/search', [AdminController::class, 'search'])->name('admin.search');
 
@@ -247,50 +249,39 @@ Route::middleware(['auth', 'role:Super Admin,Admin'])->group(function () {
 
     // User Management Routes
     Route::prefix('admin/users')->group(function () {
-        Route::get('/', function () {
-            $users = \App\Models\User::with('roles')->paginate(10);
-            return view('admin.users.index', compact('users'));
-        })->name('admin.users.index');
-
-        Route::get('/create', function () {
-            $roles = \Spatie\Permission\Models\Role::all();
-            return view('admin.users.create', compact('roles'));
-        })->name('admin.users.create');
-
-        Route::get('/{user}/edit', function ($id) {
-            $user = \App\Models\User::findOrFail($id);
-            $roles = \Spatie\Permission\Models\Role::all();
-            return view('admin.users.edit', compact('user', 'roles'));
-        })->name('admin.users.edit');
-
+        Route::get('/', [AdminUserController::class, 'index'])->name('admin.users.index');
+        Route::get('/create', [AdminUserController::class, 'create'])->name('admin.users.create');
+        Route::post('/store', [AdminUserController::class, 'store'])->name('admin.users.store');
+        Route::get('/{user}/edit', [AdminUserController::class, 'edit'])->name('admin.users.edit');
+        Route::put('/{user}', [AdminUserController::class, 'update'])->name('admin.user.update');
+        Route::delete('/{user}', [AdminUserController::class, 'destroy'])->name('admin.user.destroy');
         Route::get('/{user}', function ($id) {
             $user = \App\Models\User::with('roles')->findOrFail($id);
             return view('admin.users.show', compact('user'));
         })->name('admin.users.show');
+
     });
 
     // Roles & Permissions Routes
     Route::prefix('admin/roles')->group(function () {
-        Route::get('/', function () {
-            $roles = \Spatie\Permission\Models\Role::with('permissions')->paginate(10);
-            return view('admin.roles.index', compact('roles'));
-        })->name('admin.roles.index');
 
-        Route::get('/create', function () {
-            $permissions = \Spatie\Permission\Models\Permission::all();
-            return view('admin.roles.create', compact('permissions'));
-        })->name('admin.roles.create');
+        Route::get('/', [AdminRoleController::class, 'index'])->name('admin.roles.index');
+        Route::get('/create', [AdminRoleController::class, 'create'])->name('admin.roles.create');
+        Route::post('/store', [AdminRoleController::class, 'store'])->name('admin.roles.store');
+        Route::get('/{role}/edit', [AdminRoleController::class, 'edit'])->name('admin.roles.edit');
+        Route::put('/{role}', [AdminRoleController::class, 'update'])->name('admin.roles.update');
+        Route::delete('/{role}', [AdminRoleController::class, 'destroy'])->name('admin.roles.destroy');
 
-        Route::get('/{role}/edit', function ($id) {
-            $role = \Spatie\Permission\Models\Role::with('permissions')->findOrFail($id);
-            $permissions = \Spatie\Permission\Models\Permission::all();
-            return view('admin.roles.edit', compact('role', 'permissions'));
-        })->name('admin.roles.edit');
+        Route::prefix('permissions')->group(function () {
 
-        Route::get('/permissions', function () {
-            $permissions = \Spatie\Permission\Models\Permission::paginate(15);
-            return view('admin.roles.permissions', compact('permissions'));
-        })->name('admin.permissions.index');
+            Route::get('/', [AdminPermissionController::class, 'index'])->name('admin.permissions.index');
+            Route::post('/store', [AdminPermissionController::class, 'store'])->name('admin.permissions.store');
+            Route::put('/{permissions}', [AdminPermissionController::class, 'update'])->name('admin.permissions.update');
+            Route::delete('/{permissions}', [AdminPermissionController::class, 'destroy'])->name('admin.permissions.destroy');
+
+        });
+
+
     });
 
     // Song Management Routes
@@ -370,7 +361,7 @@ Route::middleware(['auth', 'role:Super Admin,Admin'])->group(function () {
     Route::get('/admin/settings', function () {
         return view('admin.settings');
     })->name('admin.settings');
-
+  
     // Live Chat Route
     Route::get('/admin/chat', function () {
         return view('admin.chat');
