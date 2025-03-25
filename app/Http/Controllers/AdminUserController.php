@@ -17,9 +17,23 @@ use App\Models\Role;
 
 class AdminUserController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $users = User::latest()->paginate(10);
+        $perPage = $request->input('perPage', 10);
+
+        if($request->has('search')){
+            $search = $request->input('search');
+
+            $users = User::where('name', 'like', "%$search%")
+                ->orWhere('email', 'like', "%$search%")
+                ->orWhere('phone', 'like', "%$search%")
+                ->latest()
+                ->paginate($perPage);
+
+        }else{
+            $users = User::latest()->paginate($perPage);
+        }
+
         return view('admin.users.index', compact('users'));
     }
 
@@ -30,17 +44,16 @@ class AdminUserController extends Controller
 
         $role = Role::orderBy('name', 'desc')->get();
         $data = [
-            'mode' => 'Add New',
             'roles' => $role
         ];
-        return view('admin.users.form', $data);
+        return view('admin.users.create', $data);
     }
 
     public function store(Request $request)
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'username' => 'required|string|max:50|unique:users,username',
+            // 'username' => 'required|string|max:50|unique:users,username',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|min:6|confirmed',
             'password_confirmation' => 'required',
@@ -57,10 +70,10 @@ class AdminUserController extends Controller
             'name.max' => 'The fullname may not be greater than 255 characters.',
 
             // Messages for username
-            'username.required' => 'The username field is required.',
-            'username.string' => 'The username must be a string.',
-            'username.max' => 'The username may not be greater than 50 characters.',
-            'username.unique' => 'This username is already taken. Please choose another.',
+            // 'username.required' => 'The username field is required.',
+            // 'username.string' => 'The username must be a string.',
+            // 'username.max' => 'The username may not be greater than 50 characters.',
+            // 'username.unique' => 'This username is already taken. Please choose another.',
 
             // Messages for email
             'email.required' => 'The email field is required.',
@@ -90,12 +103,19 @@ class AdminUserController extends Controller
             'city.max' => 'The city may not be greater than 100 characters.',
         ]);
 
-        $verificationToken = Str::random(64);
+        $emailVerified = $request->has('email_verified') ? now() : null;
+        $verificationToken = $request->has('email_verified') ? null : Str::random(64);
+        $email_verification_sent_at = $request->has('email_verified') ? now() : null;
+        $username = strtolower(explode('@', $request->email)[0]);
+        $count = User::where('username', $username)->count();
+        if ($count > 0) {
+            $username = $username . $count; // Tambahkan angka jika username sudah ada
+        }
 
         $user = User::create([
             'id' => Str::uuid(),
             'name' => $request->name,
-            'username' => $request->username,
+            'username' => $username,
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'phone' => $request->phone ? preg_replace('/^0/', '62', $request->phone) : null,
@@ -105,10 +125,10 @@ class AdminUserController extends Controller
             'profile_picture' => null,
             'followers' => 0,
             'following' => 0,
-            'email_verified_at' => null, // Email belum diverifikasi
+            'email_verified_at' => $emailVerified, // Email belum diverifikasi
             'email_verification_token' => $verificationToken, // Simpan token di database
-            'email_verification_sent_at' => now(),
-            'ip_address' => $request->ip(),
+            'email_verification_sent_at' => $email_verification_sent_at,
+            'ip_address' => request()->ip(),
             'created_at' => now(),
             'updated_at' => now(),
         ]);
@@ -128,7 +148,7 @@ class AdminUserController extends Controller
             activity()->withProperties(['ip' => request()->ip()])->log($authUser->name . ' create user');
 
             // Redirect ke halaman pemberitahuan
-            return redirect()->route('admin.user.index')->with('success', 'Successfully added user');
+            return redirect()->route('admin.users.index')->with('success', 'Successfully added user');
         } catch (\Exception $e) {
 
             return back()->with('error', 'Failed to send email: ' . $e->getMessage());
@@ -140,16 +160,9 @@ class AdminUserController extends Controller
         $authUser = Auth::user();
         activity()->withProperties(['ip' => request()->ip()])->log($authUser->name . ' visited edit user form');
 
-
         $user = User::findOrFail($id);
-
-        $role = Role::orderBy('name', 'desc')->get();
-        $data = [
-            'mode' => 'Edit',
-            'roles' => $role,
-            'user' => $user
-        ];
-        return view('admin.users.form', $data);
+        $roles = Role::orderBy('name', 'desc')->get();
+        return view('admin.users.edit', compact('user', 'roles'));
 
     }
 
@@ -159,7 +172,7 @@ class AdminUserController extends Controller
 
         $request->validate([
             'name' => 'required|string|max:255',
-            'username' => 'required|string|max:50|unique:users,username,' . $user->id,
+            // 'username' => 'required|string|max:50|unique:users,username,' . $user->id,
             'email' => 'required|email|unique:users,email,' . $user->id,
             'password' => 'nullable|min:6|confirmed',
             'password_confirmation' => $request->password ? 'required' : '',
@@ -176,10 +189,10 @@ class AdminUserController extends Controller
             'name.max' => 'The fullname may not be greater than 255 characters.',
 
             // Messages for username
-            'username.required' => 'The username field is required.',
-            'username.string' => 'The username must be a string.',
-            'username.max' => 'The username may not be greater than 50 characters.',
-            'username.unique' => 'This username is already taken. Please choose another.',
+            // 'username.required' => 'The username field is required.',
+            // 'username.string' => 'The username must be a string.',
+            // 'username.max' => 'The username may not be greater than 50 characters.',
+            // 'username.unique' => 'This username is already taken. Please choose another.',
 
             // Messages for email
             'email.required' => 'The email field is required.',
@@ -209,15 +222,29 @@ class AdminUserController extends Controller
         ]);
 
         // Update user data
+        $username = strtolower(explode('@', $request->email)[0]);
+        $emailVerified = null;
+        $email_verification_sent_at = null;
+        if($request->has('email_verified')){
+            $emailVerified = now();
+            $email_verification_sent_at = now();
+            if($user->email_verified_at){
+                $emailVerified = $user->email_verified_at;
+                $email_verification_sent_at = $emailVerified;
+            }
+        }
+
         $user->update([
             'name' => $request->name,
-            'username' => $request->username,
+            'username' => $username,
             'email' => $request->email,
             'password' => $request->password ? Hash::make($request->password) : $user->password,
             'phone' => $request->phone ? preg_replace('/^0/', '62', $request->phone) : null,
             'region' => $request->region ?? null,
             'city' => $request->city ?? null,
-            'ip_address' => $request->ip(),
+            'email_verified_at' => $emailVerified, // Email belum diverifikasi
+            'email_verification_sent_at' => $email_verification_sent_at,
+            'ip_address' => request()->ip(),
             'updated_at' => now(),
         ]);
 
@@ -229,7 +256,7 @@ class AdminUserController extends Controller
         $authUser = Auth::user();
         activity()->withProperties(['ip' => request()->ip()])->log($authUser->name . ' update user');
 
-        return redirect()->route('admin.user.index')->with('success', 'User updated successfully!');
+        return redirect()->route('admin.users.index')->with('success', 'User updated successfully!');
     }
 
     public function destroy($id)
@@ -247,7 +274,7 @@ class AdminUserController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'error' => 'An error occurred while deleting the user!',
-            ], 500);
+            ], 200);
         }
     }
 }

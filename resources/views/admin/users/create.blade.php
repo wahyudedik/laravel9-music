@@ -26,7 +26,7 @@
     <div class="container-xl">
         <div class="row row-cards">
             <div class="col-12">
-                <form class="card" action="#" method="POST">
+                <form class="card" action="{{route('admin.users.store')}}" method="POST">
                     @csrf
                     <div class="card-header">
                         <h3 class="card-title">User Information</h3>
@@ -57,7 +57,7 @@
                             <select name="role" class="form-select" required>
                                 <option value="">Select a role</option>
                                 @foreach($roles as $role)
-                                    <option value="{{ $role->id }}">{{ $role->name }}</option>
+                                    <option value="{{ $role->name }}">{{ $role->name }}</option>
                                 @endforeach
                             </select>
                         </div>

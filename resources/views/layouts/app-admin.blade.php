@@ -124,6 +124,7 @@
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
         }
     </style>
+    @stack('styles')
 </head>
 
 <body class="theme-light">

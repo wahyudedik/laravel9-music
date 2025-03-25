@@ -50,12 +50,16 @@
                         <div class="text-muted">
                             Show
                             <div class="mx-2 d-inline-block">
-                                <select class="form-select form-select-sm" name="perPage" onchange="this.form.submit()">
-                                    <option value="10" {{ request('perPage') == 10 ? 'selected' : '' }}>10</option>
-                                    <option value="25" {{ request('perPage') == 25 ? 'selected' : '' }}>25</option>
-                                    <option value="50" {{ request('perPage') == 50 ? 'selected' : '' }}>50</option>
-                                    <option value="100" {{ request('perPage') == 100 ? 'selected' : '' }}>100</option>
-                                </select>
+                                <form method="GET" action="{{ route('admin.users.index') }}">
+                                    <input type="hidden" name="search" value="{{ request('search') }}">
+                                    <select class="form-select form-select-sm" name="perPage" onchange="this.form.submit()">
+                                        <option value="10" {{ request('perPage') == 10 ? 'selected' : '' }}>10</option>
+                                        <option value="25" {{ request('perPage') == 25 ? 'selected' : '' }}>25</option>
+                                        <option value="50" {{ request('perPage') == 50 ? 'selected' : '' }}>50</option>
+                                        <option value="100" {{ request('perPage') == 100 ? 'selected' : '' }}>100
+                                        </option>
+                                    </select>
+                                </form>
                             </div>
                             entries
                         </div>
@@ -116,7 +120,7 @@
                                                 <i class="ti ti-edit"></i>
                                             </a>
                                             <button class="btn btn-sm btn-outline-danger"
-                                                onclick="confirmDelete({{ $user->id }})">
+                                                onclick="confirmDelete('{{ $user->id }}')">
                                                 <i class="ti ti-trash"></i>
                                             </button>
                                         </div>
@@ -149,24 +153,6 @@
 
     </div>
 
-    <div class="modal" id="modal-confirm-delete" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Delete</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <p class="delete-message">Apakah akan menghapus data ini?</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-primary btnDelete" data-delete=""
-                        onclick="confirmDelete()">Delete</button>
-                </div>
-            </div>
-        </div>
-    </div>
 
 @endsection
 @push('styles')
@@ -188,38 +174,39 @@
                     // Here you would submit a form or make an AJAX request
                     // For now, we'll just show a success message
 
-                    fetch(`{{ url('/admin/user/') }}/${userId}`, {
-                        method: "DELETE",
-                        headers: {
-                            "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content"),
-                            "Content-Type": "application/json"
-                        }
-                    })
-                    .then(response => response.json())
-                    .then(data => {
+                    fetch(`{{ url('/admin/users/') }}/${userId}`, {
+                            method: "DELETE",
+                            headers: {
+                                "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute(
+                                    "content"),
+                                "Content-Type": "application/json"
+                            }
+                        })
+                        .then(response => response.json())
+                        .then(data => {
 
-                        if(data.error){
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Error',
-                                text: `${data.error}`,
-                                showConfirmButton: false,
-                            });
-                        }
-                        if(data.success){
-                           Swal.fire({
-                                title: 'Deleted!',
-                                text: 'The user has been deleted.',
-                                icon: 'success',
-                                timer: 1000,
-                                showConfirmButton: false
-                            }).then(() => {
-                                location.reload();
-                            });
-                         }
+                            if (data.error) {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Error',
+                                    text: `${data.error}`,
+                                    showConfirmButton: false,
+                                });
+                            }
+                            if (data.success) {
+                                Swal.fire({
+                                    title: 'Deleted!',
+                                    text: 'The user has been deleted.',
+                                    icon: 'success',
+                                    timer: 1000,
+                                    showConfirmButton: false
+                                }).then(() => {
+                                    location.reload();
+                                });
+                            }
 
-                    })
-                    .catch(error => console.error("Error:", error));
+                        })
+                        .catch(error => console.error("Error:", error));
 
 
                 }
@@ -227,7 +214,6 @@
         }
     </script>
     <script>
-
         @if (session('success'))
             Swal.fire({
                 icon: 'success',
@@ -246,7 +232,5 @@
                 showConfirmButton: true
             });
         @endif
-
     </script>
-
 @endsection

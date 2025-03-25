@@ -12,6 +12,9 @@ use App\Http\Controllers\AdminClaimController;
 use App\Http\Controllers\UserVerificationController;
 use App\Http\Controllers\AdminVerificationController;
 use App\Http\Controllers\AdminUserController;
+use App\Http\Controllers\AdminRoleController;
+use App\Http\Controllers\AdminPermissionController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -116,50 +119,39 @@ Route::middleware(['auth', 'role:Super Admin,Admin'])->group(function () {
 
     // User Management Routes
     Route::prefix('admin/users')->group(function () {
-        Route::get('/', function () {
-            $users = \App\Models\User::with('roles')->paginate(10);
-            return view('admin.users.index', compact('users'));
-        })->name('admin.users.index');
-
-        Route::get('/create', function () {
-            $roles = \Spatie\Permission\Models\Role::all();
-            return view('admin.users.create', compact('roles'));
-        })->name('admin.users.create');
-
-        Route::get('/{user}/edit', function ($id) {
-            $user = \App\Models\User::findOrFail($id);
-            $roles = \Spatie\Permission\Models\Role::all();
-            return view('admin.users.edit', compact('user', 'roles'));
-        })->name('admin.users.edit');
-
+        Route::get('/', [AdminUserController::class, 'index'])->name('admin.users.index');
+        Route::get('/create', [AdminUserController::class, 'create'])->name('admin.users.create');
+        Route::post('/store', [AdminUserController::class, 'store'])->name('admin.users.store');
+        Route::get('/{user}/edit', [AdminUserController::class, 'edit'])->name('admin.users.edit');
+        Route::put('/{user}', [AdminUserController::class, 'update'])->name('admin.user.update');
+        Route::delete('/{user}', [AdminUserController::class, 'destroy'])->name('admin.user.destroy');
         Route::get('/{user}', function ($id) {
             $user = \App\Models\User::with('roles')->findOrFail($id);
             return view('admin.users.show', compact('user'));
         })->name('admin.users.show');
+
     });
 
     // Roles & Permissions Routes
     Route::prefix('admin/roles')->group(function () {
-        Route::get('/', function () {
-            $roles = \Spatie\Permission\Models\Role::with('permissions')->paginate(10);
-            return view('admin.roles.index', compact('roles'));
-        })->name('admin.roles.index');
 
-        Route::get('/create', function () {
-            $permissions = \Spatie\Permission\Models\Permission::all();
-            return view('admin.roles.create', compact('permissions'));
-        })->name('admin.roles.create');
+        Route::get('/', [AdminRoleController::class, 'index'])->name('admin.roles.index');
+        Route::get('/create', [AdminRoleController::class, 'create'])->name('admin.roles.create');
+        Route::post('/store', [AdminRoleController::class, 'store'])->name('admin.roles.store');
+        Route::get('/{role}/edit', [AdminRoleController::class, 'edit'])->name('admin.roles.edit');
+        Route::put('/{role}', [AdminRoleController::class, 'update'])->name('admin.roles.update');
+        Route::delete('/{role}', [AdminRoleController::class, 'destroy'])->name('admin.roles.destroy');
 
-        Route::get('/{role}/edit', function ($id) {
-            $role = \Spatie\Permission\Models\Role::with('permissions')->findOrFail($id);
-            $permissions = \Spatie\Permission\Models\Permission::all();
-            return view('admin.roles.edit', compact('role', 'permissions'));
-        })->name('admin.roles.edit');
+        Route::prefix('permissions')->group(function () {
 
-        Route::get('/permissions', function () {
-            $permissions = \Spatie\Permission\Models\Permission::paginate(15);
-            return view('admin.roles.permissions', compact('permissions'));
-        })->name('admin.permissions.index');
+            Route::get('/', [AdminPermissionController::class, 'index'])->name('admin.permissions.index');
+            Route::post('/store', [AdminPermissionController::class, 'store'])->name('admin.permissions.store');
+            Route::put('/{permissions}', [AdminPermissionController::class, 'update'])->name('admin.permissions.update');
+            Route::delete('/{permissions}', [AdminPermissionController::class, 'destroy'])->name('admin.permissions.destroy');
+
+        });
+
+
     });
 
     // Song Management Routes
@@ -240,13 +232,8 @@ Route::middleware(['auth', 'role:Super Admin,Admin'])->group(function () {
         return view('admin.settings');
     })->name('admin.settings');
 
-  //User Management
-    Route::get('/admin/user', [AdminUserController::class, 'index'])->name('admin.user.index'); // List User
-    Route::get('/admin/user/create', [AdminUserController::class, 'create'])->name('admin.user.create'); // Form Tambah User
-    Route::post('/admin/user', [AdminUserController::class, 'store'])->name('admin.user.store'); // Simpan User Baru
-    Route::get('/admin/user/{id}/edit', [AdminUserController::class, 'edit'])->name('admin.user.edit'); // Form Edit User
-    Route::put('/admin/user/{id}', [AdminUserController::class, 'update'])->name('admin.user.update'); // Update User
-    Route::delete('/admin/user/{id}', [AdminUserController::class, 'destroy'])->name('admin.user.destroy'); // Hapus User
+
+
 });
 
 

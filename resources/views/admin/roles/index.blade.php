@@ -74,11 +74,11 @@
                                         $users = \App\Models\User::role($role->name)->take(5)->get();
                                         $totalUsers = \App\Models\User::role($role->name)->count();
                                     @endphp
-                                    
+
                                     @foreach($users as $user)
                                         <span class="avatar avatar-xs rounded" style="background-image: url(https://ui-avatars.com/api/?name={{ urlencode($user->name) }}&background=e53935&color=fff)"></span>
                                     @endforeach
-                                    
+
                                     @if($totalUsers > 5)
                                         <span class="avatar avatar-xs rounded bg-primary">+{{ $totalUsers - 5 }}</span>
                                     @endif
@@ -128,13 +128,48 @@
             if (result.isConfirmed) {
                 // Here you would submit a form or make an AJAX request
                 // For now, we'll just show a success message
-                Swal.fire(
-                    'Deleted!',
-                    'The role has been deleted.',
-                    'success'
-                );
+
+                fetch(`{{ url('/admin/roles') }}/${roleId}`, {
+                    method: "DELETE",
+                    headers: {
+                        "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute(
+                            "content"),
+                        "Content-Type": "application/json"
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+
+                    if (data.error) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: `${data.error}`,
+                            showConfirmButton: false,
+                        });
+                    }
+                    if (data.success) {
+                        Swal.fire({
+                            title: 'Deleted!',
+                            text: `The role "${name}" has been deleted.`,
+                            icon: 'success',
+                            timer: 1000,
+                            showConfirmButton: false
+                        }).then(() => {
+                            location.reload();
+                        });
+                    }
+
+                })
+                .catch(error => console.error("Error:", error));
+
             }
         });
     }
 </script>
+
 @endsection
+@push('styles')
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+@endpush
+

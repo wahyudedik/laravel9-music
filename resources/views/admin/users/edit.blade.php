@@ -26,7 +26,7 @@
     <div class="container-xl">
         <div class="row row-cards">
             <div class="col-12">
-                <form class="card" action="#" method="POST">
+                <form class="card" action="{{ route('admin.user.update', $user->id) }}" method="POST">
                     @csrf
                     @method('PUT')
                     <div class="card-header">
@@ -52,14 +52,14 @@
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Phone</label>
-                            <input type="text" name="phone" class="form-control" value="{{ $user->phone ?? '' }}">
+                            <input type="text" name="phone" class="form-control" value="{{ preg_replace('/^62/', '0', optional($user)->phone ?? '') }}">
                         </div>
                         <div class="mb-3">
                             <label class="form-label required">Role</label>
                             <select name="role" class="form-select" required>
                                 <option value="">Select a role</option>
                                 @foreach($roles as $role)
-                                    <option value="{{ $role->id }}" {{ $user->hasRole($role->name) ? 'selected' : '' }}>{{ $role->name }}</option>
+                                    <option value="{{ $role->name }}" {{ $user->hasRole($role->name) ? 'selected' : '' }}>{{ $role->name }}</option>
                                 @endforeach
                             </select>
                         </div>
