@@ -26,7 +26,7 @@
     <div class="container-xl">
         <div class="row row-cards">
             <div class="col-12">
-                <form class="card" action="{{ route('admin.user.update', $user->id) }}" method="POST">
+                <form class="card" action="{{ route('admin.users.update', $user->id) }}" method="POST">
                     @csrf
                     @method('PUT')
                     <div class="card-header">

@@ -146,7 +146,7 @@
                                 <div class="card-body">
                                     @if ($claim->status == 'pending')
                                         <div class="mb-3">
-                                            <form action="{{ route('admin.claims.update', $claim) }}" method="POST">
+                                            <form action="{{ route('admin.claims.approve', $claim) }}" method="POST">
                                                 @csrf
                                                 @method('PUT')
                                                 <input type="hidden" name="status" value="approved">
@@ -155,7 +155,7 @@
                                                 </button>
                                             </form>
 
-                                            <form action="{{ route('admin.claims.update', $claim) }}" method="POST">
+                                            <form action="{{ route('admin.claims.reject', $claim) }}" method="POST">
                                                 @csrf
                                                 @method('PUT')
                                                 <input type="hidden" name="status" value="rejected">

@@ -110,8 +110,8 @@
                                             </a>
                                             @if ($claim->status == 'approved')
                                                 <button type="button" class="btn btn-sm btn-icon btn-outline-warning"
-                                                    onclick="confirmUnclaim({{ $claim->id }})" data-bs-toggle="tooltip"
-                                                    title="Unclaim">
+                                                    onclick="confirmUnclaim('{{ $claim->id }}')"
+                                                    data-bs-toggle="tooltip" title="Unclaim">
                                                     <i class="ti ti-ban"></i>
                                                 </button>
                                                 <form id="unclaim-form-{{ $claim->id }}"
@@ -120,17 +120,19 @@
                                                     @csrf
                                                 </form>
                                             @endif
+
                                             <button type="button" class="btn btn-sm btn-icon btn-outline-danger"
-                                                onclick="confirmDelete({{ $claim->id }})" data-bs-toggle="tooltip"
-                                                title="Delete">
+                                                onclick="confirmDelete()" data-bs-toggle="tooltip" title="Delete">
                                                 <i class="ti ti-trash"></i>
                                             </button>
-                                            <form id="delete-form-{{ $claim->id }}"
-                                                action="{{ route('admin.claims.destroy', $claim) }}" method="POST"
-                                                class="d-none">
+
+
+                                            <form id="delete-form" action="{{ route('admin.claims.destroy', $claim) }}"
+                                                method="POST" class="d-none">
                                                 @csrf
                                                 @method('DELETE')
                                             </form>
+
                                         </div>
                                     </td>
                                 </tr>
@@ -164,10 +166,12 @@
         </div>
     </div>
 @endsection
-
+@push('styles')
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+@endpush
 @section('scripts')
     <script>
-        function confirmDelete(id) {
+        function confirmDelete() {
             Swal.fire({
                 title: 'Are you sure?',
                 text: "You won't be able to revert this!",
@@ -178,7 +182,7 @@
                 confirmButtonText: 'Yes, delete it!'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    document.getElementById('delete-form-' + id).submit();
+                    document.getElementById('delete-form').submit();
                 }
             });
         }

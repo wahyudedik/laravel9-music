@@ -16,10 +16,12 @@ class Claim extends Model
     protected $table = 'claims';
 
     protected $fillable = [
+        'id',
         'user_id',
         'song_id',
         'status',
-        'document' 
+        'notes',
+        'document'
     ];
 
     protected $casts = [

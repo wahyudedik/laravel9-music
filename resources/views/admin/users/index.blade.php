@@ -175,62 +175,43 @@
                     // For now, we'll just show a success message
 
                     fetch(`{{ url('/admin/users/') }}/${userId}`, {
-                            method: "DELETE",
-                            headers: {
-                                "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute(
-                                    "content"),
-                                "Content-Type": "application/json"
-                            }
-                        })
-                        .then(response => response.json())
-                        .then(data => {
+                        method: "DELETE",
+                        headers: {
+                            "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute(
+                                "content"),
+                            "Content-Type": "application/json"
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
 
-                            if (data.error) {
-                                Swal.fire({
-                                    icon: 'error',
-                                    title: 'Error',
-                                    text: `${data.error}`,
-                                    showConfirmButton: false,
-                                });
-                            }
-                            if (data.success) {
-                                Swal.fire({
-                                    title: 'Deleted!',
-                                    text: 'The user has been deleted.',
-                                    icon: 'success',
-                                    timer: 1000,
-                                    showConfirmButton: false
-                                }).then(() => {
-                                    location.reload();
-                                });
-                            }
+                        if (data.error) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: `${data.error}`,
+                                showConfirmButton: false,
+                            });
+                        }
+                        if (data.success) {
+                            Swal.fire({
+                                title: 'Deleted!',
+                                text: 'The user has been deleted.',
+                                icon: 'success',
+                                timer: 1000,
+                                showConfirmButton: false
+                            }).then(() => {
+                                location.reload();
+                            });
+                        }
 
-                        })
-                        .catch(error => console.error("Error:", error));
+                    })
+                    .catch(error => console.error("Error:", error));
 
 
                 }
             });
         }
     </script>
-    <script>
-        @if (session('success'))
-            Swal.fire({
-                icon: 'success',
-                title: 'Success',
-                text: "{{ session('success') }}",
-                showConfirmButton: false,
-                timer: 3000
-            });
-        @endif
 
-        @if (session('error'))
-            Swal.fire({
-                icon: 'error',
-                title: 'Error',
-                text: "{{ session('error') }}",
-                showConfirmButton: true
-            });
-        @endif
-    </script>
 @endsection
