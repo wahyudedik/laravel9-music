@@ -1,18 +1,20 @@
 <?php
-use App\Http\Controllers\AdminClaimController;
-use App\Http\Controllers\AdminController;
-use App\Http\Controllers\AdminUserController;
-use App\Http\Controllers\AdminVerificationController;
+use App\Models\Role;
+use App\Models\User;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\SongController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\UserVerificationController;
-use App\Models\Role;
-use App\Models\User;
-use Illuminate\Support\Facades\Request;
-use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Storage;
 use Spatie\Permission\Models\Permission;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AdminRoleController;
+use App\Http\Controllers\AdminUserController;
+use App\Http\Controllers\AdminClaimController;
+use App\Http\Controllers\AdminPermissionController;
+use App\Http\Controllers\UserVerificationController;
+use App\Http\Controllers\AdminVerificationController;
 
 /*
 |--------------------------------------------------------------------------
