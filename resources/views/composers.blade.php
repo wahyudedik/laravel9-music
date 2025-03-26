@@ -2,128 +2,70 @@
 
 @section('content')
     <!-- Page Header -->
-    <div class="page-header mb-4">
-        <div class="row align-items-center">
-            <div class="col">
-                <h2 class="page-title">Pencipta Lagu</h2>
-                <div class="text-muted mt-1">Temukan semua pencipta lagu terbaik dengan karya-karya mereka</div>
-            </div>
-            <div class="col-auto">
-                <div class="input-icon">
-                    <input type="text" class="form-control" placeholder="Cari nama pencipta...">
-                    <span class="input-icon-addon">
-                        <i class="ti ti-search"></i>
-                    </span>
-                </div>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="page-title mb-1 text-white">Pencipta Lagu</h2>
+            <div class="text-white">Temukan semua pencipta lagu terbaik dengan karya-karya mereka</div>
+        </div>
+        <div class="d-none d-md-block">
+            <div class="input-icon">
+                <input type="text" class="form-control bg-dark text-white border-dark w-100" style="min-width: 300px;"
+                    placeholder="Cari judul lagu...">
             </div>
         </div>
     </div>
 
-    <!-- Filter Options -->
+    <!-- Filter Chips -->
     <div class="d-flex flex-wrap gap-2 mb-4">
-        <div class="dropdown">
-            <a href="#" class="btn btn-outline-primary dropdown-toggle" data-bs-toggle="dropdown">
-                <i class="ti ti-music me-1"></i> Genre
-            </a>
-            <div class="dropdown-menu">
-                <a class="dropdown-item" href="#">Semua Genre</a>
-                <a class="dropdown-item" href="#">Pop</a>
-                <a class="dropdown-item" href="#">Rock</a>
-                <a class="dropdown-item" href="#">Hip Hop</a>
-                <a class="dropdown-item" href="#">R&B</a>
-                <a class="dropdown-item" href="#">Electronic</a>
-            </div>
+        <div class="btn-group">
+            <button type="button" class="btn btn-sm btn-dark active">Semua Genre</button>
+            <button type="button" class="btn btn-sm btn-dark">Pop</button>
+            <button type="button" class="btn btn-sm btn-dark">Rock</button>
+            <button type="button" class="btn btn-sm btn-dark">Hip Hop</button>
+            <button type="button" class="btn btn-sm btn-dark">R&B</button>
+            <button type="button" class="btn btn-sm btn-dark">Electronic</button>
         </div>
-        <div class="dropdown">
-            <a href="#" class="btn btn-outline-primary dropdown-toggle" data-bs-toggle="dropdown">
-                <i class="ti ti-calendar me-1"></i> Periode
-            </a>
-            <div class="dropdown-menu">
-                <a class="dropdown-item" href="#">Minggu Ini</a>
-                <a class="dropdown-item" href="#">Bulan Ini</a>
-                <a class="dropdown-item" href="#">6 Bulan Terakhir</a>
-                <a class="dropdown-item" href="#">Tahun Ini</a>
-                <a class="dropdown-item" href="#">Sepanjang Masa</a>
-            </div>
-        </div>
-        <div class="dropdown">
-            <a href="#" class="btn btn-outline-primary dropdown-toggle" data-bs-toggle="dropdown">
-                <i class="ti ti-sort-ascending me-1"></i> Urutkan
-            </a>
-            <div class="dropdown-menu">
-                <a class="dropdown-item" href="#">Terbaru</a>
-                <a class="dropdown-item" href="#">Terpopuler</a>
-                <a class="dropdown-item" href="#">Paling Banyak Disukai</a>
-            </div>
-        </div>
-    </div>
 
-    <!-- Composers Grid -->
-    <div class="row row-cards">
-        @for ($i = 1; $i <= 32; $i++)
-            <div class="col-md-6 col-lg-3">
-                <div class="card card-sm">
-                    <div class="card-body p-4 text-center">
-                        <span class="avatar avatar-xl mb-3 avatar-rounded" style="background-image: url(https://picsum.photos/300/300?random={{ $i + 400 }})"></span>
-                        <h3 class="m-0 mb-1">Pencipta Lagu #{{ $i }}</h3>
-                        <div class="text-muted">{{ rand(20, 100) }} karya</div>
-                        <div class="mt-3">
-                            <span class="badge bg-purple-lt">
-                                <i class="ti ti-users me-1"></i> {{ rand(100, 900) }}K
-                            </span>
-                            <span class="badge bg-blue-lt">
-                                <i class="ti ti-music me-1"></i> {{ rand(20, 100) }}
-                            </span>
-                        </div>
-                        <div class="mt-2">
-                            <span class="badge bg-green-lt">
-                                <i class="ti ti-microphone me-1"></i> {{ rand(5, 50) }} Dicover
-                            </span>
-                            <span class="badge bg-cyan-lt">
-                                <i class="ti ti-player-play me-1"></i> {{ rand(50, 800) }}M
-                            </span>
-                        </div>
-                        <div class="mt-3">
-                            <a href="#" class="btn btn-primary">
-                                <i class="ti ti-user me-1"></i> Lihat Profil
-                            </a>
-                        </div>
-                    </div>
+        <div class="ms-auto">
+            <div class="dropdown">
+                <button class="btn btn-sm btn-dark dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                    <i class="ti ti-sort-ascending me-1"></i> Urutkan
+                </button>
+                <div class="dropdown-menu dropdown-menu-end bg-dark text-white">
+                    <a class="dropdown-item text-white active" href="#">
+                        <i class="ti ti-check me-2 text-primary"></i> Terbaru
+                    </a>
+                    <a class="dropdown-item text-white" href="#">Terpopuler</a>
+                    <a class="dropdown-item text-white" href="#">Paling Banyak Disukai</a>
                 </div>
             </div>
-        @endfor
+        </div>
     </div>
 
     <!-- Featured Composers Section -->
-    <div class="card mt-4">
-        <div class="card-header">
-            <h3 class="card-title">
+    <div class="card bg-dark border-0 shadow-sm mb-5">
+        <div class="card-header border-bottom border-dark">
+            <h3 class="card-title text-white">
                 <i class="ti ti-award me-2 text-primary"></i>Pencipta Lagu Terbaik
             </h3>
         </div>
         <div class="card-body">
-            <div class="row row-cards">
+            <div class="row g-4">
                 @for ($i = 1; $i <= 4; $i++)
                     <div class="col-md-6 col-lg-3">
-                        <div class="card card-sm">
-                            <div class="card-body p-4 text-center">
-                                <span class="avatar avatar-xl mb-3 avatar-rounded" style="background-image: url(https://picsum.photos/300/300?random={{ $i + 500 }})"></span>
-                                <h3 class="m-0 mb-1">Pencipta Terbaik #{{ $i }}</h3>
-                                <div class="text-muted">{{ rand(50, 200) }} karya</div>
-                                <div class="mt-3">
-                                    <span class="badge bg-purple-lt">
-                                        <i class="ti ti-users me-1"></i> {{ rand(500, 900) }}K
-                                    </span>
-                                    <span class="badge bg-blue-lt">
-                                        <i class="ti ti-player-play me-1"></i> {{ rand(50, 200) }}M
-                                    </span>
-                                </div>
-                                <div class="mt-3">
-                                    <a href="#" class="btn btn-primary">
-                                        <i class="ti ti-user me-1"></i> Lihat Profil
-                                    </a>
-                                </div>
+                        <div class="text-center">
+                            <img src="https://picsum.photos/300/300?random={{ $i + 500 }}" class="rounded-circle mb-3"
+                                style="width: 120px; height: 120px;" alt="Composer">
+                            <h4 class="mb-1 text-white">Pencipta Terbaik #{{ $i }}</h4>
+                            <p class="text-white mb-2">{{ rand(50, 200) }} karya • {{ rand(500, 900) }}K Penggemar</p>
+                            <div class="d-flex justify-content-center gap-2 mb-3">
+                                <span class="badge bg-blue-lt">
+                                    <i class="ti ti-player-play me-1"></i> {{ rand(50, 200) }}M
+                                </span>
                             </div>
+                            <a href="#" class="btn btn-sm btn-primary">
+                                <i class="ti ti-user me-1"></i> Lihat Profil
+                            </a>
                         </div>
                     </div>
                 @endfor
@@ -131,43 +73,77 @@
         </div>
     </div>
 
+    <!-- Composers Grid -->
+    <div class="row g-4 mb-5">
+        @for ($i = 1; $i <= 32; $i++)
+            <div class="col-md-6 col-lg-3">
+                <div class="card bg-dark border-0 h-100 transition-transform hover-shadow">
+                    <div class="card-body text-center p-4">
+                        <img src="https://picsum.photos/300/300?random={{ $i + 400 }}" class="rounded-circle mb-3"
+                            style="width: 120px; height: 120px;" alt="Composer">
+                        <h4 class="mb-1 text-white">Pencipta Lagu #{{ $i }}</h4>
+                        <p class="text-white mb-2">{{ rand(20, 100) }} karya • {{ rand(100, 900) }}K Penggemar</p>
+                        <div class="d-flex justify-content-center gap-2 mb-3">
+                            <span class="badge bg-blue-lt">
+                                <i class="ti ti-music me-1"></i> {{ rand(20, 100) }}
+                            </span>
+                            <span class="badge bg-green-lt">
+                                <i class="ti ti-microphone me-1"></i> {{ rand(5, 50) }} Dicover
+                            </span>
+                        </div>
+                        <a href="#" class="btn btn-sm btn-primary">
+                            <i class="ti ti-user me-1"></i> Lihat Profil
+                        </a>
+                    </div>
+                </div>
+            </div>
+        @endfor
+    </div>
+
     <!-- Top Compositions Section -->
-    <div class="card mt-4">
-        <div class="card-header">
-            <h3 class="card-title">
+    <div class="card bg-dark border-0 shadow-sm mb-5">
+        <div class="card-header border-bottom border-dark">
+            <h3 class="card-title text-white">
                 <i class="ti ti-playlist me-2 text-primary"></i>Karya Terpopuler
             </h3>
         </div>
         <div class="card-body">
             <div class="table-responsive">
-                <table class="table table-vcenter card-table table-hover">
+                <table class="table table-dark table-hover">
                     <thead>
-                        <tr>
+                        <tr class="text-white">
                             <th width="40">#</th>
                             <th width="80"></th>
                             <th>Judul</th>
                             <th>Pencipta</th>
                             <th>Dinyanyikan Oleh</th>
                             <th>Stats</th>
+                            <th width="40"></th>
                         </tr>
                     </thead>
                     <tbody>
                         @for ($i = 1; $i <= 5; $i++)
-                            <tr>
-                                <td class="text-muted">{{ $i }}</td>
+                            <tr class="align-middle">
+                                <td class="text-white">{{ $i }}</td>
                                 <td>
                                     <div class="position-relative">
-                                        <span class="avatar avatar-md" style="background-image: url(https://picsum.photos/300/300?random={{ $i + 600 }})"></span>
-                                        <span class="badge bg-primary position-absolute" style="bottom: 0; right: 0;">
-                                            <i class="ti ti-player-play"></i>
-                                        </span>
+                                        <img src="https://picsum.photos/300/300?random={{ $i + 600 }}" class="rounded"
+                                            style="width: 40px; height: 40px;" alt="Song">
+                                        <button
+                                            class="btn btn-icon btn-sm btn-primary rounded-circle position-absolute play-song-btn"
+                                            style="bottom: -5px; right: -5px; width: 24px; height: 24px; padding: 0;"
+                                            data-song-title="Karya Populer #{{ $i }}"
+                                            data-artist-name="Pencipta #{{ rand(1, 20) }}"
+                                            data-cover-image="https://picsum.photos/300/300?random={{ $i + 600 }}">
+                                            <i class="ti ti-player-play" style="font-size: 14px;"></i>
+                                        </button>
                                     </div>
                                 </td>
-                                <td>Karya Populer #{{ $i }}</td>
-                                <td class="text-muted">
+                                <td class="text-white">Karya Populer #{{ $i }}</td>
+                                <td class="text-white">
                                     Pencipta #{{ rand(1, 20) }}
                                 </td>
-                                <td class="text-muted">
+                                <td class="text-white">
                                     <small>Artis Populer #{{ rand(1, 10) }}</small>
                                 </td>
                                 <td>
@@ -183,6 +159,26 @@
                                         </span>
                                     </div>
                                 </td>
+                                <td>
+                                    <div class="dropdown">
+                                        <a href="#" class="btn btn-action text-white" data-bs-toggle="dropdown"
+                                            aria-expanded="false">
+                                            <i class="ti ti-dots-vertical"></i>
+                                        </a>
+                                        <div class="dropdown-menu dropdown-menu-end bg-dark text-white">
+                                            <a class="dropdown-item text-white" href="#" data-bs-toggle="modal"
+                                                data-bs-target="#addToPlaylistModal">
+                                                <i class="ti ti-plus me-2"></i> Tambah ke Playlist
+                                            </a>
+                                            <a class="dropdown-item text-white" href="#">
+                                                <i class="ti ti-heart me-2"></i> Tambah ke Favorit
+                                            </a>
+                                            <a class="dropdown-item text-white" href="#">
+                                                <i class="ti ti-share me-2"></i> Bagikan
+                                            </a>
+                                        </div>
+                                    </div>
+                                </td>
                             </tr>
                         @endfor
                     </tbody>
@@ -192,20 +188,20 @@
     </div>
 
     <!-- Pagination -->
-    <div class="d-flex justify-content-center mt-4">
+    <div class="d-flex justify-content-center mt-4 mb-5">
         <ul class="pagination">
             <li class="page-item disabled">
-                <a class="page-link" href="#" tabindex="-1" aria-disabled="true">
+                <a class="page-link bg-dark text-white border-dark" href="#" tabindex="-1" aria-disabled="true">
                     <i class="ti ti-chevron-left"></i>
                 </a>
             </li>
-            <li class="page-item active"><a class="page-link" href="#">1</a></li>
-            <li class="page-item"><a class="page-link" href="#">2</a></li>
-            <li class="page-item"><a class="page-link" href="#">3</a></li>
-            <li class="page-item"><a class="page-link" href="#">4</a></li>
-            <li class="page-item"><a class="page-link" href="#">5</a></li>
+            <li class="page-item active"><a class="page-link bg-primary border-primary" href="#">1</a></li>
+            <li class="page-item"><a class="page-link bg-dark text-white border-dark" href="#">2</a></li>
+            <li class="page-item"><a class="page-link bg-dark text-white border-dark" href="#">3</a></li>
+            <li class="page-item"><a class="page-link bg-dark text-white border-dark" href="#">4</a></li>
+            <li class="page-item"><a class="page-link bg-dark text-white border-dark" href="#">5</a></li>
             <li class="page-item">
-                <a class="page-link" href="#">
+                <a class="page-link bg-dark text-white border-dark" href="#">
                     <i class="ti ti-chevron-right"></i>
                 </a>
             </li>

@@ -4,14 +4,16 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Song;
-use App\Models\User;
 use App\Models\Stream;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+
 
 class UserController extends Controller
 {
@@ -77,5 +79,18 @@ class UserController extends Controller
             'popularComposers' => $popularComposers,
             'popularCoverCreators' => $popularCoverCreators,
         ]);
+    }
+
+    public function play($id)
+    {
+        $song = Song::find($id);
+
+        if (!$song || !$song->file_path) {
+            return response()->json(['error' => 'Lagu tidak ditemukan atau file tidak tersedia.'], 404);
+        }
+
+        $url = Storage::url($song->file_path);
+
+        return response()->json(['url' => $url]);
     }
 }

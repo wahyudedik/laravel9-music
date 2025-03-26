@@ -92,7 +92,8 @@
                                                 style="background-image: url(https://ui-avatars.com/api/?name={{ urlencode($verification->user->name) }}&background=e53935&color=fff)"></span>
                                             <div>
                                                 <div class="font-weight-medium">
-                                                    <a href="{{ route('admin.user-profiles.show', $verification->user->id) }}">{{ $verification->user->name }}</a>
+                                                    <a
+                                                        href="{{ route('admin.user-profiles.show', $verification->user->id) }}">{{ $verification->user->name }}</a>
                                                 </div>
                                                 <div class="text-muted text-nowrap">{{ $verification->type }}</div>
                                             </div>
@@ -160,7 +161,8 @@
                                                     </button>
                                                 </form>
 
-                                                <form action="{{ route('admin.verifications.reject', $verification->id) }}"
+                                                <form
+                                                    action="{{ route('admin.verifications.reject', $verification->id) }}"
                                                     method="POST" style="display: inline;">
                                                     @csrf
                                                     <button type="submit" class="btn btn-sm btn-icon btn-ghost-danger"
@@ -184,18 +186,21 @@
                     </table>
                 </div>
 
-                <div class="card-footer d-flex align-items-center">
-                    <p class="m-0 text-secondary">Showing <span>{{ $verifications->firstItem() ?? 0 }}</span> to
-                        <span>{{ $verifications->lastItem() ?? 0 }}</span> of <span>{{ $verifications->total() }}</span>
-                        entries
+                <div class="card-footer d-flex align-items-center justify-content-between">
+                    <p class="m-0 text-muted">
+                        <span class="text-secondary">Showing</span>
+                        <span class="fw-bold">{{ $verifications->firstItem() ?? 0 }}</span>
+                        <span class="text-secondary">to</span>
+                        <span class="fw-bold">{{ $verifications->lastItem() ?? 0 }}</span>
+                        <span class="text-secondary">of</span>
+                        <span class="fw-bold">{{ $verifications->total() }}</span>
+                        <span class="text-secondary">entries</span>
                     </p>
-                    <ul class="pagination m-0 ms-auto">
-                        {{ $verifications->onEachSide(1)->links() }}
-                    </ul>
+                    <div class="pagination m-0">
+                        {{ $verifications->onEachSide(1)->links('pagination.tabler') }}
+                    </div>
                 </div>
             </div>
-
-
         </div>
     </div>
 
@@ -304,11 +309,11 @@
                                 <option value="rejected">Rejected</option>
                             </select>
                         </div>
-                        <div class="mb-3">
+                        {{-- <div class="mb-3">
                             <label class="form-label">Notes</label>
                             <textarea name="notes" id="edit-notes" class="form-control" rows="3"
                                 placeholder="Additional notes about this verification"></textarea>
-                        </div>
+                        </div> --}}
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-link link-secondary"

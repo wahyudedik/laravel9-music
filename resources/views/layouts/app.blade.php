@@ -106,6 +106,15 @@
                         </form>
                     </div>
 
+                    <!-- Add Live Chat Icon -->
+                    <div class="nav-item me-3">
+                        <a href="{{ route('user.chat') }}" class="nav-link px-0" data-bs-toggle="tooltip"
+                            data-bs-placement="bottom" title="Live Chat">
+                            <i class="ti ti-messages"></i>
+                            <span class="badge bg-green badge-pill badge-notification">1</span>
+                        </a>
+                    </div>
+
                     <!-- Add Notification Icon -->
                     <div class="nav-item dropdown d-none d-md-flex me-3">
                         <a href="#" class="nav-link px-0" data-bs-toggle="dropdown" tabindex="-1"
@@ -154,7 +163,8 @@
                                     </div>
                                 </div>
                                 <div class="card-footer text-center">
-                                    <a href="#" class="link-secondary">View all notifications</a>
+                                    <a href="{{ route('notifications') }}" class="link-secondary">View all
+                                        notifications</a>
                                 </div>
                             </div>
                         </div>
@@ -212,7 +222,7 @@
                                 <div class="card-footer">
                                     <div class="d-flex justify-content-between">
                                         <span>Total: <strong>$22.98</strong></span>
-                                        <a href="#" class="btn btn-primary btn-sm">Checkout</a>
+                                        <a href="{{ route('user.cart') }}" class="btn btn-primary btn-sm">Checkout</a>
                                     </div>
                                 </div>
                             </div>
@@ -231,7 +241,7 @@
                             </div>
                         </a>
                         <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                            <a href="#" class="dropdown-item">
+                            <a href="{{ route('profile.my-assets') }}" class="dropdown-item">
                                 <i class="ti ti-user me-2"></i>Profile
                             </a>
                             @if (!auth()->user()->email_verified_at)
@@ -257,17 +267,25 @@
                                 @elseif($verification->status == 'approved')
                                     <a href="{{ route('verification.status') }}" class="dropdown-item text-success">
                                         <i class="ti ti-check me-2"></i>Akun Terverifikasi
+                                        ({{ ucfirst($verification->type) }})
                                     </a>
                                 @elseif($verification->status == 'rejected')
-                                    <a href="{{ route('verification.form') }}" class="dropdown-item text-danger">
-                                        <i class="ti ti-x me-2"></i>Verifikasi Ditolak
+                                    <a href="{{ route('verification.status') }}" class="dropdown-item text-danger">
+                                        <i class="ti ti-x me-2"></i>Verifikasi {{ ucfirst($verification->type) }}
+                                        Ditolak
                                     </a>
                                 @endif
                             @endif
-                            <a href="#" class="dropdown-item">
+                            <a href="{{ route('user.wallet') }}" class="dropdown-item">
+                                <i class="ti ti-wallet me-2"></i>My Wallet
+                            </a>
+                            <a href="{{ route('ticket.copyright') }}" class="dropdown-item">
+                                <i class="ti ti-ticket me-2"></i>Claim Hak Cipta
+                            </a>
+                            <a href="{{ route('user.settings') }}" class="dropdown-item">
                                 <i class="ti ti-settings me-2"></i>Settings
                             </a>
-                            <a href="#" class="dropdown-item">
+                            <a href="{{ route('help.center') }}" class="dropdown-item">
                                 <i class="ti ti-help me-2"></i>Help Center
                             </a>
                             <div class="dropdown-divider"></div>
@@ -288,19 +306,24 @@
                                     <i class="ti ti-home me-1"></i>Home
                                 </a>
                             </li>
-                            <li class="nav-item active">
-                                <a class="nav-link" href="#">
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('user.dashboard') }}">
                                     <i class="ti ti-dashboard me-1"></i>Dashboard
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#">
+                                <a class="nav-link" href="{{ route('playlist.index') }}">
                                     <i class="ti ti-playlist me-1"></i>Playlist
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#">
-                                    <i class="ti ti-user me-1"></i>Profile
+                                <a class="nav-link" href="{{ route('wishlist.index') }}">
+                                    <i class="ti ti-heart me-1"></i>Wishlist
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('report.index') }}">
+                                    <i class="ti ti-flag me-1"></i>Report
                                 </a>
                             </li>
                         </ul>
