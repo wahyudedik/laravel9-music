@@ -1,20 +1,23 @@
 <?php
-use App\Models\Role;
-use App\Models\User;
-use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Request;
-use Illuminate\Support\Facades\Storage;
+
+use App\Http\Controllers\AdminClaimController;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AdminPermissionController;
+use App\Http\Controllers\AdminRoleController;
+use App\Http\Controllers\AdminUserController;
+use App\Http\Controllers\AdminUserProfileController;
+use App\Http\Controllers\AdminVerificationController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\SongController;
 use App\Http\Controllers\UserController;
-use Spatie\Permission\Models\Permission;
-use App\Http\Controllers\AdminController;
-use App\Http\Controllers\AdminRoleController;
-use App\Http\Controllers\AdminUserController;
-use App\Http\Controllers\AdminClaimController;
-use App\Http\Controllers\AdminPermissionController;
 use App\Http\Controllers\UserVerificationController;
-use App\Http\Controllers\AdminVerificationController;
+use App\Models\Role;
+use App\Models\User;
+use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
+use Spatie\Permission\Models\Permission;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -261,7 +264,6 @@ Route::middleware(['auth', 'role:Super Admin,Admin'])->group(function () {
             $user = \App\Models\User::with('roles')->findOrFail($id);
             return view('admin.users.show', compact('user'));
         })->name('admin.users.show');
-
     });
 
     // Roles & Permissions Routes
@@ -280,10 +282,7 @@ Route::middleware(['auth', 'role:Super Admin,Admin'])->group(function () {
             Route::post('/store', [AdminPermissionController::class, 'store'])->name('admin.permissions.store');
             Route::put('/{permissions}', [AdminPermissionController::class, 'update'])->name('admin.permissions.update');
             Route::delete('/{permissions}', [AdminPermissionController::class, 'destroy'])->name('admin.permissions.destroy');
-
         });
-
-
     });
 
     // Song Management Routes
@@ -315,9 +314,12 @@ Route::middleware(['auth', 'role:Super Admin,Admin'])->group(function () {
     })->name('admin.genres.index');
 
     // Admin User Profile Management Route
-    Route::get('/admin/user-profiles', function () {
-        return view('admin.user-profiles.index');
-    })->name('admin.user-profiles.index');
+    // Route::get('/admin/user-profiles', function () {
+    //     return view('admin.user-profiles.index');
+    // })->name('admin.user-profiles.index');
+
+    Route::get('/admin/user-profiles', [AdminUserProfileController::class, 'index'])->name('admin.user-profiles.index');
+
 
     Route::get('/admin/user-profiles/{id}', function ($id) {
         // In a real implementation, you would fetch the user by ID
@@ -363,7 +365,7 @@ Route::middleware(['auth', 'role:Super Admin,Admin'])->group(function () {
     Route::get('/admin/settings', function () {
         return view('admin.settings');
     })->name('admin.settings');
-  
+
     // Live Chat Route
     Route::get('/admin/chat', function () {
         return view('admin.chat');
