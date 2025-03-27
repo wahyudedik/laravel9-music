@@ -319,12 +319,12 @@ Route::middleware(['auth', 'role:Super Admin,Admin'])->group(function () {
     // })->name('admin.user-profiles.index');
 
     Route::get('/admin/user-profiles', [AdminUserProfileController::class, 'index'])->name('admin.user-profiles.index');
+    Route::get('/admin/user-profiles/{id}', [AdminUserProfileController::class, 'show'])->name('admin.user-profiles.show');
 
-
-    Route::get('/admin/user-profiles/{id}', function ($id) {
-        // In a real implementation, you would fetch the user by ID
-        return view('admin.user-profiles.show', compact('id'));
-    })->name('admin.user-profiles.show');
+    // Route::get('/admin/user-profiles/{id}', function ($id) {
+    //     // In a real implementation, you would fetch the user by ID
+    //     return view('admin.user-profiles.show', compact('id'));
+    // })->name('admin.user-profiles.show');
 
     // Withdraw Verification Routes
     Route::get('/admin/withdrawals', function () {

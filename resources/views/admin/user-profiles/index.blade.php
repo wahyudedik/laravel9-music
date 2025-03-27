@@ -75,9 +75,8 @@
                             </tr>
                         </thead>
                         <tbody>
-
-                            <tr>
-                                @foreach ($users as $user)
+                            @foreach ($users as $user)
+                                <tr>
                                     <td>
                                         <div class="d-flex align-items-center">
                                             <span class="avatar me-2"
@@ -107,7 +106,6 @@
                                             <span class="badge bg-green-lt">{{ $user->covers_count }} Covers </span>
                                             <span class="badge bg-purple-lt">{{ $user->albums_count }} Albums</span>
                                         </div>
-
                                     </td>
                                     <td>
                                         @if ($user->verification)
@@ -125,7 +123,6 @@
                                         @endif
                                     </td>
                                     <td class="text-muted">{{ date('M d, Y', strtotime($user->created_at)) }}</td>
-                                    </td>
                                     <td>
                                         <div class="btn-list flex-nowrap">
                                             <a href="{{ route('admin.user-profiles.show', $user->id) }}"
@@ -152,37 +149,35 @@
                                                     <a href="#" class="dropdown-item text-danger">
                                                         <i class="ti ti-ban me-2"></i>Suspend
                                                     </a>
-
+                                                    {{-- @endif --}}
                                                 </div>
                                             </div>
                                         </div>
                                     </td>
-
-                            </tr>
+                                </tr>
                             @endforeach
-
                         </tbody>
                     </table>
-                </div>
-                <div class="card-footer d-flex align-items-center">
-                    <p class="m-0 text-muted">Showing <span>1</span> to <span>10</span> of <span>97</span> entries</p>
-                    <ul class="pagination m-0 ms-auto">
-                        <li class="page-item disabled">
-                            <a class="page-link" href="#" tabindex="-1" aria-disabled="true">
-                                <i class="ti ti-chevron-left"></i>
-                                prev
-                            </a>
-                        </li>
-                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                        <li class="page-item">
-                            <a class="page-link" href="#">
-                                next
-                                <i class="ti ti-chevron-right"></i>
-                            </a>
-                        </li>
-                    </ul>
+                    <div class="card-footer d-flex align-items-center">
+                        <p class="m-0 text-muted">Showing <span>1</span> to <span>10</span> of <span>97</span> entries</p>
+                        <ul class="pagination m-0 ms-auto">
+                            <li class="page-item disabled">
+                                <a class="page-link" href="#" tabindex="-1" aria-disabled="true">
+                                    <i class="ti ti-chevron-left"></i>
+                                    prev
+                                </a>
+                            </li>
+                            <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                            <li class="page-item"><a class="page-link" href="#">2</a></li>
+                            <li class="page-item"><a class="page-link" href="#">3</a></li>
+                            <li class="page-item">
+                                <a class="page-link" href="#">
+                                    next
+                                    <i class="ti ti-chevron-right"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
