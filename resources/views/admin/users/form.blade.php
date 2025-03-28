@@ -97,7 +97,7 @@
                 @php
                     $route = route('admin.user.store');
                     if ($mode == 'Edit') {
-                        $route = route('admin.user.update', ['id' => $user->id]);
+                        $route = route('admin.users.update', ['id' => $user->id]);
                     }
 
                 @endphp
@@ -396,7 +396,7 @@
             let selectedRegion = @json(old('region', $user->region ?? ''));
             let selectedCity = @json(old('city', $user->city ?? ''));
 
-            $.getJSON("/regions", function(data) {
+            $.getJSON("/admin/data/regions", function(data) {
                 let provinceSelect = $("#region");
                 provinceSelect.empty().append('<option value="">Select Region</option>');
 

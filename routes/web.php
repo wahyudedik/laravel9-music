@@ -16,6 +16,9 @@ use App\Http\Controllers\AdminPermissionController;
 use App\Http\Controllers\UserVerificationController;
 use App\Http\Controllers\AdminVerificationController;
 
+use App\Services\Admin\SongServices;
+use App\Services\Admin\UserServices;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -235,7 +238,19 @@ Route::middleware(['auth', 'role:Super Admin,Admin'])->group(function () {
     Route::get('/admin/search', [AdminController::class, 'search'])->name('admin.search');
 
     // Claims Management - Add these lines
-    Route::resource('admin/claims', AdminClaimController::class, ['as' => 'admin']);
+    Route::prefix('admin/claims')->group(function () {
+        Route::get('/', [AdminClaimController::class, 'index'])->name('admin.claims.index');
+        Route::get('/create', [AdminClaimController::class, 'create'])->name('admin.claims.create');
+        Route::post('/store', [AdminClaimController::class, 'store'])->name('admin.claims.store');
+        Route::get('/{claim}/edit', [AdminClaimController::class, 'edit'])->name('admin.claims.edit');
+        Route::put('/{claim}', [AdminClaimController::class, 'update'])->name('admin.claims.update');
+        Route::put('/{claim}/approve', [AdminClaimController::class, 'approve'])->name('admin.claims.approve');
+        Route::put('/{claim}/reject', [AdminClaimController::class, 'reject'])->name('admin.claims.reject');
+        Route::delete('/{claim}', [AdminClaimController::class, 'destroy'])->name('admin.claims.destroy');
+        Route::get('/show/{claim}', function (\App\Models\Claim $claim) {
+            return view('admin.claims.show', compact('claim'));
+        })->name('admin.claims.show');
+    });
     Route::post('/admin/claims/{claim}/unclaim', [AdminClaimController::class, 'unclaimSong'])->name('admin.claims.unclaim');
 
     // Verifikasi Pengguna oleh admin
@@ -255,13 +270,12 @@ Route::middleware(['auth', 'role:Super Admin,Admin'])->group(function () {
         Route::get('/create', [AdminUserController::class, 'create'])->name('admin.users.create');
         Route::post('/store', [AdminUserController::class, 'store'])->name('admin.users.store');
         Route::get('/{user}/edit', [AdminUserController::class, 'edit'])->name('admin.users.edit');
-        Route::put('/{user}', [AdminUserController::class, 'update'])->name('admin.user.update');
-        Route::delete('/{user}', [AdminUserController::class, 'destroy'])->name('admin.user.destroy');
+        Route::put('/{user}', [AdminUserController::class, 'update'])->name('admin.users.update');
+        Route::delete('/{user}', [AdminUserController::class, 'destroy'])->name('admin.users.destroy');
         Route::get('/{user}', function ($id) {
             $user = \App\Models\User::with('roles')->findOrFail($id);
             return view('admin.users.show', compact('user'));
         })->name('admin.users.show');
-
     });
 
     // Roles & Permissions Routes
@@ -280,10 +294,7 @@ Route::middleware(['auth', 'role:Super Admin,Admin'])->group(function () {
             Route::post('/store', [AdminPermissionController::class, 'store'])->name('admin.permissions.store');
             Route::put('/{permissions}', [AdminPermissionController::class, 'update'])->name('admin.permissions.update');
             Route::delete('/{permissions}', [AdminPermissionController::class, 'destroy'])->name('admin.permissions.destroy');
-
         });
-
-
     });
 
     // Song Management Routes
@@ -363,7 +374,7 @@ Route::middleware(['auth', 'role:Super Admin,Admin'])->group(function () {
     Route::get('/admin/settings', function () {
         return view('admin.settings');
     })->name('admin.settings');
-  
+
     // Live Chat Route
     Route::get('/admin/chat', function () {
         return view('admin.chat');
@@ -390,4 +401,25 @@ Route::middleware(['auth', 'role:Super Admin,Admin'])->group(function () {
     Route::get('/play-song/{id}', function ($id) {
         return view('play-song', compact('id'));
     })->name('play-song');
+
+    //Utility Route
+    Route::get('/admin/data/regions', function () {
+        $json = Storage::disk('local')->get('data/regions.json');
+        return response()->json(json_decode($json));
+    });
+    Route::get('/admin/data/songs', function (SongServices $songServices) {
+        $search = Request::input('search');
+        $limit = Request::input('limit', 10);
+        return response()->json($songServices->getAllSongs($search, $limit));
+    });
+    Route::get('/admin/data/users', function (UserServices $uuserServices) {
+        $search = Request::input('search');
+        $limit = Request::input('limit', 10);
+        return response()->json($uuserServices->getAllUsers($search, $limit));
+    });
+
 });
+
+
+
+

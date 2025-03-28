@@ -27,14 +27,8 @@
                         <div class="card-body">
                             <div class="mb-3">
                                 <label class="form-label required">User</label>
-                                <select name="user_id" class="form-select @error('user_id') is-invalid @enderror">
+                                <select name="user_id" id="user_id" class="selectpicker  form-control  @error('user_id') is-invalid @enderror" data-live-search="true">
                                     <option value="">Select User</option>
-                                    @foreach ($users as $user)
-                                        <option value="{{ $user->id }}"
-                                            {{ old('user_id') == $user->id ? 'selected' : '' }}>
-                                            {{ $user->name }} ({{ $user->email }})
-                                        </option>
-                                    @endforeach
                                 </select>
                                 @error('user_id')
                                     <div class="invalid-feedback">{{ $message }}</div>
@@ -43,14 +37,9 @@
 
                             <div class="mb-3">
                                 <label class="form-label required">Song</label>
-                                <select name="song_id" class="form-select @error('song_id') is-invalid @enderror">
+
+                                <select name="song_id" id="song_id" class="selectpicker  form-control  @error('song_id') is-invalid @enderror" data-live-search="true">
                                     <option value="">Select Song</option>
-                                    @foreach ($songs as $song)
-                                        <option value="{{ $song->id }}"
-                                            {{ old('song_id') == $song->id ? 'selected' : '' }}>
-                                            {{ $song->title }} - {{ $song->artist }}
-                                        </option>
-                                    @endforeach
                                 </select>
                                 @error('song_id')
                                     <div class="invalid-feedback">{{ $message }}</div>
@@ -76,4 +65,98 @@
             </div>
         </div>
     </div>
+@endsection
+@push('styles')
+    <!-- Bootstrap Select CSS -->
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta2/dist/css/bootstrap-select.min.css">
+
+    <style>
+        .bootstrap-select>.dropdown-toggle {
+            height: 48.4px;
+        }
+
+        .card-no-hover {
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            transition: none;
+        }
+
+        .card-no-hover:hover {
+            transform: none;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        }
+    </style>
+@endpush
+@section('scripts')
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta2/dist/js/bootstrap-select.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            function fetchSongs(search = "") {
+                $.ajax({
+                    url: "/admin/data/songs",
+                    type: "GET",
+                    data: { search: search, limit: 20 }, // Change limit as needed
+                    dataType: "json",
+                    success: function (data) {
+                        var songSelect = $("#song_id");
+                        songSelect.empty();
+                        songSelect.append('<option value="">Select a song</option>');
+
+                        $.each(data, function (index, song) {
+                            songSelect.append('<option value="' + song.id + '">' + song.title + '</option>');
+                        });
+
+                        songSelect.selectpicker("refresh");
+                    }
+                });
+            }
+
+            // Load initial songs
+            fetchSongs();
+
+            // Fetch songs on search
+            $("#song_id").on("shown.bs.select", function () {
+                $(".bs-searchbox input").on("keyup", function () {
+                    let searchQuery = $(this).val();
+                    fetchSongs(searchQuery);
+                });
+            });
+
+
+            function fetchUsers(search = "") {
+                $.ajax({
+                    url: "/admin/data/users",
+                    type: "GET",
+                    data: { search: search, limit: 20 }, // Change limit as needed
+                    dataType: "json",
+                    success: function (data) {
+                        var userSelect = $("#user_id");
+                        userSelect.empty();
+                        userSelect.append('<option value="">Select a user</option>');
+
+                        $.each(data, function (index, user) {
+                            userSelect.append('<option value="' + user.id + '">' + user.name +' ('+user.roleName+')' + '</option>');
+                        });
+
+                        userSelect.selectpicker("refresh");
+                    }
+                });
+            }
+
+            // Load initial songs
+            fetchUsers();
+
+            // Fetch songs on search
+            $("#user_id").on("shown.bs.select", function () {
+                $(".bs-searchbox input").on("keyup", function () {
+                    let searchQuery = $(this).val();
+                    fetchUsers(searchQuery);
+                });
+            });
+
+        });
+    </script>
+
 @endsection
