@@ -29,7 +29,7 @@
         <div class="container-xl">
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">All Claims</h3>
+                    <h3 class="card-title">All Claims</h3> 
                     <div class="card-actions">
                         <form action="{{ route('admin.claims.index') }}" method="GET" class="d-flex">
                             <select name="status" class="form-select me-2" onchange="this.form.submit()">

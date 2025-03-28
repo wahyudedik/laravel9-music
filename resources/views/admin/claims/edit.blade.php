@@ -36,11 +36,11 @@
                         </div>
                         <div class="card-body">
 
-
-
                             <div class="mb-3">
                                 <label class="form-label required">User</label>
-                                <select name="user_id" id="user_id" class="selectpicker  form-control  @error('user_id') is-invalid @enderror" data-live-search="true">
+                                <select name="user_id" id="user_id"
+                                    class="selectpicker  form-control  @error('user_id') is-invalid @enderror"
+                                    data-live-search="true">
                                     <option value="">Select User</option>
                                 </select>
                                 @error('user_id')
@@ -48,11 +48,12 @@
                                 @enderror
                             </div>
 
-
                             <div class="mb-3">
                                 <label class="form-label required">Song</label>
 
-                                <select name="song_id" id="song_id" class="selectpicker  form-control  @error('song_id') is-invalid @enderror" data-live-search="true">
+                                <select name="song_id" id="song_id"
+                                    class="selectpicker  form-control  @error('song_id') is-invalid @enderror"
+                                    data-live-search="true">
                                     <option value="">Select Song</option>
                                 </select>
                                 @error('song_id')

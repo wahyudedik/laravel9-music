@@ -35,7 +35,8 @@
                                 <div class="col-md-6 col-xl-6">
                                     <div class="mb-3">
                                         <div class="form-label required">Song Title</div>
-                                        <input type="text" class="form-control" name="title" placeholder="Enter song title" required>
+                                        <input type="text" class="form-control" name="title"
+                                            placeholder="Enter song title" required>
                                     </div>
                                 </div>
                                 <div class="col-md-6 col-xl-6">
@@ -123,14 +124,16 @@
                                 <div class="col-md-6">
                                     <div class="mb-3">
                                         <div class="form-label required">Cover Image</div>
-                                        <input type="file" class="form-control" name="cover_image" accept="image/*" required>
+                                        <input type="file" class="form-control" name="cover_image" accept="image/*"
+                                            required>
                                         <div class="form-hint">Recommended size: 500x500px, max 2MB</div>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="mb-3">
                                         <div class="form-label required">Audio File</div>
-                                        <input type="file" class="form-control" name="audio_file" accept="audio/*" required>
+                                        <input type="file" class="form-control" name="audio_file" accept="audio/*"
+                                            required>
                                         <div class="form-hint">Supported formats: MP3, WAV, FLAC. Max 10MB</div>
                                     </div>
                                 </div>
@@ -143,18 +146,24 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="mb-3">
-                                        <div class="form-label">License Type</div>
+                                        <div class="form-label required">License Type</div>
                                         <select class="form-select" name="license_type">
-                                            <option value="standard">Standard</option>
-                                            <option value="premium">Premium</option>
-                                            <option value="exclusive">Exclusive</option>
+                                            <option value="full_license">Full License</option>
+                                            <option value="royalty">Royalty</option>
+                                            <option value="free">Free</option>
                                         </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <div class="form-label">License File</div>
+                                        <input type="file" class="form-control" name="license_file">
+                                        <div class="form-hint">Upload license document (PDF, DOC)</div>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="mb-3">
                                         <div class="form-label">License Price (Rp)</div>
-                                        <input type="number" class="form-control" name="license_price" placeholder="Enter license price">
+                                        <input type="number" class="form-control" name="license_price"
+                                            placeholder="Enter license price">
                                     </div>
                                 </div>
                                 <div class="col-md-12">
@@ -189,36 +198,36 @@
 @endsection
 
 @section('scripts')
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const form = document.querySelector('form');
-        
-        form.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            Swal.fire({
-                title: 'Creating Song',
-                text: 'Please wait while we process your request...',
-                allowOutsideClick: false,
-                didOpen: () => {
-                    Swal.showLoading();
-                }
-            });
-            
-            // Simulate form submission delay
-            setTimeout(() => {
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.querySelector('form');
+
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+
                 Swal.fire({
-                    icon: 'success',
-                    title: 'Song Created Successfully',
-                    text: 'The song has been added to the system.',
-                    confirmButtonColor: '#e53935'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        window.location.href = "{{ route('admin.songs.index') }}";
+                    title: 'Creating Song',
+                    text: 'Please wait while we process your request...',
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading();
                     }
                 });
-            }, 1500);
+
+                // Simulate form submission delay
+                setTimeout(() => {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Song Created Successfully',
+                        text: 'The song has been added to the system.',
+                        confirmButtonColor: '#e53935'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = "{{ route('admin.songs.index') }}";
+                        }
+                    });
+                }, 1500);
+            });
         });
-    });
-</script>
+    </script>
 @endsection
