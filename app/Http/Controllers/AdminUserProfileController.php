@@ -28,9 +28,21 @@ class AdminUserProfileController extends Controller
 
         $covers = Song::where('cover_creator_id', $id)->get();
 
-        $albums = Song::where('album_id', $id)->get();
+        // $albums = Song::where('album_id', $id)->get();
 
-        $publishedSongs = Song::where('status', 'published', $id)->get();
+        // $publishedSongs = Song::where('status', 'published', $id)->get();
+
+        $albums = Album::where('artist_id', $id)->get(); // Perbaikan di sini
+
+        $publishedSongs = Song::where('status', 'published')->where(function ($query) use ($id) {
+            $query->where('artist_id', $id)
+                ->orWhere('cover_creator_id', $id)
+                ->orWhereIn('album_id', function ($subquery) use ($id) {
+                    $subquery->select('id')
+                        ->from('albums')
+                        ->where('artist_id', $id);
+                });
+        })->get();
 
         return view('admin.user-profiles.show', compact('user', 'songs', 'covers', 'albums', 'publishedSongs'));
     }

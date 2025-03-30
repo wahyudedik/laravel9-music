@@ -449,8 +449,9 @@
                                                                     @elseif ($publish->cover_creator_id == $user->id)
                                                                         {{ $publish->cover_version }}
                                                                         <br>
-                                                                        Original by
-                                                                        {{ $publish->title }}
+                                                                        Original by {{ $publish->title }}
+                                                                    @elseif (in_array($publish->album_id, $albums->pluck('id')->toArray()))
+                                                                        {{ $albums->where('id', $publish->album_id)->first()->title }}
                                                                     @else
                                                                         {{ $publish->title }}
                                                                     @endif
@@ -462,11 +463,15 @@
                                                                 <span class="badge bg-blue">Song</span>
                                                             @elseif ($publish->cover_creator_id == $user->id)
                                                                 <span class="badge bg-green">Cover</span>
-                                                            @elseif ($publish->album_id == $user->id)
+                                                            @elseif (in_array($publish->album_id, $albums->pluck('id')->toArray()))
                                                                 <span class="badge bg-purple">Album</span>
                                                             @endif
                                                         </td>
+
+                                                        </td>
                                                         <td>{{ date('M d, Y', strtotime($publish->created_at)) }}</td>
+                                                        <td>{{ $publish->status }}</td>
+
                                                         <td>
                                                             <div class="text-muted">
                                                                 <i class="ti ti-eye me-1"></i>
