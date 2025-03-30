@@ -594,6 +594,7 @@
                 </div>
 
                 <!-- Edit User Modal -->
+
                 <div class="modal modal-blur fade" id="editUserModal" tabindex="-1" role="dialog" aria-hidden="true">
                     <div class="modal-dialog modal-lg" role="document">
                         <div class="modal-content">
@@ -603,134 +604,136 @@
                                     aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
-                                <div class="row mb-3">
-                                    <div class="col-lg-3 text-center">
-                                        <div class="mb-3">
-                                            <span
-                                                style="background-image: url(https://ui-avatars.com/api/?name={{ $user->name }}&background=e53935&color=fff)"></span>
-                                            <div>
-                                                <a href="#" class="btn btn-sm btn-primary">Change</a>
-                                                <a href="#" class="btn btn-sm btn-danger">Remove</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-9">
-                                        <div class="row">
-                                            <div class="col-lg-6">
-                                                <div class="mb-3">
-                                                    <label class="form-label">First Name</label>
-                                                    <input type="text" class="form-control" value="User">
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-6">
-                                                <div class="mb-3">
-                                                    <label class="form-label">Last Name</label>
-                                                    <input type="text" class="form-control"
-                                                        value="{{ $user->name }}">
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-6">
-                                                <div class="mb-3">
-                                                    <label class="form-label">Email</label>
-                                                    <input type="email" class="form-control"
-                                                        value="user{{ $user->email }}">
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-6">
-                                                <div class="mb-3">
-                                                    <label class="form-label">Phone</label>
-                                                    <input type="text" class="form-control"
-                                                        value="+1 ({{ rand(100, 999) }}) {{ rand(100, 999) }}-{{ rand(1000, 9999) }}">
+                                <form method="POST" action="{{ route('admin.user-profiles.update', $user->id) }}">
+                                    @csrf
+                                    @method('PUT')
+                                    <div class="row mb-3">
+                                        <div class="col-lg-3 text-center">
+                                            <div class="mb-3">
+                                                <span
+                                                    style="background-image: url(https://ui-avatars.com/api/?name={{ $user->name }}&background=e53935&color=fff)"></span>
+                                                <div>
+                                                    <a href="#" class="btn btn-sm btn-primary">Change</a>
+                                                    <a href="#" class="btn btn-sm btn-danger">Remove</a>
                                                 </div>
                                             </div>
                                         </div>
+                                        <div class="col-lg-9">
+                                            <div class="row">
+                                                <div class="col-lg-6">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">First Name</label>
+                                                        <input type="text" class="form-control" name="first_name"
+                                                            value="{{ explode(' ', $user->name)[0] ?? '' }}">
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-6">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">Last Name</label>
+                                                        <input type="text" class="form-control" name="last_name"
+                                                            value="{{ isset(explode(' ', $user->name)[1]) ? implode(' ', array_slice(explode(' ', $user->name), 1)) : '' }}">
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-6">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">Email</label>
+                                                        <input type="email" class="form-control" name="email"
+                                                            value="{{ $user->email }}">
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-6">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">Phone</label>
+                                                        <input type="text" class="form-control" name="phone"
+                                                            value="{{ $user->phone }}">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
 
-                                <div class="hr-text">Account Information</div>
+                                    <div class="hr-text">Account Information</div>
 
-                                <div class="row">
-                                    <div class="col-lg-6">
-                                        <div class="mb-3">
-                                            <label class="form-label">Username</label>
-                                            <input type="text" class="form-control" value="user{{ $user->name }}">
+                                    <div class="row">
+                                        <div class="col-lg-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Username</label>
+                                                <input type="text" class="form-control" name="username"
+                                                    value="{{ $user->username }}">
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="col-lg-6">
-                                        <div class="mb-3">
-                                            <label class="form-label">Role</label>
-                                            <select class="form-select">
-                                                @foreach ($user->roles as $role)
-                                                    @if ($role->name == 'Artist')
-                                                        <span class="badge bg-purple me-1">Artist</span>
-                                                    @elseif ($role->name == 'Composer')
-                                                        <span class="badge bg-blue me-1">Composer</span>
-                                                    @elseif ($role->name == 'Cover Creator')
-                                                        <span class="badge bg-green me-1">Cover Creator</span>
-                                                    @else
-                                                        <span class="badge bg-secondary me-1">Regular User</span>
-                                                    @endif
-                                                @endforeach
-                                            </select>
+                                        <div class="col-lg-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Role</label>
+                                                <select name="role" class="form-select">
+                                                    @foreach ($roles as $role)
+                                                        <option value="{{ $role->id }}"
+                                                            {{ $user->roles->contains($role->id) ? 'selected' : '' }}>
+                                                            {{ $role->name }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="col-lg-6">
-                                        <div class="mb-3">
-                                            <label class="form-label">Status</label>
-                                            <select class="form-select">
-                                                <option value="active"
-                                                    {{ $user->verification && $user->verification->status == 'active' ? 'selected' : '' }}>
-                                                    Active</option>
-                                                <option value="suspended"
-                                                    {{ $user->verification && $user->verification->status == 'suspended' ? 'selected' : '' }}>
-                                                    Suspended</option>
-                                            </select>
 
+                                        <div class="col-lg-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Status</label>
+                                                <select name="status" class="form-select">
+                                                    <option value="active"
+                                                        {{ $user->verification && $user->verification->status == 'active' ? 'selected' : '' }}>
+                                                        Active</option>
+                                                    <option value="suspended"
+                                                        {{ $user->verification && $user->verification->status == 'suspended' ? 'selected' : '' }}>
+                                                        Suspended</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Verification</label>
+                                                <select name="verification" class="form-select">
+                                                    <option value="active"
+                                                        {{ $user->verification && $user->verification->status == 'active' ? 'selected' : '' }}>
+                                                        Active</option>
+                                                    <option value="suspended"
+                                                        {{ $user->verification && $user->verification->status == 'suspended' ? 'selected' : '' }}>
+                                                        Suspended</option>
+                                                </select>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="col-lg-6">
-                                        <div class="mb-3">
-                                            <label class="form-label">Verification</label>
-                                            <select class="form-select">
-                                                <option value="active"
-                                                    {{ $user->verification && $user->verification->status == 'active' ? 'selected' : '' }}>
-                                                    Active</option>
-                                                <option value="suspended"
-                                                    {{ $user->verification && $user->verification->status == 'suspended' ? 'selected' : '' }}>
-                                                    Suspended</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
 
-                                <div class="hr-text">Additional Information</div>
+                                    <div class="hr-text">Additional Information</div>
 
-                                <div class="row">
-                                    <div class="col-lg-6">
-                                        <div class="mb-3">
-                                            <label class="form-label">Location</label>
-                                            <input type="text" value="{{ $user->region ?? 'Default Region' }}, USA">
+                                    <div class="row">
+                                        <div class="col-lg-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Location</label>
+                                                <input type="text" class="form-control" name="location"
+                                                    value="{{ $user->region }}">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Website</label>
+                                                <input type="text" class="form-control" name="website"
+                                                    value="{{ $socialMedia->first() ? $socialMedia->first()->url : '' }}">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-12">
+                                            <div class="mb-3">
+                                                <label class="form-label">Bio</label>
+                                                <textarea class="form-control" name="bio" rows="3">{{ $userProfile->first() ? $userProfile->first()->bio : '' }}</textarea>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="col-lg-6">
-                                        <div class="mb-3">
-                                            <label class="form-label">Website</label>
-                                            <input type="text" class="form-control" value="#">
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-12">
-                                        {{-- <div class="mb-3">
-                                            <label class="form-label">Bio</label>
-                                            <textarea class="form-control" rows="3">This is a sample bio for User {{ $id }}. The user has been on the platform since {{ date('F Y', strtotime('-' . rand(1, 36) . ' months')) }} and has published multiple songs and covers.</textarea>
-                                        </div> --}}
-                                    </div>
-                                </div>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-link link-secondary"
                                     data-bs-dismiss="modal">Cancel</button>
-                                <button type="button" class="btn btn-primary ms-auto">Save changes</button>
+                                <button type="submit" class="btn btn-primary ms-auto">Save changes</button>
                             </div>
+                            </form>
                         </div>
                     </div>
                 </div>

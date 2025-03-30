@@ -320,6 +320,7 @@ Route::middleware(['auth', 'role:Super Admin,Admin'])->group(function () {
 
     Route::get('/admin/user-profiles', [AdminUserProfileController::class, 'index'])->name('admin.user-profiles.index');
     Route::get('/admin/user-profiles/{id}', [AdminUserProfileController::class, 'show'])->name('admin.user-profiles.show');
+    Route::put('/admin/user-profiles/{id}', [AdminUserProfileController::class, 'update'])->name('admin.user-profiles.update');
 
     // Route::get('/admin/user-profiles/{id}', function ($id) {
     //     // In a real implementation, you would fetch the user by ID
