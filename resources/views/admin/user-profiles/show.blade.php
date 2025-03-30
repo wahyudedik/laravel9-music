@@ -55,8 +55,10 @@
                 <div class="col-lg-4">
                     <div class="card">
                         <div class="card-body p-4 text-center">
+
                             <span class="avatar avatar-xl mb-3 rounded"
-                                style="background-image: url(https://ui-avatars.com/api/?name={{ $user->name }}&background=e53935&color=fff)"></span>
+                                style="background-image: url({{ $user->profile_picture ? asset('storage/' . $user->profile_picture) : 'https://ui-avatars.com/api/?name=' . urlencode($user->name) . '&background=e53935&color=fff' }})">
+                            </span>
 
                             <h3 class="m-0 mb-1">{{ $user->name }}</h3>
                             <div class="text-muted mb-2">{{ $user->email }}</div>
@@ -610,11 +612,23 @@
                                     <div class="row mb-3">
                                         <div class="col-lg-3 text-center">
                                             <div class="mb-3">
-                                                <span
-                                                    style="background-image: url(https://ui-avatars.com/api/?name={{ $user->name }}&background=e53935&color=fff)"></span>
+
+                                                <span class="avatar avatar-xl mb-3 rounded"
+                                                    style="background-image: url({{ $user->profile_picture ? asset('storage/' . $user->profile_picture) : 'https://ui-avatars.com/api/?name=' . urlencode($user->name) . '&background=e53935&color=fff' }})">
+                                                </span>
+
                                                 <div>
-                                                    <a href="#" class="btn btn-sm btn-primary">Change</a>
-                                                    <a href="#" class="btn btn-sm btn-danger">Remove</a>
+
+                                                    <a href="#" class="btn btn-sm btn-primary"
+                                                        data-bs-toggle="modal"
+                                                        data-bs-target="#changeProfilePictureModal">Change</a>
+
+                                                    <a href="javascript:void(0);" class="btn btn-sm btn-danger"
+                                                        onclick="removeProfilePicture(event)">Remove</a>
+
+
+
+
                                                 </div>
                                             </div>
                                         </div>
@@ -734,6 +748,31 @@
                                 <button type="submit" class="btn btn-primary ms-auto">Save changes</button>
                             </div>
                             </form>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal fade" id="changeProfilePictureModal" tabindex="-1"
+                    aria-labelledby="changeProfilePictureModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="changeProfilePictureModalLabel">Change Profile Picture</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form action="{{ route('admin.user-profiles.update-picture', $user->id) }}"
+                                    method="POST" enctype="multipart/form-data">
+                                    @csrf
+                                    <div class="mb-3">
+                                        <label for="profile_picture" class="form-label">Upload New Picture</label>
+                                        <input type="file" class="form-control" id="profile_picture"
+                                            name="profile_picture" accept="image/*">
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Upload</button>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -1014,5 +1053,29 @@ Quis nostrud exercitation ullamco</textarea>
                             });
                         };
                     });
+
+                    function removeProfilePicture(event) {
+                        event.preventDefault();
+
+                        if (confirm("Apakah Anda yakin ingin menghapus foto profil?")) {
+                            fetch("{{ route('admin.user-profiles.remove-picture', ['id' => $user->id]) }}", {
+                                    method: "DELETE",
+                                    headers: {
+                                        "X-CSRF-TOKEN": "{{ csrf_token() }}"
+                                    }
+                                }).then(response => response.json())
+                                .then(data => {
+                                    if (data.success) {
+                                        alert("Foto profil berhasil dihapus!");
+                                        location.reload();
+                                    } else {
+                                        alert("Gagal menghapus foto profil.");
+                                    }
+                                }).catch(error => {
+                                    console.error("Error:", error);
+                                    alert("Terjadi kesalahan saat menghapus foto profil.");
+                                });
+                        }
+                    }
                 </script>
             @endsection

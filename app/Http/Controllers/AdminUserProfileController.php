@@ -9,6 +9,8 @@ use App\Models\User;
 use App\Models\UserProfile;
 use App\Models\UserSocialMedia;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Spatie\Permission\Models\Role;
 
 class AdminUserProfileController extends Controller
@@ -105,5 +107,47 @@ class AdminUserProfileController extends Controller
         );
 
         return redirect()->route('admin.user-profiles.show', $id)->with('success', 'User profile updated successfully.');
+    }
+
+    public function updatePicture(Request $request, $id)
+    {
+        $request->validate([
+            'profile_picture' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ]);
+
+        $user = User::find($id);
+
+        if (!$user) {
+            abort(404);
+        }
+
+        if ($request->hasFile('profile_picture')) {
+            if ($user->profile_picture) {
+                Storage::delete('public/' . $user->profile_picture);
+            }
+
+            $image = $request->file('profile_picture');
+            $imageName = Str::uuid() . '.' . $image->getClientOriginalExtension();
+            $imagePath = 'uploads/profil/' . $imageName;
+
+            Storage::disk('public')->put($imagePath, file_get_contents($image));
+
+            $user->profile_picture = $imagePath;
+            $user->save();
+        }
+
+        return redirect()->route('admin.user-profiles.show', $id)->with('success', 'Profile picture updated successfully.');
+    }
+    public function removePicture($id)
+    {
+        $user = User::findOrFail($id);
+
+        if ($user->profile_picture) {
+            Storage::delete('public/' . $user->profile_picture);
+            $user->profile_picture = null;
+            $user->save();
+        }
+
+        return response()->json(['success' => true]);
     }
 }

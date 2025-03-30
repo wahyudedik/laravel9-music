@@ -321,11 +321,13 @@ Route::middleware(['auth', 'role:Super Admin,Admin'])->group(function () {
     Route::get('/admin/user-profiles', [AdminUserProfileController::class, 'index'])->name('admin.user-profiles.index');
     Route::get('/admin/user-profiles/{id}', [AdminUserProfileController::class, 'show'])->name('admin.user-profiles.show');
     Route::put('/admin/user-profiles/{id}', [AdminUserProfileController::class, 'update'])->name('admin.user-profiles.update');
+    Route::post('/admin/user-profiles/{id}/update-picture', [AdminUserProfileController::class, 'updatePicture'])->name('admin.user-profiles.update-picture');
+    Route::delete(
+        '/admin/user-profiles/{id}/remove-picture',
+        [AdminUserProfileController::class, 'removePicture']
+    )->name('admin.user-profiles.remove-picture');
 
-    // Route::get('/admin/user-profiles/{id}', function ($id) {
-    //     // In a real implementation, you would fetch the user by ID
-    //     return view('admin.user-profiles.show', compact('id'));
-    // })->name('admin.user-profiles.show');
+
 
     // Withdraw Verification Routes
     Route::get('/admin/withdrawals', function () {
