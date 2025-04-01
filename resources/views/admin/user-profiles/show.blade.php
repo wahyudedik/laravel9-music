@@ -626,9 +626,6 @@
                                                     <a href="javascript:void(0);" class="btn btn-sm btn-danger"
                                                         onclick="removeProfilePicture(event)">Remove</a>
 
-
-
-
                                                 </div>
                                             </div>
                                         </div>
@@ -693,8 +690,8 @@
                                             <div class="mb-3">
                                                 <label class="form-label">Status</label>
                                                 <select name="status" class="form-select">
-                                                    <option value="active"
-                                                        {{ $user->verification && $user->verification->status == 'active' ? 'selected' : '' }}>
+                                                    <option value="approved"
+                                                        {{ $user->verification && $user->verification->status == 'approved' ? 'selected' : '' }}>
                                                         Active</option>
                                                     <option value="suspended"
                                                         {{ $user->verification && $user->verification->status == 'suspended' ? 'selected' : '' }}>
@@ -706,8 +703,8 @@
                                             <div class="mb-3">
                                                 <label class="form-label">Verification</label>
                                                 <select name="verification" class="form-select">
-                                                    <option value="active"
-                                                        {{ $user->verification && $user->verification->status == 'active' ? 'selected' : '' }}>
+                                                    <option value="approved"
+                                                        {{ $user->verification && $user->verification->status == 'approved' ? 'selected' : '' }}>
                                                         Active</option>
                                                     <option value="suspended"
                                                         {{ $user->verification && $user->verification->status == 'suspended' ? 'selected' : '' }}>
@@ -901,84 +898,99 @@
                                     aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
-                                <div class="mb-3">
-                                    <label class="form-label">Song Title</label>
-                                    <input type="text" class="form-control" value="Song Title 1">
-                                </div>
-                                <div class="row">
-                                    <div class="col-lg-6">
-                                        <div class="mb-3">
-                                            <label class="form-label">Genre</label>
-                                            <select class="form-select">
-                                                <option value="">Select Genre</option>
-                                                <option value="pop" selected>Pop</option>
-                                                <option value="rock">Rock</option>
-                                                <option value="hiphop">Hip Hop</option>
-                                                <option value="electronic">Electronic</option>
-                                                <option value="jazz">Jazz</option>
-                                                <option value="classical">Classical</option>
-                                                <option value="country">Country</option>
-                                                <option value="rnb">R&B</option>
-                                            </select>
+                                <form action="{{ route('admin.songs.update', $song->id) }}" method="POST"
+                                    enctype="multipart/form-data">
+                                    @csrf
+                                    @method('PUT')
+                                    <div class="mb-3">
+                                        <label for="title" class="form-label">Song Title</label>
+                                        <input type="text" class="form-control" id="title" name="title"
+                                            value="{{ $song->title }}" required>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-6">
+                                            <div class="mb-3">
+                                                <label for="genre" class="form-label">Genre</label>
+                                                <select class="form-select" id="genre" name="genre" required>
+                                                    <option value="">Pilih Genre</option>
+                                                    <option value="pop" {{ $song->genre === 'pop' ? 'selected' : '' }}>
+                                                        Pop</option>
+                                                    <option value="rock"
+                                                        {{ $song->genre === 'rock' ? 'selected' : '' }}>Rock</option>
+                                                    <option value="hiphop"
+                                                        {{ $song->genre === 'hiphop' ? 'selected' : '' }}>Hip Hop</option>
+                                                    <option value="electronic"
+                                                        {{ $song->genre === 'electronic' ? 'selected' : '' }}>Electronic
+                                                    </option>
+                                                    <option value="jazz"
+                                                        {{ $song->genre === 'jazz' ? 'selected' : '' }}>Jazz</option>
+                                                    <option value="classical"
+                                                        {{ $song->genre === 'classical' ? 'selected' : '' }}>Classical
+                                                    </option>
+                                                    <option value="country"
+                                                        {{ $song->genre === 'country' ? 'selected' : '' }}>Country</option>
+                                                    <option value="rnb" {{ $song->genre === 'rnb' ? 'selected' : '' }}>
+                                                        R&B</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Album (Optional)</label>
+                                                <select class="form-select">
+                                                    <option value="">Select Album</option>
+                                                    <option value="album1" selected>Album 1</option>
+                                                    <option value="album2">Album 2</option>
+                                                    <option value="album3">Album 3</option>
+                                                    <option value="new">Create New Album...</option>
+                                                </select>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="col-lg-6">
-                                        <div class="mb-3">
-                                            <label class="form-label">Album (Optional)</label>
-                                            <select class="form-select">
-                                                <option value="">Select Album</option>
-                                                <option value="album1" selected>Album 1</option>
-                                                <option value="album2">Album 2</option>
-                                                <option value="album3">Album 3</option>
-                                                <option value="new">Create New Album...</option>
-                                            </select>
+                                    <div class="mb-3">
+                                        <div class="d-flex align-items-center mb-2">
+                                            <label class="form-label mb-0 me-auto">Current Song File</label>
+                                            <a href="#" class="text-muted">
+                                                <i class="ti ti-player-play me-1"></i>Preview
+                                            </a>
                                         </div>
-                                    </div>
-                                </div>
-                                <div class="mb-3">
-                                    <div class="d-flex align-items-center mb-2">
-                                        <label class="form-label mb-0 me-auto">Current Song File</label>
-                                        <a href="#" class="text-muted">
-                                            <i class="ti ti-player-play me-1"></i>Preview
-                                        </a>
-                                    </div>
-                                    <div class="form-control-plaintext">song_file_1.mp3</div>
-                                    <div class="form-check mt-1">
-                                        <input class="form-check-input" type="checkbox" id="replace-song">
-                                        <label class="form-check-label" for="replace-song">
-                                            Replace song file
-                                        </label>
-                                    </div>
-                                    <input type="file" class="form-control mt-2" disabled>
-                                </div>
-                                <div class="mb-3">
-                                    <div class="d-flex align-items-center mb-2">
-                                        <label class="form-label mb-0 me-auto">Current Cover Image</label>
-                                    </div>
-                                    <div class="d-flex align-items-center">
-                                        <img src="https://picsum.photos/100/100?random=1" class="rounded me-3"
-                                            style="width: 100px; height: 100px; object-fit: cover;">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="replace-cover">
-                                            <label class="form-check-label" for="replace-cover">
-                                                Replace cover image
+                                        <div class="form-control-plaintext">song_file_1.mp3</div>
+                                        <div class="form-check mt-1">
+                                            <input class="form-check-input" type="checkbox" id="replace-song">
+                                            <label class="form-check-label" for="replace-song">
+                                                Replace song file
                                             </label>
                                         </div>
+                                        <input type="file" class="form-control mt-2" disabled>
                                     </div>
-                                    <input type="file" class="form-control mt-2" disabled>
-                                </div>
-                                <div class="mb-3">
-                                    <label class="form-label">Release Date</label>
-                                    <input type="date" class="form-control"
-                                        value="{{ date('Y-m-d', strtotime('-5 days')) }}">
-                                </div>
-                                <div class="mb-3">
-                                    <label class="form-label">Description</label>
-                                    <textarea class="form-control" rows="3">This is a sample description for Song Title 1. It was released on {{ date('F d, Y', strtotime('-5 days')) }} and has been gaining popularity since then.</textarea>
-                                </div>
-                                <div class="mb-3">
-                                    <label class="form-label">Lyrics (Optional)</label>
-                                    <textarea class="form-control" rows="5">These are sample lyrics for Song Title 1.
+                                    <div class="mb-3">
+                                        <div class="d-flex align-items-center mb-2">
+                                            <label class="form-label mb-0 me-auto">Current Cover Image</label>
+                                        </div>
+                                        <div class="d-flex align-items-center">
+                                            <img src="https://picsum.photos/100/100?random=1" class="rounded me-3"
+                                                style="width: 100px; height: 100px; object-fit: cover;">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="replace-cover">
+                                                <label class="form-check-label" for="replace-cover">
+                                                    Replace cover image
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <input type="file" class="form-control mt-2" disabled>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Release Date</label>
+                                        <input type="date" class="form-control"
+                                            value="{{ date('Y-m-d', strtotime('-5 days')) }}">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Description</label>
+                                        <textarea class="form-control" rows="3">This is a sample description for Song Title 1. It was released on {{ date('F d, Y', strtotime('-5 days')) }} and has been gaining popularity since then.</textarea>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Lyrics (Optional)</label>
+                                        <textarea class="form-control" rows="5">These are sample lyrics for Song Title 1.
 Verse 1:
 Lorem ipsum dolor sit amet
 Consectetur adipiscing elit
@@ -988,32 +1000,34 @@ Chorus:
 Ut labore et dolore magna aliqua
 Ut enim ad minim veniam
 Quis nostrud exercitation ullamco</textarea>
-                                </div>
-                                <div class="mb-3">
-                                    <div class="form-label">Status</div>
-                                    <div>
-                                        <label class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="edit-status"
-                                                value="draft">
-                                            <span class="form-check-label">Draft</span>
-                                        </label>
-                                        <label class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="edit-status"
-                                                value="published" checked>
-                                            <span class="form-check-label">Published</span>
-                                        </label>
-                                        <label class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="edit-status"
-                                                value="scheduled">
-                                            <span class="form-check-label">Schedule Release</span>
-                                        </label>
                                     </div>
-                                </div>
+                                    <div class="mb-3">
+                                        <div class="form-label">Status</div>
+                                        <div>
+                                            <label class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="edit-status"
+                                                    value="draft">
+                                                <span class="form-check-label">Draft</span>
+                                            </label>
+                                            <label class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="edit-status"
+                                                    value="published" checked>
+                                                <span class="form-check-label">Published</span>
+                                            </label>
+                                            <label class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="edit-status"
+                                                    value="scheduled">
+                                                <span class="form-check-label">Schedule Release</span>
+                                            </label>
+                                        </div>
+                                    </div>
+
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-link link-secondary"
                                     data-bs-dismiss="modal">Cancel</button>
-                                <button type="button" class="btn btn-primary ms-auto">Save Changes</button>
+                                <button type="submit" class="btn btn-primary ms-auto">Save Changes</button>
+
                             </div>
                         </div>
                     </div>

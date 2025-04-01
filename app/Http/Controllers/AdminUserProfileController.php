@@ -19,6 +19,7 @@ class AdminUserProfileController extends Controller
     {
         $users = User::withCount('songs', 'covers', 'albums')->with('roles')->limit(10)->get();
         $users->load('verification');
+
         return view('admin.user-profiles.index', compact('users'));
     }
 
@@ -64,8 +65,8 @@ class AdminUserProfileController extends Controller
             'email' => 'required|email|unique:users,email,' . $id,
             'phone' => 'nullable|string|max:20',
             'username' => 'required|string|max:255|unique:users,username,' . $id,
-            'status' => 'required|in:active,suspended',
-            'verification' => 'required|in:active,suspended',
+            'status' => 'required|in:approved,suspended',
+            'verification' => 'required|in:approved,suspended',
             'location' => 'nullable|string|max:255',
             'website' => 'nullable|url',
             'role' => 'required|integer|exists:roles,id',
@@ -149,5 +150,39 @@ class AdminUserProfileController extends Controller
         }
 
         return response()->json(['success' => true]);
+    }
+
+    public function suspend($id)
+    {
+        $user = User::find($id);
+
+        if (!$user) {
+            return redirect()->route('admin.user-profiles.index')->with('error', 'User not found.');
+        }
+
+        if ($user->verification) {
+            $user->verification->status = 'suspended';
+            $user->verification->save();
+            return redirect()->route('admin.user-profiles.index')->with('success', 'User verification suspended.');
+        }
+
+        return redirect()->route('admin.user-profiles.index')->with('error', 'User verification not found.');
+    }
+
+    public function active($id)
+    {
+        $user = User::find($id);
+
+        if (!$user) {
+            return redirect()->route('admin.user-profiles.index')->with('error', 'User not found.');
+        }
+
+        if ($user->verification) {
+            $user->verification->status = 'approved';
+            $user->verification->save();
+            return redirect()->route('admin.user-profiles.index')->with('success', 'User verification active.');
+        }
+
+        return redirect()->route('admin.user-profiles.index')->with('error', 'User verification not found.');
     }
 }

@@ -113,10 +113,10 @@
                                                 <span class="badge bg-warning text-dark">Pending Verification</span>
                                             @elseif ($user->verification->status == 'suspended')
                                                 <span class="badge bg-danger">Suspended</span>
-                                            @elseif ($user->verification->status == 'active')
+                                            @elseif ($user->verification->status == 'approved')
                                                 <span class="badge bg-success">Active</span>
                                             @else
-                                                <span class="badge bg-secondary">Unknown Status</span>
+                                                <span class="badge bg-secondary">Rejected</span>
                                             @endif
                                         @else
                                             <span class="badge bg-secondary">Not Verified</span>
@@ -135,20 +135,29 @@
                                                     <i class="ti ti-dots-vertical"></i>
                                                 </button>
                                                 <div class="dropdown-menu dropdown-menu-end">
-                                                    <a href="#" class="dropdown-item">
+                                                    <a href="{{ route('admin.user-profiles.show', $user->id) }}"
+                                                        class="dropdown-item">
                                                         <i class="ti ti-edit me-2"></i>Edit
                                                     </a>
                                                     <a href="#" class="dropdown-item">
                                                         <i class="ti ti-mail me-2"></i>Send Email
                                                     </a>
-                                                    {{-- @if ($user->id % 5 == 0)
-                                                        <a href="#" class="dropdown-item text-success">
-                                                            <i class="ti ti-check me-2"></i>Activate
-                                                        </a>
-                                                    @else --}}
-                                                    <a href="#" class="dropdown-item text-danger">
-                                                        <i class="ti ti-ban me-2"></i>Suspend
-                                                    </a>
+                                                    <form action="{{ route('admin.user-profiles.active', $user->id) }}"
+                                                        method="POST">
+                                                        @csrf
+                                                        <button type="submit" class="dropdown-item text-success">
+                                                            <i class="ti ti-ban me-2"></i>Active
+                                                        </button>
+                                                    </form>
+
+                                                    <form action="{{ route('admin.user-profiles.suspend', $user->id) }}"
+                                                        method="POST">
+                                                        @csrf
+                                                        <button type="submit" class="dropdown-item text-danger">
+                                                            <i class="ti ti-ban me-2"></i>Suspend
+                                                        </button>
+                                                    </form>
+
                                                     {{-- @endif --}}
                                                 </div>
                                             </div>
