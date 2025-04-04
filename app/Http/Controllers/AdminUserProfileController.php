@@ -13,13 +13,70 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Spatie\Permission\Models\Role;
 
-class AdminUserProfileController extends Controller
+class AdminUserProfileController extends Controller 
 {
-    public function index()
+    public function index(Request $request)
     {
-        $users = User::withCount('songs', 'covers', 'albums')->with('roles')->limit(10)->get();
+        $query = User::withCount('songs', 'covers', 'albums')->with('roles');
+        
+        // Search functionality
+        if ($request->has('search') && !empty($request->search)) {
+            $searchTerm = $request->search;
+            $query->where(function($q) use ($searchTerm) {
+                $q->where('name', 'like', "%{$searchTerm}%")
+                  ->orWhere('email', 'like', "%{$searchTerm}%")
+                  ->orWhere('username', 'like', "%{$searchTerm}%");
+            });
+        }
+        
+        // Filter functionality
+        if ($request->has('filter') && !empty($request->filter)) {
+            switch ($request->filter) {
+                case 'artists':
+                    $query->whereHas('roles', function($q) {
+                        $q->where('name', 'artist');
+                    });
+                    break;
+                case 'composers':
+                    $query->whereHas('roles', function($q) {
+                        $q->where('name', 'composer');
+                    });
+                    break;
+                case 'cover_creators':
+                    $query->has('covers');
+                    break;
+                case 'regular_users':
+                    $query->whereDoesntHave('roles', function($q) {
+                        $q->whereIn('name', ['admin', 'artist', 'composer']);
+                    });
+                    break;
+            }
+        }
+        
+        // Sorting functionality
+        $sort = $request->input('sort', 'latest');
+        switch ($sort) {
+            case 'latest':
+                $query->orderBy('created_at', 'desc');
+                break;
+            case 'oldest':
+                $query->orderBy('created_at', 'asc');
+                break;
+            case 'name-asc':
+                $query->orderBy('name', 'asc');
+                break;
+            case 'name-desc':
+                $query->orderBy('name', 'desc');
+                break;
+        }
+        
+        // Pagination
+        $perPage = $request->input('per_page', 10);
+        $users = $query->paginate($perPage);
+        
+        // Load verification data
         $users->load('verification');
-
+        
         return view('admin.user-profiles.index', compact('users'));
     }
 

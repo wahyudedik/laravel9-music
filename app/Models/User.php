@@ -14,7 +14,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
-use Symfony\Component\HttpFoundation\File\Stream;
+use Symfony\Component\HttpFoundation\File\Stream; 
 
 class User extends Authenticatable implements MustVerifyEmail
 {

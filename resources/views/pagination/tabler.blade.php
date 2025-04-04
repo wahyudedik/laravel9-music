@@ -14,7 +14,7 @@
                     <i class="ti ti-chevron-left"></i>
                     prev
                 </a>
-            </li>
+            </li> 
         @endif
 
         {{-- Pagination Elements --}}

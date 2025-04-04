@@ -974,7 +974,7 @@
                                                 <input class="form-check-input" type="checkbox" id="replace-cover">
                                                 <label class="form-check-label" for="replace-cover">
                                                     Replace cover image
-                                                </label>
+                                                </label> 
                                             </div>
                                         </div>
                                         <input type="file" class="form-control mt-2" disabled>

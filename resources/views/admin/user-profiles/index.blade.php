@@ -11,23 +11,25 @@
                     <div class="text-muted mt-1">Manage user profiles and their content</div>
                 </div>
                 <div class="col-auto ms-auto d-print-none">
-                    <div class="d-flex">
+                    <!-- Search form -->
+                    <form action="{{ route('admin.user-profiles.index') }}" method="GET" class="d-flex">
                         <div class="me-2">
-                            <input type="text" class="form-control" placeholder="Search users...">
+                            <input type="text" class="form-control" name="search" placeholder="Search users..." value="{{ request('search') }}">
                         </div>
                         <div class="dropdown">
                             <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown">
                                 <i class="ti ti-filter me-1"></i>Filter
                             </button>
                             <div class="dropdown-menu">
-                                <a class="dropdown-item" href="#">All Users</a>
-                                <a class="dropdown-item" href="#">Artists</a>
-                                <a class="dropdown-item" href="#">Composers</a>
-                                <a class="dropdown-item" href="#">Cover Creators</a>
-                                <a class="dropdown-item" href="#">Regular Users</a>
+                                <a class="dropdown-item {{ request('filter') == '' ? 'active' : '' }}" href="{{ route('admin.user-profiles.index', array_merge(request()->except('filter'), ['filter' => ''])) }}">All Users</a>
+                                <a class="dropdown-item {{ request('filter') == 'artists' ? 'active' : '' }}" href="{{ route('admin.user-profiles.index', array_merge(request()->except('filter'), ['filter' => 'artists'])) }}">Artists</a>
+                                <a class="dropdown-item {{ request('filter') == 'composers' ? 'active' : '' }}" href="{{ route('admin.user-profiles.index', array_merge(request()->except('filter'), ['filter' => 'composers'])) }}">Composers</a>
+                                <a class="dropdown-item {{ request('filter') == 'cover_creators' ? 'active' : '' }}" href="{{ route('admin.user-profiles.index', array_merge(request()->except('filter'), ['filter' => 'cover_creators'])) }}">Cover Creators</a>
+                                <a class="dropdown-item {{ request('filter') == 'regular_users' ? 'active' : '' }}" href="{{ route('admin.user-profiles.index', array_merge(request()->except('filter'), ['filter' => 'regular_users'])) }}">Regular Users</a>
                             </div>
                         </div>
-                    </div>
+                        <button type="submit" class="btn btn-primary ms-2">Apply</button>
+                    </form>
                 </div>
             </div>
         </div>
@@ -38,25 +40,27 @@
             <div class="card">
                 <div class="card-body border-bottom py-3">
                     <div class="d-flex">
+                        <!-- Per page selector -->
                         <div class="text-muted">
                             Show
                             <div class="mx-2 d-inline-block">
-                                <select class="form-select form-select-sm">
-                                    <option value="10" selected>10</option>
-                                    <option value="25">25</option>
-                                    <option value="50">50</option>
-                                    <option value="100">100</option>
+                                <select class="form-select form-select-sm" name="per_page" onchange="window.location.href='{{ route('admin.user-profiles.index') }}?per_page=' + this.value + '{{ request()->has('search') ? '&search=' . request('search') : '' }}{{ request()->has('filter') ? '&filter=' . request('filter') : '' }}{{ request()->has('sort') ? '&sort=' . request('sort') : '' }}'">
+                                    <option value="10" {{ request('per_page') == 10 || !request('per_page') ? 'selected' : '' }}>10</option>
+                                    <option value="25" {{ request('per_page') == 25 ? 'selected' : '' }}>25</option>
+                                    <option value="50" {{ request('per_page') == 50 ? 'selected' : '' }}>50</option>
+                                    <option value="100" {{ request('per_page') == 100 ? 'selected' : '' }}>100</option>
                                 </select>
                             </div>
                             entries
                         </div>
+                        <!-- Sort selector -->
                         <div class="ms-auto text-muted">
                             <div class="ms-2 d-inline-block">
-                                <select class="form-select form-select-sm">
-                                    <option value="latest" selected>Latest Registered</option>
-                                    <option value="oldest">Oldest Registered</option>
-                                    <option value="name-asc">Name (A-Z)</option>
-                                    <option value="name-desc">Name (Z-A)</option>
+                                <select class="form-select form-select-sm" name="sort" onchange="window.location.href='{{ route('admin.user-profiles.index') }}?sort=' + this.value + '{{ request()->has('search') ? '&search=' . request('search') : '' }}{{ request()->has('filter') ? '&filter=' . request('filter') : '' }}{{ request()->has('per_page') ? '&per_page=' . request('per_page') : '' }}'">
+                                    <option value="latest" {{ request('sort') == 'latest' || !request('sort') ? 'selected' : '' }}>Latest Registered</option>
+                                    <option value="oldest" {{ request('sort') == 'oldest' ? 'selected' : '' }}>Oldest Registered</option>
+                                    <option value="name-asc" {{ request('sort') == 'name-asc' ? 'selected' : '' }}>Name (A-Z)</option>
+                                    <option value="name-desc" {{ request('sort') == 'name-desc' ? 'selected' : '' }}>Name (Z-A)</option>
                                 </select>
                             </div>
                         </div>
@@ -135,10 +139,6 @@
                                                     <i class="ti ti-dots-vertical"></i>
                                                 </button>
                                                 <div class="dropdown-menu dropdown-menu-end">
-                                                    <a href="{{ route('admin.user-profiles.show', $user->id) }}"
-                                                        class="dropdown-item">
-                                                        <i class="ti ti-edit me-2"></i>Edit
-                                                    </a>
                                                     <a href="#" class="dropdown-item">
                                                         <i class="ti ti-mail me-2"></i>Send Email
                                                     </a>
@@ -168,24 +168,7 @@
                         </tbody>
                     </table>
                     <div class="card-footer d-flex align-items-center">
-                        <p class="m-0 text-muted">Showing <span>1</span> to <span>10</span> of <span>97</span> entries</p>
-                        <ul class="pagination m-0 ms-auto">
-                            <li class="page-item disabled">
-                                <a class="page-link" href="#" tabindex="-1" aria-disabled="true">
-                                    <i class="ti ti-chevron-left"></i>
-                                    prev
-                                </a>
-                            </li>
-                            <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                            <li class="page-item"><a class="page-link" href="#">2</a></li>
-                            <li class="page-item"><a class="page-link" href="#">3</a></li>
-                            <li class="page-item">
-                                <a class="page-link" href="#">
-                                    next
-                                    <i class="ti ti-chevron-right"></i>
-                                </a>
-                            </li>
-                        </ul>
+                        {{ $users->appends(request()->except('page'))->links('pagination.tabler') }}
                     </div>
                 </div>
             </div>
