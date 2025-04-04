@@ -338,12 +338,9 @@ Route::middleware(['auth', 'role:Super Admin,Admin'])->group(function () {
         [AdminUserProfileController::class, 'removePicture']
     )->name('admin.user-profiles.remove-picture');
     Route::post('/admin/user-profiles/{id}/suspend', [AdminUserProfileController::class, 'suspend'])->name('admin.user-profiles.suspend');
-
     Route::post('/admin/user-profiles/{id}/active', [AdminUserProfileController::class, 'active'])->name('admin.user-profiles.active');
     Route::put('/admin/songs/{id}', [SongController::class, 'update'])->name('admin.songs.update');
-
-
-
+    
     // Withdraw Verification Routes
     Route::get('/admin/withdrawals', function () {
         return view('admin.withdrawals.index');
