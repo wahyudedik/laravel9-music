@@ -313,11 +313,7 @@ Route::middleware(['auth', 'role:Super Admin,Admin'])->group(function () {
         return view('admin.genres.index');
     })->name('admin.genres.index');
 
-    // Admin User Profile Management Route
-    // Route::get('/admin/user-profiles', function () {
-    //     return view('admin.user-profiles.index');
-    // })->name('admin.user-profiles.index');
-
+    //user profile route
     Route::get('/admin/user-profiles', [AdminUserProfileController::class, 'index'])->name('admin.user-profiles.index');
     Route::get('/admin/user-profiles/{id}', [AdminUserProfileController::class, 'show'])->name('admin.user-profiles.show');
     Route::put('/admin/user-profiles/{id}', [AdminUserProfileController::class, 'update'])->name('admin.user-profiles.update');
