@@ -157,8 +157,6 @@
                                                             <i class="ti ti-ban me-2"></i>Suspend
                                                         </button>
                                                     </form>
-
-                                                    {{-- @endif --}}
                                                 </div>
                                             </div>
                                         </div>
