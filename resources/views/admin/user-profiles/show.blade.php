@@ -513,7 +513,7 @@
                                 </div>
 
                                 <!-- Activity Tab -->
-                                <div class="tab-pane" id="activity">
+                                {{-- <div class="tab-pane" id="activity">
                                     <div class="d-flex justify-content-between mb-3">
                                         <h4 class="card-title">Recent Activity</h4>
                                         <div class="btn-group">
@@ -589,7 +589,91 @@
                                             </div>
                                         @endfor
                                     </div>
+                                </div> --}}
+                                <div class="tab-pane" id="activity">
+                                    <div class="d-flex justify-content-between mb-3">
+                                        <h4 class="card-title">Recent Activity</h4>
+                                        <div class="btn-group">
+                                            <button type="button"
+                                                class="btn btn-sm btn-outline-primary active">All</button>
+                                            <button type="button" class="btn btn-sm btn-outline-primary">Content</button>
+                                            <button type="button" class="btn btn-sm btn-outline-primary">Login</button>
+                                            <button type="button"
+                                                class="btn btn-sm btn-outline-primary">Payments</button>
+                                        </div>
+                                    </div>
+
+                                    <div class="list-group list-group-flush">
+                                        @forelse ($activities as $activity)
+                                            <div class="list-group-item">
+                                                <div class="row align-items-center">
+                                                    <div class="col-auto">
+                                                        @php
+                                                            $icon = '';
+                                                            $bgColor = '';
+                                                            switch ($activity->log_name) {
+                                                                case 'content':
+                                                                    $icon = 'ti ti-file-text';
+                                                                    $bgColor = 'bg-primary-lt';
+                                                                    break;
+                                                                case 'login':
+                                                                    $icon = 'ti ti-login';
+                                                                    $bgColor = 'bg-info-lt';
+                                                                    break;
+                                                                case 'payments':
+                                                                    $icon = 'ti ti-credit-card';
+                                                                    $bgColor = 'bg-warning-lt';
+                                                                    break;
+                                                                default:
+                                                                    $icon = 'ti ti-activity';
+                                                                    $bgColor = 'bg-secondary-lt';
+                                                                    break;
+                                                            }
+                                                        @endphp
+                                                        <div class="avatar avatar-rounded {{ $bgColor }}">
+                                                            <i
+                                                                class="{{ $icon }} text-{{ str_replace('-lt', '', $bgColor) }}"></i>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col">
+                                                        <div class="text-body">
+                                                            {{ $activity->description }} -
+                                                            {{ $activity->subjectUser?->name ?? '-' }}
+                                                        </div>
+
+                                                        <div class="text-muted">
+                                                            {{ $activity->created_at->diffForHumans() }}
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-auto">
+                                                        <div class="dropdown">
+                                                            <button class="btn btn-icon btn-ghost-secondary"
+                                                                data-bs-toggle="dropdown">
+                                                                <i class="ti ti-dots-vertical"></i>
+                                                            </button>
+                                                            <div class="dropdown-menu dropdown-menu-end">
+                                                                <a href="#" class="dropdown-item">
+                                                                    <i class="ti ti-eye me-2"></i>View Details
+                                                                </a>
+                                                                <a href="#" class="dropdown-item text-danger">
+                                                                    <i class="ti ti-trash me-2"></i>Delete Record
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @empty
+                                            <div class="list-group-item">
+                                                <div class="text-center text-muted">Tidak ada aktivitas terbaru.</div>
+                                            </div>
+                                        @endforelse
+                                    </div>
                                 </div>
+
+
+
                             </div>
                         </div>
                     </div>
@@ -898,14 +982,17 @@
                                     aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
-                                <form action="{{ route('admin.songs.update', $song->id) }}" method="POST"
+                                {{-- <form action="{{ route('admin.songs.update', $song->id) }}" method="POST"
                                     enctype="multipart/form-data">
+                                    @csrf
+                                    @method('PUT') --}}
+                                <form action="#" method="POST" enctype="multipart/form-data">
                                     @csrf
                                     @method('PUT')
                                     <div class="mb-3">
                                         <label for="title" class="form-label">Song Title</label>
                                         <input type="text" class="form-control" id="title" name="title"
-                                            value="{{ $song->title }}" required>
+                                            value="#">
                                     </div>
                                     <div class="row">
                                         <div class="col-lg-6">
@@ -913,14 +1000,16 @@
                                                 <label for="genre" class="form-label">Genre</label>
                                                 <select class="form-select" id="genre" name="genre" required>
                                                     <option value="">Pilih Genre</option>
-                                                    <option value="pop" {{ $song->genre === 'pop' ? 'selected' : '' }}>
+                                                    {{-- <option value="pop" {{ $song->genre === 'pop' ? 'selected' : '' }}>
                                                         Pop</option>
                                                     <option value="rock"
                                                         {{ $song->genre === 'rock' ? 'selected' : '' }}>Rock</option>
                                                     <option value="hiphop"
-                                                        {{ $song->genre === 'hiphop' ? 'selected' : '' }}>Hip Hop</option>
+                                                        {{ $song->genre === 'hiphop' ? 'selected' : '' }}>Hip Hop
+                                                    </option>
                                                     <option value="electronic"
-                                                        {{ $song->genre === 'electronic' ? 'selected' : '' }}>Electronic
+                                                        {{ $song->genre === 'electronic' ? 'selected' : '' }}>
+                                                        Electronic
                                                     </option>
                                                     <option value="jazz"
                                                         {{ $song->genre === 'jazz' ? 'selected' : '' }}>Jazz</option>
@@ -928,9 +1017,10 @@
                                                         {{ $song->genre === 'classical' ? 'selected' : '' }}>Classical
                                                     </option>
                                                     <option value="country"
-                                                        {{ $song->genre === 'country' ? 'selected' : '' }}>Country</option>
+                                                        {{ $song->genre === 'country' ? 'selected' : '' }}>Country
+                                                    </option>
                                                     <option value="rnb" {{ $song->genre === 'rnb' ? 'selected' : '' }}>
-                                                        R&B</option>
+                                                        R&B</option> --}}
                                                 </select>
                                             </div>
                                         </div>
@@ -974,7 +1064,7 @@
                                                 <input class="form-check-input" type="checkbox" id="replace-cover">
                                                 <label class="form-check-label" for="replace-cover">
                                                     Replace cover image
-                                                </label> 
+                                                </label>
                                             </div>
                                         </div>
                                         <input type="file" class="form-control mt-2" disabled>

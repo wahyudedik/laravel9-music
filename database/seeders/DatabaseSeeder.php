@@ -31,6 +31,7 @@ class DatabaseSeeder extends Seeder
             StreamSeeder::class,
             UserProfileSeeder::class,
             UserSocialMediaSeeder::class,
+            //  ActivityLogSeeder::class,
         ]);
     }
 }
