@@ -511,85 +511,6 @@
                                         </table>
                                     </div>
                                 </div>
-
-                                <!-- Activity Tab -->
-                                {{-- <div class="tab-pane" id="activity">
-                                    <div class="d-flex justify-content-between mb-3">
-                                        <h4 class="card-title">Recent Activity</h4>
-                                        <div class="btn-group">
-                                            <button type="button"
-                                                class="btn btn-sm btn-outline-primary active">All</button>
-                                            <button type="button" class="btn btn-sm btn-outline-primary">Content</button>
-                                            <button type="button" class="btn btn-sm btn-outline-primary">Login</button>
-                                            <button type="button"
-                                                class="btn btn-sm btn-outline-primary">Payments</button>
-                                        </div>
-                                    </div>
-
-                                    <div class="list-group list-group-flush">
-                                        @for ($i = 1; $i <= 10; $i++)
-                                            <div class="list-group-item">
-                                                <div class="row align-items-center">
-                                                    <div class="col-auto">
-                                                        @if ($i % 4 == 0)
-                                                            <div class="avatar avatar-rounded bg-primary-lt">
-                                                                <i class="ti ti-upload text-primary"></i>
-                                                            </div>
-                                                        @elseif($i % 4 == 1)
-                                                            <div class="avatar avatar-rounded bg-success-lt">
-                                                                <i class="ti ti-player-play text-success"></i>
-                                                            </div>
-                                                        @elseif($i % 4 == 2)
-                                                            <div class="avatar avatar-rounded bg-warning-lt">
-                                                                <i class="ti ti-credit-card text-warning"></i>
-                                                            </div>
-                                                        @else
-                                                            <div class="avatar avatar-rounded bg-info-lt">
-                                                                <i class="ti ti-login text-info"></i>
-                                                            </div>
-                                                        @endif
-                                                    </div>
-                                                    <div class="col">
-                                                        <div class="text-body">
-                                                            @if ($i % 4 == 0)
-                                                                Uploaded a new {{ ['song', 'cover', 'album'][$i % 3] }}:
-                                                                "{{ ['Blinding Lights', 'Save Your Tears', 'Levitating', 'Stay', 'Industry Baby'][$i % 5] }}"
-                                                            @elseif($i % 4 == 1)
-                                                                Published {{ ['song', 'cover', 'album'][$i % 3] }}:
-                                                                "{{ ['Blinding Lights', 'Save Your Tears', 'Levitating', 'Stay', 'Industry Baby'][$i % 5] }}"
-                                                            @elseif($i % 4 == 2)
-                                                                Made a payment of ${{ rand(5, 50) }}.{{ rand(10, 99) }}
-                                                                for
-                                                                {{ ['license', 'subscription', 'premium features'][$i % 3] }}
-                                                            @else
-                                                                Logged in from
-                                                                {{ ['Chrome on Windows', 'Safari on macOS', 'Firefox on Linux', 'Mobile App on Android', 'Mobile App on iOS'][$i % 5] }}
-                                                            @endif
-                                                        </div>
-                                                        <div class="text-muted">{{ rand(1, 24) }}
-                                                            {{ ['minutes', 'hours', 'days'][$i % 3] }} ago</div>
-                                                    </div>
-                                                    <div class="col-auto">
-                                                        <div class="dropdown">
-                                                            <button class="btn btn-icon btn-ghost-secondary"
-                                                                data-bs-toggle="dropdown">
-                                                                <i class="ti ti-dots-vertical"></i>
-                                                            </button>
-                                                            <div class="dropdown-menu dropdown-menu-end">
-                                                                <a href="#" class="dropdown-item">
-                                                                    <i class="ti ti-eye me-2"></i>View Details
-                                                                </a>
-                                                                <a href="#" class="dropdown-item text-danger">
-                                                                    <i class="ti ti-trash me-2"></i>Delete Record
-                                                                </a>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        @endfor
-                                    </div>
-                                </div> --}}
                                 <div class="tab-pane" id="activity">
                                     <div class="d-flex justify-content-between mb-3">
                                         <h4 class="card-title">Recent Activity</h4>
@@ -607,27 +528,39 @@
                                         @forelse ($activities as $activity)
                                             <div class="list-group-item">
                                                 <div class="row align-items-center">
+
                                                     <div class="col-auto">
                                                         @php
-                                                            $icon = '';
-                                                            $bgColor = '';
-                                                            switch ($activity->log_name) {
-                                                                case 'content':
-                                                                    $icon = 'ti ti-file-text';
-                                                                    $bgColor = 'bg-primary-lt';
-                                                                    break;
-                                                                case 'login':
-                                                                    $icon = 'ti ti-login';
-                                                                    $bgColor = 'bg-info-lt';
-                                                                    break;
-                                                                case 'payments':
-                                                                    $icon = 'ti ti-credit-card';
-                                                                    $bgColor = 'bg-warning-lt';
-                                                                    break;
-                                                                default:
-                                                                    $icon = 'ti ti-activity';
-                                                                    $bgColor = 'bg-secondary-lt';
-                                                                    break;
+                                                            $icon = 'ti ti-activity';
+                                                            $bgColor = 'bg-secondary-lt';
+
+                                                            if ($activity->event === 'login') {
+                                                                $icon = 'ti ti-login';
+                                                                $bgColor = 'bg-info-lt';
+                                                            } elseif ($activity->event === 'logout') {
+                                                                $icon = 'ti ti-logout';
+                                                                $bgColor = 'bg-warning-lt';
+                                                            } elseif ($activity->event === 'created') {
+                                                                $icon = 'ti ti-plus';
+                                                                $bgColor = 'bg-success-lt';
+                                                            } elseif ($activity->event === 'updated' || $activity->event === 'update_profile' || $activity->event === 'update_profile_picture') {
+                                                                $icon = 'ti ti-pencil';
+                                                                $bgColor = 'bg-primary-lt';
+                                                            } elseif ($activity->event === 'deleted' || $activity->event === 'remove_profile_picture') {
+                                                                $icon = 'ti ti-trash';
+                                                                $bgColor = 'bg-danger-lt';
+                                                            } elseif ($activity->event === 'uploaded') {
+                                                                $icon = 'ti ti-upload';
+                                                                $bgColor = 'bg-primary-lt';
+                                                            } elseif ($activity->event === 'payment_processed') {
+                                                                $icon = 'ti ti-credit-card';
+                                                                $bgColor = 'bg-warning-lt';
+                                                            } elseif ($activity->event === 'suspend_user' || $activity->event === 'suspend_verification') {
+                                                                $icon = 'ti ti-user-x';
+                                                                $bgColor = 'bg-warning-lt';
+                                                            } elseif ($activity->event === 'active_verification') {
+                                                                $icon = 'ti ti-user-check';
+                                                                $bgColor = 'bg-success-lt';
                                                             }
                                                         @endphp
                                                         <div class="avatar avatar-rounded {{ $bgColor }}">
@@ -637,14 +570,16 @@
                                                     </div>
                                                     <div class="col">
                                                         <div class="text-body">
-                                                            {{ $activity->description }} -
-                                                            {{ $activity->subjectUser?->name ?? '-' }}
+                                                            {{ $activity->description }}
+                                                            @if ($activity->subjectUser)
+                                                                ({{ $activity->subjectUser->name }})
+                                                            @endif
                                                         </div>
-
                                                         <div class="text-muted">
-                                                            {{ $activity->created_at->diffForHumans() }}
-                                                        </div>
+                                                            {{ $activity->created_at->diffForHumans() }}</div>
                                                     </div>
+
+
 
                                                     <div class="col-auto">
                                                         <div class="dropdown">
@@ -653,20 +588,30 @@
                                                                 <i class="ti ti-dots-vertical"></i>
                                                             </button>
                                                             <div class="dropdown-menu dropdown-menu-end">
-                                                                <a href="#" class="dropdown-item">
+                                                                <button type="button" class="dropdown-item"
+                                                                    data-bs-toggle="modal"
+                                                                    data-bs-target="#viewDetailsModal{{ $activity->id }}">
                                                                     <i class="ti ti-eye me-2"></i>View Details
-                                                                </a>
-                                                                <a href="#" class="dropdown-item text-danger">
+                                                                </button>
+
+                                                                <button type="button" class="dropdown-item text-danger"
+                                                                    data-bs-toggle="modal"
+                                                                    data-bs-target="#deleteActivityModal{{ $activity->id }}">
                                                                     <i class="ti ti-trash me-2"></i>Delete Record
-                                                                </a>
+                                                                </button>
+
                                                             </div>
                                                         </div>
+
+
                                                     </div>
+
+
                                                 </div>
                                             </div>
                                         @empty
                                             <div class="list-group-item">
-                                                <div class="text-center text-muted">Tidak ada aktivitas terbaru.</div>
+                                                <div class="text-center text-muted">No activity recorded.</div>
                                             </div>
                                         @endforelse
                                     </div>
@@ -967,6 +912,68 @@
                                 <button type="button" class="btn btn-link link-secondary"
                                     data-bs-dismiss="modal">Cancel</button>
                                 <button type="button" class="btn btn-primary ms-auto">Add Song</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                @foreach ($activities as $activity)
+                    <div class="modal fade" id="viewDetailsModal{{ $activity->id }}" tabindex="-1" role="dialog">
+                        <div class="modal-dialog modal-lg" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Detail Aktivitas</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <p><strong>Deskripsi:</strong> {{ $activity->description }}</p>
+                                    <p><strong>Event:</strong> {{ $activity->event }}</p>
+                                    <p><strong>Dilakukan oleh ID:</strong> {{ $activity->causer_id }}</p>
+                                    @if ($activity->subjectUser)
+                                        <p><strong>Subjek:</strong> {{ $activity->subjectUser->name }} (ID:
+                                            {{ $activity->subject_id }})</p>
+                                    @else
+                                        <p><strong>Subjek ID:</strong> {{ $activity->subject_id }}</p>
+                                    @endif
+                                    <p><strong>Dibuat pada:</strong> {{ $activity->created_at }}</p>
+                                    <p><strong>Diperbarui pada:</strong> {{ $activity->updated_at }}</p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary"
+                                        data-bs-dismiss="modal">Tutup</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+
+                <div class="modal fade" id="deleteActivityModal{{ $activity->id }}" tabindex="-1"
+                    aria-labelledby="deleteActivityModalLabel{{ $activity->id }}" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="deleteActivityModalLabel{{ $activity->id }}">
+                                    Confirm Delete</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                Are you sure you want to delete this activity
+                                record?
+                                <p class="text-muted small">
+                                    {{ $activity->description }} -
+                                    {{ $activity->created_at->diffForHumans() }}
+                                </p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                <form action="#" method="POST" style="display: inline;">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                </form>
                             </div>
                         </div>
                     </div>

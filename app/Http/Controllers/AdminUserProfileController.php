@@ -108,13 +108,11 @@ class AdminUserProfileController extends Controller
 
 
 
-        $activities = ActivityLog::with('subjectUser') // eager loading relasi user
-            ->select('description', 'causer_id', 'subject_id', 'created_at', 'updated_at')
+        $activities = ActivityLog::with('subjectUser')
+            ->select('description', 'causer_id', 'subject_id', 'created_at', 'updated_at', 'event')
             ->where('causer_id', $id)
             ->latest()
             ->get();
-
-
 
         return view('admin.user-profiles.show', compact('user', 'songs', 'covers', 'albums', 'publishedSongs', 'roles', 'socialMedia', 'userProfile', 'activities'));
     }
@@ -181,6 +179,7 @@ class AdminUserProfileController extends Controller
         if (!empty($newAttributes)) {
             activity()
                 ->performedOn($user)
+                ->event('update_profile') // Tambahkan method event() di sini
                 ->withProperties(['old' => $oldAttributes, 'attributes' => $newAttributes, 'ip' => request()->ip()])
                 ->log(auth()->user()->name . ' updated profile');
         }
@@ -222,6 +221,7 @@ class AdminUserProfileController extends Controller
         if (!empty($newAttributes)) {
             activity()
                 ->performedOn($user)
+                ->event('update_profile_picture')
                 ->withProperties(['old' => $oldAttributes, 'attributes' => $newAttributes, 'ip' => request()->ip()])
                 ->log(auth()->user()->name . ' updated picture profile');
         }
@@ -231,11 +231,19 @@ class AdminUserProfileController extends Controller
     public function removePicture($id)
     {
         $user = User::findOrFail($id);
+        $oldPicture = $user->profile_picture;
+
 
         if ($user->profile_picture) {
             Storage::delete('public/' . $user->profile_picture);
             $user->profile_picture = null;
             $user->save();
+
+            activity()
+                ->performedOn($user)
+                ->event('remove_profile_picture')
+                ->withProperties(['old_profile_picture' => $oldPicture, 'ip' => request()->ip()])
+                ->log(auth()->user()->name . ' removed profile picture');
         }
 
         return response()->json(['success' => true]);
@@ -249,9 +257,17 @@ class AdminUserProfileController extends Controller
             return redirect()->route('admin.user-profiles.index')->with('error', 'User not found.');
         }
 
+        $oldVerificationStatus = $user->verification ? $user->verification->status : null;
+
         if ($user->verification) {
             $user->verification->status = 'suspended';
             $user->verification->save();
+
+            activity()
+                ->performedOn($user)
+                ->event('suspend_verification') // Event untuk menangguhkan verifikasi
+                ->withProperties(['old_status' => $oldVerificationStatus, 'new_status' => 'suspended', 'ip' => request()->ip()])
+                ->log(auth()->user()->name . ' suspended user verification for ');
             return redirect()->route('admin.user-profiles.index')->with('success', 'User verification suspended.');
         }
 
@@ -266,9 +282,18 @@ class AdminUserProfileController extends Controller
             return redirect()->route('admin.user-profiles.index')->with('error', 'User not found.');
         }
 
+        $oldVerificationStatus = $user->verification ? $user->verification->status : null;
+
         if ($user->verification) {
             $user->verification->status = 'approved';
             $user->verification->save();
+
+            activity()
+                ->performedOn($user)
+                ->event('active_verification')
+                ->withProperties(['old_status' => $oldVerificationStatus, 'new_status' => 'active', 'ip' => request()->ip()])
+                ->log(auth()->user()->name . ' active user verification for ');
+
             return redirect()->route('admin.user-profiles.index')->with('success', 'User verification active.');
         }
 
