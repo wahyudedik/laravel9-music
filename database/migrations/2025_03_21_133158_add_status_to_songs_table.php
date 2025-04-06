@@ -8,10 +8,10 @@ return new class extends Migration {
     public function up()
     {
         Schema::table('songs', function (Blueprint $table) {
-            $table->enum('status', ['Active', 'Inactive', 'Pending'])
-                ->default('Active')
+            $table->enum('status', ['draft', 'published', 'scheduled'])
+                ->default('draft')
                 ->after('duration')
-                ->comment('Status lagu: Active, Inactive, Pending');
+                ->comment('Status lagu: draft, published, Scheduled');
         });
     }
 

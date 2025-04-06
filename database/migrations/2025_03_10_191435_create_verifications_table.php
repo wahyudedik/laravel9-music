@@ -11,7 +11,7 @@ return new class extends Migration
      *
      * @return void
      */
-    public function up() 
+    public function up()
     {
         Schema::create('verifications', function (Blueprint $table) {
             $table->uuid('id')->primary()->comment('ID unik untuk setiap verifikasi akun');
@@ -19,7 +19,7 @@ return new class extends Migration
             $table->enum('type', ['composer', 'artist', 'cover'])->comment('Tipe verifikasi: composer, artist, cover creator');
             $table->text('document_ktp')->comment('Path dokumen KTP');
             $table->text('document_npwp')->nullable()->comment('Path dokumen NPWP (opsional)');
-            $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending')->comment('Status verifikasi: pending, approved, rejected');
+            $table->enum('status', ['pending', 'approved', 'rejected', 'suspended'])->default('pending')->comment('Status verifikasi: pending, approved, rejected, suspended ');
             $table->timestamps(); // created_at & updated_at
 
             // Foreign Key

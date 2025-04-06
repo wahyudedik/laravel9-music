@@ -9,7 +9,7 @@
                         User Profile
                     </div>
                     <h2 class="page-title">
-                        User {{ $id }} Details
+                        {{ $user->name }}
                     </h2>
                 </div>
                 <div class="col-auto ms-auto d-print-none">
@@ -55,24 +55,26 @@
                 <div class="col-lg-4">
                     <div class="card">
                         <div class="card-body p-4 text-center">
-                            <span class="avatar avatar-xl mb-3 rounded"
-                                style="background-image: url(https://ui-avatars.com/api/?name=User+{{ $id }}&background=e53935&color=fff)"></span>
-                            <h3 class="m-0 mb-1">User {{ $id }}</h3>
-                            <div class="text-muted">user{{ $id }}@example.com</div>
-                            <div class="mt-2">
-                                @if ($id % 4 == 0)
-                                    <span class="badge bg-purple">Artist</span>
-                                @elseif($id % 4 == 1)
-                                    <span class="badge bg-blue">Composer</span>
-                                @elseif($id % 4 == 2)
-                                    <span class="badge bg-green">Cover Creator</span>
-                                @else
-                                    <span class="badge bg-secondary">Regular User</span>
-                                @endif
 
-                                @if ($id % 3 != 0)
-                                    <span class="badge bg-success">Verified</span>
-                                @endif
+                            <span class="avatar avatar-xl mb-3 rounded"
+                                style="background-image: url({{ $user->profile_picture ? asset('storage/' . $user->profile_picture) : 'https://ui-avatars.com/api/?name=' . urlencode($user->name) . '&background=e53935&color=fff' }})">
+                            </span>
+
+                            <h3 class="m-0 mb-1">{{ $user->name }}</h3>
+                            <div class="text-muted mb-2">{{ $user->email }}</div>
+
+                            <div>
+                                @foreach ($user->roles as $role)
+                                    @if ($role->name == 'Artist')
+                                        <span class="badge bg-purple me-1">Artist</span>
+                                    @elseif ($role->name == 'Composer')
+                                        <span class="badge bg-blue me-1">Composer</span>
+                                    @elseif ($role->name == 'Cover Creator')
+                                        <span class="badge bg-green me-1">Cover Creator</span>
+                                    @else
+                                        <span class="badge bg-secondary me-1">Regular User</span>
+                                    @endif
+                                @endforeach
                             </div>
                         </div>
                         <div class="d-flex">
@@ -92,27 +94,28 @@
                         <div class="card-body">
                             <div class="mb-3">
                                 <div class="text-muted mb-1">Full Name</div>
-                                <div>User {{ $id }} Full Name</div>
+                                <div>{{ $user->name }}</div>
                             </div>
                             <div class="mb-3">
                                 <div class="text-muted mb-1">Email</div>
-                                <div>user{{ $id }}@example.com</div>
+                                <div>user{{ $user->email }}</div>
                             </div>
                             <div class="mb-3">
                                 <div class="text-muted mb-1">Phone</div>
-                                <div>+1 ({{ rand(100, 999) }}) {{ rand(100, 999) }}-{{ rand(1000, 9999) }}</div>
+                                <div>{{ $user->phone }}</div>
+
                             </div>
                             <div class="mb-3">
                                 <div class="text-muted mb-1">Location</div>
-                                <div>{{ ['New York', 'Los Angeles', 'Chicago', 'Houston', 'Miami'][$id % 5] }}, USA</div>
+                                <div>{{ $user->region }}</div>
                             </div>
                             <div class="mb-3">
                                 <div class="text-muted mb-1">Member Since</div>
-                                <div>{{ date('F d, Y', strtotime('-' . rand(1, 365) . ' days')) }}</div>
+                                <div>{{ $user->created_at }}</div>
                             </div>
                             <div class="mb-3">
                                 <div class="text-muted mb-1">Last Login</div>
-                                <div>{{ date('F d, Y H:i', strtotime('-' . rand(0, 10) . ' days')) }}</div>
+                                <div>{{ $user->last_login }}</div>
                             </div>
                         </div>
                     </div>
@@ -155,8 +158,8 @@
                         <div class="card-header">
                             <h3 class="card-title">Verification Status</h3>
                         </div>
-                        <div class="card-body">
-                            @if ($id % 3 == 0)
+                        <div>
+                            @if ($user->verification && $user->verification->status == 'pending')
                                 <div class="alert alert-warning">
                                     <div class="d-flex">
                                         <div>
@@ -164,8 +167,14 @@
                                         </div>
                                         <div>
                                             <h4 class="alert-title">Pending Verification</h4>
-                                            <div class="text-muted">This user has a pending verification request as an
-                                                {{ ['Artist', 'Composer', 'Cover Creator'][$id % 3] }}.</div>
+                                            <div class="text-muted">
+                                                This user has a pending verification request as a
+                                                @if ($user->roles->isNotEmpty())
+                                                    {{ $user->roles->first()->name }}.
+                                                @else
+                                                    User.
+                                                @endif
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="btn-list mt-3">
@@ -173,7 +182,7 @@
                                         <a href="#" class="btn btn-danger btn-sm">Reject</a>
                                     </div>
                                 </div>
-                            @elseif($id % 5 == 0)
+                            @elseif ($user->verification && $user->verification->status == 'suspended')
                                 <div class="alert alert-danger">
                                     <div class="d-flex">
                                         <div>
@@ -189,7 +198,7 @@
                                         <a href="#" class="btn btn-success btn-sm">Reactivate Account</a>
                                     </div>
                                 </div>
-                            @else
+                            @elseif ($user->verification && $user->verification->status == 'active')
                                 <div class="alert alert-success">
                                     <div class="d-flex">
                                         <div>
@@ -197,8 +206,27 @@
                                         </div>
                                         <div>
                                             <h4 class="alert-title">Verified Account</h4>
-                                            <div class="text-muted">This user has been verified as a
-                                                {{ ['Artist', 'Composer', 'Cover Creator', 'Regular User'][$id % 4] }}.
+                                            <div class="text-muted">
+                                                This user has been verified as a
+                                                @if ($user->roles->isNotEmpty())
+                                                    {{ $user->roles->first()->name }}.
+                                                @else
+                                                    User.
+                                                @endif
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            @elseif(!$user->verification)
+                                <div class="alert alert-secondary">
+                                    <div class="d-flex">
+                                        <div>
+                                            <i class="ti ti-alert-triangle me-2"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="alert-title">Not Verified Account</h4>
+                                            <div class="text-muted">
+                                                This user has not been verified yet.
                                             </div>
                                         </div>
                                     </div>
@@ -253,74 +281,62 @@
                                         </div>
                                     </div>
 
-                                    <div class="table-responsive">
-                                        <table class="table table-vcenter card-table table-hover">
-                                            <thead>
+
+                                    <table class="table table-vcenter card-table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>Title</th>
+                                                <th>Genre</th>
+                                                <th>Duration</th>
+                                                <th>Uploaded</th>
+                                                <th>Status</th>
+                                                <th class="w-1">Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($songs as $song)
                                                 <tr>
-                                                    <th>Title</th>
-                                                    <th>Genre</th>
-                                                    <th>Duration</th>
-                                                    <th>Uploaded</th>
-                                                    <th>Status</th>
-                                                    <th class="w-1">Actions</th>
+                                                    <td>
+                                                        <div class="d-flex align-items-center">
+                                                            <span class="avatar me-2"
+                                                                style="background-image: url(https://picsum.photos/40/40?random={{ $song->id }})"></span>
+                                                            <div>{{ $song->title }}</div>
+                                                        </div>
+                                                    </td>
+                                                    <td>{{ $song->genre }}</td>
+                                                    <td>{{ $song->duration }}</td>
+                                                    <td>{{ $song->created_at }}</td>
+                                                    <td>{{ $song->status }}</td>
+                                                    <td>
+                                                        <div class="dropdown">
+                                                            <button class="btn btn-icon btn-ghost-secondary"
+                                                                data-bs-toggle="dropdown">
+                                                                <i class="ti ti-dots-vertical"></i>
+                                                            </button>
+                                                            <div class="dropdown-menu dropdown-menu-end">
+                                                                <a href="#" class="dropdown-item"
+                                                                    data-bs-toggle="modal" data-bs-target="#editSongModal"
+                                                                    data-song-id="{{ $song->id }}">
+                                                                    <i class="ti ti-edit me-2"></i>Edit
+                                                                </a>
+                                                                <a href="#" class="dropdown-item">
+                                                                    <i class="ti ti-player-play me-2"></i>Preview
+                                                                </a>
+                                                                @if ($loop->index % 3 != 1)
+                                                                    <a href="#" class="dropdown-item text-success">
+                                                                        <i class="ti ti-check me-2"></i>Publish
+                                                                    </a>
+                                                                @endif
+                                                                <a href="#" class="dropdown-item text-danger">
+                                                                    <i class="ti ti-trash me-2"></i>Delete
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                    </td>
                                                 </tr>
-                                            </thead>
-                                            <tbody>
-                                                @for ($i = 1; $i <= 5; $i++)
-                                                    <tr>
-                                                        <td>
-                                                            <div class="d-flex align-items-center">
-                                                                <span class="avatar me-2"
-                                                                    style="background-image: url(https://picsum.photos/40/40?random={{ $i }})"></span>
-                                                                <div>Song Title {{ $i }}</div>
-                                                            </div>
-                                                        </td>
-                                                        <td>{{ ['Pop', 'Rock', 'Hip Hop', 'Electronic', 'Jazz'][$i % 5] }}
-                                                        </td>
-                                                        <td>{{ rand(2, 5) }}:{{ sprintf('%02d', rand(0, 59)) }}</td>
-                                                        <td>{{ date('M d, Y', strtotime('-' . rand(1, 30) . ' days')) }}
-                                                        </td>
-                                                        <td>
-                                                            @if ($i % 3 == 0)
-                                                                <span class="badge bg-warning text-dark">Pending</span>
-                                                            @elseif($i % 3 == 1)
-                                                                <span class="badge bg-success">Published</span>
-                                                            @else
-                                                                <span class="badge bg-secondary">Draft</span>
-                                                            @endif
-                                                        </td>
-                                                        <td>
-                                                            <div class="dropdown">
-                                                                <button class="btn btn-icon btn-ghost-secondary"
-                                                                    data-bs-toggle="dropdown">
-                                                                    <i class="ti ti-dots-vertical"></i>
-                                                                </button>
-                                                                <div class="dropdown-menu dropdown-menu-end">
-                                                                    <a href="#" class="dropdown-item"
-                                                                        data-bs-toggle="modal"
-                                                                        data-bs-target="#editSongModal">
-                                                                        <i class="ti ti-edit me-2"></i>Edit
-                                                                    </a>
-                                                                    <a href="#" class="dropdown-item">
-                                                                        <i class="ti ti-player-play me-2"></i>Preview
-                                                                    </a>
-                                                                    @if ($i % 3 != 1)
-                                                                        <a href="#"
-                                                                            class="dropdown-item text-success">
-                                                                            <i class="ti ti-check me-2"></i>Publish
-                                                                        </a>
-                                                                    @endif
-                                                                    <a href="#" class="dropdown-item text-danger">
-                                                                        <i class="ti ti-trash me-2"></i>Delete
-                                                                    </a>
-                                                                </div>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                @endfor
-                                            </tbody>
-                                        </table>
-                                    </div>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
                                 </div>
 
                                 <!-- Covers Tab -->
@@ -345,24 +361,21 @@
                                     </div>
 
                                     <div class="row row-cards">
-                                        @for ($i = 1; $i <= 6; $i++)
+                                        @foreach ($covers as $cover)
                                             <div class="col-sm-6 col-lg-4">
                                                 <div class="card card-sm">
                                                     <a href="#" class="d-block">
-                                                        <img src="https://picsum.photos/400/300?random={{ $i + 10 }}"
+                                                        <img src="https://picsum.photos/400/300?random={{ $cover->id }}"
                                                             class="card-img-top">
                                                     </a>
                                                     <div class="card-body">
                                                         <div class="d-flex align-items-center">
-                                                            <span class="avatar me-2"
-                                                                style="background-image: url(https://ui-avatars.com/api/?name=User+{{ $id }}&background=e53935&color=fff)"></span>
+                                                            <span
+                                                                style="background-image: url(https://ui-avatars.com/api/?name={{ $user->name }}&background=e53935&color=fff)"></span>
                                                             <div>
-                                                                <div>Cover of
-                                                                    "{{ ['Blinding Lights', 'Save Your Tears', 'Levitating', 'Stay', 'Industry Baby', 'Good 4 U'][$i - 1] }}"
-                                                                </div>
+                                                                <div>Cover of "{{ $cover->title }}"</div>
                                                                 <div class="text-muted">Original by
-                                                                    {{ ['The Weeknd', 'The Weeknd', 'Dua Lipa', 'Justin Bieber', 'Lil Nas X', 'Olivia Rodrigo'][$i - 1] }}
-                                                                </div>
+                                                                    {{ $cover->cover_version }}</div>
                                                             </div>
                                                         </div>
                                                         <div class="d-flex align-items-center mt-3">
@@ -397,7 +410,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                        @endfor
+                                        @endforeach
                                     </div>
                                 </div>
 
@@ -413,6 +426,7 @@
                                         </div>
                                     </div>
 
+
                                     <div class="table-responsive">
                                         <table class="table table-vcenter card-table table-hover">
                                             <thead>
@@ -425,34 +439,41 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                @for ($i = 1; $i <= 8; $i++)
+                                                @foreach ($publishedSongs as $publish)
                                                     <tr>
                                                         <td>
                                                             <div class="d-flex align-items-center">
                                                                 <span class="avatar me-2"
-                                                                    style="background-image: url(https://picsum.photos/40/40?random={{ $i + 20 }})"></span>
+                                                                    style="background-image: url(https://picsum.photos/40/40?random={{ $publish->id }})"></span>
                                                                 <div>
-                                                                    <div>{{ ['Song', 'Cover', 'Album'][$i % 3] }} Title
-                                                                        {{ $i }}</div>
-                                                                    @if ($i % 3 == 1)
-                                                                        <div class="text-muted">Original by
-                                                                            {{ ['The Weeknd', 'Dua Lipa', 'Justin Bieber', 'Lil Nas X'][$i % 4] }}
-                                                                        </div>
+                                                                    @if ($publish->artist_id == $user->id)
+                                                                        {{ $publish->title }}
+                                                                    @elseif ($publish->cover_creator_id == $user->id)
+                                                                        {{ $publish->cover_version }}
+                                                                        <br>
+                                                                        Original by {{ $publish->title }}
+                                                                    @elseif (in_array($publish->album_id, $albums->pluck('id')->toArray()))
+                                                                        {{ $albums->where('id', $publish->album_id)->first()->title }}
+                                                                    @else
+                                                                        {{ $publish->title }}
                                                                     @endif
                                                                 </div>
                                                             </div>
                                                         </td>
                                                         <td>
-                                                            @if ($i % 3 == 0)
+                                                            @if ($publish->artist_id == $user->id)
                                                                 <span class="badge bg-blue">Song</span>
-                                                            @elseif($i % 3 == 1)
+                                                            @elseif ($publish->cover_creator_id == $user->id)
                                                                 <span class="badge bg-green">Cover</span>
-                                                            @else
+                                                            @elseif (in_array($publish->album_id, $albums->pluck('id')->toArray()))
                                                                 <span class="badge bg-purple">Album</span>
                                                             @endif
                                                         </td>
-                                                        <td>{{ date('M d, Y', strtotime('-' . rand(1, 60) . ' days')) }}
+
                                                         </td>
+                                                        <td>{{ date('M d, Y', strtotime($publish->created_at)) }}</td>
+                                                        <td>{{ $publish->status }}</td>
+
                                                         <td>
                                                             <div class="text-muted">
                                                                 <i class="ti ti-eye me-1"></i>
@@ -460,6 +481,7 @@
                                                                 <i class="ti ti-thumb-up ms-2 me-1"></i>
                                                                 {{ number_format(rand(10, 5000)) }}
                                                             </div>
+                                                        </td>
                                                         </td>
                                                         <td>
                                                             <div class="dropdown">
@@ -484,7 +506,7 @@
                                                             </div>
                                                         </td>
                                                     </tr>
-                                                @endfor
+                                                @endforeach
                                             </tbody>
                                         </table>
                                     </div>
@@ -574,6 +596,7 @@
                 </div>
 
                 <!-- Edit User Modal -->
+
                 <div class="modal modal-blur fade" id="editUserModal" tabindex="-1" role="dialog" aria-hidden="true">
                     <div class="modal-dialog modal-lg" role="document">
                         <div class="modal-content">
@@ -583,128 +606,169 @@
                                     aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
-                                <div class="row mb-3">
-                                    <div class="col-lg-3 text-center">
-                                        <div class="mb-3">
-                                            <span class="avatar avatar-xl mb-3 rounded"
-                                                style="background-image: url(https://ui-avatars.com/api/?name=User+{{ $id }}&background=e53935&color=fff)"></span>
-                                            <div>
-                                                <a href="#" class="btn btn-sm btn-primary">Change</a>
-                                                <a href="#" class="btn btn-sm btn-danger">Remove</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-9">
-                                        <div class="row">
-                                            <div class="col-lg-6">
-                                                <div class="mb-3">
-                                                    <label class="form-label">First Name</label>
-                                                    <input type="text" class="form-control" value="User">
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-6">
-                                                <div class="mb-3">
-                                                    <label class="form-label">Last Name</label>
-                                                    <input type="text" class="form-control"
-                                                        value="{{ $id }}">
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-6">
-                                                <div class="mb-3">
-                                                    <label class="form-label">Email</label>
-                                                    <input type="email" class="form-control"
-                                                        value="user{{ $id }}@example.com">
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-6">
-                                                <div class="mb-3">
-                                                    <label class="form-label">Phone</label>
-                                                    <input type="text" class="form-control"
-                                                        value="+1 ({{ rand(100, 999) }}) {{ rand(100, 999) }}-{{ rand(1000, 9999) }}">
+                                <form method="POST" action="{{ route('admin.user-profiles.update', $user->id) }}">
+                                    @csrf
+                                    @method('PUT')
+                                    <div class="row mb-3">
+                                        <div class="col-lg-3 text-center">
+                                            <div class="mb-3">
+
+                                                <span class="avatar avatar-xl mb-3 rounded"
+                                                    style="background-image: url({{ $user->profile_picture ? asset('storage/' . $user->profile_picture) : 'https://ui-avatars.com/api/?name=' . urlencode($user->name) . '&background=e53935&color=fff' }})">
+                                                </span>
+
+                                                <div>
+
+                                                    <a href="#" class="btn btn-sm btn-primary"
+                                                        data-bs-toggle="modal"
+                                                        data-bs-target="#changeProfilePictureModal">Change</a>
+
+                                                    <a href="javascript:void(0);" class="btn btn-sm btn-danger"
+                                                        onclick="removeProfilePicture(event)">Remove</a>
+
                                                 </div>
                                             </div>
                                         </div>
+                                        <div class="col-lg-9">
+                                            <div class="row">
+                                                <div class="col-lg-6">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">First Name</label>
+                                                        <input type="text" class="form-control" name="first_name"
+                                                            value="{{ explode(' ', $user->name)[0] ?? '' }}">
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-6">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">Last Name</label>
+                                                        <input type="text" class="form-control" name="last_name"
+                                                            value="{{ isset(explode(' ', $user->name)[1]) ? implode(' ', array_slice(explode(' ', $user->name), 1)) : '' }}">
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-6">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">Email</label>
+                                                        <input type="email" class="form-control" name="email"
+                                                            value="{{ $user->email }}">
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-6">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">Phone</label>
+                                                        <input type="text" class="form-control" name="phone"
+                                                            value="{{ $user->phone }}">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
 
-                                <div class="hr-text">Account Information</div>
+                                    <div class="hr-text">Account Information</div>
 
-                                <div class="row">
-                                    <div class="col-lg-6">
-                                        <div class="mb-3">
-                                            <label class="form-label">Username</label>
-                                            <input type="text" class="form-control" value="user{{ $id }}">
+                                    <div class="row">
+                                        <div class="col-lg-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Username</label>
+                                                <input type="text" class="form-control" name="username"
+                                                    value="{{ $user->username }}">
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="col-lg-6">
-                                        <div class="mb-3">
-                                            <label class="form-label">Role</label>
-                                            <select class="form-select">
-                                                <option value="user" {{ $id % 4 == 3 ? 'selected' : '' }}>Regular User
-                                                </option>
-                                                <option value="artist" {{ $id % 4 == 0 ? 'selected' : '' }}>Artist
-                                                </option>
-                                                <option value="composer" {{ $id % 4 == 1 ? 'selected' : '' }}>Composer
-                                                </option>
-                                                <option value="cover_creator" {{ $id % 4 == 2 ? 'selected' : '' }}>Cover
-                                                    Creator</option>
-                                            </select>
+                                        <div class="col-lg-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Role</label>
+                                                <select name="role" class="form-select">
+                                                    @foreach ($roles as $role)
+                                                        <option value="{{ $role->id }}"
+                                                            {{ $user->roles->contains($role->id) ? 'selected' : '' }}>
+                                                            {{ $role->name }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="col-lg-6">
-                                        <div class="mb-3">
-                                            <label class="form-label">Status</label>
-                                            <select class="form-select">
-                                                <option value="active" {{ $id % 5 != 0 ? 'selected' : '' }}>Active
-                                                </option>
-                                                <option value="suspended" {{ $id % 5 == 0 ? 'selected' : '' }}>Suspended
-                                                </option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-6">
-                                        <div class="mb-3">
-                                            <label class="form-label">Verification</label>
-                                            <select class="form-select">
-                                                <option value="verified" {{ $id % 3 != 0 ? 'selected' : '' }}>Verified
-                                                </option>
-                                                <option value="pending" {{ $id % 3 == 0 ? 'selected' : '' }}>Pending
-                                                    Verification</option>
-                                                <option value="unverified">Unverified</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
 
-                                <div class="hr-text">Additional Information</div>
+                                        <div class="col-lg-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Status</label>
+                                                <select name="status" class="form-select">
+                                                    <option value="approved"
+                                                        {{ $user->verification && $user->verification->status == 'approved' ? 'selected' : '' }}>
+                                                        Active</option>
+                                                    <option value="suspended"
+                                                        {{ $user->verification && $user->verification->status == 'suspended' ? 'selected' : '' }}>
+                                                        Suspended</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Verification</label>
+                                                <select name="verification" class="form-select">
+                                                    <option value="approved"
+                                                        {{ $user->verification && $user->verification->status == 'approved' ? 'selected' : '' }}>
+                                                        Active</option>
+                                                    <option value="suspended"
+                                                        {{ $user->verification && $user->verification->status == 'suspended' ? 'selected' : '' }}>
+                                                        Suspended</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
 
-                                <div class="row">
-                                    <div class="col-lg-6">
-                                        <div class="mb-3">
-                                            <label class="form-label">Location</label>
-                                            <input type="text" class="form-control"
-                                                value="{{ ['New York', 'Los Angeles', 'Chicago', 'Houston', 'Miami'][$id % 5] }}, USA">
+                                    <div class="hr-text">Additional Information</div>
+
+                                    <div class="row">
+                                        <div class="col-lg-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Location</label>
+                                                <input type="text" class="form-control" name="location"
+                                                    value="{{ $user->region }}">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Website</label>
+                                                <input type="text" class="form-control" name="website"
+                                                    value="{{ $socialMedia->first() ? $socialMedia->first()->url : '' }}">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-12">
+                                            <div class="mb-3">
+                                                <label class="form-label">Bio</label>
+                                                <textarea class="form-control" name="bio" rows="3">{{ $userProfile->first() ? $userProfile->first()->bio : '' }}</textarea>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="col-lg-6">
-                                        <div class="mb-3">
-                                            <label class="form-label">Website</label>
-                                            <input type="text" class="form-control"
-                                                value="https://example.com/user{{ $id }}">
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-12">
-                                        <div class="mb-3">
-                                            <label class="form-label">Bio</label>
-                                            <textarea class="form-control" rows="3">This is a sample bio for User {{ $id }}. The user has been on the platform since {{ date('F Y', strtotime('-' . rand(1, 36) . ' months')) }} and has published multiple songs and covers.</textarea>
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-link link-secondary"
                                     data-bs-dismiss="modal">Cancel</button>
-                                <button type="button" class="btn btn-primary ms-auto">Save changes</button>
+                                <button type="submit" class="btn btn-primary ms-auto">Save changes</button>
+                            </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal fade" id="changeProfilePictureModal" tabindex="-1"
+                    aria-labelledby="changeProfilePictureModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="changeProfilePictureModalLabel">Change Profile Picture</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form action="{{ route('admin.user-profiles.update-picture', $user->id) }}"
+                                    method="POST" enctype="multipart/form-data">
+                                    @csrf
+                                    <div class="mb-3">
+                                        <label for="profile_picture" class="form-label">Upload New Picture</label>
+                                        <input type="file" class="form-control" id="profile_picture"
+                                            name="profile_picture" accept="image/*">
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Upload</button>
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -834,84 +898,99 @@
                                     aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
-                                <div class="mb-3">
-                                    <label class="form-label">Song Title</label>
-                                    <input type="text" class="form-control" value="Song Title 1">
-                                </div>
-                                <div class="row">
-                                    <div class="col-lg-6">
-                                        <div class="mb-3">
-                                            <label class="form-label">Genre</label>
-                                            <select class="form-select">
-                                                <option value="">Select Genre</option>
-                                                <option value="pop" selected>Pop</option>
-                                                <option value="rock">Rock</option>
-                                                <option value="hiphop">Hip Hop</option>
-                                                <option value="electronic">Electronic</option>
-                                                <option value="jazz">Jazz</option>
-                                                <option value="classical">Classical</option>
-                                                <option value="country">Country</option>
-                                                <option value="rnb">R&B</option>
-                                            </select>
+                                <form action="{{ route('admin.songs.update', $song->id) }}" method="POST"
+                                    enctype="multipart/form-data">
+                                    @csrf
+                                    @method('PUT')
+                                    <div class="mb-3">
+                                        <label for="title" class="form-label">Song Title</label>
+                                        <input type="text" class="form-control" id="title" name="title"
+                                            value="{{ $song->title }}" required>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-6">
+                                            <div class="mb-3">
+                                                <label for="genre" class="form-label">Genre</label>
+                                                <select class="form-select" id="genre" name="genre" required>
+                                                    <option value="">Pilih Genre</option>
+                                                    <option value="pop" {{ $song->genre === 'pop' ? 'selected' : '' }}>
+                                                        Pop</option>
+                                                    <option value="rock"
+                                                        {{ $song->genre === 'rock' ? 'selected' : '' }}>Rock</option>
+                                                    <option value="hiphop"
+                                                        {{ $song->genre === 'hiphop' ? 'selected' : '' }}>Hip Hop</option>
+                                                    <option value="electronic"
+                                                        {{ $song->genre === 'electronic' ? 'selected' : '' }}>Electronic
+                                                    </option>
+                                                    <option value="jazz"
+                                                        {{ $song->genre === 'jazz' ? 'selected' : '' }}>Jazz</option>
+                                                    <option value="classical"
+                                                        {{ $song->genre === 'classical' ? 'selected' : '' }}>Classical
+                                                    </option>
+                                                    <option value="country"
+                                                        {{ $song->genre === 'country' ? 'selected' : '' }}>Country</option>
+                                                    <option value="rnb" {{ $song->genre === 'rnb' ? 'selected' : '' }}>
+                                                        R&B</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Album (Optional)</label>
+                                                <select class="form-select">
+                                                    <option value="">Select Album</option>
+                                                    <option value="album1" selected>Album 1</option>
+                                                    <option value="album2">Album 2</option>
+                                                    <option value="album3">Album 3</option>
+                                                    <option value="new">Create New Album...</option>
+                                                </select>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="col-lg-6">
-                                        <div class="mb-3">
-                                            <label class="form-label">Album (Optional)</label>
-                                            <select class="form-select">
-                                                <option value="">Select Album</option>
-                                                <option value="album1" selected>Album 1</option>
-                                                <option value="album2">Album 2</option>
-                                                <option value="album3">Album 3</option>
-                                                <option value="new">Create New Album...</option>
-                                            </select>
+                                    <div class="mb-3">
+                                        <div class="d-flex align-items-center mb-2">
+                                            <label class="form-label mb-0 me-auto">Current Song File</label>
+                                            <a href="#" class="text-muted">
+                                                <i class="ti ti-player-play me-1"></i>Preview
+                                            </a>
                                         </div>
-                                    </div>
-                                </div>
-                                <div class="mb-3">
-                                    <div class="d-flex align-items-center mb-2">
-                                        <label class="form-label mb-0 me-auto">Current Song File</label>
-                                        <a href="#" class="text-muted">
-                                            <i class="ti ti-player-play me-1"></i>Preview
-                                        </a>
-                                    </div>
-                                    <div class="form-control-plaintext">song_file_1.mp3</div>
-                                    <div class="form-check mt-1">
-                                        <input class="form-check-input" type="checkbox" id="replace-song">
-                                        <label class="form-check-label" for="replace-song">
-                                            Replace song file
-                                        </label>
-                                    </div>
-                                    <input type="file" class="form-control mt-2" disabled>
-                                </div>
-                                <div class="mb-3">
-                                    <div class="d-flex align-items-center mb-2">
-                                        <label class="form-label mb-0 me-auto">Current Cover Image</label>
-                                    </div>
-                                    <div class="d-flex align-items-center">
-                                        <img src="https://picsum.photos/100/100?random=1" class="rounded me-3"
-                                            style="width: 100px; height: 100px; object-fit: cover;">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="replace-cover">
-                                            <label class="form-check-label" for="replace-cover">
-                                                Replace cover image
+                                        <div class="form-control-plaintext">song_file_1.mp3</div>
+                                        <div class="form-check mt-1">
+                                            <input class="form-check-input" type="checkbox" id="replace-song">
+                                            <label class="form-check-label" for="replace-song">
+                                                Replace song file
                                             </label>
                                         </div>
+                                        <input type="file" class="form-control mt-2" disabled>
                                     </div>
-                                    <input type="file" class="form-control mt-2" disabled>
-                                </div>
-                                <div class="mb-3">
-                                    <label class="form-label">Release Date</label>
-                                    <input type="date" class="form-control"
-                                        value="{{ date('Y-m-d', strtotime('-5 days')) }}">
-                                </div>
-                                <div class="mb-3">
-                                    <label class="form-label">Description</label>
-                                    <textarea class="form-control" rows="3">This is a sample description for Song Title 1. It was released on {{ date('F d, Y', strtotime('-5 days')) }} and has been gaining popularity since then.</textarea>
-                                </div>
-                                <div class="mb-3">
-                                    <label class="form-label">Lyrics (Optional)</label>
-                                    <textarea class="form-control" rows="5">These are sample lyrics for Song Title 1.
+                                    <div class="mb-3">
+                                        <div class="d-flex align-items-center mb-2">
+                                            <label class="form-label mb-0 me-auto">Current Cover Image</label>
+                                        </div>
+                                        <div class="d-flex align-items-center">
+                                            <img src="https://picsum.photos/100/100?random=1" class="rounded me-3"
+                                                style="width: 100px; height: 100px; object-fit: cover;">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="replace-cover">
+                                                <label class="form-check-label" for="replace-cover">
+                                                    Replace cover image
+                                                </label> 
+                                            </div>
+                                        </div>
+                                        <input type="file" class="form-control mt-2" disabled>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Release Date</label>
+                                        <input type="date" class="form-control"
+                                            value="{{ date('Y-m-d', strtotime('-5 days')) }}">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Description</label>
+                                        <textarea class="form-control" rows="3">This is a sample description for Song Title 1. It was released on {{ date('F d, Y', strtotime('-5 days')) }} and has been gaining popularity since then.</textarea>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Lyrics (Optional)</label>
+                                        <textarea class="form-control" rows="5">These are sample lyrics for Song Title 1.
 Verse 1:
 Lorem ipsum dolor sit amet
 Consectetur adipiscing elit
@@ -921,32 +1000,34 @@ Chorus:
 Ut labore et dolore magna aliqua
 Ut enim ad minim veniam
 Quis nostrud exercitation ullamco</textarea>
-                                </div>
-                                <div class="mb-3">
-                                    <div class="form-label">Status</div>
-                                    <div>
-                                        <label class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="edit-status"
-                                                value="draft">
-                                            <span class="form-check-label">Draft</span>
-                                        </label>
-                                        <label class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="edit-status"
-                                                value="published" checked>
-                                            <span class="form-check-label">Published</span>
-                                        </label>
-                                        <label class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="edit-status"
-                                                value="scheduled">
-                                            <span class="form-check-label">Schedule Release</span>
-                                        </label>
                                     </div>
-                                </div>
+                                    <div class="mb-3">
+                                        <div class="form-label">Status</div>
+                                        <div>
+                                            <label class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="edit-status"
+                                                    value="draft">
+                                                <span class="form-check-label">Draft</span>
+                                            </label>
+                                            <label class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="edit-status"
+                                                    value="published" checked>
+                                                <span class="form-check-label">Published</span>
+                                            </label>
+                                            <label class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="edit-status"
+                                                    value="scheduled">
+                                                <span class="form-check-label">Schedule Release</span>
+                                            </label>
+                                        </div>
+                                    </div>
+
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-link link-secondary"
                                     data-bs-dismiss="modal">Cancel</button>
-                                <button type="button" class="btn btn-primary ms-auto">Save Changes</button>
+                                <button type="submit" class="btn btn-primary ms-auto">Save Changes</button>
+
                             </div>
                         </div>
                     </div>
@@ -986,5 +1067,29 @@ Quis nostrud exercitation ullamco</textarea>
                             });
                         };
                     });
+
+                    function removeProfilePicture(event) {
+                        event.preventDefault();
+
+                        if (confirm("Apakah Anda yakin ingin menghapus foto profil?")) {
+                            fetch("{{ route('admin.user-profiles.remove-picture', ['id' => $user->id]) }}", {
+                                    method: "DELETE",
+                                    headers: {
+                                        "X-CSRF-TOKEN": "{{ csrf_token() }}"
+                                    }
+                                }).then(response => response.json())
+                                .then(data => {
+                                    if (data.success) {
+                                        alert("Foto profil berhasil dihapus!");
+                                        location.reload();
+                                    } else {
+                                        alert("Gagal menghapus foto profil.");
+                                    }
+                                }).catch(error => {
+                                    console.error("Error:", error);
+                                    alert("Terjadi kesalahan saat menghapus foto profil.");
+                                });
+                        }
+                    }
                 </script>
             @endsection

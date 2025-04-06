@@ -3,15 +3,18 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Models\Album;
+use App\Models\Song;
+use App\Models\Verification;
+use Carbon\Carbon;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
-use Symfony\Component\HttpFoundation\File\Stream;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Carbon\Carbon;
+use Symfony\Component\HttpFoundation\File\Stream; 
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -70,5 +73,24 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->email_verification_sent_at
             && now()->diffInMinutes(Carbon::parse($this->email_verification_sent_at)) < 5;
+    }
+
+    public function songs()
+    {
+        return $this->hasMany(Song::class, 'artist_id');
+    }
+
+    public function covers()
+    {
+        return $this->hasMany(Song::class, 'cover_creator_id');
+    }
+    public function albums()
+    {
+        return $this->hasMany(Album::class, 'artist_id');
+    }
+
+    public function verification()
+    {
+        return $this->hasOne(Verification::class, 'user_id');
     }
 }

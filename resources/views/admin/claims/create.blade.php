@@ -27,7 +27,9 @@
                         <div class="card-body">
                             <div class="mb-3">
                                 <label class="form-label required">User</label>
-                                <select name="user_id" id="user_id" class="selectpicker  form-control  @error('user_id') is-invalid @enderror" data-live-search="true">
+                                <select name="user_id" id="user_id"
+                                    class="selectpicker  form-control  @error('user_id') is-invalid @enderror"
+                                    data-live-search="true">
                                     <option value="">Select User</option>
                                 </select>
                                 @error('user_id')
@@ -38,7 +40,9 @@
                             <div class="mb-3">
                                 <label class="form-label required">Song</label>
 
-                                <select name="song_id" id="song_id" class="selectpicker  form-control  @error('song_id') is-invalid @enderror" data-live-search="true">
+                                <select name="song_id" id="song_id"
+                                    class="selectpicker  form-control  @error('song_id') is-invalid @enderror"
+                                    data-live-search="true">
                                     <option value="">Select Song</option>
                                 </select>
                                 @error('song_id')
@@ -55,6 +59,16 @@
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Notes</label>
+                                <textarea name="notes" class="form-control @error('notes') is-invalid @enderror" rows="4">{{ old('notes') }}</textarea>
+                                <small class="form-hint">Additional information about this claim</small>
+                                @error('notes')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+
                         </div>
                         <div class="card-footer text-end">
                             <a href="{{ route('admin.claims.index') }}" class="btn btn-outline-secondary me-2">Cancel</a>
@@ -92,20 +106,24 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta2/dist/js/bootstrap-select.min.js"></script>
 
     <script>
-        $(document).ready(function () {
+        $(document).ready(function() {
             function fetchSongs(search = "") {
                 $.ajax({
                     url: "/admin/data/songs",
                     type: "GET",
-                    data: { search: search, limit: 20 }, // Change limit as needed
+                    data: {
+                        search: search,
+                        limit: 20
+                    }, // Change limit as needed
                     dataType: "json",
-                    success: function (data) {
+                    success: function(data) {
                         var songSelect = $("#song_id");
                         songSelect.empty();
                         songSelect.append('<option value="">Select a song</option>');
 
-                        $.each(data, function (index, song) {
-                            songSelect.append('<option value="' + song.id + '">' + song.title + '</option>');
+                        $.each(data, function(index, song) {
+                            songSelect.append('<option value="' + song.id + '">' + song.title +
+                                '</option>');
                         });
 
                         songSelect.selectpicker("refresh");
@@ -117,8 +135,8 @@
             fetchSongs();
 
             // Fetch songs on search
-            $("#song_id").on("shown.bs.select", function () {
-                $(".bs-searchbox input").on("keyup", function () {
+            $("#song_id").on("shown.bs.select", function() {
+                $(".bs-searchbox input").on("keyup", function() {
                     let searchQuery = $(this).val();
                     fetchSongs(searchQuery);
                 });
@@ -129,15 +147,19 @@
                 $.ajax({
                     url: "/admin/data/users",
                     type: "GET",
-                    data: { search: search, limit: 20 }, // Change limit as needed
+                    data: {
+                        search: search,
+                        limit: 20
+                    }, // Change limit as needed
                     dataType: "json",
-                    success: function (data) {
+                    success: function(data) {
                         var userSelect = $("#user_id");
                         userSelect.empty();
                         userSelect.append('<option value="">Select a user</option>');
 
-                        $.each(data, function (index, user) {
-                            userSelect.append('<option value="' + user.id + '">' + user.name +' ('+user.roleName+')' + '</option>');
+                        $.each(data, function(index, user) {
+                            userSelect.append('<option value="' + user.id + '">' + user.name +
+                                ' (' + user.roleName + ')' + '</option>');
                         });
 
                         userSelect.selectpicker("refresh");
@@ -149,8 +171,8 @@
             fetchUsers();
 
             // Fetch songs on search
-            $("#user_id").on("shown.bs.select", function () {
-                $(".bs-searchbox input").on("keyup", function () {
+            $("#user_id").on("shown.bs.select", function() {
+                $(".bs-searchbox input").on("keyup", function() {
                     let searchQuery = $(this).val();
                     fetchUsers(searchQuery);
                 });
@@ -158,5 +180,4 @@
 
         });
     </script>
-
 @endsection

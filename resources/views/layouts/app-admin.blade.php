@@ -461,7 +461,7 @@
 
             // Flash messages with SweetAlert
             @if (session('success'))
-                Swal.fire({
+                Swal.fire({ 
                     icon: 'success',
                     title: 'Success',
                     text: "{{ session('success') }}",

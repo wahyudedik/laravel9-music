@@ -52,6 +52,11 @@ class Song extends Model
         return $this->belongsTo(User::class, 'composer_id');
     }
 
+    public function song()
+    {
+        return $this->belongsTo(User::class, 'artist_id');
+    }
+
     public function coverCreator()
     {
         return $this->belongsTo(User::class, 'cover_creator_id');

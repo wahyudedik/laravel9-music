@@ -89,14 +89,36 @@
                                 <label class="form-label text-muted">Song Information</label>
                                 <div class="d-flex align-items-center">
                                     <span class="avatar avatar-lg me-3"
-                                        style="background-image: url({{ $claim->song->cover_url ?? 'https://picsum.photos/100/100?random=' . rand(1, 100) }})"></span>
+                                        style="background-image: url({{ isset($claim->song->cover_url) ? $claim->song->cover_url : 'https://picsum.photos/100/100?random=' . rand(1, 100) }})"></span>
                                     <div>
-                                        <div class="h3 mb-0">{{ $claim->song->title }}</div>
-                                        <div class="text-muted">{{ $claim->song->artist }}</div>
-                                        <div class="text-muted small">
-                                            <span class="badge bg-blue-lt me-1">{{ $claim->song->genre }}</span>
-                                            <span>{{ $claim->song->duration }} min</span>
-                                        </div>
+                                        @if (isset($claim->song) && $claim->song)
+                                            <div class="h3 mb-0">{{ $claim->song->title }}</div>
+                                            <div class="text-muted small">
+                                                <span
+                                                    class="badge bg-blue-lt me-1">{{ $claim->song->genre ?? 'Unknown Genre' }}</span>
+                                                <span>{{ $claim->song->duration ?? '0' }} min</span>
+                                            </div>
+                                        @else
+                                            <div class="h3 mb-0">Unknown Song</div>
+                                            <div class="text-muted">Song data not available</div>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label text-muted">User Information</label>
+                                <div class="d-flex align-items-center">
+                                    <span class="avatar avatar-lg me-3"
+                                        style="background-image: url({{ isset($claim->user->profile_picture) ? $claim->user->profile_picture : 'https://picsum.photos/100/100?random=' . rand(1, 100) }})"></span>
+                                    <div>
+                                        @if (isset($claim->user) && $claim->user)
+                                            <div class="h3 mb-0">{{ $claim->user->name }}</div>
+                                            <div class="text-muted">{{ $claim->user->email }}</div>
+                                        @else
+                                            <div class="h3 mb-0">Unknown User</div>
+                                            <div class="text-muted">User data not available</div>
+                                        @endif
                                     </div>
                                 </div>
                             </div>

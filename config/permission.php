@@ -199,4 +199,12 @@ return [
 
         'store' => 'default',
     ],
+
+    'guards' => [
+        'web' => [
+            'driver' => 'session',
+            'provider' => 'users',
+        ],
+    ],
+
 ];
