@@ -26,7 +26,7 @@ return new class extends Migration
         // Update tabel songs
         Schema::table('songs', function (Blueprint $table) {
             $table->dropColumn('genre'); // kolom lama genre (string)
-            $table->uuid('genre_id')->nullable()->comment('Relasi ke genre, UUID dari tabel genres');
+            $table->uuid('genre_id')->nullable()->after('version')->comment('Relasi ke genre, UUID dari tabel genres');
             $table->foreign('genre_id')->references('id')->on('genres')->onDelete('set null');
         });
     }
