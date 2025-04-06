@@ -254,19 +254,6 @@ Route::middleware(['auth', 'role:Super Admin,Admin'])->group(function () {
             return view('admin.claims.show', compact('claim'));
         })->name('admin.claims.show');
     });
-    Route::prefix('admin/claims')->group(function () {
-        Route::get('/', [AdminClaimController::class, 'index'])->name('admin.claims.index');
-        Route::get('/create', [AdminClaimController::class, 'create'])->name('admin.claims.create');
-        Route::post('/store', [AdminClaimController::class, 'store'])->name('admin.claims.store');
-        Route::get('/{claim}/edit', [AdminClaimController::class, 'edit'])->name('admin.claims.edit');
-        Route::put('/{claim}', [AdminClaimController::class, 'update'])->name('admin.claims.update');
-        Route::put('/{claim}/approve', [AdminClaimController::class, 'approve'])->name('admin.claims.approve');
-        Route::put('/{claim}/reject', [AdminClaimController::class, 'reject'])->name('admin.claims.reject');
-        Route::delete('/{claim}', [AdminClaimController::class, 'destroy'])->name('admin.claims.destroy');
-        Route::get('/show/{claim}', function (\App\Models\Claim $claim) {
-            return view('admin.claims.show', compact('claim'));
-        })->name('admin.claims.show');
-    });
     Route::post('/admin/claims/{claim}/unclaim', [AdminClaimController::class, 'unclaimSong'])->name('admin.claims.unclaim');
 
     // Verifikasi Pengguna oleh admin
@@ -337,9 +324,20 @@ Route::middleware(['auth', 'role:Super Admin,Admin'])->group(function () {
         return view('admin.albums.index');
     })->name('admin.albums.index');
 
-    Route::get('/admin/genres', function () {
-        return view('admin.genres.index');
-    })->name('admin.genres.index');
+
+    // Genre Management Routes
+    Route::prefix('admin/genres')->group(function () {
+        Route::get('/', [App\Http\Controllers\AdminGenreController::class, 'index'])->name('admin.genres.index');
+        Route::post('/store', [App\Http\Controllers\AdminGenreController::class, 'store'])->name('admin.genres.store');
+        Route::put('/{genre}', [App\Http\Controllers\AdminGenreController::class, 'update'])->name('admin.genres.update');
+        Route::delete('/{genre}', [App\Http\Controllers\AdminGenreController::class, 'destroy'])->name('admin.genres.destroy');
+        Route::get('/{genre}', function ($id) {
+            $genre = \App\Models\Genre::findOrFail($id);
+            return view('admin.genres.show', compact('genre'));
+        })->name('admin.genres.show');
+    });
+
+
 
     //user profile route
     Route::get('/admin/user-profiles', [AdminUserProfileController::class, 'index'])->name('admin.user-profiles.index');
@@ -353,7 +351,7 @@ Route::middleware(['auth', 'role:Super Admin,Admin'])->group(function () {
     Route::post('/admin/user-profiles/{id}/suspend', [AdminUserProfileController::class, 'suspend'])->name('admin.user-profiles.suspend');
     Route::post('/admin/user-profiles/{id}/active', [AdminUserProfileController::class, 'active'])->name('admin.user-profiles.active');
     Route::put('/admin/songs/{id}', [SongController::class, 'update'])->name('admin.songs.update');
-    
+
     // Withdraw Verification Routes
     Route::get('/admin/withdrawals', function () {
         return view('admin.withdrawals.index');
@@ -436,9 +434,4 @@ Route::middleware(['auth', 'role:Super Admin,Admin'])->group(function () {
         $limit = Request::input('limit', 10);
         return response()->json($uuserServices->getAllUsers($search, $limit));
     });
-
 });
-
-
-
-

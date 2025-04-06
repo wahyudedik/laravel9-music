@@ -223,7 +223,9 @@
 </div>
 
 <script>
+
     var baseUrl = "{{ url('/') }}";
+
     function editPermission(id, name, description) {
         document.getElementById('edit-permission-id').value = id;
         document.getElementById('edit-permission-name').value = name;
