@@ -528,41 +528,28 @@
                                         @forelse ($activities as $activity)
                                             <div class="list-group-item">
                                                 <div class="row align-items-center">
-
                                                     <div class="col-auto">
                                                         @php
-                                                            $icon = 'ti ti-activity';
-                                                            $bgColor = 'bg-secondary-lt';
+                                                            $iconMap = [
+                                                                'login' => ['icon' => 'ti ti-login', 'color' => 'bg-info-lt'],
+                                                                'logout' => ['icon' => 'ti ti-logout', 'color' => 'bg-warning-lt'],
+                                                                'created' => ['icon' => 'ti ti-plus', 'color' => 'bg-success-lt'],
+                                                                'updated' => ['icon' => 'ti ti-pencil', 'color' => 'bg-primary-lt'],
+                                                                'update_profile' => ['icon' => 'ti ti-pencil', 'color' => 'bg-primary-lt'],
+                                                                'update_profile_picture' => ['icon' => 'ti ti-pencil', 'color' => 'bg-primary-lt'],
+                                                                'deleted' => ['icon' => 'ti ti-trash', 'color' => 'bg-danger-lt'],
+                                                                'remove_profile_picture' => ['icon' => 'ti ti-trash', 'color' => 'bg-danger-lt'],
+                                                                'uploaded' => ['icon' => 'ti ti-upload', 'color' => 'bg-primary-lt'],
+                                                                'payment_processed' => ['icon' => 'ti ti-credit-card', 'color' => 'bg-warning-lt'],
+                                                                'suspend_user' => ['icon' => 'ti ti-user-x', 'color' => 'bg-warning-lt'],
+                                                                'suspend_verification' => ['icon' => 'ti ti-user-x', 'color' => 'bg-warning-lt'],
+                                                                'active_verification' => ['icon' => 'ti ti-user-check', 'color' => 'bg-success-lt'],
+                                                            ];
 
-                                                            if ($activity->event === 'login') {
-                                                                $icon = 'ti ti-login';
-                                                                $bgColor = 'bg-info-lt';
-                                                            } elseif ($activity->event === 'logout') {
-                                                                $icon = 'ti ti-logout';
-                                                                $bgColor = 'bg-warning-lt';
-                                                            } elseif ($activity->event === 'created') {
-                                                                $icon = 'ti ti-plus';
-                                                                $bgColor = 'bg-success-lt';
-                                                            } elseif ($activity->event === 'updated' || $activity->event === 'update_profile' || $activity->event === 'update_profile_picture') {
-                                                                $icon = 'ti ti-pencil';
-                                                                $bgColor = 'bg-primary-lt';
-                                                            } elseif ($activity->event === 'deleted' || $activity->event === 'remove_profile_picture') {
-                                                                $icon = 'ti ti-trash';
-                                                                $bgColor = 'bg-danger-lt';
-                                                            } elseif ($activity->event === 'uploaded') {
-                                                                $icon = 'ti ti-upload';
-                                                                $bgColor = 'bg-primary-lt';
-                                                            } elseif ($activity->event === 'payment_processed') {
-                                                                $icon = 'ti ti-credit-card';
-                                                                $bgColor = 'bg-warning-lt';
-                                                            } elseif ($activity->event === 'suspend_user' || $activity->event === 'suspend_verification') {
-                                                                $icon = 'ti ti-user-x';
-                                                                $bgColor = 'bg-warning-lt';
-                                                            } elseif ($activity->event === 'active_verification') {
-                                                                $icon = 'ti ti-user-check';
-                                                                $bgColor = 'bg-success-lt';
-                                                            }
+                                                            $icon = $iconMap[$activity->event]['icon'] ?? 'ti ti-activity';
+                                                            $bgColor = $iconMap[$activity->event]['color'] ?? 'bg-secondary-lt';
                                                         @endphp
+
                                                         <div class="avatar avatar-rounded {{ $bgColor }}">
                                                             <i
                                                                 class="{{ $icon }} text-{{ str_replace('-lt', '', $bgColor) }}"></i>
@@ -576,37 +563,40 @@
                                                             @endif
                                                         </div>
                                                         <div class="text-muted">
-                                                            {{ $activity->created_at->diffForHumans() }}</div>
+                                                            {{ $activity->created_at->diffForHumans() }}
+                                                        </div>
                                                     </div>
-
-
-
                                                     <div class="col-auto">
                                                         <div class="dropdown">
                                                             <button class="btn btn-icon btn-ghost-secondary"
+                                                                title="Options" aria-label="Options"
                                                                 data-bs-toggle="dropdown">
                                                                 <i class="ti ti-dots-vertical"></i>
                                                             </button>
                                                             <div class="dropdown-menu dropdown-menu-end">
-                                                                <button type="button" class="dropdown-item"
-                                                                    data-bs-toggle="modal"
-                                                                    data-bs-target="#viewDetailsModal{{ $activity->id }}">
+                                                                <button class="dropdown-item" data-bs-toggle="modal"
+                                                                    data-bs-target="#viewDetailsModal"
+                                                                    onclick="setActivityDetail({{ $activity }})">
                                                                     <i class="ti ti-eye me-2"></i>View Details
                                                                 </button>
-
-                                                                <button type="button" class="dropdown-item text-danger"
+                                                                {{-- <button class="dropdown-item text-danger"
                                                                     data-bs-toggle="modal"
-                                                                    data-bs-target="#deleteActivityModal{{ $activity->id }}">
+                                                                    data-bs-target="#deleteActivityModal"
+                                                                    onclick="setDeleteData({{ $activity->id }}, '{{ $activity->description }}')">
+                                                                    <i class="ti ti-trash me-2"></i>Delete Record
+                                                                </button> --}}
+                                                                <button class="dropdown-item text-danger"
+                                                                    data-bs-toggle="modal"
+                                                                    data-bs-target="#deleteActivityModal"
+                                                                    data-id="{{ $activity->id }}"
+                                                                    data-description="{{ $activity->description }}"
+                                                                    onclick="setDeleteData(this)">
                                                                     <i class="ti ti-trash me-2"></i>Delete Record
                                                                 </button>
 
                                                             </div>
                                                         </div>
-
-
                                                     </div>
-
-
                                                 </div>
                                             </div>
                                         @empty
@@ -614,6 +604,7 @@
                                                 <div class="text-center text-muted">No activity recorded.</div>
                                             </div>
                                         @endforelse
+
                                     </div>
                                 </div>
 
@@ -917,67 +908,56 @@
                     </div>
                 </div>
 
-
-                @foreach ($activities as $activity)
-                    <div class="modal fade" id="viewDetailsModal{{ $activity->id }}" tabindex="-1" role="dialog">
-                        <div class="modal-dialog modal-lg" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title">Detail Aktivitas</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                        aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <p><strong>Deskripsi:</strong> {{ $activity->description }}</p>
-                                    <p><strong>Event:</strong> {{ $activity->event }}</p>
-                                    <p><strong>Dilakukan oleh ID:</strong> {{ $activity->causer_id }}</p>
-                                    @if ($activity->subjectUser)
-                                        <p><strong>Subjek:</strong> {{ $activity->subjectUser->name }} (ID:
-                                            {{ $activity->subject_id }})</p>
-                                    @else
-                                        <p><strong>Subjek ID:</strong> {{ $activity->subject_id }}</p>
-                                    @endif
-                                    <p><strong>Dibuat pada:</strong> {{ $activity->created_at }}</p>
-                                    <p><strong>Diperbarui pada:</strong> {{ $activity->updated_at }}</p>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary"
-                                        data-bs-dismiss="modal">Tutup</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                @endforeach
-
-                <div class="modal fade" id="deleteActivityModal{{ $activity->id }}" tabindex="-1"
-                    aria-labelledby="deleteActivityModalLabel{{ $activity->id }}" aria-hidden="true">
-                    <div class="modal-dialog">
+                {{-- Modal View Details --}}
+                <div class="modal fade" id="viewDetailsModal" tabindex="-1" role="dialog">
+                    <div class="modal-dialog modal-lg" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="deleteActivityModalLabel{{ $activity->id }}">
-                                    Confirm Delete</h5>
+                                <h5 class="modal-title">Detail Aktivitas</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
                                     aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
-                                Are you sure you want to delete this activity
-                                record?
-                                <p class="text-muted small">
-                                    {{ $activity->description }} -
-                                    {{ $activity->created_at->diffForHumans() }}
-                                </p>
+                                <p><strong>Deskripsi :</strong> <span id="detailDescription"></span></p>
+                                <p><strong>Event :</strong> <span id="detailEvent"></span></p>
+                                <p><strong>Dilakukan oleh :</strong> <span id="detailCauser"></span></p>
+                                <p><strong>Kepada :</strong> <span id="detailSubject"></span></p>
+                                <p><strong>Dibuat pada :</strong> <span id="detailCreatedAt"></span></p>
+                                <p><strong>Diperbarui pada :</strong> <span id="detailUpdatedAt"></span></p>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                <form action="#" method="POST" style="display: inline;">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-danger">Delete</button>
-                                </form>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
                             </div>
                         </div>
                     </div>
                 </div>
+
+                {{-- Modal Delete Confirmation --}}
+                <div class="modal fade" id="deleteActivityModal" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <form id="deleteForm" method="POST">
+                            @csrf
+                            @method('DELETE')
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Confirm Delete</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    Are you sure you want to delete this activity record?
+                                    <p class="text-muted small" id="deleteDescription"></p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary"
+                                        data-bs-dismiss="modal">Cancel</button>
+                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
 
                 <!-- Edit Song Modal -->
                 <div class="modal modal-blur fade" id="editSongModal" tabindex="-1" role="dialog" aria-hidden="true">
@@ -1186,6 +1166,58 @@ Quis nostrud exercitation ullamco</textarea>
                                     console.error("Error:", error);
                                     alert("Terjadi kesalahan saat menghapus foto profil.");
                                 });
+                        }
+                    }
+
+
+                    function formatDateIndo(isoString) {
+                        if (!isoString) return '-';
+                        const date = new Date(isoString);
+                        return date.toLocaleString("id-ID", {
+                            day: '2-digit',
+                            month: 'long',
+                            year: 'numeric',
+                            hour: '2-digit',
+                            minute: '2-digit',
+                            timeZone: 'Asia/Jakarta'
+                        });
+                    }
+
+                    function setActivityDetail(activity) {
+                        document.getElementById('detailDescription').innerText = activity.description || '-';
+                        document.getElementById('detailEvent').innerText = activity.event || '-';
+
+                        document.getElementById('detailCauser').innerText = activity.causer_user.name || '-';
+
+                        if (activity.subject_user) {
+                            document.getElementById('detailSubject').innerText =
+                                `${activity.subject_user.name}`;
+                        } else {
+                            document.getElementById('detailSubject').innerText = activity.subject_id ?? '-';
+                        }
+
+                        document.getElementById('detailCreatedAt').innerText = formatDateIndo(activity.created_at);
+                        document.getElementById('detailUpdatedAt').innerText = formatDateIndo(activity.updated_at);
+                    }
+
+
+                    function setDeleteData(button) {
+                        const activityId = button.getAttribute('data-id'); // ambil ID dari tombol
+                        const description = button.getAttribute('data-description'); // opsional kalau mau tampilkan
+
+                        console.log("Activity ID:", activityId);
+                        console.log("Description:", description);
+
+                        if (activityId) {
+                            const form = document.getElementById('deleteForm');
+                            form.action = `/admin/activities/${activityId}`;
+                            console.log("Form action set to:", form.action);
+                        }
+
+                        // Jika pakai deskripsi di modal
+                        const descElem = document.getElementById('deleteDescription');
+                        if (descElem) {
+                            descElem.innerText = description || '';
                         }
                     }
                 </script>

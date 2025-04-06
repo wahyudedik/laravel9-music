@@ -12,4 +12,9 @@ class ActivityLog extends SpatieActivity
     {
         return $this->belongsTo(User::class, 'subject_id');
     }
+
+    public function causerUser()
+    {
+        return $this->belongsTo(User::class, 'causer_id');
+    }
 }

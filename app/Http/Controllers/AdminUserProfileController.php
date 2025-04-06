@@ -108,7 +108,7 @@ class AdminUserProfileController extends Controller
 
 
 
-        $activities = ActivityLog::with('subjectUser')
+        $activities = ActivityLog::with('subjectUser', 'causerUser')
             ->select('description', 'causer_id', 'subject_id', 'created_at', 'updated_at', 'event')
             ->where('causer_id', $id)
             ->latest()
@@ -265,7 +265,7 @@ class AdminUserProfileController extends Controller
 
             activity()
                 ->performedOn($user)
-                ->event('suspend_verification') // Event untuk menangguhkan verifikasi
+                ->event('suspend_verification')
                 ->withProperties(['old_status' => $oldVerificationStatus, 'new_status' => 'suspended', 'ip' => request()->ip()])
                 ->log(auth()->user()->name . ' suspended user verification for ');
             return redirect()->route('admin.user-profiles.index')->with('success', 'User verification suspended.');

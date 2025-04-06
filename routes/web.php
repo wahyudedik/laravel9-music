@@ -1,6 +1,7 @@
 <?php
 
-use App\Http\Controllers\ActivityController;
+
+use App\Http\Controllers\ActivityLogController;
 use App\Http\Controllers\AdminClaimController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AdminPermissionController;
@@ -15,13 +16,14 @@ use App\Http\Controllers\UserVerificationController;
 use App\Models\Role;
 use App\Models\User;
 use App\Services\Admin\SongServices;
+
+
 use App\Services\Admin\UserServices;
-
-
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 use Spatie\Permission\Models\Permission;
+
 
 
 
@@ -342,6 +344,8 @@ Route::middleware(['auth', 'role:Super Admin,Admin'])->group(function () {
     )->name('admin.user-profiles.remove-picture');
     Route::post('/admin/user-profiles/{id}/suspend', [AdminUserProfileController::class, 'suspend'])->name('admin.user-profiles.suspend');
     Route::post('/admin/user-profiles/{id}/active', [AdminUserProfileController::class, 'active'])->name('admin.user-profiles.active');
+
+    Route::delete('admin/activities/{id}', [ActivityLogController::class, 'destroy'])->name('admin.activities.destroy');
 
 
 
