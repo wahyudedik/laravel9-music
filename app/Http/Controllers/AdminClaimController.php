@@ -35,8 +35,8 @@ class AdminClaimController extends Controller
                         ->orWhere('email', 'like', "%{$search}%");
                 })
                     ->orWhereHas('song', function ($q) use ($search) {
-                        $q->where('title', 'like', "%{$search}%")
-                            ->orWhere('artist', 'like', "%{$search}%");
+                        $q->where('title', 'like', "%{$search}%");
+                            // ->orWhere('artist', 'like', "%{$search}%"); 
                     });
             });
         }
@@ -65,10 +65,10 @@ class AdminClaimController extends Controller
      */
     public function store(Request $request)
     {
-
         $request->validate([
             'user_id' => 'required|exists:users,id',
             'song_id' => 'required|exists:songs,id',
+            'notes' => 'nullable|string|max:1000',
             'document' => 'nullable|file|mimes:pdf,doc,docx,jpg,jpeg,png|max:2048',
         ]);
 
@@ -82,6 +82,7 @@ class AdminClaimController extends Controller
             'user_id' => $request->user_id,
             'song_id' => $request->song_id,
             'status' => 'pending', // Default status for new claims
+            'notes' => $request->notes ?? null,
             'document' => $documentPath,
         ]);
 

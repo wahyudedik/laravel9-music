@@ -15,7 +15,7 @@ class Claim extends Model
 
     protected $table = 'claims';
 
-    protected $fillable = [
+    protected $fillable = [ 
         'id',
         'user_id',
         'song_id',

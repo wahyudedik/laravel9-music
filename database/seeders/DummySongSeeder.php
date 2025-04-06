@@ -18,6 +18,7 @@ class DummySongSeeder extends Seeder
         // Ambil daftar user ID dan album ID dari database
         $users = DB::table('users')->pluck('id')->toArray();
         $albums = DB::table('albums')->pluck('id')->toArray();
+        $genres = ['Pop', 'Rock', 'Jazz', 'Electronic', 'Hip Hop', 'Country', 'Classical', 'Reggae', 'Metal', 'Folk']; // Daftar genre
 
         // Pastikan ada user dan album tersedia
         if (empty($users)) {
@@ -39,6 +40,7 @@ class DummySongSeeder extends Seeder
                 [
                     'id' => DB::table('songs')->where('title', $title)->value('id') ?? Str::uuid(),
                     'version' => 'Original',
+                    'genre' => $genres[array_rand($genres)], // Pilih genre acak
                     'album_id' => $albums[array_rand($albums)] ?? null,
                     'composer_id' => $users[array_rand($users)],
                     'artist_id' => $users[array_rand($users)] ?? null,
@@ -51,6 +53,7 @@ class DummySongSeeder extends Seeder
                     'cover_image' => 'uploads/songs/dummy_cover_' . $i . '.png',
                     'file_path' => 'uploads/songs/dummy_audio_' . $i . '.mp3',
                     'duration' => rand(180, 300),
+                    'status' => 'published', // Set status ke published
                     'created_at' => now(),
                     'updated_at' => now(),
                 ]

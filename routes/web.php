@@ -1,20 +1,23 @@
 <?php
-use App\Models\Role;
-use App\Models\User;
-use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Request;
-use Illuminate\Support\Facades\Storage;
+
+use App\Http\Controllers\AdminClaimController;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AdminPermissionController;
+use App\Http\Controllers\AdminRoleController;
+use App\Http\Controllers\AdminUserController;
+use App\Http\Controllers\AdminUserProfileController;
+use App\Http\Controllers\AdminVerificationController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\SongController;
 use App\Http\Controllers\UserController;
-use Spatie\Permission\Models\Permission;
-use App\Http\Controllers\AdminController;
-use App\Http\Controllers\AdminRoleController;
-use App\Http\Controllers\AdminUserController;
-use App\Http\Controllers\AdminClaimController;
-use App\Http\Controllers\AdminPermissionController;
 use App\Http\Controllers\UserVerificationController;
-use App\Http\Controllers\AdminVerificationController;
+use App\Models\Role;
+use App\Models\User;
+use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
+use Spatie\Permission\Models\Permission;
+
 
 use App\Services\Admin\SongServices;
 use App\Services\Admin\UserServices;
@@ -325,16 +328,19 @@ Route::middleware(['auth', 'role:Super Admin,Admin'])->group(function () {
         return view('admin.genres.index');
     })->name('admin.genres.index');
 
-    // Admin User Profile Management Route
-    Route::get('/admin/user-profiles', function () {
-        return view('admin.user-profiles.index');
-    })->name('admin.user-profiles.index');
-
-    Route::get('/admin/user-profiles/{id}', function ($id) {
-        // In a real implementation, you would fetch the user by ID
-        return view('admin.user-profiles.show', compact('id'));
-    })->name('admin.user-profiles.show');
-
+    //user profile route
+    Route::get('/admin/user-profiles', [AdminUserProfileController::class, 'index'])->name('admin.user-profiles.index');
+    Route::get('/admin/user-profiles/{id}', [AdminUserProfileController::class, 'show'])->name('admin.user-profiles.show');
+    Route::put('/admin/user-profiles/{id}', [AdminUserProfileController::class, 'update'])->name('admin.user-profiles.update');
+    Route::post('/admin/user-profiles/{id}/update-picture', [AdminUserProfileController::class, 'updatePicture'])->name('admin.user-profiles.update-picture');
+    Route::delete(
+        '/admin/user-profiles/{id}/remove-picture',
+        [AdminUserProfileController::class, 'removePicture']
+    )->name('admin.user-profiles.remove-picture');
+    Route::post('/admin/user-profiles/{id}/suspend', [AdminUserProfileController::class, 'suspend'])->name('admin.user-profiles.suspend');
+    Route::post('/admin/user-profiles/{id}/active', [AdminUserProfileController::class, 'active'])->name('admin.user-profiles.active');
+    Route::put('/admin/songs/{id}', [SongController::class, 'update'])->name('admin.songs.update');
+    
     // Withdraw Verification Routes
     Route::get('/admin/withdrawals', function () {
         return view('admin.withdrawals.index');

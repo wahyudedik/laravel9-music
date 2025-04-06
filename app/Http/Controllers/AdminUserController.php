@@ -21,7 +21,7 @@ class AdminUserController extends Controller
     {
         $perPage = $request->input('perPage', 10);
 
-        if($request->has('search')){
+        if ($request->has('search')) {
             $search = $request->input('search');
 
             $users = User::where('name', 'like', "%$search%")
@@ -29,8 +29,7 @@ class AdminUserController extends Controller
                 ->orWhere('phone', 'like', "%$search%")
                 ->latest()
                 ->paginate($perPage);
-
-        }else{
+        } else {
             $users = User::latest()->paginate($perPage);
         }
 
@@ -163,7 +162,6 @@ class AdminUserController extends Controller
         $user = User::findOrFail($id);
         $roles = Role::orderBy('name', 'desc')->get();
         return view('admin.users.edit', compact('user', 'roles'));
-
     }
 
     public function update(Request $request, $id)
@@ -225,10 +223,10 @@ class AdminUserController extends Controller
         $username = strtolower(explode('@', $request->email)[0]);
         $emailVerified = null;
         $email_verification_sent_at = null;
-        if($request->has('email_verified')){
+        if ($request->has('email_verified')) {
             $emailVerified = now();
             $email_verification_sent_at = now();
-            if($user->email_verified_at){
+            if ($user->email_verified_at) {
                 $emailVerified = $user->email_verified_at;
                 $email_verification_sent_at = $emailVerified;
             }
