@@ -197,30 +197,34 @@
     <!-- Email Modal -->
     <div class="modal modal-blur fade" id="emailModal" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
+            <div class="modal-content shadow-lg rounded-4">
                 <div class="modal-header">
                     <h5 class="modal-title">Send Email</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form id="emailForm">
-                    <div class="modal-body">
+                <form id="emailForm" action="{{ route('admin.send.email') }}" method="POST">
+                    @csrf
+                    <div class="modal-body p-4">
+                        <div id="emailAlert" class="alert alert-success d-none" role="alert"></div>
+                        <input type="hidden" name="recipient" id="recipient_email">
+
                         <div class="mb-3">
-                            <label class="form-label">Recipient</label>
+                            <label class="form-label fw-bold">Recipient</label>
                             <input type="text" class="form-control" id="email_recipient" readonly>
                         </div>
+
                         <div class="mb-3">
-                            <label class="form-label" for="email_subject">Subject</label>
+                            <label class="form-label fw-bold" for="email_subject">Subject</label>
                             <input type="text" class="form-control" id="email_subject" name="subject" required>
                         </div>
+
                         <div class="mb-3">
-                            <label class="form-label" for="email_body">Message</label>
+                            <label class="form-label fw-bold" for="email_body">Message</label>
                             <textarea class="form-control" id="email_body" name="body" rows="5" required></textarea>
                         </div>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-link link-secondary"
-                            data-bs-dismiss="modal">Cancel</button>
-                        <button type="button" class="btn btn-primary ms-auto">
+                    <div class="modal-footer border-top-0 px-4 pb-4">
+                        <button type="submit" class="btn btn-primary ms-auto" id="sendEmailBtn">
                             <i class="ti ti-send me-2"></i>Send Email
                         </button>
                     </div>
@@ -234,6 +238,7 @@
     <script>
         function setEmailRecipient(name, email) {
             document.getElementById('email_recipient').value = name + ' <' + email + '>';
+            document.getElementById('recipient_email').value = email;
         }
     </script>
 @endsection

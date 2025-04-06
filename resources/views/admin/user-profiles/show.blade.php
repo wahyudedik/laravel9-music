@@ -807,8 +807,14 @@
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-link link-secondary me-auto"
                                     data-bs-dismiss="modal">Cancel</button>
-                                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Yes, suspend
-                                    account</button>
+                                <form action="{{ route('admin.user-profiles.suspend', $user->id) }}" method="POST"
+                                    id="suspendForm">
+                                    @csrf
+                                    <button type="submit" class="btn btn-danger">
+                                        <i class="ti ti-ban me-2"></i>Yes, suspend
+                                        account
+                                    </button>
+                                </form>
                             </div>
                         </div>
                     </div>
