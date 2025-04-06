@@ -251,6 +251,19 @@ Route::middleware(['auth', 'role:Super Admin,Admin'])->group(function () {
             return view('admin.claims.show', compact('claim'));
         })->name('admin.claims.show');
     });
+    Route::prefix('admin/claims')->group(function () {
+        Route::get('/', [AdminClaimController::class, 'index'])->name('admin.claims.index');
+        Route::get('/create', [AdminClaimController::class, 'create'])->name('admin.claims.create');
+        Route::post('/store', [AdminClaimController::class, 'store'])->name('admin.claims.store');
+        Route::get('/{claim}/edit', [AdminClaimController::class, 'edit'])->name('admin.claims.edit');
+        Route::put('/{claim}', [AdminClaimController::class, 'update'])->name('admin.claims.update');
+        Route::put('/{claim}/approve', [AdminClaimController::class, 'approve'])->name('admin.claims.approve');
+        Route::put('/{claim}/reject', [AdminClaimController::class, 'reject'])->name('admin.claims.reject');
+        Route::delete('/{claim}', [AdminClaimController::class, 'destroy'])->name('admin.claims.destroy');
+        Route::get('/show/{claim}', function (\App\Models\Claim $claim) {
+            return view('admin.claims.show', compact('claim'));
+        })->name('admin.claims.show');
+    });
     Route::post('/admin/claims/{claim}/unclaim', [AdminClaimController::class, 'unclaimSong'])->name('admin.claims.unclaim');
 
     // Verifikasi Pengguna oleh admin
