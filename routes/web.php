@@ -1,5 +1,7 @@
 <?php
 
+
+use App\Http\Controllers\ActivityLogController;
 use App\Http\Controllers\AdminClaimController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AdminPermissionController;
@@ -8,19 +10,24 @@ use App\Http\Controllers\AdminUserController;
 use App\Http\Controllers\AdminUserProfileController;
 use App\Http\Controllers\AdminVerificationController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\EmailController;
 use App\Http\Controllers\SongController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserVerificationController;
 use App\Models\Role;
 use App\Models\User;
+
+
+use App\Services\Admin\SongServices;
+use App\Services\Admin\UserServices;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 use Spatie\Permission\Models\Permission;
 
 
-use App\Services\Admin\SongServices;
-use App\Services\Admin\UserServices;
+
+
 
 /*
 |--------------------------------------------------------------------------
@@ -339,8 +346,13 @@ Route::middleware(['auth', 'role:Super Admin,Admin'])->group(function () {
     )->name('admin.user-profiles.remove-picture');
     Route::post('/admin/user-profiles/{id}/suspend', [AdminUserProfileController::class, 'suspend'])->name('admin.user-profiles.suspend');
     Route::post('/admin/user-profiles/{id}/active', [AdminUserProfileController::class, 'active'])->name('admin.user-profiles.active');
+
+    Route::delete('/admin/activities/{id}', [ActivityLogController::class, 'destroy'])->name('admin.activities.destroy');
+    Route::post('/admin/send-email', [EmailController::class, 'send'])->name('admin.send.email');
+
+
     Route::put('/admin/songs/{id}', [SongController::class, 'update'])->name('admin.songs.update');
-    
+
     // Withdraw Verification Routes
     Route::get('/admin/withdrawals', function () {
         return view('admin.withdrawals.index');
@@ -423,9 +435,4 @@ Route::middleware(['auth', 'role:Super Admin,Admin'])->group(function () {
         $limit = Request::input('limit', 10);
         return response()->json($uuserServices->getAllUsers($search, $limit));
     });
-
 });
-
-
-
-

@@ -12,33 +12,34 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Spatie\Permission\Models\Role;
+use App\Models\ActivityLog;
 
-class AdminUserProfileController extends Controller 
+class AdminUserProfileController extends Controller
 {
     public function index(Request $request)
     {
         $query = User::withCount('songs', 'covers', 'albums')->with('roles');
-        
+
         // Search functionality
         if ($request->has('search') && !empty($request->search)) {
             $searchTerm = $request->search;
-            $query->where(function($q) use ($searchTerm) {
+            $query->where(function ($q) use ($searchTerm) {
                 $q->where('name', 'like', "%{$searchTerm}%")
-                  ->orWhere('email', 'like', "%{$searchTerm}%")
-                  ->orWhere('username', 'like', "%{$searchTerm}%");
+                    ->orWhere('email', 'like', "%{$searchTerm}%")
+                    ->orWhere('username', 'like', "%{$searchTerm}%");
             });
         }
-        
+
         // Filter functionality
         if ($request->has('filter') && !empty($request->filter)) {
             switch ($request->filter) {
                 case 'artists':
-                    $query->whereHas('roles', function($q) {
+                    $query->whereHas('roles', function ($q) {
                         $q->where('name', 'artist');
                     });
                     break;
                 case 'composers':
-                    $query->whereHas('roles', function($q) {
+                    $query->whereHas('roles', function ($q) {
                         $q->where('name', 'composer');
                     });
                     break;
@@ -46,13 +47,13 @@ class AdminUserProfileController extends Controller
                     $query->has('covers');
                     break;
                 case 'regular_users':
-                    $query->whereDoesntHave('roles', function($q) {
+                    $query->whereDoesntHave('roles', function ($q) {
                         $q->whereIn('name', ['admin', 'artist', 'composer']);
                     });
                     break;
             }
         }
-        
+
         // Sorting functionality
         $sort = $request->input('sort', 'latest');
         switch ($sort) {
@@ -69,14 +70,14 @@ class AdminUserProfileController extends Controller
                 $query->orderBy('name', 'desc');
                 break;
         }
-        
+
         // Pagination
         $perPage = $request->input('per_page', 10);
         $users = $query->paginate($perPage);
-        
+
         // Load verification data
         $users->load('verification');
-        
+
         return view('admin.user-profiles.index', compact('users'));
     }
 
@@ -106,7 +107,14 @@ class AdminUserProfileController extends Controller
         $userProfile = UserProfile::where('user_id', $id)->get();
 
 
-        return view('admin.user-profiles.show', compact('user', 'songs', 'covers', 'albums', 'publishedSongs', 'roles', 'socialMedia', 'userProfile'));
+
+        $activities = ActivityLog::with('subjectUser', 'causerUser')
+            ->select('description', 'causer_id', 'subject_id', 'created_at', 'updated_at', 'event')
+            ->where('causer_id', $id)
+            ->latest()
+            ->get();
+
+        return view('admin.user-profiles.show', compact('user', 'songs', 'covers', 'albums', 'publishedSongs', 'roles', 'socialMedia', 'userProfile', 'activities'));
     }
 
     public function update(Request $request, $id)
@@ -116,6 +124,8 @@ class AdminUserProfileController extends Controller
         if (!$user) {
             abort(404);
         }
+
+        $oldAttributes = $user->getAttributes();
         $request->validate([
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
@@ -164,6 +174,16 @@ class AdminUserProfileController extends Controller
             ['url' => $request->input('website')]
         );
 
+        $newAttributes = $user->getChanges();
+
+        if (!empty($newAttributes)) {
+            activity()
+                ->performedOn($user)
+                ->event('update_profile') // Tambahkan method event() di sini
+                ->withProperties(['old' => $oldAttributes, 'attributes' => $newAttributes, 'ip' => request()->ip()])
+                ->log(auth()->user()->name . ' updated profile');
+        }
+
         return redirect()->route('admin.user-profiles.show', $id)->with('success', 'User profile updated successfully.');
     }
 
@@ -178,6 +198,8 @@ class AdminUserProfileController extends Controller
         if (!$user) {
             abort(404);
         }
+
+        $oldAttributes = $user->getAttributes();
 
         if ($request->hasFile('profile_picture')) {
             if ($user->profile_picture) {
@@ -194,16 +216,34 @@ class AdminUserProfileController extends Controller
             $user->save();
         }
 
+        $newAttributes = $user->getChanges();
+
+        if (!empty($newAttributes)) {
+            activity()
+                ->performedOn($user)
+                ->event('update_profile_picture')
+                ->withProperties(['old' => $oldAttributes, 'attributes' => $newAttributes, 'ip' => request()->ip()])
+                ->log(auth()->user()->name . ' updated picture profile');
+        }
+
         return redirect()->route('admin.user-profiles.show', $id)->with('success', 'Profile picture updated successfully.');
     }
     public function removePicture($id)
     {
         $user = User::findOrFail($id);
+        $oldPicture = $user->profile_picture;
+
 
         if ($user->profile_picture) {
             Storage::delete('public/' . $user->profile_picture);
             $user->profile_picture = null;
             $user->save();
+
+            activity()
+                ->performedOn($user)
+                ->event('remove_profile_picture')
+                ->withProperties(['old_profile_picture' => $oldPicture, 'ip' => request()->ip()])
+                ->log(auth()->user()->name . ' removed profile picture');
         }
 
         return response()->json(['success' => true]);
@@ -217,9 +257,17 @@ class AdminUserProfileController extends Controller
             return redirect()->route('admin.user-profiles.index')->with('error', 'User not found.');
         }
 
+        $oldVerificationStatus = $user->verification ? $user->verification->status : null;
+
         if ($user->verification) {
             $user->verification->status = 'suspended';
             $user->verification->save();
+
+            activity()
+                ->performedOn($user)
+                ->event('suspend_verification')
+                ->withProperties(['old_status' => $oldVerificationStatus, 'new_status' => 'suspended', 'ip' => request()->ip()])
+                ->log(auth()->user()->name . ' suspended user verification for ');
             return redirect()->route('admin.user-profiles.index')->with('success', 'User verification suspended.');
         }
 
@@ -234,9 +282,18 @@ class AdminUserProfileController extends Controller
             return redirect()->route('admin.user-profiles.index')->with('error', 'User not found.');
         }
 
+        $oldVerificationStatus = $user->verification ? $user->verification->status : null;
+
         if ($user->verification) {
             $user->verification->status = 'approved';
             $user->verification->save();
+
+            activity()
+                ->performedOn($user)
+                ->event('active_verification')
+                ->withProperties(['old_status' => $oldVerificationStatus, 'new_status' => 'active', 'ip' => request()->ip()])
+                ->log(auth()->user()->name . ' active user verification for ');
+
             return redirect()->route('admin.user-profiles.index')->with('success', 'User verification active.');
         }
 
