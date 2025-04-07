@@ -169,7 +169,7 @@
                                                         <button type="submit" class="dropdown-item text-success">
                                                             <i class="ti ti-ban me-2"></i>Active
                                                         </button>
-                                                    </form>
+                                                    </form> 
 
                                                     <form action="{{ route('admin.user-profiles.suspend', $user->id) }}"
                                                         method="POST">

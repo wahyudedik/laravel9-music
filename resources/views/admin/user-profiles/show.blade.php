@@ -5,10 +5,10 @@
         <div class="container-xl">
             <div class="row g-2 align-items-center">
                 <div class="col">
-                    <div class="page-pretitle">
+                    <div class="page-title">
                         User Profile
                     </div>
-                    <h2 class="page-title">
+                    <h2 class="page-pretitle">
                         {{ $user->name }}
                     </h2>
                 </div>
@@ -33,7 +33,8 @@
                                     onclick="setEmailRecipient('{{ $user->name }}', '{{ $user->email }}')">
                                     <i class="ti ti-mail me-2"></i>Send Email
                                 </a>
-                                <a class="dropdown-item" href="#">
+                                <a class="dropdown-item" href="#" data-bs-toggle="modal"
+                                    data-bs-target="#resetPasswordModal">
                                     <i class="ti ti-key me-2"></i>Reset Password
                                 </a>
                                 <div class="dropdown-divider"></div>
@@ -270,18 +271,23 @@
                                 <div class="tab-pane active show" id="songs">
                                     <div class="d-flex justify-content-between mb-3">
                                         <h4 class="card-title">User's Songs</h4>
-                                        <div class="d-flex">
-                                            <div class="me-2">
-                                                <input type="text" class="form-control form-control-sm"
-                                                    placeholder="Search songs...">
+                                        <div class="d-flex gap-2">
+                                            <div class="flex-grow-1">
+                                                <div class="input-icon">
+                                                    <span class="input-icon-addon">
+                                                        <i class="ti ti-search"></i>
+                                                    </span>
+                                                    <input type="text" class="form-control"
+                                                        placeholder="Search songs...">
+                                                </div>
                                             </div>
-                                            <a href="#" class="btn btn-primary btn-sm" data-bs-toggle="modal"
+                                            <a href="#" class="btn btn-primary" data-bs-toggle="modal"
                                                 data-bs-target="#addSongModal">
-                                                <i class="ti ti-plus me-1"></i>Add Song
+                                                <i class="ti ti-plus"></i>
+                                                Add Song
                                             </a>
                                         </div>
                                     </div>
-
 
                                     <table class="table table-vcenter card-table table-hover">
                                         <thead>
@@ -344,9 +350,9 @@
                                 <div class="tab-pane" id="covers">
                                     <div class="d-flex justify-content-between mb-3">
                                         <h4 class="card-title">User's Covers</h4>
-                                        <div class="d-flex">
-                                            <div class="me-2">
-                                                <select class="form-select form-select-sm">
+                                        <div class="d-flex align-items-center">
+                                            <div class="me-3">
+                                                <select class="form-select">
                                                     <option value="">All Genres</option>
                                                     <option value="pop">Pop</option>
                                                     <option value="rock">Rock</option>
@@ -355,8 +361,8 @@
                                                     <option value="jazz">Jazz</option>
                                                 </select>
                                             </div>
-                                            <a href="#" class="btn btn-primary btn-sm">
-                                                <i class="ti ti-plus me-1"></i>Add Cover
+                                            <a href="#" class="btn btn-primary">
+                                                <i class="ti ti-plus me-2"></i>Add Cover
                                             </a>
                                         </div>
                                     </div>
@@ -516,12 +522,10 @@
                                     <div class="d-flex justify-content-between mb-3">
                                         <h4 class="card-title">Recent Activity</h4>
                                         <div class="btn-group">
-                                            <button type="button"
-                                                class="btn btn-sm btn-outline-primary active">All</button>
-                                            <button type="button" class="btn btn-sm btn-outline-primary">Content</button>
-                                            <button type="button" class="btn btn-sm btn-outline-primary">Login</button>
-                                            <button type="button"
-                                                class="btn btn-sm btn-outline-primary">Payments</button>
+                                            <button type="button" class="btn btn-outline-primary active">All</button>
+                                            <button type="button" class="btn btn-outline-primary">Content</button>
+                                            <button type="button" class="btn btn-outline-primary">Login</button>
+                                            <button type="button" class="btn btn-outline-primary">Payments</button>
                                         </div>
                                     </div>
 
@@ -532,23 +536,65 @@
                                                     <div class="col-auto">
                                                         @php
                                                             $iconMap = [
-                                                                'login' => ['icon' => 'ti ti-login', 'color' => 'bg-info-lt'],
-                                                                'logout' => ['icon' => 'ti ti-logout', 'color' => 'bg-warning-lt'],
-                                                                'created' => ['icon' => 'ti ti-plus', 'color' => 'bg-success-lt'],
-                                                                'updated' => ['icon' => 'ti ti-pencil', 'color' => 'bg-primary-lt'],
-                                                                'update_profile' => ['icon' => 'ti ti-pencil', 'color' => 'bg-primary-lt'],
-                                                                'update_profile_picture' => ['icon' => 'ti ti-pencil', 'color' => 'bg-primary-lt'],
-                                                                'deleted' => ['icon' => 'ti ti-trash', 'color' => 'bg-danger-lt'],
-                                                                'remove_profile_picture' => ['icon' => 'ti ti-trash', 'color' => 'bg-danger-lt'],
-                                                                'uploaded' => ['icon' => 'ti ti-upload', 'color' => 'bg-primary-lt'],
-                                                                'payment_processed' => ['icon' => 'ti ti-credit-card', 'color' => 'bg-warning-lt'],
-                                                                'suspend_user' => ['icon' => 'ti ti-user-x', 'color' => 'bg-warning-lt'],
-                                                                'suspend_verification' => ['icon' => 'ti ti-user-x', 'color' => 'bg-warning-lt'],
-                                                                'active_verification' => ['icon' => 'ti ti-user-check', 'color' => 'bg-success-lt'],
+                                                                'login' => [
+                                                                    'icon' => 'ti ti-login',
+                                                                    'color' => 'bg-info-lt',
+                                                                ],
+                                                                'logout' => [
+                                                                    'icon' => 'ti ti-logout',
+                                                                    'color' => 'bg-warning-lt',
+                                                                ],
+                                                                'created' => [
+                                                                    'icon' => 'ti ti-plus',
+                                                                    'color' => 'bg-success-lt',
+                                                                ],
+                                                                'updated' => [
+                                                                    'icon' => 'ti ti-pencil',
+                                                                    'color' => 'bg-primary-lt',
+                                                                ],
+                                                                'update_profile' => [
+                                                                    'icon' => 'ti ti-pencil',
+                                                                    'color' => 'bg-primary-lt',
+                                                                ],
+                                                                'update_profile_picture' => [
+                                                                    'icon' => 'ti ti-pencil',
+                                                                    'color' => 'bg-primary-lt',
+                                                                ],
+                                                                'deleted' => [
+                                                                    'icon' => 'ti ti-trash',
+                                                                    'color' => 'bg-danger-lt',
+                                                                ],
+                                                                'remove_profile_picture' => [
+                                                                    'icon' => 'ti ti-trash',
+                                                                    'color' => 'bg-danger-lt',
+                                                                ],
+                                                                'uploaded' => [
+                                                                    'icon' => 'ti ti-upload',
+                                                                    'color' => 'bg-primary-lt',
+                                                                ],
+                                                                'payment_processed' => [
+                                                                    'icon' => 'ti ti-credit-card',
+                                                                    'color' => 'bg-warning-lt',
+                                                                ],
+                                                                'suspend_user' => [
+                                                                    'icon' => 'ti ti-user-x',
+                                                                    'color' => 'bg-warning-lt',
+                                                                ],
+                                                                'suspend_verification' => [
+                                                                    'icon' => 'ti ti-user-x',
+                                                                    'color' => 'bg-warning-lt',
+                                                                ],
+                                                                'active_verification' => [
+                                                                    'icon' => 'ti ti-user-check',
+                                                                    'color' => 'bg-success-lt',
+                                                                ],
                                                             ];
 
-                                                            $icon = $iconMap[$activity->event]['icon'] ?? 'ti ti-activity';
-                                                            $bgColor = $iconMap[$activity->event]['color'] ?? 'bg-secondary-lt';
+                                                            $icon =
+                                                                $iconMap[$activity->event]['icon'] ?? 'ti ti-activity';
+                                                            $bgColor =
+                                                                $iconMap[$activity->event]['color'] ??
+                                                                'bg-secondary-lt';
                                                         @endphp
 
                                                         <div class="avatar avatar-rounded {{ $bgColor }}">
@@ -1154,6 +1200,58 @@ Quis nostrud exercitation ullamco</textarea>
                                 <button type="submit" class="btn btn-primary ms-auto">Save Changes</button>
 
                             </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Reset Password Modal -->
+                <div class="modal modal-blur fade" id="resetPasswordModal" tabindex="-1" role="dialog"
+                    aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content shadow-lg rounded-4">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Reset Password</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <form action="#" method="POST">
+                                @csrf
+                                <div class="modal-body p-4">
+                                    <div class="mb-3">
+                                        <label class="form-label fw-bold">User</label>
+                                        <input type="text" class="form-control"
+                                            value="{{ $user->name }} ({{ $user->email }})" readonly>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label fw-bold" for="new_password">New Password</label>
+                                        <input type="password" class="form-control" id="new_password" name="password"
+                                            required>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label fw-bold" for="password_confirmation">Confirm
+                                            Password</label>
+                                        <input type="password" class="form-control" id="password_confirmation"
+                                            name="password_confirmation" required>
+                                    </div>
+
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="send_notification"
+                                            name="send_notification" checked>
+                                        <label class="form-check-label" for="send_notification">
+                                            Send password reset notification to user
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="modal-footer border-top-0 px-4 pb-4">
+                                    <button type="button" class="btn btn-link link-secondary"
+                                        data-bs-dismiss="modal">Cancel</button>
+                                    <button type="submit" class="btn btn-primary ms-auto">
+                                        <i class="ti ti-key me-2"></i>Reset Password
+                                    </button>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
