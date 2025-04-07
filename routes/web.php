@@ -331,9 +331,20 @@ Route::middleware(['auth', 'role:Super Admin,Admin'])->group(function () {
         return view('admin.albums.index');
     })->name('admin.albums.index');
 
-    Route::get('/admin/genres', function () {
-        return view('admin.genres.index');
-    })->name('admin.genres.index');
+
+    // Genre Management Routes
+    Route::prefix('admin/genres')->group(function () {
+        Route::get('/', [App\Http\Controllers\AdminGenreController::class, 'index'])->name('admin.genres.index');
+        Route::post('/store', [App\Http\Controllers\AdminGenreController::class, 'store'])->name('admin.genres.store');
+        Route::put('/{genre}', [App\Http\Controllers\AdminGenreController::class, 'update'])->name('admin.genres.update');
+        Route::delete('/{genre}', [App\Http\Controllers\AdminGenreController::class, 'destroy'])->name('admin.genres.destroy');
+        Route::get('/{genre}', function ($id) {
+            $genre = \App\Models\Genre::findOrFail($id);
+            return view('admin.genres.show', compact('genre'));
+        })->name('admin.genres.show');
+    });
+
+
 
     //user profile route
     Route::get('/admin/user-profiles', [AdminUserProfileController::class, 'index'])->name('admin.user-profiles.index');

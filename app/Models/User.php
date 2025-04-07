@@ -14,7 +14,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
-use Symfony\Component\HttpFoundation\File\Stream; 
+use Symfony\Component\HttpFoundation\File\Stream;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -87,6 +87,11 @@ class User extends Authenticatable implements MustVerifyEmail
     public function albums()
     {
         return $this->hasMany(Album::class, 'artist_id');
+    }
+
+    public function composedSongs()
+    {
+        return $this->belongsToMany(Song::class, 'composer_song');
     }
 
     public function verification()

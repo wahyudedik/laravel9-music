@@ -36,7 +36,7 @@ class AdminClaimController extends Controller
                 })
                     ->orWhereHas('song', function ($q) use ($search) {
                         $q->where('title', 'like', "%{$search}%");
-                            // ->orWhere('artist', 'like', "%{$search}%"); 
+                            // ->orWhere('artist', 'like', "%{$search}%");
                     });
             });
         }
