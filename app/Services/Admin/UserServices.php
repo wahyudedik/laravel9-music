@@ -31,4 +31,26 @@ class UserServices
         });
     }
 
+    public function getAllArtist($search = null, $limit = 10)
+    {
+        $query = User::select('id', 'name')
+            ->whereHas('roles', function ($q) {
+                $q->where('name', 'Artist');
+            })
+            ->with(['roles' => function ($q) {
+                $q->where('name', 'Artist');
+            }]);
+
+        if ($search) {
+            $query->where('name', 'LIKE', "%{$search}%");
+        }
+
+        return $query->limit($limit)->get()->map(function ($user) {
+            return [
+                'id' => $user->id,
+                'name' => $user->name,
+                'roleName' => 'Artist', // always Artist
+            ];
+        });
+    }
 }

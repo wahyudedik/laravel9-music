@@ -16,6 +16,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
 use Spatie\Permission\Models\Permission;
 
 
@@ -320,10 +321,26 @@ Route::middleware(['auth', 'role:Super Admin,Admin'])->group(function () {
     });
 
     // Album and Genre routes
-    Route::get('/admin/albums', function () {
-        return view('admin.albums.index');
-    })->name('admin.albums.index');
+    // Album Management Routes
+    Route::prefix('admin/albums')->group(function () {
+        Route::get('/', [App\Http\Controllers\AdminAlbumController::class, 'index'])->name('admin.albums.index');
+        Route::post('/store', [App\Http\Controllers\AdminAlbumController::class, 'store'])->name('admin.albums.store');
+        Route::put('/{album}', [App\Http\Controllers\AdminAlbumController::class, 'update'])->name('admin.albums.update');
+        Route::delete('/{album}', [App\Http\Controllers\AdminAlbumController::class, 'destroy'])->name('admin.albums.destroy');
+        Route::get('/{filename}', function ($filename) {
+            $path = storage_path('app/public/albums/' . $filename);
+            if (!File::exists($path)) {
+                // Redirect to placeholder instead of 404
+                return redirect('https://via.placeholder.com/40');
+            }
+            return response()->file($path);
+        })->name('admin.albums.image');
 
+        Route::get('/{album}', function ($id) {
+            $album = \App\Models\Album::findOrFail($id);
+            return view('admin.albums.show', compact('album'));
+        })->name('admin.albums.show');
+    });
 
     // Genre Management Routes
     Route::prefix('admin/genres')->group(function () {
@@ -433,5 +450,10 @@ Route::middleware(['auth', 'role:Super Admin,Admin'])->group(function () {
         $search = Request::input('search');
         $limit = Request::input('limit', 10);
         return response()->json($uuserServices->getAllUsers($search, $limit));
+    });
+    Route::get('/admin/data/artists', function (UserServices $uuserServices) {
+        $search = Request::input('search');
+        $limit = Request::input('limit', 10);
+        return response()->json($uuserServices->getAllArtist($search, $limit));
     });
 });

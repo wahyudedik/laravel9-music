@@ -17,6 +17,8 @@ class Album extends Model
         'title',
         'cover_image',
         'release_date',
+        'description',
+        'status',
     ];
 
     protected $casts = [
