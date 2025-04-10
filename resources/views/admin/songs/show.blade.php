@@ -107,7 +107,7 @@
                                 </div>
                                 <div>
                                     <div class="text-muted">Total Plays</div>
-                                    <div class="h3 m-0">1,245,678</div>
+                                    <div class="h3 m-0">{{ number_format($song->play_count) }}</div>
                                 </div>
                             </div>
                             <div class="d-flex align-items-center mb-3">
@@ -118,7 +118,7 @@
                                 </div>
                                 <div>
                                     <div class="text-muted">Downloads</div>
-                                    <div class="h3 m-0">45,892</div>
+                                    <div class="h3 m-0">{{ number_format($song->download_count) }}</div>
                                 </div>
                             </div>
                             <div class="d-flex align-items-center mb-3">
@@ -129,7 +129,7 @@
                                 </div>
                                 <div>
                                     <div class="text-muted">Licenses Sold</div>
-                                    <div class="h3 m-0">328</div>
+                                    <div class="h3 m-0">{{ number_format($song->licences_sold) }}</div>
                                 </div>
                             </div>
                             <div class="d-flex align-items-center">
@@ -140,7 +140,7 @@
                                 </div>
                                 <div>
                                     <div class="text-muted">Favorites</div>
-                                    <div class="h3 m-0">87,345</div>
+                                    <div class="h3 m-0">{{ number_format($song->favorites_count) }}</div>
                                 </div>
                             </div>
                         </div>
