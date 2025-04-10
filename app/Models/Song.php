@@ -17,13 +17,18 @@ class Song extends Model
         'id',
         'title',
         'version',
-        'genre',
+        'description',
+        'genre_id',
         'album_id',
-        'composer_id',
         'artist_id',
         'cover_creator_id',
         'cover_version',
         'license_status',
+        'license_type',
+        'license_price',
+        'license_file',
+        'allow_cover_version',
+        'allow_commercial_use',
         'release_date',
         'play_count',
         'like_count',
@@ -49,7 +54,7 @@ class Song extends Model
 
     public function composers()
     {
-        return $this->belongsToMany(User::class, 'composer_song');
+        return $this->belongsToMany(User::class, 'composer_song', 'song_id', 'user_id');
     }
 
     public function song()
@@ -65,5 +70,17 @@ class Song extends Model
     public function coverCreator()
     {
         return $this->belongsTo(User::class, 'cover_creator_id');
+    }
+
+    // Songs that are covering this song (i.e. children)
+    public function coverVersions()
+    {
+        return $this->hasMany(Song::class, 'cover_song_id');
+    }
+
+    // The original song this is covering (i.e. parent)
+    public function originalSong()
+    {
+        return $this->belongsTo(Song::class, 'cover_song_id');
     }
 }

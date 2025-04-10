@@ -12,7 +12,7 @@
                 </div>
                 <div class="col-auto ms-auto d-print-none">
                     <div class="btn-list">
-                        <a href="{{ route('admin.songs.edit', $id) }}" class="btn btn-primary d-none d-sm-inline-block">
+                        <a href="{{ route('admin.songs.edit', $song->id) }}" class="btn btn-primary d-none d-sm-inline-block">
                             <i class="ti ti-edit me-2"></i>
                             Edit Song
                         </a>
@@ -33,20 +33,56 @@
                     <div class="card">
                         <div class="card-body">
                             <div class="text-center mb-4">
-                                <img src="https://picsum.photos/300/300?random=1" class="rounded" width="200"
-                                    height="200" alt="Cover Image">
-                                <h2 class="mt-3 mb-0">Blinding Lights</h2>
-                                <p class="text-muted">The Weeknd</p>
+                                @php
+                                    // Extract filename from the 3rd image variant (small)
+                                    $coverImages = explode(',', $song->cover_image ?? '');
+                                    $smallCoverFile = $coverImages[2] ?? null;
+
+                                    // Get just the filename from the path (e.g. "cover_abc_sm.jpeg")
+                                    $filename = $smallCoverFile ? basename($smallCoverFile) : null;
+
+                                    // Generate image URL via route
+                                    $imageUrl = $filename
+                                        ? route('admin.songs.image', ['filename' => $filename])
+                                        : 'https://via.placeholder.com/300';
+                                @endphp
+
+                                <img src="{{ $imageUrl }}" class="rounded" width="200" height="200"
+                                    alt="Cover Image">
+                                <h2 class="mt-3 mb-0">{{ $song->album->title }}</h2>
+                                <p class="text-muted">{{ $song->artist->name }}</p>
                                 <div class="mt-3">
-                                    <span class="badge bg-success">Active</span>
-                                    <span class="badge bg-blue ms-2">Premium</span>
+                                    {{-- Status Badge --}}
+                                    @if ($song->status === 'Active')
+                                        <span class="badge bg-success">Active</span>
+                                    @elseif ($song->status === 'Pending')
+                                        <span class="badge bg-warning text-dark">Pending</span>
+                                    @elseif ($song->status === 'Inactive')
+                                        <span class="badge bg-danger">Inactive</span>
+                                    @else
+                                        <span class="badge bg-secondary">{{ $song->status }}</span>
+                                    @endif
+                                    <span class="badge bg-blue ms-2">{{ $song->license_type }}</span>
                                 </div>
                             </div>
                             <div class="mt-4">
-                                <audio controls class="w-100 mb-3">
-                                    <source src="#" type="audio/mpeg">
-                                    Your browser does not support the audio element.
-                                </audio>
+                                @php
+                                    $filename = $song->file_path ? basename($song->file_path) : null;
+                                    $audioUrl = $filename
+                                        ? route('admin.songs.audio', ['filename' => $filename])
+                                        : null;
+                                @endphp
+
+                                @if ($audioUrl)
+                                    <audio controls class="w-100 mb-3">
+                                        <source src="{{ $audioUrl }}" type="audio/mpeg">
+                                        Your browser does not support the audio element.
+                                    </audio>
+                                @endif
+
+
+
+
                                 <div class="d-flex justify-content-center">
                                     <button class="btn btn-outline-primary me-2">
                                         <i class="ti ti-download me-2"></i>Download
@@ -119,65 +155,87 @@
                             <div class="datagrid">
                                 <div class="datagrid-item">
                                     <div class="datagrid-title">Song ID</div>
-                                    <div class="datagrid-content">{{ $id }}</div>
+                                    <div class="datagrid-content">{{ $song->id }}</div>
                                 </div>
                                 <div class="datagrid-item">
                                     <div class="datagrid-title">Title</div>
-                                    <div class="datagrid-content">Blinding Lights</div>
+                                    <div class="datagrid-content">{{ $song->title }}</div>
                                 </div>
                                 <div class="datagrid-item">
                                     <div class="datagrid-title">Artist</div>
-                                    <div class="datagrid-content">The Weeknd</div>
+                                    <div class="datagrid-content">{{ $song->artist->name }}</div>
                                 </div>
                                 <div class="datagrid-item">
                                     <div class="datagrid-title">Album</div>
-                                    <div class="datagrid-content">After Hours</div>
+                                    <div class="datagrid-content">{{ $song->album->title }}</div>
                                 </div>
                                 <div class="datagrid-item">
                                     <div class="datagrid-title">Genre</div>
-                                    <div class="datagrid-content">Pop</div>
+                                    <div class="datagrid-content">{{ $song->genre->name }}</div>
                                 </div>
                                 <div class="datagrid-item">
                                     <div class="datagrid-title">Release Date</div>
-                                    <div class="datagrid-content">November 29, 2020</div>
+                                    <div class="datagrid-content">
+                                        {{ \Carbon\Carbon::parse($song->release_date)->format('F d, Y') }}
+                                    </div>
                                 </div>
                                 <div class="datagrid-item">
                                     <div class="datagrid-title">Duration</div>
-                                    <div class="datagrid-content">3:20</div>
+                                    <div class="datagrid-content">{{ gmdate('i:s', $song->duration) }}</div>
                                 </div>
                                 <div class="datagrid-item">
                                     <div class="datagrid-title">Status</div>
                                     <div class="datagrid-content">
-                                        <span class="badge bg-success">Active</span>
+                                        @if ($song->status === 'Active')
+                                            <span class="badge bg-success">Active</span>
+                                        @elseif ($song->status === 'Inactive')
+                                            <span class="badge bg-secondary">Inactive</span>
+                                        @elseif ($song->status === 'Pending')
+                                            <span class="badge bg-warning text-dark">Pending</span>
+                                        @else
+                                            <span class="badge bg-dark">{{ $song->status }}</span>
+                                        @endif
                                     </div>
                                 </div>
                                 <div class="datagrid-item">
                                     <div class="datagrid-title">License Type</div>
-                                    <div class="datagrid-content">Premium</div>
+                                    <div class="datagrid-content">{{ $song->license_type ?? '-' }}</div>
                                 </div>
                                 <div class="datagrid-item">
                                     <div class="datagrid-title">License Price</div>
-                                    <div class="datagrid-content">Rp. 150,000</div>
+                                    <div class="datagrid-content">
+                                        {{ $song->license_price ? 'Rp. ' . number_format($song->license_price, 0, ',', '.') : '-' }}
+                                    </div>
                                 </div>
                                 <div class="datagrid-item">
                                     <div class="datagrid-title">Allow Covers</div>
                                     <div class="datagrid-content">
-                                        <span class="badge bg-success">Yes</span>
+                                        @if ($song->allow_cover_version)
+                                            <span class="badge bg-success">Yes</span>
+                                        @else
+                                            <span class="badge bg-danger">No</span>
+                                        @endif
                                     </div>
                                 </div>
                                 <div class="datagrid-item">
                                     <div class="datagrid-title">Allow Commercial Use</div>
                                     <div class="datagrid-content">
-                                        <span class="badge bg-success">Yes</span>
+                                        @if ($song->allow_commercial_use)
+                                            <span class="badge bg-success">Yes</span>
+                                        @else
+                                            <span class="badge bg-danger">No</span>
+                                        @endif
                                     </div>
                                 </div>
                                 <div class="datagrid-item">
                                     <div class="datagrid-title">Created At</div>
-                                    <div class="datagrid-content">January 15, 2023</div>
+                                    <div class="datagrid-content">
+                                        {{ \Carbon\Carbon::parse($song->created_at)->translatedFormat('F j, Y') }}</div>
                                 </div>
                                 <div class="datagrid-item">
                                     <div class="datagrid-title">Last Updated</div>
-                                    <div class="datagrid-content">March 22, 2023</div>
+                                    <div class="datagrid-content">
+                                        {{ \Carbon\Carbon::parse($song->updated_at)->translatedFormat('F j, Y') }}</div>
                                 </div>
                             </div>
                         </div>
@@ -188,23 +246,43 @@
                             <h3 class="card-title">Composers & Credits</h3>
                         </div>
                         <div class="card-body">
-                            <div class="mb-3">
-                                <h4 class="mb-2">Composers</h4>
-                                <div class="avatar-list avatar-list-stacked">
-                                    <span class="avatar avatar-md rounded"
-                                        style="background-image: url(https://ui-avatars.com/api/?name=John+Doe&background=e53935&color=fff)"
-                                        data-bs-toggle="tooltip" title="John Doe"></span>
-                                    <span class="avatar avatar-md rounded"
-                                        style="background-image: url(https://ui-avatars.com/api/?name=Jane+Smith&background=e53935&color=fff)"
-                                        data-bs-toggle="tooltip" title="Jane Smith"></span>
-                                    <span class="avatar avatar-md rounded"
-                                        style="background-image: url(https://ui-avatars.com/api/?name=The+Weeknd&background=e53935&color=fff)"
-                                        data-bs-toggle="tooltip" title="The Weeknd"></span>
+                            @if ($song->composers->count())
+                                <div class="mb-3">
+                                    <h4 class="mb-2">Composers</h4>
+                                    <div class="avatar-list avatar-list-stacked">
+                                        @foreach ($song->composers as $composer)
+                                            <span class="avatar avatar-md rounded"
+                                                style="background-image: url('https://ui-avatars.com/api/?name={{ urlencode($composer->name) }}&background=e53935&color=fff')"
+                                                data-bs-toggle="tooltip" title="{{ $composer->name }}">
+                                            </span>
+                                        @endforeach
+                                    </div>
                                 </div>
-                            </div>
+                            @else
+                                <div class="mb-3">
+                                    <h4 class="mb-2">Composers</h4>
+                                    <p class="text-muted">No composers assigned.</p>
+                                </div>
+                            @endif
                             <div>
-                                <h4 class="mb-2">Production Credits</h4>
-                                <ul class="list-unstyled">
+                                @if ($song->composers->count())
+                                    <h4 class="mb-2">Production Credits</h4>
+                                    <ul class="list-unstyled">
+                                        <li class="mb-1">
+                                            <strong>Composer:</strong>
+                                            {{ $song->composers->pluck('name')->join(', ') }}
+                                        </li>
+                                    </ul>
+                                @else
+                                    <h4 class="mb-2">Production Credits</h4>
+                                    <ul class="list-unstyled">
+                                        <li class="mb-1 text-muted">
+                                            <em>No composers assigned.</em>
+                                        </li>
+                                    </ul>
+                                @endif
+
+                                {{-- <ul class="list-unstyled">
                                     <li class="mb-1">
                                         <strong>Producer:</strong> Max Martin, Oscar Holter
                                     </li>
@@ -214,7 +292,7 @@
                                     <li class="mb-1">
                                         <strong>Mastering Engineer:</strong> Dave Kutch
                                     </li>
-                                </ul>
+                                </ul> --}}
                             </div>
                         </div>
                     </div>
@@ -224,17 +302,7 @@
                             <h3 class="card-title">Description</h3>
                         </div>
                         <div class="card-body">
-                            <p>
-                                Blinding Lights is a song by Canadian singer the Weeknd. It was released on November 29,
-                                2019, as the second single from his fourth studio album After Hours. The Weeknd wrote and
-                                produced the song with Max Martin and Oscar Holter, with Belly and Jason Quenneville
-                                receiving additional writing credits.
-                            </p>
-                            <p>
-                                The song set the record for most weeks in the top five and top ten of the US Billboard Hot
-                                100. It also holds the record for the longest charting song on the Hot 100 of all time,
-                                spending 90 weeks on the chart.
-                            </p>
+                            {{ $song->description }}
                         </div>
                     </div>
 
@@ -255,57 +323,52 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>
-                                            <div class="d-flex align-items-center">
-                                                <span class="avatar me-2"
-                                                    style="background-image: url(https://ui-avatars.com/api/?name=Alex+Johnson&background=e53935&color=fff)"></span>
-                                                <div>Alex Johnson</div>
-                                            </div>
-                                        </td>
-                                        <td>Jan 15, 2023</td>
-                                        <td>24,567</td>
-                                        <td><span class="badge bg-success">Active</span></td>
-                                        <td>
-                                            <a href="#" class="btn btn-icon btn-ghost-secondary">
-                                                <i class="ti ti-eye"></i>
-                                            </a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="d-flex align-items-center">
-                                                <span class="avatar me-2"
-                                                    style="background-image: url(https://ui-avatars.com/api/?name=Sarah+Williams&background=e53935&color=fff)"></span>
-                                                <div>Sarah Williams</div>
-                                            </div>
-                                        </td>
-                                        <td>Feb 28, 2023</td>
-                                        <td>18,932</td>
-                                        <td><span class="badge bg-success">Active</span></td>
-                                        <td>
-                                            <a href="#" class="btn btn-icon btn-ghost-secondary">
-                                                <i class="ti ti-eye"></i>
-                                            </a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="d-flex align-items-center">
-                                                <span class="avatar me-2"
-                                                    style="background-image: url(https://ui-avatars.com/api/?name=Mike+Thompson&background=e53935&color=fff)"></span>
-                                                <div>Mike Thompson</div>
-                                            </div>
-                                        </td>
-                                        <td>Mar 10, 2023</td>
-                                        <td>12,345</td>
-                                        <td><span class="badge bg-success">Active</span></td>
-                                        <td>
-                                            <a href="#" class="btn btn-icon btn-ghost-secondary">
-                                                <i class="ti ti-eye"></i>
-                                            </a>
-                                        </td>
-                                    </tr>
+                                    @forelse ($song->coverVersions as $cover)
+                                        @php
+                                            $artist = $cover->artist;
+                                            $name = $artist?->name ?? 'Unknown';
+                                            $avatarUrl =
+                                                'https://ui-avatars.com/api/?name=' .
+                                                urlencode($name) .
+                                                '&background=e53935&color=fff';
+                                        @endphp
+                                        <tr>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <span class="avatar me-2"
+                                                        style="background-image: url({{ $avatarUrl }})"></span>
+                                                    <div>{{ $name }}</div>
+                                                </div>
+                                            </td>
+                                            <td>{{ \Carbon\Carbon::parse($cover->release_date)->format('M d, Y') }}</td>
+                                            <td>{{ number_format($cover->play_count ?? 0) }}</td>
+                                            <td>
+                                                <span
+                                                    class="badge
+                                                    {{ $cover->status == 'Active'
+                                                        ? 'bg-success'
+                                                        : ($cover->status == 'Inactive'
+                                                            ? 'bg-danger'
+                                                            : ($cover->status == 'Pending'
+                                                                ? 'bg-warning'
+                                                                : 'bg-secondary')) }}">
+                                                    {{ $cover->status }}
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <a href="{{ route('admin.songs.show', $cover->id) }}"
+                                                    class="btn btn-icon btn-ghost-secondary">
+                                                    <i class="ti ti-eye"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="5" class="text-center text-muted">No cover versions available.
+                                            </td>
+                                        </tr>
+                                    @endforelse
+
                                 </tbody>
                             </table>
                         </div>

@@ -53,4 +53,27 @@ class UserServices
             ];
         });
     }
+
+    public function getAllComposer($search = null, $limit = 10)
+    {
+        $query = User::select('id', 'name')
+            ->whereHas('roles', function ($q) {
+                $q->where('name', 'Composer');
+            })
+            ->with(['roles' => function ($q) {
+                $q->where('name', 'Composer');
+            }]);
+
+        if ($search) {
+            $query->where('name', 'LIKE', "%{$search}%");
+        }
+
+        return $query->limit($limit)->get()->map(function ($user) {
+            return [
+                'id' => $user->id,
+                'name' => $user->name,
+                'roleName' => 'Composer', // always Composer
+            ];
+        });
+    }
 }

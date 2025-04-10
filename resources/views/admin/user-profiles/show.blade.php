@@ -898,7 +898,7 @@
                                     aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
-                                <form action="{{ route('admin.songs.update', $song->id) }}" method="POST"
+                                <form action="{{ route('profile.songs.update', $song->id) }}" method="POST"
                                     enctype="multipart/form-data">
                                     @csrf
                                     @method('PUT')
@@ -974,7 +974,7 @@
                                                 <input class="form-check-input" type="checkbox" id="replace-cover">
                                                 <label class="form-check-label" for="replace-cover">
                                                     Replace cover image
-                                                </label> 
+                                                </label>
                                             </div>
                                         </div>
                                         <input type="file" class="form-control mt-2" disabled>

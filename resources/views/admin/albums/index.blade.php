@@ -33,6 +33,7 @@
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h3 class="card-title">Albums</h3>
                     <div class="d-flex">
+
                         <form action="{{ route('admin.albums.index') }}" method="GET" class="d-flex">
 
                             <div class="input-icon me-3">
