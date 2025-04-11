@@ -1064,10 +1064,6 @@
                             </div>
                             <div class="modal-body">
                                 <form action="{{ route('profile.songs.update', $song->id) }}" method="POST"
-                                    {{-- <form action="{{ route('admin.songs.update', $song->id) }}" method="POST"
-         enctype="multipart/form-data">
-                                    @csrf
-                                    @method('PUT') --}} <form action="#" method="POST"
                                     enctype="multipart/form-data">
                                     @csrf
                                     @method('PUT')
