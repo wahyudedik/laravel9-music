@@ -1063,8 +1063,12 @@
                                     aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
-
-                                <form action="#" method="POST" enctype="multipart/form-data">
+                                <form action="{{ route('profile.songs.update', $song->id) }}" method="POST"
+                                    {{-- <form action="{{ route('admin.songs.update', $song->id) }}" method="POST"
+         enctype="multipart/form-data">
+                                    @csrf
+                                    @method('PUT') --}} <form action="#" method="POST"
+                                    enctype="multipart/form-data">
                                     @csrf
                                     @method('PUT')
                                     <div class="mb-3">
@@ -1213,7 +1217,7 @@ Quis nostrud exercitation ullamco</textarea>
                             </div>
                             <form action="#" method="POST">
                                 @csrf
-                                <div class="modal-body p-4"> 
+                                <div class="modal-body p-4">
                                     <div class="mb-3">
                                         <label class="form-label fw-bold">User</label>
                                         <input type="text" class="form-control"
