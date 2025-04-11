@@ -1063,8 +1063,8 @@
                                     aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
-
-                                <form action="#" method="POST" enctype="multipart/form-data">
+                                <form action="{{ route('profile.songs.update', $song->id) }}" method="POST"
+                                    enctype="multipart/form-data">
                                     @csrf
                                     @method('PUT')
                                     <div class="mb-3">
