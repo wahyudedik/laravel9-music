@@ -293,7 +293,7 @@
                                     <span class="nav-link-icon d-md-none d-lg-inline-block">
                                         <i class="ti ti-ticket"></i>
                                     </span>
-                                    <span class="nav-link-title">Ticketing</span>
+                                    <span class="nav-link-title">Claims</span>
                                 </a>
                                 <div class="dropdown-menu">
                                     <a class="dropdown-item" href="{{ route('admin.claims.create') }}">

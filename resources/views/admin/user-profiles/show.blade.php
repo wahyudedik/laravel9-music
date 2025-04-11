@@ -5,10 +5,10 @@
         <div class="container-xl">
             <div class="row g-2 align-items-center">
                 <div class="col">
-                    <div class="page-pretitle">
+                    <div class="page-title">
                         User Profile
                     </div>
-                    <h2 class="page-title">
+                    <h2 class="page-pretitle">
                         {{ $user->name }}
                     </h2>
                 </div>
@@ -29,10 +29,12 @@
                                     data-bs-target="#editUserModal">
                                     <i class="ti ti-edit me-2"></i>Edit Profile
                                 </a>
-                                <a class="dropdown-item" href="#">
+                                <a href="#" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#emailModal"
+                                    onclick="setEmailRecipient('{{ $user->name }}', '{{ $user->email }}')">
                                     <i class="ti ti-mail me-2"></i>Send Email
                                 </a>
-                                <a class="dropdown-item" href="#">
+                                <a class="dropdown-item" href="#" data-bs-toggle="modal"
+                                    data-bs-target="#resetPasswordModal">
                                     <i class="ti ti-key me-2"></i>Reset Password
                                 </a>
                                 <div class="dropdown-divider"></div>
@@ -269,18 +271,23 @@
                                 <div class="tab-pane active show" id="songs">
                                     <div class="d-flex justify-content-between mb-3">
                                         <h4 class="card-title">User's Songs</h4>
-                                        <div class="d-flex">
-                                            <div class="me-2">
-                                                <input type="text" class="form-control form-control-sm"
-                                                    placeholder="Search songs...">
+                                        <div class="d-flex gap-2">
+                                            <div class="flex-grow-1">
+                                                <div class="input-icon">
+                                                    <span class="input-icon-addon">
+                                                        <i class="ti ti-search"></i>
+                                                    </span>
+                                                    <input type="text" class="form-control"
+                                                        placeholder="Search songs...">
+                                                </div>
                                             </div>
-                                            <a href="#" class="btn btn-primary btn-sm" data-bs-toggle="modal"
+                                            <a href="#" class="btn btn-primary" data-bs-toggle="modal"
                                                 data-bs-target="#addSongModal">
-                                                <i class="ti ti-plus me-1"></i>Add Song
+                                                <i class="ti ti-plus"></i>
+                                                Add Song
                                             </a>
                                         </div>
                                     </div>
-
 
                                     <table class="table table-vcenter card-table table-hover">
                                         <thead>
@@ -343,9 +350,9 @@
                                 <div class="tab-pane" id="covers">
                                     <div class="d-flex justify-content-between mb-3">
                                         <h4 class="card-title">User's Covers</h4>
-                                        <div class="d-flex">
-                                            <div class="me-2">
-                                                <select class="form-select form-select-sm">
+                                        <div class="d-flex align-items-center">
+                                            <div class="me-3">
+                                                <select class="form-select">
                                                     <option value="">All Genres</option>
                                                     <option value="pop">Pop</option>
                                                     <option value="rock">Rock</option>
@@ -354,8 +361,8 @@
                                                     <option value="jazz">Jazz</option>
                                                 </select>
                                             </div>
-                                            <a href="#" class="btn btn-primary btn-sm">
-                                                <i class="ti ti-plus me-1"></i>Add Cover
+                                            <a href="#" class="btn btn-primary">
+                                                <i class="ti ti-plus me-2"></i>Add Cover
                                             </a>
                                         </div>
                                     </div>
@@ -511,85 +518,145 @@
                                         </table>
                                     </div>
                                 </div>
-
-                                <!-- Activity Tab -->
                                 <div class="tab-pane" id="activity">
                                     <div class="d-flex justify-content-between mb-3">
                                         <h4 class="card-title">Recent Activity</h4>
                                         <div class="btn-group">
-                                            <button type="button"
-                                                class="btn btn-sm btn-outline-primary active">All</button>
-                                            <button type="button" class="btn btn-sm btn-outline-primary">Content</button>
-                                            <button type="button" class="btn btn-sm btn-outline-primary">Login</button>
-                                            <button type="button"
-                                                class="btn btn-sm btn-outline-primary">Payments</button>
+                                            <button type="button" class="btn btn-outline-primary active">All</button>
+                                            <button type="button" class="btn btn-outline-primary">Content</button>
+                                            <button type="button" class="btn btn-outline-primary">Login</button>
+                                            <button type="button" class="btn btn-outline-primary">Payments</button>
                                         </div>
                                     </div>
 
                                     <div class="list-group list-group-flush">
-                                        @for ($i = 1; $i <= 10; $i++)
+                                        @forelse ($activities as $activity)
                                             <div class="list-group-item">
                                                 <div class="row align-items-center">
                                                     <div class="col-auto">
-                                                        @if ($i % 4 == 0)
-                                                            <div class="avatar avatar-rounded bg-primary-lt">
-                                                                <i class="ti ti-upload text-primary"></i>
-                                                            </div>
-                                                        @elseif($i % 4 == 1)
-                                                            <div class="avatar avatar-rounded bg-success-lt">
-                                                                <i class="ti ti-player-play text-success"></i>
-                                                            </div>
-                                                        @elseif($i % 4 == 2)
-                                                            <div class="avatar avatar-rounded bg-warning-lt">
-                                                                <i class="ti ti-credit-card text-warning"></i>
-                                                            </div>
-                                                        @else
-                                                            <div class="avatar avatar-rounded bg-info-lt">
-                                                                <i class="ti ti-login text-info"></i>
-                                                            </div>
-                                                        @endif
+                                                        @php
+                                                            $iconMap = [
+                                                                'login' => [
+                                                                    'icon' => 'ti ti-login',
+                                                                    'color' => 'bg-info-lt',
+                                                                ],
+                                                                'logout' => [
+                                                                    'icon' => 'ti ti-logout',
+                                                                    'color' => 'bg-warning-lt',
+                                                                ],
+                                                                'created' => [
+                                                                    'icon' => 'ti ti-plus',
+                                                                    'color' => 'bg-success-lt',
+                                                                ],
+                                                                'updated' => [
+                                                                    'icon' => 'ti ti-pencil',
+                                                                    'color' => 'bg-primary-lt',
+                                                                ],
+                                                                'update_profile' => [
+                                                                    'icon' => 'ti ti-pencil',
+                                                                    'color' => 'bg-primary-lt',
+                                                                ],
+                                                                'update_profile_picture' => [
+                                                                    'icon' => 'ti ti-pencil',
+                                                                    'color' => 'bg-primary-lt',
+                                                                ],
+                                                                'deleted' => [
+                                                                    'icon' => 'ti ti-trash',
+                                                                    'color' => 'bg-danger-lt',
+                                                                ],
+                                                                'remove_profile_picture' => [
+                                                                    'icon' => 'ti ti-trash',
+                                                                    'color' => 'bg-danger-lt',
+                                                                ],
+                                                                'uploaded' => [
+                                                                    'icon' => 'ti ti-upload',
+                                                                    'color' => 'bg-primary-lt',
+                                                                ],
+                                                                'payment_processed' => [
+                                                                    'icon' => 'ti ti-credit-card',
+                                                                    'color' => 'bg-warning-lt',
+                                                                ],
+                                                                'suspend_user' => [
+                                                                    'icon' => 'ti ti-user-x',
+                                                                    'color' => 'bg-warning-lt',
+                                                                ],
+                                                                'suspend_verification' => [
+                                                                    'icon' => 'ti ti-user-x',
+                                                                    'color' => 'bg-warning-lt',
+                                                                ],
+                                                                'active_verification' => [
+                                                                    'icon' => 'ti ti-user-check',
+                                                                    'color' => 'bg-success-lt',
+                                                                ],
+                                                            ];
+
+                                                            $icon =
+                                                                $iconMap[$activity->event]['icon'] ?? 'ti ti-activity';
+                                                            $bgColor =
+                                                                $iconMap[$activity->event]['color'] ??
+                                                                'bg-secondary-lt';
+                                                        @endphp
+
+                                                        <div class="avatar avatar-rounded {{ $bgColor }}">
+                                                            <i
+                                                                class="{{ $icon }} text-{{ str_replace('-lt', '', $bgColor) }}"></i>
+                                                        </div>
                                                     </div>
                                                     <div class="col">
                                                         <div class="text-body">
-                                                            @if ($i % 4 == 0)
-                                                                Uploaded a new {{ ['song', 'cover', 'album'][$i % 3] }}:
-                                                                "{{ ['Blinding Lights', 'Save Your Tears', 'Levitating', 'Stay', 'Industry Baby'][$i % 5] }}"
-                                                            @elseif($i % 4 == 1)
-                                                                Published {{ ['song', 'cover', 'album'][$i % 3] }}:
-                                                                "{{ ['Blinding Lights', 'Save Your Tears', 'Levitating', 'Stay', 'Industry Baby'][$i % 5] }}"
-                                                            @elseif($i % 4 == 2)
-                                                                Made a payment of ${{ rand(5, 50) }}.{{ rand(10, 99) }}
-                                                                for
-                                                                {{ ['license', 'subscription', 'premium features'][$i % 3] }}
-                                                            @else
-                                                                Logged in from
-                                                                {{ ['Chrome on Windows', 'Safari on macOS', 'Firefox on Linux', 'Mobile App on Android', 'Mobile App on iOS'][$i % 5] }}
+                                                            {{ $activity->description }}
+                                                            @if ($activity->subjectUser)
+                                                                ({{ $activity->subjectUser->name }})
                                                             @endif
                                                         </div>
-                                                        <div class="text-muted">{{ rand(1, 24) }}
-                                                            {{ ['minutes', 'hours', 'days'][$i % 3] }} ago</div>
+                                                        <div class="text-muted">
+                                                            {{ $activity->created_at->diffForHumans() }}
+                                                        </div>
                                                     </div>
                                                     <div class="col-auto">
                                                         <div class="dropdown">
                                                             <button class="btn btn-icon btn-ghost-secondary"
+                                                                title="Options" aria-label="Options"
                                                                 data-bs-toggle="dropdown">
                                                                 <i class="ti ti-dots-vertical"></i>
                                                             </button>
                                                             <div class="dropdown-menu dropdown-menu-end">
-                                                                <a href="#" class="dropdown-item">
+                                                                <button class="dropdown-item" data-bs-toggle="modal"
+                                                                    data-bs-target="#viewDetailsModal"
+                                                                    onclick="setActivityDetail({{ $activity }})">
                                                                     <i class="ti ti-eye me-2"></i>View Details
-                                                                </a>
-                                                                <a href="#" class="dropdown-item text-danger">
+                                                                </button>
+                                                                {{-- <button class="dropdown-item text-danger"
+                                                                    data-bs-toggle="modal"
+                                                                    data-bs-target="#deleteActivityModal"
+                                                                    onclick="setDeleteData({{ $activity->id }}, '{{ $activity->description }}')">
                                                                     <i class="ti ti-trash me-2"></i>Delete Record
-                                                                </a>
+                                                                </button> --}}
+                                                                <button class="dropdown-item text-danger"
+                                                                    data-bs-toggle="modal"
+                                                                    data-bs-target="#deleteActivityModal"
+                                                                    data-id="{{ $activity->id }}"
+                                                                    data-description="{{ $activity->description }}"
+                                                                    onclick="setDeleteData(this)">
+                                                                    <i class="ti ti-trash me-2"></i>Delete Record
+                                                                </button>
+
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        @endfor
+                                        @empty
+                                            <div class="list-group-item">
+                                                <div class="text-center text-muted">No activity recorded.</div>
+                                            </div>
+                                        @endforelse
+
                                     </div>
                                 </div>
+
+
+
                             </div>
                         </div>
                     </div>
@@ -787,8 +854,14 @@
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-link link-secondary me-auto"
                                     data-bs-dismiss="modal">Cancel</button>
-                                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Yes, suspend
-                                    account</button>
+                                <form action="{{ route('admin.user-profiles.suspend', $user->id) }}" method="POST"
+                                    id="suspendForm">
+                                    @csrf
+                                    <button type="submit" class="btn btn-danger">
+                                        <i class="ti ti-ban me-2"></i>Yes, suspend
+                                        account
+                                    </button>
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -888,6 +961,98 @@
                     </div>
                 </div>
 
+                {{-- Modal View Details --}}
+                <div class="modal fade" id="viewDetailsModal" tabindex="-1" role="dialog">
+                    <div class="modal-dialog modal-lg" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Detail Aktivitas</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <p><strong>Deskripsi :</strong> <span id="detailDescription"></span></p>
+                                <p><strong>Event :</strong> <span id="detailEvent"></span></p>
+                                <p><strong>Dilakukan oleh :</strong> <span id="detailCauser"></span></p>
+                                <p><strong>Kepada :</strong> <span id="detailSubject"></span></p>
+                                <p><strong>Dibuat pada :</strong> <span id="detailCreatedAt"></span></p>
+                                <p><strong>Diperbarui pada :</strong> <span id="detailUpdatedAt"></span></p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Modal Delete Confirmation --}}
+                <div class="modal fade" id="deleteActivityModal" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <form id="deleteForm" method="POST">
+                            @csrf
+                            @method('DELETE')
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Confirm Delete</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    Are you sure you want to delete this activity record?
+                                    <p class="text-muted small" id="deleteDescription"></p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary"
+                                        data-bs-dismiss="modal">Cancel</button>
+                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                {{-- Email modal --}}
+                <div class="modal modal-blur fade" id="emailModal" tabindex="-1" role="dialog" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content shadow-lg rounded-4">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Send Email</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <form id="emailForm" action="{{ route('admin.send.email') }}" method="POST">
+                                @csrf
+                                <div class="modal-body p-4">
+                                    <div id="emailAlert" class="alert alert-success d-none" role="alert"></div>
+                                    <input type="hidden" name="recipient" id="recipient_email">
+
+                                    <div class="mb-3">
+                                        <label class="form-label fw-bold">Recipient</label>
+                                        <input type="text" class="form-control" id="email_recipient" readonly>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label fw-bold" for="email_subject">Subject</label>
+                                        <input type="text" class="form-control" id="email_subject" name="subject"
+                                            required>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label fw-bold" for="email_body">Message</label>
+                                        <textarea class="form-control" id="email_body" name="body" rows="5" required></textarea>
+                                    </div>
+                                </div>
+                                <div class="modal-footer border-top-0 px-4 pb-4">
+                                    <button type="submit" class="btn btn-primary ms-auto" id="sendEmailBtn">
+                                        <i class="ti ti-send me-2"></i>Send Email
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+
                 <!-- Edit Song Modal -->
                 <div class="modal modal-blur fade" id="editSongModal" tabindex="-1" role="dialog" aria-hidden="true">
                     <div class="modal-dialog modal-lg" role="document">
@@ -898,14 +1063,14 @@
                                     aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
-                                <form action="{{ route('profile.songs.update', $song->id) }}" method="POST"
-                                    enctype="multipart/form-data">
+
+                                <form action="#" method="POST" enctype="multipart/form-data">
                                     @csrf
                                     @method('PUT')
                                     <div class="mb-3">
                                         <label for="title" class="form-label">Song Title</label>
                                         <input type="text" class="form-control" id="title" name="title"
-                                            value="{{ $song->title }}" required>
+                                            value="#">
                                     </div>
                                     <div class="row">
                                         <div class="col-lg-6">
@@ -913,14 +1078,16 @@
                                                 <label for="genre" class="form-label">Genre</label>
                                                 <select class="form-select" id="genre" name="genre" required>
                                                     <option value="">Pilih Genre</option>
-                                                    <option value="pop" {{ $song->genre === 'pop' ? 'selected' : '' }}>
+                                                    {{-- <option value="pop" {{ $song->genre === 'pop' ? 'selected' : '' }}>
                                                         Pop</option>
                                                     <option value="rock"
                                                         {{ $song->genre === 'rock' ? 'selected' : '' }}>Rock</option>
                                                     <option value="hiphop"
-                                                        {{ $song->genre === 'hiphop' ? 'selected' : '' }}>Hip Hop</option>
+                                                        {{ $song->genre === 'hiphop' ? 'selected' : '' }}>Hip Hop
+                                                    </option>
                                                     <option value="electronic"
-                                                        {{ $song->genre === 'electronic' ? 'selected' : '' }}>Electronic
+                                                        {{ $song->genre === 'electronic' ? 'selected' : '' }}>
+                                                        Electronic
                                                     </option>
                                                     <option value="jazz"
                                                         {{ $song->genre === 'jazz' ? 'selected' : '' }}>Jazz</option>
@@ -928,9 +1095,10 @@
                                                         {{ $song->genre === 'classical' ? 'selected' : '' }}>Classical
                                                     </option>
                                                     <option value="country"
-                                                        {{ $song->genre === 'country' ? 'selected' : '' }}>Country</option>
+                                                        {{ $song->genre === 'country' ? 'selected' : '' }}>Country
+                                                    </option>
                                                     <option value="rnb" {{ $song->genre === 'rnb' ? 'selected' : '' }}>
-                                                        R&B</option>
+                                                        R&B</option> --}}
                                                 </select>
                                             </div>
                                         </div>
@@ -1032,6 +1200,58 @@ Quis nostrud exercitation ullamco</textarea>
                         </div>
                     </div>
                 </div>
+
+                <!-- Reset Password Modal -->
+                <div class="modal modal-blur fade" id="resetPasswordModal" tabindex="-1" role="dialog"
+                    aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content shadow-lg rounded-4">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Reset Password</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <form action="#" method="POST">
+                                @csrf
+                                <div class="modal-body p-4">
+                                    <div class="mb-3">
+                                        <label class="form-label fw-bold">User</label>
+                                        <input type="text" class="form-control"
+                                            value="{{ $user->name }} ({{ $user->email }})" readonly>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label fw-bold" for="new_password">New Password</label>
+                                        <input type="password" class="form-control" id="new_password" name="password"
+                                            required>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label fw-bold" for="password_confirmation">Confirm
+                                            Password</label>
+                                        <input type="password" class="form-control" id="password_confirmation"
+                                            name="password_confirmation" required>
+                                    </div>
+
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="send_notification"
+                                            name="send_notification" checked>
+                                        <label class="form-check-label" for="send_notification">
+                                            Send password reset notification to user
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="modal-footer border-top-0 px-4 pb-4">
+                                    <button type="button" class="btn btn-link link-secondary"
+                                        data-bs-dismiss="modal">Cancel</button>
+                                    <button type="submit" class="btn btn-primary ms-auto">
+                                        <i class="ti ti-key me-2"></i>Reset Password
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             @endsection
 
             @section('scripts')
@@ -1090,6 +1310,63 @@ Quis nostrud exercitation ullamco</textarea>
                                     alert("Terjadi kesalahan saat menghapus foto profil.");
                                 });
                         }
+                    }
+
+
+                    function formatDateIndo(isoString) {
+                        if (!isoString) return '-';
+                        const date = new Date(isoString);
+                        return date.toLocaleString("id-ID", {
+                            day: '2-digit',
+                            month: 'long',
+                            year: 'numeric',
+                            hour: '2-digit',
+                            minute: '2-digit',
+                            timeZone: 'Asia/Jakarta'
+                        });
+                    }
+
+                    function setActivityDetail(activity) {
+                        document.getElementById('detailDescription').innerText = activity.description || '-';
+                        document.getElementById('detailEvent').innerText = activity.event || '-';
+
+                        document.getElementById('detailCauser').innerText = activity.causer_user.name || '-';
+
+                        if (activity.subject_user) {
+                            document.getElementById('detailSubject').innerText =
+                                `${activity.subject_user.name}`;
+                        } else {
+                            document.getElementById('detailSubject').innerText = activity.subject_id ?? '-';
+                        }
+
+                        document.getElementById('detailCreatedAt').innerText = formatDateIndo(activity.created_at);
+                        document.getElementById('detailUpdatedAt').innerText = formatDateIndo(activity.updated_at);
+                    }
+
+
+                    function setDeleteData(button) {
+                        const activityId = button.getAttribute('data-id'); // ambil ID dari tombol
+                        const description = button.getAttribute('data-description'); // opsional kalau mau tampilkan
+
+                        console.log("Activity ID:", activityId);
+                        console.log("Description:", description);
+
+                        if (activityId) {
+                            const form = document.getElementById('deleteForm');
+                            form.action = `/admin/activities/${activityId}`;
+                            console.log("Form action set to:", form.action);
+                        }
+
+                        // Jika pakai deskripsi di modal
+                        const descElem = document.getElementById('deleteDescription');
+                        if (descElem) {
+                            descElem.innerText = description || '';
+                        }
+                    }
+
+                    function setEmailRecipient(name, email) {
+                        document.getElementById('email_recipient').value = name + ' <' + email + '>';
+                        document.getElementById('recipient_email').value = email;
                     }
                 </script>
             @endsection
