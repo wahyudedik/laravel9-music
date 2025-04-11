@@ -590,11 +590,8 @@
                                                                 ],
                                                             ];
 
-                                                            $icon =
-                                                                $iconMap[$activity->event]['icon'] ?? 'ti ti-activity';
-                                                            $bgColor =
-                                                                $iconMap[$activity->event]['color'] ??
-                                                                'bg-secondary-lt';
+                                                            $icon = $iconMap[$activity->event]['icon'] ?? 'ti ti-activity';
+                                                            $bgColor = $iconMap[$activity->event]['color'] ?? 'bg-secondary-lt';
                                                         @endphp
 
                                                         <div class="avatar avatar-rounded {{ $bgColor }}">
@@ -1063,8 +1060,7 @@
                                     aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
-                                <form action="{{ route('profile.songs.update', $song->id) }}" method="POST"
-                                    enctype="multipart/form-data">
+                                <form action="#" method="POST" enctype="multipart/form-data">
                                     @csrf
                                     @method('PUT')
                                     <div class="mb-3">
