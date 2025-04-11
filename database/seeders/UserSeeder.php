@@ -46,73 +46,73 @@ class UserSeeder extends Seeder
                 'country' => 'Indonesia',
                 'role' => 'Super Admin'
             ],
-            [
-                'name' => 'Admin',
-                'username' => 'admin',
-                'email' => 'admin@musicx.com',
-                'password' => 'admin123',
-                'phone' => '6289876543210',
-                'city' => 'Surabaya',
-                'region' => 'Jawa Timur',
-                'country' => 'Indonesia',
-                'role' => 'Admin'
-            ],
-            [
-                'name' => 'User Biasa',
-                'username' => 'user',
-                'email' => 'user@musicx.com',
-                'password' => 'user123',
-                'phone' => '6281234567890',
-                'city' => 'Bandung',
-                'region' => 'Jawa Barat',
-                'country' => 'Indonesia',
-                'role' => 'User'
-            ],
+            // [
+            //     'name' => 'Admin',
+            //     'username' => 'admin',
+            //     'email' => 'admin@musicx.com',
+            //     'password' => 'admin123',
+            //     'phone' => '6289876543210',
+            //     'city' => 'Surabaya',
+            //     'region' => 'Jawa Timur',
+            //     'country' => 'Indonesia',
+            //     'role' => 'Admin'
+            // ],
+            // [
+            //     'name' => 'User Biasa',
+            //     'username' => 'user',
+            //     'email' => 'user@musicx.com',
+            //     'password' => 'user123',
+            //     'phone' => '6281234567890',
+            //     'city' => 'Bandung',
+            //     'region' => 'Jawa Barat',
+            //     'country' => 'Indonesia',
+            //     'role' => 'User'
+            // ],
 
-            [
-                'name' => 'Agung Tester',
-                'username' => 'useragung',
-                'email' => 'agung.nex.edp@gmail.com',
-                'password' => 'user123',
-                'phone' => '6281384010384',
-                'city' => 'Tangerang',
-                'region' => 'Banten',
-                'country' => 'Indonesia',
-                'role' => 'User'
-            ],
-            [
-                'name' => 'John Composer',
-                'username' => 'composerjohn',
-                'email' => 'composer@musicx.com',
-                'password' => 'composer123',
-                'phone' => '6281122334455',
-                'city' => 'Yogyakarta',
-                'region' => 'DIY',
-                'country' => 'Indonesia',
-                'role' => 'Composer'
-            ],
-            [
-                'name' => 'Alice Artist',
-                'username' => 'artistalice',
-                'email' => 'artist@musicx.com',
-                'password' => 'artist123',
-                'phone' => '6282233445566',
-                'city' => 'Bali',
-                'region' => 'Bali',
-                'country' => 'Indonesia',
-                'role' => 'Artist'
-            ],
-            [
-                'name' => 'Cover Creator Kevin',
-                'username' => 'coverkevin',
-                'email' => 'cover@musicx.com',
-                'password' => 'cover123',
-                'phone' => '6283344556677',
-                'city' => 'Medan',
-                'region' => 'Sumatera Utara',
-                'country' => 'Indonesia',
-                'role' => 'Cover Creator'
-            ],
+            // [
+            //     'name' => 'Agung Tester',
+            //     'username' => 'useragung',
+            //     'email' => 'agung.nex.edp@gmail.com',
+            //     'password' => 'user123',
+            //     'phone' => '6281384010384',
+            //     'city' => 'Tangerang',
+            //     'region' => 'Banten',
+            //     'country' => 'Indonesia',
+            //     'role' => 'User'
+            // ],
+            // [
+            //     'name' => 'John Composer',
+            //     'username' => 'composerjohn',
+            //     'email' => 'composer@musicx.com',
+            //     'password' => 'composer123',
+            //     'phone' => '6281122334455',
+            //     'city' => 'Yogyakarta',
+            //     'region' => 'DIY',
+            //     'country' => 'Indonesia',
+            //     'role' => 'Composer'
+            // ],
+            // [
+            //     'name' => 'Alice Artist',
+            //     'username' => 'artistalice',
+            //     'email' => 'artist@musicx.com',
+            //     'password' => 'artist123',
+            //     'phone' => '6282233445566',
+            //     'city' => 'Bali',
+            //     'region' => 'Bali',
+            //     'country' => 'Indonesia',
+            //     'role' => 'Artist'
+            // ],
+            // [
+            //     'name' => 'Cover Creator Kevin',
+            //     'username' => 'coverkevin',
+            //     'email' => 'cover@musicx.com',
+            //     'password' => 'cover123',
+            //     'phone' => '6283344556677',
+            //     'city' => 'Medan',
+            //     'region' => 'Sumatera Utara',
+            //     'country' => 'Indonesia',
+            //     'role' => 'Cover Creator'
+            // ],
         ];
 
         foreach ($users as $data) {
@@ -148,7 +148,7 @@ class UserSeeder extends Seeder
                 'name' => 'Guest User',
                 'username' => 'guest',
                 'password' => Hash::make('guest123'),
-                'phone' => '6280000000000',
+                'phone' => '6280000000000', 
                 'city' => 'Unknown',
                 'region' => 'Unknown',
                 'country' => 'Unknown',

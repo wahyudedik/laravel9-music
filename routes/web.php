@@ -374,8 +374,6 @@ Route::middleware(['auth', 'role:Super Admin,Admin'])->group(function () {
         })->name('admin.genres.show');
     });
 
-
-
     //user profile route
     Route::get('/admin/user-profiles', [AdminUserProfileController::class, 'index'])->name('admin.user-profiles.index');
     Route::get('/admin/user-profiles/{id}', [AdminUserProfileController::class, 'show'])->name('admin.user-profiles.show');
