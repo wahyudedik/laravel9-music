@@ -338,7 +338,6 @@ Route::middleware(['auth', 'role:Super Admin,Admin'])->group(function () {
             }
             return response()->file($path);
         })->where('filename', '.*')->name('admin.songs.audio');
-
     });
 
     // Album and Genre routes
@@ -375,8 +374,6 @@ Route::middleware(['auth', 'role:Super Admin,Admin'])->group(function () {
         })->name('admin.genres.show');
     });
 
-
-
     //user profile route
     Route::get('/admin/user-profiles', [AdminUserProfileController::class, 'index'])->name('admin.user-profiles.index');
     Route::get('/admin/user-profiles/{id}', [AdminUserProfileController::class, 'show'])->name('admin.user-profiles.show');
@@ -388,10 +385,10 @@ Route::middleware(['auth', 'role:Super Admin,Admin'])->group(function () {
     )->name('admin.user-profiles.remove-picture');
     Route::post('/admin/user-profiles/{id}/suspend', [AdminUserProfileController::class, 'suspend'])->name('admin.user-profiles.suspend');
     Route::post('/admin/user-profiles/{id}/active', [AdminUserProfileController::class, 'active'])->name('admin.user-profiles.active');
-    Route::put('/admin/songs/{id}', [SongController::class, 'update'])->name('profile.songs.update');
+    // Route::put('/admin/songs/{id}', [SongController::class, 'update'])->name('profile.songs.update');
     Route::delete('/admin/activities/{id}', [ActivityLogController::class, 'destroy'])->name('admin.activities.destroy');
     Route::post('/admin/send-email', [EmailController::class, 'send'])->name('admin.send.email');
-    Route::put('/admin/songs/{id}', [SongController::class, 'update'])->name('admin.songs.update');
+    // Route::put('/admin/songs/{id}', [SongController::class, 'update'])->name('admin.songs.update');
 
     // Withdraw Verification Routes
     Route::get('/admin/withdrawals', function () {
