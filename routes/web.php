@@ -338,7 +338,6 @@ Route::middleware(['auth', 'role:Super Admin,Admin'])->group(function () {
             }
             return response()->file($path);
         })->where('filename', '.*')->name('admin.songs.audio');
-
     });
 
     // Album and Genre routes
