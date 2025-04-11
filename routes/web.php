@@ -9,6 +9,11 @@ use App\Http\Controllers\AdminRoleController;
 use App\Http\Controllers\AdminUserController;
 use App\Http\Controllers\AdminUserProfileController;
 use App\Http\Controllers\AdminVerificationController;
+use App\Http\Controllers\AdminAlbumController;
+use App\Http\Controllers\AdminGenreController;
+use App\Http\Controllers\AdminSongController;
+
+
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\EmailController;
 use App\Http\Controllers\SongController;
@@ -23,6 +28,7 @@ use App\Services\Admin\UserServices;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
 use Spatie\Permission\Models\Permission;
 
 
@@ -309,35 +315,60 @@ Route::middleware(['auth', 'role:Super Admin,Admin'])->group(function () {
 
     // Song Management Routes
     Route::prefix('admin/songs')->group(function () {
-        Route::get('/', function () {
-            return view('admin.songs.index');
-        })->name('admin.songs.index');
 
-        Route::get('/create', function () {
-            return view('admin.songs.create');
-        })->name('admin.songs.create');
+        Route::get('/', [AdminSongController::class, 'index'])->name('admin.songs.index');
+        Route::get('/create', [AdminSongController::class, 'create'])->name('admin.songs.create');
+        Route::post('/store', [AdminSongController::class, 'store'])->name('admin.songs.store');
+        Route::get('/{id}/edit', [AdminSongController::class, 'edit'])->name('admin.songs.edit');
+        Route::put('/{song}', [AdminSongController::class, 'update'])->name('admin.songs.update');
+        Route::post('/songs/bulk-action', [AdminSongController::class, 'bulkAction'])->name('admin.songs.bulk-action');
+        Route::get('/{id}', [AdminSongController::class, 'show'])->name('admin.songs.show');
+        Route::delete('/{song}', [AdminSongController::class, 'destroy'])->name('admin.songs.destroy');
+        Route::get('/image/{filename}', function ($filename) {
+            $path = storage_path('app/public/songs/' . $filename);
+            if (!File::exists($path)) {
+                return redirect('https://via.placeholder.com/40');
+            }
+            return response()->file($path);
+        })->where('filename', '.*')->name('admin.songs.image');
+        Route::get('/audio/{filename}', function ($filename) {
+            $path = storage_path('app/public/songs/audio/' . $filename);
+            if (!File::exists($path)) {
+                return response(null, 204); // No Content
+            }
+            return response()->file($path);
+        })->where('filename', '.*')->name('admin.songs.audio');
 
-        Route::get('/{id}/edit', function ($id) {
-            return view('admin.songs.edit', compact('id'));
-        })->name('admin.songs.edit');
-
-        Route::get('/{id}', function ($id) {
-            return view('admin.songs.show', compact('id'));
-        })->name('admin.songs.show');
     });
 
     // Album and Genre routes
-    Route::get('/admin/albums', function () {
-        return view('admin.albums.index');
-    })->name('admin.albums.index');
+    // Album Management Routes
+    Route::prefix('admin/albums')->group(function () {
+        Route::get('/', [AdminAlbumController::class, 'index'])->name('admin.albums.index');
+        Route::post('/store', [AdminAlbumController::class, 'store'])->name('admin.albums.store');
+        Route::put('/{album}', [AdminAlbumController::class, 'update'])->name('admin.albums.update');
+        Route::delete('/{album}', [AdminAlbumController::class, 'destroy'])->name('admin.albums.destroy');
+        Route::get('/{filename}', function ($filename) {
+            $path = storage_path('app/public/albums/' . $filename);
+            if (!File::exists($path)) {
+                // Redirect to placeholder instead of 404
+                return redirect('https://via.placeholder.com/40');
+            }
+            return response()->file($path);
+        })->name('admin.albums.image');
 
+        Route::get('/{album}', function ($id) {
+            $album = \App\Models\Album::findOrFail($id);
+            return view('admin.albums.show', compact('album'));
+        })->name('admin.albums.show');
+    });
 
     // Genre Management Routes
     Route::prefix('admin/genres')->group(function () {
-        Route::get('/', [App\Http\Controllers\AdminGenreController::class, 'index'])->name('admin.genres.index');
-        Route::post('/store', [App\Http\Controllers\AdminGenreController::class, 'store'])->name('admin.genres.store');
-        Route::put('/{genre}', [App\Http\Controllers\AdminGenreController::class, 'update'])->name('admin.genres.update');
-        Route::delete('/{genre}', [App\Http\Controllers\AdminGenreController::class, 'destroy'])->name('admin.genres.destroy');
+        Route::get('/', [AdminGenreController::class, 'index'])->name('admin.genres.index');
+        Route::post('/store', [AdminGenreController::class, 'store'])->name('admin.genres.store');
+        Route::put('/{genre}', [AdminGenreController::class, 'update'])->name('admin.genres.update');
+        Route::delete('/{genre}', [AdminGenreController::class, 'destroy'])->name('admin.genres.destroy');
         Route::get('/{genre}', function ($id) {
             $genre = \App\Models\Genre::findOrFail($id);
             return view('admin.genres.show', compact('genre'));
@@ -357,9 +388,7 @@ Route::middleware(['auth', 'role:Super Admin,Admin'])->group(function () {
     )->name('admin.user-profiles.remove-picture');
     Route::post('/admin/user-profiles/{id}/suspend', [AdminUserProfileController::class, 'suspend'])->name('admin.user-profiles.suspend');
     Route::post('/admin/user-profiles/{id}/active', [AdminUserProfileController::class, 'active'])->name('admin.user-profiles.active');
-    Route::delete('/admin/activities/{id}', [ActivityLogController::class, 'destroy'])->name('admin.activities.destroy');
-    Route::post('/admin/send-email', [EmailController::class, 'send'])->name('admin.send.email');
-    Route::put('/admin/songs/{id}', [SongController::class, 'update'])->name('admin.songs.update');
+
 
     // Withdraw Verification Routes
     Route::get('/admin/withdrawals', function () {
@@ -438,9 +467,29 @@ Route::middleware(['auth', 'role:Super Admin,Admin'])->group(function () {
         $limit = Request::input('limit', 10);
         return response()->json($songServices->getAllSongs($search, $limit));
     });
+    Route::get('/admin/data/albums', function (SongServices $songServices) {
+        $search = Request::input('search');
+        $limit = Request::input('limit', 10);
+        return response()->json($songServices->getAllAlbums($search, $limit));
+    });
+    Route::get('/admin/data/genres', function (SongServices $songServices) {
+        $search = Request::input('search');
+        $limit = Request::input('limit', 10);
+        return response()->json($songServices->getAllGenres($search, $limit));
+    });
     Route::get('/admin/data/users', function (UserServices $uuserServices) {
         $search = Request::input('search');
         $limit = Request::input('limit', 10);
         return response()->json($uuserServices->getAllUsers($search, $limit));
+    });
+    Route::get('/admin/data/artists', function (UserServices $uuserServices) {
+        $search = Request::input('search');
+        $limit = Request::input('limit', 10);
+        return response()->json($uuserServices->getAllArtist($search, $limit));
+    });
+    Route::get('/admin/data/composers', function (UserServices $uuserServices) {
+        $search = Request::input('search');
+        $limit = Request::input('limit', 10);
+        return response()->json($uuserServices->getAllComposer($search, $limit));
     });
 });
