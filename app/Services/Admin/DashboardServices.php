@@ -109,15 +109,26 @@ class DashboardServices
     public function getRecentSongs()
     {
         $songs = DB::table('songs')
-            ->leftJoin('users', function ($join) {
-                $join->on('users.id', '=', 'songs.artist_id')
-                    ->orOn('users.id', '=', 'songs.composer_id')
-                    ->orOn('users.id', '=', 'songs.cover_creator_id');
+            ->leftJoin('users as artist', 'artist.id', '=', 'songs.artist_id')
+            ->leftJoin('users as cover', 'cover.id', '=', 'songs.cover_creator_id')
+            ->leftJoin('composer_song', 'composer_song.song_id', '=', 'songs.id')
+            ->leftJoin('users as composer', 'composer.id', '=', 'composer_song.user_id')
+            ->leftJoin('genres', 'songs.genre_id', '=', 'genres.id')
+            ->leftJoin('model_has_roles', function ($join) {
+                $join->on('model_has_roles.model_uuid', '=', 'artist.id')
+                    ->orOn('model_has_roles.model_uuid', '=', 'cover.id')
+                    ->orOn('model_has_roles.model_uuid', '=', 'composer.id');
             })
-            ->join('model_has_roles', 'model_has_roles.model_uuid', '=', 'users.id')
             ->join('roles', 'roles.id', '=', 'model_has_roles.role_id')
             ->whereIn('roles.name', ['Artist', 'Cover Creator', 'Composer'])
-            ->select('songs.id', 'users.name as name', 'songs.title', 'songs.genre', 'songs.created_at', 'songs.status')
+            ->select(
+                'songs.id',
+                DB::raw('COALESCE(artist.name, cover.name, composer.name) as name'),
+                'songs.title',
+                'genres.name as genre',
+                'songs.created_at',
+                'songs.status'
+            )
             ->distinct()
             ->limit(10)
             ->get()
@@ -130,30 +141,32 @@ class DashboardServices
         return $songs;
     }
 
-    public function getGenreData($genre)
+    public function getGenreData($genreName)
     {
         $totalSongs = Song::count();
 
-        return Song::selectRaw('genre, COUNT(*) as count')
-            ->where('genre', $genre)
-            ->groupBy('genre')
+        return Song::join('genres', 'songs.genre_id', '=', 'genres.id')
+            ->selectRaw('genres.name as genre, COUNT(*) as count')
+            ->where('genres.name', $genreName)
+            ->groupBy('genres.name')
             ->get()
             ->map(function ($genre) use ($totalSongs) {
-                $genre->percentage = $totalSongs > 0 ? round(($genre->count / $totalSongs) * 100, 2) : 0;
+                $genre->percentage = $totalSongs > 0
+                    ? round(($genre->count / $totalSongs) * 100, 2)
+                    : 0;
                 return $genre;
             })->first();
     }
 
     public function getSongGenre()
     {
-
-        $genres = ['Pop', 'Hip Hop', 'Rock', 'Electronic', 'Reggae', 'General', 'Other'];
-
+        $genreNames = DB::table('genres')->pluck('name'); // get all genre names from DB
         $topGenres = [];
-        foreach ($genres as $genre) {
-            $data = $this->getGenreData($genre);
+
+        foreach ($genreNames as $genreName) {
+            $data = $this->getGenreData($genreName);
             if ($data) {
-                $topGenres[$genre] = $data;
+                $topGenres[$genreName] = $data;
             }
         }
 

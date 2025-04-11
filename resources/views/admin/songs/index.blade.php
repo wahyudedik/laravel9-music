@@ -27,78 +27,81 @@
 
     <div class="page-body">
         <div class="container-xl">
-            <div class="card mb-4">
+            <div class="card mb-4 " style="overflow: auto;">
                 <div class="card-header">
                     <h3 class="card-title">Filter Songs</h3>
                 </div>
-                <div class="card-body">
-                    <div class="row g-3">
-                        <div class="col-md-4">
-                            <label class="form-label">Album</label>
-                            <select id="album-filter" class="form-select">
-                                <option value="">All Albums</option>
-                                <option value="After Hours">After Hours</option>
-                                <option value="Future Nostalgia">Future Nostalgia</option>
-                                <option value="Justice">Justice</option>
-                                <option value="MONTERO">MONTERO</option>
-                                <option value="Planet Her">Planet Her</option>
-                            </select>
-                        </div>
-                        <div class="col-md-4">
-                            <label class="form-label">Genre</label>
-                            <select id="genre-filter" class="form-select">
-                                <option value="">All Genres</option>
-                                <option value="Pop">Pop</option>
-                                <option value="Hip Hop">Hip Hop</option>
-                                <option value="Rock">Rock</option>
-                                <option value="Electronic">Electronic</option>
-                                <option value="R&B">R&B</option>
-                            </select>
-                        </div>
-                        <div class="col-md-4">
-                            <label class="form-label">Status</label>
-                            <select id="status-filter" class="form-select">
-                                <option value="">All Status</option>
-                                <option value="Active">Active</option>
-                                <option value="Pending">Pending</option>
-                                <option value="Inactive">Inactive</option>
-                            </select>
-                        </div>
-                        <div class="col-12">
-                            <div class="d-flex justify-content-end">
-                                <button id="reset-filters" class="btn btn-link me-2">Reset</button>
-                                <button id="apply-filters" class="btn btn-primary">Apply Filters</button>
+                <form id="form-filter" action="{{ route('admin.songs.index') }}" method="GET" class="d-flex">
+                    <div class="card-body">
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <label class="form-label">Album</label>
+                                <select name="falbum_id" id="falbum_id" data-album="{{ request('falbum_id') }}"
+                                    data-json="@json($album)" class="selectpicker form-control"
+                                    data-live-search="true" required>
+                                    <option value="">Select Album</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Genre</label>
+                                <select name="fgenre_id" id="fgenre_id" data-genre="{{ request('fgenre_id') }}"
+                                    data-json="@json($genre)" class="selectpicker form-control "
+                                    data-live-search="true" required>
+                                    <option value="">Select Genre</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Status</label>
+                                <select id="status-filter" name="fstatus" class="form-select">
+                                    <option value="">All Status</option>
+                                    <option value="Active" {{ request('fstatus') == 'Active' ? 'selected' : '' }}>Active
+                                    </option>
+                                    <option value="Pending" {{ request('fstatus') == 'Pending' ? 'selected' : '' }}>Pending
+                                    </option>
+                                    <option value="Inactive" {{ request('fstatus') == 'Inactive' ? 'selected' : '' }}>
+                                        Inactive</option>
+                                </select>
+                            </div>
+                            <div class="col-12">
+                                <div class="d-flex justify-content-end">
+                                    <a href="{{ route('admin.songs.index') }}" id="reset-filters"
+                                        class="btn btn-link me-2">Reset</a>
+                                    <button type="submit" id="apply-filters" class="btn btn-primary">Apply Filters</button>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                </form>
             </div>
 
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h3 class="card-title">Song List</h3>
                     <div class="d-flex">
-                        <div class="input-icon me-3">
-                            <span class="input-icon-addon">
-                                <i class="ti ti-search"></i>
-                            </span>
-                            <input type="text" id="song-search" class="form-control" placeholder="Search songs...">
-                        </div>
+                        <form action="{{ route('admin.songs.index') }}" method="GET" class="d-flex">
+                            <div class="input-icon me-3">
+                                <span class="input-icon-addon">
+                                    <i class="ti ti-search"></i>
+                                </span>
+                                <input type="text" name="search" id="song-search" class="form-control"
+                                    value="{{ request('search') }}" placeholder="Search songs...">
+                            </div>
+                        </form>
                         <div class="dropdown">
                             <button class="btn btn-outline-secondary dropdown-toggle" type="button"
                                 id="bulkActionsDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                                 Bulk Actions
                             </button>
                             <ul class="dropdown-menu" aria-labelledby="bulkActionsDropdown">
-                                <li><a class="dropdown-item" href="#"><i class="ti ti-check me-2"></i>Activate
-                                        Selected</a></li>
-                                <li><a class="dropdown-item" href="#"><i class="ti ti-x me-2"></i>Deactivate
-                                        Selected</a></li>
+                                <li><a class="dropdown-item bulk-action-btn" href="javascript:void(0)" data-action="activate"><i
+                                            class="ti ti-check me-2"></i>Activate Selected</a></li>
+                                <li><a class="dropdown-item bulk-action-btn" href="javascript:void(0)" data-action="deactivate"><i
+                                            class="ti ti-x me-2"></i>Deactivate Selected</a></li>
                                 <li>
                                     <hr class="dropdown-divider">
                                 </li>
-                                <li><a class="dropdown-item text-danger" href="#"><i
-                                            class="ti ti-trash me-2"></i>Delete Selected</a></li>
+                                <li><a class="dropdown-item text-danger bulk-action-btn" href="javascript:void(0)"
+                                        data-action="delete"><i class="ti ti-trash me-2"></i>Delete Selected</a></li>
                             </ul>
                         </div>
                     </div>
@@ -120,63 +123,45 @@
                             </tr>
                         </thead>
                         <tbody id="songs-table-body">
-                            @php
-                                $albums = ['After Hours', 'Future Nostalgia', 'Justice', 'MONTERO', 'Planet Her'];
-                                $artists = ['The Weeknd', 'Dua Lipa', 'Justin Bieber', 'Lil Nas X', 'Doja Cat'];
-                                $genres = ['Pop', 'Hip Hop', 'R&B', 'Electronic', 'Rock'];
-                                $statuses = ['Active', 'Pending', 'Inactive'];
-                                $songs = [
-                                    'Blinding Lights',
-                                    'Save Your Tears',
-                                    'Levitating',
-                                    'Don\'t Start Now',
-                                    'Peaches',
-                                    'Stay',
-                                    'MONTERO (Call Me By Your Name)',
-                                    'INDUSTRY BABY',
-                                    'Kiss Me More',
-                                    'Need To Know',
-                                    'Woman',
-                                    'Streets',
-                                    'Take My Breath',
-                                    'Love Again',
-                                    'Physical',
-                                    'Ghost',
-                                    'Yummy',
-                                    'SUN GOES DOWN',
-                                ];
-                            @endphp
 
-                            @for ($i = 0; $i < 15; $i++)
+
+                            @foreach ($songs as $song)
                                 @php
-                                    $songIndex = $i % count($songs);
-                                    $artistIndex = $i % count($artists);
-                                    $albumIndex = $i % count($albums);
-                                    $genreIndex = $i % count($genres);
-                                    $statusIndex = $i % count($statuses);
-                                    $releaseDate = date('Y-m-d', strtotime('-' . rand(1, 365) . ' days'));
+                                    // Extract filename from the 3rd image variant (small)
+                                    $coverImages = explode(',', $song->cover_image ?? '');
+                                    $smallCoverFile = $coverImages[2] ?? null;
+
+                                    // Get just the filename from the path (e.g. "cover_abc_sm.jpeg")
+                                    $filename = $smallCoverFile ? basename($smallCoverFile) : null;
+
+                                    // Generate image URL via route
+                                    $imageUrl = $filename
+                                        ? route('admin.songs.image', ['filename' => $filename])
+                                        : 'https://via.placeholder.com/40';
                                 @endphp
-                                <tr class="song-row" data-album="{{ $albums[$albumIndex] }}"
-                                    data-genre="{{ $genres[$genreIndex] }}" data-status="{{ $statuses[$statusIndex] }}">
+
+                                <tr class="song-row" data-album="{{ $song->album->title ?? '-' }}"
+                                    data-genre="{{ $song->genre->name ?? '-' }}"
+                                    data-status="{{ $song->status ?? 'Inactive' }}">
                                     <td>
                                         <input class="form-check-input m-0 align-middle song-checkbox" type="checkbox"
-                                            value="{{ $i + 1 }}">
+                                            value="{{ $song->id }}">
                                     </td>
                                     <td>
                                         <div class="d-flex align-items-center">
                                             <span class="avatar me-2"
-                                                style="background-image: url(https://picsum.photos/40/40?random={{ $i }})"></span>
-                                            <div>{{ $songs[$songIndex] }}</div>
+                                                style="background-image: url('{{ $imageUrl }}')"></span>
+                                            <div>{{ $song->title }}</div>
                                         </div>
                                     </td>
-                                    <td>{{ $artists[$artistIndex] }}</td>
-                                    <td>{{ $albums[$albumIndex] }}</td>
-                                    <td>{{ $genres[$genreIndex] }}</td>
-                                    <td>{{ $releaseDate }}</td>
+                                    <td>{{ $song->album->artist->name ?? '-' }}</td>
+                                    <td>{{ $song->album->title ?? '-' }}</td>
+                                    <td>{{ $song->genre->name ?? '-' }}</td>
+                                    <td>{{ \Carbon\Carbon::parse($song->release_date)->format('d M Y') }}</td>
                                     <td>
-                                        @if ($statuses[$statusIndex] == 'Active')
+                                        @if ($song->status == 'Active')
                                             <span class="badge bg-success">Active</span>
-                                        @elseif($statuses[$statusIndex] == 'Pending')
+                                        @elseif($song->status == 'Pending')
                                             <span class="badge bg-warning text-dark">Pending</span>
                                         @else
                                             <span class="badge bg-danger">Inactive</span>
@@ -188,175 +173,274 @@
                                                 <i class="ti ti-dots-vertical"></i>
                                             </button>
                                             <div class="dropdown-menu dropdown-menu-end">
-                                                <a href="{{ route('admin.songs.show', $i + 1) }}" class="dropdown-item">
+                                                <a href="{{ route('admin.songs.show', $song->id) }}"
+                                                    class="dropdown-item">
                                                     <i class="ti ti-eye me-2"></i>View
                                                 </a>
-                                                <a href="{{ route('admin.songs.edit', $i + 1) }}" class="dropdown-item">
+                                                <a href="{{ route('admin.songs.edit', $song->id) }}"
+                                                    class="dropdown-item">
                                                     <i class="ti ti-edit me-2"></i>Edit
                                                 </a>
                                                 <a href="#" class="dropdown-item">
                                                     <i class="ti ti-player-play me-2"></i>Preview
                                                 </a>
                                                 <div class="dropdown-divider"></div>
-                                                <a href="#" class="dropdown-item text-danger delete-song"
-                                                    data-id="{{ $i + 1 }}">
+
+                                                <a href="javascript:void(0)" class="dropdown-item text-danger delete-song"
+                                                    onclick="confirmDelete('{{ $song->id }}')"
+                                                    data-id="{{ $song->id }}">
                                                     <i class="ti ti-trash me-2"></i>Delete
                                                 </a>
+
+                                                <form id="delete-form-{{ $song->id }}"
+                                                    action="{{ route('admin.songs.destroy', $song) }}" method="POST"
+                                                    class="d-none">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                </form>
+
+
+
                                             </div>
                                         </div>
                                     </td>
                                 </tr>
-                            @endfor
+                            @endforeach
                         </tbody>
                     </table>
                 </div>
                 <div class="card-footer d-flex align-items-center">
-                    <p class="m-0 text-muted">Showing <span>1</span> to <span>15</span> of <span>50</span> entries</p>
-                    <ul class="pagination m-0 ms-auto">
-                        <li class="page-item disabled">
-                            <a class="page-link" href="#" tabindex="-1" aria-disabled="true">
-                                <i class="ti ti-chevron-left"></i>
-                                prev
-                            </a>
-                        </li>
-                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                        <li class="page-item">
-                            <a class="page-link" href="#">
-                                next
-                                <i class="ti ti-chevron-right"></i>
-                            </a>
-                        </li>
-                    </ul>
+                    {{ $songs->links() }}
                 </div>
             </div>
         </div>
     </div>
 @endsection
+@push('styles')
+    <!-- Bootstrap Select CSS -->
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta2/dist/css/bootstrap-select.min.css">
 
+    <style>
+        .bootstrap-select>.dropdown-toggle {
+            height: 35.6px;
+        }
+
+        .card-no-hover {
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            transition: none;
+        }
+
+        .card-no-hover:hover {
+            transform: none;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        }
+    </style>
+@endpush
 @section('scripts')
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta2/dist/js/bootstrap-select.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Filter functionality
-            const albumFilter = document.getElementById('album-filter');
-            const genreFilter = document.getElementById('genre-filter');
-            const statusFilter = document.getElementById('status-filter');
-            const applyFiltersBtn = document.getElementById('apply-filters');
-            const resetFiltersBtn = document.getElementById('reset-filters');
-            const songRows = document.querySelectorAll('.song-row');
-            const songSearch = document.getElementById('song-search');
-            const selectAll = document.getElementById('select-all');
-            const songCheckboxes = document.querySelectorAll('.song-checkbox');
-            const deleteButtons = document.querySelectorAll('.delete-song');
 
-            // Apply filters
-            applyFiltersBtn.addEventListener('click', function() {
-                filterSongs();
+            // When #select-all is clicked
+            $('#select-all').on('change', function() {
+                $('.song-checkbox').prop('checked', this.checked);
             });
 
-            // Reset filters
-            resetFiltersBtn.addEventListener('click', function() {
-                albumFilter.value = '';
-                genreFilter.value = '';
-                statusFilter.value = '';
-                songSearch.value = '';
-                filterSongs();
+            // If any individual checkbox is unchecked, uncheck #select-all
+            $('.song-checkbox').on('change', function() {
+                if (!$(this).is(':checked')) {
+                    $('#select-all').prop('checked', false);
+                }
+
+                // If all are checked, check #select-all
+                if ($('.song-checkbox:checked').length === $('.song-checkbox').length) {
+                    $('#select-all').prop('checked', true);
+                }
             });
 
-            // Search functionality
-            songSearch.addEventListener('input', function() {
-                filterSongs();
+            var selectedAlbum = $('#falbum_id').attr('data-album');
+            var selectedGenre = $('#fgenre_id').attr('data-genre');
+
+            fetchAlbum("#falbum_id", selectedAlbum);
+            fetchGenre("#fgenre_id", selectedGenre);
+            $('#apply-filters').on('click', function() {
+                $('#form-filter').submit(); // force submit
             });
 
-            // Select all checkboxes
-            selectAll.addEventListener('change', function() {
-                songCheckboxes.forEach(checkbox => {
-                    const row = checkbox.closest('tr');
-                    if (!row.classList.contains('d-none')) {
-                        checkbox.checked = selectAll.checked;
-                    }
-                });
-            });
 
-            // Delete song confirmation
-            deleteButtons.forEach(button => {
-                button.addEventListener('click', function(e) {
+
+            // Handle bulk action buttons
+            document.querySelectorAll('.bulk-action-btn').forEach(btn => {
+                btn.addEventListener('click', function(e) {
                     e.preventDefault();
-                    const songId = this.dataset.id;
+
+                    const action = this.dataset.action;
+                    const selectedIds = Array.from(document.querySelectorAll(
+                        '.song-checkbox:checked')).map(cb => cb.value);
+
+                    if (selectedIds.length === 0) {
+                        return Swal.fire({
+                            icon: 'warning',
+                            title: 'No Songs Selected',
+                            text: 'Please select at least one song to proceed.',
+                            confirmButtonText: 'OK'
+                        });
+                    }
 
                     Swal.fire({
-                        title: 'Are you sure?',
-                        text: "You won't be able to revert this!",
-                        icon: 'warning',
+                        title: `Are you sure?`,
+                        text: `You are about to ${action} ${selectedIds.length} song(s).`,
+                        icon: 'question',
                         showCancelButton: true,
-                        confirmButtonColor: '#e53935',
-                        cancelButtonColor: '#6c757d',
-                        confirmButtonText: 'Yes, delete it!'
+                        confirmButtonText: 'Yes, proceed!',
+                        cancelButtonText: 'Cancel'
                     }).then((result) => {
                         if (result.isConfirmed) {
-                            Swal.fire(
-                                'Deleted!',
-                                'The song has been deleted.',
-                                'success'
-                            );
-                            // Here you would normally make an AJAX call to delete the song
-                            // For demo purposes, we'll just hide the row
-                            this.closest('tr').remove();
+                            fetch(`{{ route('admin.songs.bulk-action') }}`, {
+                                    method: 'POST',
+                                    headers: {
+                                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                        'Content-Type': 'application/json',
+                                        'Accept': 'application/json'
+                                    },
+                                    body: JSON.stringify({
+                                        action: action,
+                                        song_ids: selectedIds
+                                    })
+                                })
+                                .then(res => res.json())
+                                .then(data => {
+                                    if (data.success) {
+                                        Swal.fire('Success', data.message, 'success')
+                                            .then(() => location.reload());
+                                    } else {
+                                        Swal.fire('Error', data.message ||
+                                            'Something went wrong.', 'error');
+                                    }
+                                })
+                                .catch(err => {
+                                    console.error(err);
+                                    Swal.fire('Error', 'Request failed.', 'error');
+                                });
                         }
                     });
                 });
             });
 
-            // Filter songs function
-            function filterSongs() {
-                const albumValue = albumFilter.value.toLowerCase();
-                const genreValue = genreFilter.value.toLowerCase();
-                const statusValue = statusFilter.value.toLowerCase();
-                const searchValue = songSearch.value.toLowerCase();
 
-                songRows.forEach(row => {
-                    const album = row.dataset.album.toLowerCase();
-                    const genre = row.dataset.genre.toLowerCase();
-                    const status = row.dataset.status.toLowerCase();
-                    const title = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
-                    const artist = row.querySelector('td:nth-child(3)').textContent.toLowerCase();
 
-                    const matchesAlbum = !albumValue || album.includes(albumValue);
-                    const matchesGenre = !genreValue || genre.includes(genreValue);
-                    const matchesStatus = !statusValue || status.includes(statusValue);
-                    const matchesSearch = !searchValue ||
-                        title.includes(searchValue) ||
-                        artist.includes(searchValue);
-
-                    if (matchesAlbum && matchesGenre && matchesStatus && matchesSearch) {
-                        row.classList.remove('d-none');
-                    } else {
-                        row.classList.add('d-none');
-                    }
-                });
-
-                // Uncheck "select all" if any visible items are unchecked
-                updateSelectAllCheckbox();
-            }
-
-            // Update "select all" checkbox state
-            function updateSelectAllCheckbox() {
-                const visibleCheckboxes = Array.from(songCheckboxes).filter(checkbox =>
-                    !checkbox.closest('tr').classList.contains('d-none')
-                );
-
-                const allChecked = visibleCheckboxes.every(checkbox => checkbox.checked);
-                const someChecked = visibleCheckboxes.some(checkbox => checkbox.checked);
-
-                selectAll.checked = allChecked;
-                selectAll.indeterminate = someChecked && !allChecked;
-            }
-
-            // Update select all checkbox when individual checkboxes change
-            songCheckboxes.forEach(checkbox => {
-                checkbox.addEventListener('change', updateSelectAllCheckbox);
-            });
         });
+
+        function confirmDelete(id) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#e53935',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('delete-form-' + id).submit();
+                }
+            });
+        }
+
+        function fetchAlbum(selectId, selectedValue = "", search = "") {
+            const albumSelect = $(selectId);
+            const preloadedJson = albumSelect.attr('data-json');
+            let preloadedAlbum = null;
+
+            // Parse JSON safely
+            try {
+                preloadedAlbum = JSON.parse(preloadedJson);
+            } catch (e) {
+                console.error("Invalid JSON in data-json:", e);
+            }
+
+            albumSelect.empty();
+            albumSelect.append('<option value="">Select Album</option>');
+
+            // Append preloaded selected album if it exists
+            if (preloadedAlbum && preloadedAlbum.id) {
+                albumSelect.append(
+                    '<option value="' + preloadedAlbum.id + '" selected>' +
+                    preloadedAlbum.title + ' (' + preloadedAlbum.artist + ')</option>'
+                );
+            }
+
+            // AJAX to fetch albums
+            $.ajax({
+                url: "/admin/data/albums",
+                type: "GET",
+                data: {
+                    search: search,
+                    limit: 20
+                },
+                dataType: "json",
+                success: function(data) {
+                    $.each(data, function(index, album) {
+                        // Avoid duplicates
+                        if (albumSelect.find('option[value="' + album.id + '"]').length === 0) {
+                            const selected = album.id === selectedValue ? 'selected' : '';
+                            albumSelect.append(
+                                '<option value="' + album.id + '" ' + selected + '>' +
+                                album.title + ' (' + album.artist + ')</option>'
+                            );
+                        }
+                    });
+
+                    albumSelect.selectpicker("refresh");
+                }
+            });
+        }
+
+        function fetchGenre(selectId, selectedValue = "", search = "") {
+            const genreSelect = $(selectId);
+            const preloadedJson = genreSelect.attr('data-json');
+            let preloadedGenre = null;
+
+            // Parse JSON if exists
+            try {
+                preloadedGenre = JSON.parse(preloadedJson);
+            } catch (e) {
+                console.error("Invalid JSON in data-json:", e);
+            }
+
+            genreSelect.empty();
+            genreSelect.append('<option value="">Select Genre</option>');
+
+            // Add preloaded selected genre if available
+            if (preloadedGenre && preloadedGenre.id) {
+                genreSelect.append('<option value="' + preloadedGenre.id + '" selected>' +
+                    preloadedGenre.name + '</option>');
+            }
+
+            // Fetch other genre options via AJAX
+            $.ajax({
+                url: "/admin/data/genres",
+                type: "GET",
+                data: {
+                    search: search,
+                    limit: 20
+                },
+                dataType: "json",
+                success: function(data) {
+                    $.each(data, function(index, genre) {
+                        // Skip if already added (from preloaded data)
+                        if (genreSelect.find('option[value="' + genre.id + '"]').length === 0) {
+                            const selected = genre.id === selectedValue ? 'selected' : '';
+                            genreSelect.append('<option value="' + genre.id + '" ' + selected + '>' +
+                                genre.name + '</option>');
+                        }
+                    });
+
+                    genreSelect.selectpicker("refresh");
+                }
+            });
+        }
     </script>
 @endsection
