@@ -173,10 +173,12 @@
                                                         <i class="ti ti-dots-vertical"></i>
                                                     </button>
                                                     <div class="dropdown-menu dropdown-menu-end">
+
                                                         <a href="javascript:void(0)" class="dropdown-item"
                                                             onclick="editGenre('{{ $genre->id }}', '{{ $genre->name }}', '{{ $genre->description }}', '{{ $genre->icon_color }}', '{{ $genre->status }}'  )">
                                                             <i class="ti ti-edit me-2"></i>Edit
                                                         </a>
+
                                                         <a href="#" class="dropdown-item">
                                                             <i class="ti ti-music me-2"></i>View Songs
                                                         </a>
@@ -366,6 +368,8 @@
             </form>
         </div>
     </div>
+
+
 @endsection
 
 @section('scripts')
