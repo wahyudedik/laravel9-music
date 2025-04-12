@@ -421,6 +421,24 @@ Route::middleware(['auth', 'role:Super Admin,Admin'])->group(function () {
         })->where('filename', '.*')->name('admin.songs.audio');
     });
 
+    // Route Product licensed
+    Route::prefix('admin/products')->group(function () {
+        Route::get('/', function () {
+            return view('admin.products.index');
+        })->name('admin.products.index');
+
+        Route::get('/create', function () {
+            return view('admin.products.create');
+        })->name('admin.products.create');
+
+        Route::get('/{id}/edit', function ($id) {
+            return view('admin.products.edit', compact('id'));
+        })->name('admin.products.edit');
+
+        Route::get('/{id}', function ($id) {
+            return view('admin.products.show', compact('id'));
+        })->name('admin.products.show');
+    });
 
 
     // Album and Genre routes
@@ -534,6 +552,44 @@ Route::middleware(['auth', 'role:Super Admin,Admin'])->group(function () {
     Route::get('/admin/reports/content', function () {
         return view('admin.reports.content');
     })->name('admin.reports.content');
+
+    // Royalties Management Routes
+    Route::get('/admin/royalties', function () {
+        return view('admin.royalties.index');
+    })->name('admin.royalties.index');
+
+    Route::get('/admin/royalties/{id}', function ($id) {
+        return view('admin.royalties.show', compact('id'));
+    })->name('admin.royalties.show');
+
+    Route::get('/admin/royalties/{id}/edit', function ($id) {
+        return view('admin.royalties.edit', compact('id'));
+    })->name('admin.royalties.edit');
+
+    Route::get('/admin/royalties-reports', function () {
+        return view('admin.royalties.reports');
+    })->name('admin.royalties.reports');
+
+    Route::get('/admin/royalties-settings', function () {
+        return view('admin.royalties.settings');
+    })->name('admin.royalties.settings');
+
+    // Booking Artis Route
+    Route::get('/admin/bookings', function () {
+        return view('admin.bookings.index');
+    })->name('admin.bookings.index');
+
+    Route::get('/admin/bookings/create', function () {
+        return view('admin.bookings.create');
+    })->name('admin.bookings.create');
+
+    Route::get('/admin/bookings/{id}/edit', function ($id) {
+        return view('admin.bookings.edit', compact('id'));
+    })->name('admin.bookings.edit');
+
+    Route::get('/admin/bookings/{id}', function ($id) {
+        return view('admin.bookings.show', compact('id'));
+    })->name('admin.bookings.show');
 
     //Utility Route
     Route::get('/admin/data/regions', function () {

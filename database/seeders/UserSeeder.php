@@ -141,25 +141,25 @@ class UserSeeder extends Seeder
             $user->assignRole($data['role']);
         }
 
-        User::firstOrCreate(
-            ['email' => 'guest@musicx.com'],
-            [
-                'id' => Str::uuid(),
-                'name' => 'Guest User',
-                'username' => 'guest',
-                'password' => Hash::make('guest123'),
-                'phone' => '6280000000000', 
-                'city' => 'Unknown',
-                'region' => 'Unknown',
-                'country' => 'Unknown',
-                'profile_picture' => null,
-                'followers' => 0,
-                'following' => 0,
-                'email_verified_at' => now(),
-                'remember_token' => Str::random(10),
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]
-        );
+        // User::firstOrCreate(
+        //     ['email' => 'guest@musicx.com'],
+        //     [
+        //         'id' => Str::uuid(),
+        //         'name' => 'Guest User',
+        //         'username' => 'guest',
+        //         'password' => Hash::make('guest123'),
+        //         'phone' => '6280000000000', 
+        //         'city' => 'Unknown',
+        //         'region' => 'Unknown',
+        //         'country' => 'Unknown',
+        //         'profile_picture' => null,
+        //         'followers' => 0,
+        //         'following' => 0,
+        //         'email_verified_at' => now(),
+        //         'remember_token' => Str::random(10),
+        //         'created_at' => now(),
+        //         'updated_at' => now(),
+        //     ]
+        // );
     }
 }
