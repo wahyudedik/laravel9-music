@@ -122,6 +122,12 @@
                                         <textarea class="form-control" name="description" rows="4" placeholder="Enter song description"></textarea>
                                     </div>
                                 </div>
+                                <div class="col-md-12">
+                                    <div class="mb-3">
+                                        <div class="form-label">Lyrics</div>
+                                        <textarea class="form-control" name="lyrics" rows="4" placeholder="Enter song lyrics"></textarea>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="card-header">

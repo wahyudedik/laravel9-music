@@ -124,6 +124,12 @@ Route::middleware(['auth', 'role:User,Cover Creator,Artist,Composer,Super Admin,
 
 
 
+//  user play song
+
+Route::middleware(['auth', 'role:User,Cover Creator,Artist,Composer,Admin,Super Admin', 'verified'])->group(function () {
+    Route::get('/play-song/{id}', [SongController::class, 'playSong'])
+        ->name('play-song');
+});
 
 // User Dashboard Routes
 Route::middleware(['auth', 'role:User,Cover Creator,Artist,Composer', 'verified'])->group(function () {
@@ -132,10 +138,6 @@ Route::middleware(['auth', 'role:User,Cover Creator,Artist,Composer', 'verified'
         return redirect()->route('user.dashboard');
     });
     Route::get('/user/dashboard', [UserController::class, 'dashboard'])->name('user.dashboard');
-
-    //  user play song
-    Route::get('/play-song/{id}', [SongController::class, 'playSong'])
-        ->name('play-song');
 
     // Fitur untuk pengajuan verification status user
     Route::get('/verification/form', [UserVerificationController::class, 'showVerificationForm'])
@@ -374,6 +376,8 @@ Route::middleware(['auth', 'role:Super Admin,Admin'])->group(function () {
         })->where('filename', '.*')->name('admin.songs.audio');
     });
 
+
+
     // Album and Genre routes
     // Album Management Routes
     Route::prefix('admin/albums')->group(function () {
@@ -485,11 +489,6 @@ Route::middleware(['auth', 'role:Super Admin,Admin'])->group(function () {
     Route::get('/admin/reports/content', function () {
         return view('admin.reports.content');
     })->name('admin.reports.content');
-
-    // play song
-    Route::get('admin/play-song/{id}', function ($id) {
-        return view('play-song', compact('id'));
-    })->name('admin.play-song');
 
     //Utility Route
     Route::get('/admin/data/regions', function () {

@@ -18,6 +18,7 @@ class Song extends Model
         'title',
         'version',
         'description',
+        'lyrics',
         'genre_id',
         'album_id',
         'artist_id',
