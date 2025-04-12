@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -23,11 +24,15 @@ class DatabaseSeeder extends Seeder
 
         $this->call([
             // SiteConfigsSeeder::class,
-            // RoleSeeder::class, 
+            // RoleSeeder::class,
             // PermissionSeeder::class,
             UserSeeder::class,
             // AlbumsSeeder::class,
             // DummySongSeeder::class,
+            StreamSeeder::class,
+            UserProfileSeeder::class,
+            UserSocialMediaSeeder::class,
+            GenreSeeder::class,
             // StreamSeeder::class,
             // UserProfileSeeder::class,
             // UserSocialMediaSeeder::class,

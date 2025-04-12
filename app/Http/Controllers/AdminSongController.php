@@ -73,7 +73,7 @@ class AdminSongController extends Controller
     public function create()
     {
         $authUser = Auth::user();
-        activity()->withProperties(['ip' => request()->ip()])->log($authUser->name . ' visited create songs form');
+        activity('song')->withProperties(['ip' => request()->ip()])->log($authUser->name . ' visited create songs form');
 
         return view('admin.songs.create');
     }
@@ -154,6 +154,7 @@ class AdminSongController extends Controller
             'title' => $request->title,
             'version' => $request->version ?? 'original',
             'description' => $request->description,
+            'lyrics' => $request->lyrics ?? null,
             'genre_id' => $request->genre_id,
             'album_id' => $request->album_id,
             'artist_id' => $request->artist_id,
@@ -203,8 +204,8 @@ class AdminSongController extends Controller
             'name' => $song->genre->name,
         ];
         $artist = [
-            'id' => $song->genre->id,
-            'name' => $song->genre->name,
+            'id' => $song->artist->id,
+            'name' => $song->artist->name,
             'roleName' => 'Artist',
         ];
         $album = [
@@ -324,6 +325,7 @@ class AdminSongController extends Controller
             'title' => $request->title,
             'version' => $request->version ?? 'original',
             'description' => $request->description,
+            'lyrics' => $request->lyrics,
             'genre_id' => $request->genre_id,
             'album_id' => $request->album_id,
             'artist_id' => $request->artist_id,

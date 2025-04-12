@@ -299,9 +299,28 @@
                                                 </span>
                                             </div>
                                             <div class="col-auto">
-                                                <button class="btn btn-icon btn-sm btn-primary" data-bs-toggle="tooltip"
-                                                    title="Play">
-                                                    <i class="ti ti-player-play"></i>
+                                                <button
+                                                    class="btn btn-icon btn-sm btn-primary popular-play-button-{{ $song->id }}"
+                                                    data-bs-toggle="tooltip" title="Play">
+                                                    <i class="ti ti-player-play "></i>
+
+                                                    @php
+                                                        $filename = $song->file_path
+                                                            ? basename($song->file_path)
+                                                            : null;
+                                                        $audioUrl = $filename
+                                                            ? route('songs.audio', ['filename' => $filename])
+                                                            : null;
+                                                    @endphp
+
+                                                    @if ($audioUrl)
+                                                        <audio controls
+                                                            class="w-100 mb-3 d-none populaar-audio-{{ $song->id }}">
+                                                            <source src="{{ $audioUrl }}" type="audio/mpeg">
+                                                            Your browser does not support the audio element.
+                                                        </audio>
+                                                    @endif
+
                                                 </button>
                                             </div>
                                         </div>
@@ -583,10 +602,31 @@
                                         <td>{{ now()->subHours(rand(1, 24))->diffForHumans() }}</td>
                                         <td>
                                             <div class="btn-list flex-nowrap">
-                                                <button class="btn btn-icon btn-sm btn-primary" data-bs-toggle="tooltip"
-                                                    title="Play">
+
+                                                <button
+                                                    class="btn btn-icon btn-sm btn-primary recently-play-btn-{{ $song->id }}"
+                                                    data-bs-toggle="tooltip" title="Play">
                                                     <i class="ti ti-player-play"></i>
+
+                                                    @php
+                                                        $filename = $song->file_path
+                                                            ? basename($song->file_path)
+                                                            : null;
+                                                        $audioUrl = $filename
+                                                            ? route('songs.audio', ['filename' => $filename])
+                                                            : null;
+                                                    @endphp
+
+                                                    @if ($audioUrl)
+                                                        <audio controls
+                                                            class="w-100 mb-3 d-none recently-play-audio-{{ $song->id }}">
+                                                            <source src="{{ $audioUrl }}" type="audio/mpeg">
+                                                            Your browser does not support the audio element.
+                                                        </audio>
+                                                    @endif
+
                                                 </button>
+
                                                 <div class="dropdown">
                                                     <button class="btn btn-icon btn-sm btn-ghost-secondary"
                                                         data-bs-toggle="dropdown">
@@ -635,6 +675,107 @@
                 timerProgressBar: true
             });
             */
+
+            //popular play button
+            document.querySelectorAll('[class*="popular-play-button-"]').forEach(button => {
+                button.addEventListener('click', function() {
+                    const btnClass = Array.from(button.classList).find(c => c.startsWith(
+                        'popular-play-button-'));
+                    const songId = btnClass?.replace('popular-play-button-', '');
+                    const audio = document.querySelector(`.populaar-audio-${songId}`);
+                    const icon = button.querySelector('i');
+
+                    if (audio) {
+                        // Pause all other audio
+                        document.querySelectorAll('audio').forEach(a => {
+                            if (a !== audio) {
+                                a.pause();
+                                a.currentTime = 0;
+                                const otherId = a.className.match(/populaar-audio-(.+)/)?.[
+                                    1
+                                ];
+                                const otherBtn = document.querySelector(
+                                    `.popular-play-button-${otherId}`);
+                                if (otherBtn) {
+                                    const otherIcon = otherBtn.querySelector('i');
+                                    otherIcon?.classList.remove('ti-player-pause');
+                                    otherIcon?.classList.add('ti-player-play');
+                                }
+                            }
+                        });
+
+                        // Toggle play/pause for this audio
+                        if (audio.paused) {
+                            audio.play();
+                            icon.classList.remove('ti-player-play');
+                            icon.classList.add('ti-player-pause');
+                        } else {
+                            audio.pause();
+                            icon.classList.remove('ti-player-pause');
+                            icon.classList.add('ti-player-play');
+                        }
+
+                        // When audio ends
+                        audio.addEventListener('ended', () => {
+                            icon.classList.remove('ti-player-pause');
+                            icon.classList.add('ti-player-play');
+                        });
+                    }
+                });
+            });
+
+
+            //recently play button
+            document.querySelectorAll('[class*="recently-play-btn-"]').forEach(button => {
+                button.addEventListener('click', function() {
+                    const btnClass = Array.from(button.classList).find(c => c.startsWith(
+                        'recently-play-btn-'));
+                    const songId = btnClass?.replace('recently-play-btn-', '');
+                    const audio = document.querySelector(`.recently-play-audio-${songId}`);
+                    const icon = button.querySelector('i');
+
+                    if (!audio) return;
+
+                    // Pause other audios
+                    document.querySelectorAll('audio').forEach(a => {
+                        if (a !== audio) {
+                            a.pause();
+                            a.currentTime = 0;
+                            const otherMatch = a.className.match(
+                                /recently-play-audio-(\d+)/);
+                            if (otherMatch) {
+                                const otherId = otherMatch[1];
+                                const otherBtn = document.querySelector(
+                                    `.recently-play-btn-${otherId}`);
+                                const otherIcon = otherBtn?.querySelector('i');
+                                if (otherIcon) {
+                                    otherIcon.classList.remove('ti-player-pause');
+                                    otherIcon.classList.add('ti-player-play');
+                                }
+                            }
+                        }
+                    });
+
+                    // Toggle play/pause
+                    if (audio.paused) {
+                        audio.play();
+                        icon.classList.remove('ti-player-play');
+                        icon.classList.add('ti-player-pause');
+                    } else {
+                        audio.pause();
+                        icon.classList.remove('ti-player-pause');
+                        icon.classList.add('ti-player-play');
+                    }
+
+                    // When audio ends, reset icon
+                    audio.addEventListener('ended', () => {
+                        icon.classList.remove('ti-player-pause');
+                        icon.classList.add('ti-player-play');
+                    });
+                });
+            });
+
+
         });
 
         document.addEventListener('DOMContentLoaded', function() {

@@ -13,12 +13,12 @@ use App\Http\Controllers\AdminAlbumController;
 use App\Http\Controllers\AdminGenreController;
 use App\Http\Controllers\AdminSongController;
 
-
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\EmailController;
 use App\Http\Controllers\SongController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserVerificationController;
+use App\Http\Controllers\HomeController;
 use App\Models\Role;
 use App\Models\User;
 
@@ -47,12 +47,39 @@ use Spatie\Permission\Models\Permission;
 */
 
 // Route dibuat frontend Landing Page atau Home
-Route::get('/', function () {
-    return view('welcome');
-})->name('welcome');
+Route::get('/', [HomeController::class, 'welcome'])->name('welcome');
 Route::get('/popular-songs', function () {
     return view('popular-songs');
 })->name('popular-songs');
+
+Route::prefix('songs')->group(function () {
+    Route::get('/image/{filename}', function ($filename) {
+        $path = storage_path('app/public/songs/' . $filename);
+        if (!File::exists($path)) {
+            return redirect('https://via.placeholder.com/40');
+        }
+        return response()->file($path);
+    })->where('filename', '.*')->name('songs.image');
+    Route::get('/album/image/{filename}', function ($filename) {
+        $path = storage_path('app/public/albums/' . $filename);
+        if (!File::exists($path)) {
+            // Redirect to placeholder instead of 404
+            return redirect('https://via.placeholder.com/40');
+        }
+        return response()->file($path);
+    })->name('albums.image');
+});
+
+
+
+Route::get('/audio/{filename}', function ($filename) {
+    $path = storage_path('app/public/songs/audio/' . $filename);
+    if (!File::exists($path)) {
+        return response(null, 204); // No Content
+    }
+    return response()->file($path);
+})->where('filename', '.*')->name('songs.audio');
+
 Route::get('/artists', function () {
     return view('artists');
 })->name('artists');
@@ -93,6 +120,15 @@ Route::post('/email/resend', [AuthController::class, 'resendVerificationEmail'])
 // Authenticated User Routes
 Route::middleware(['auth', 'role:User,Cover Creator,Artist,Composer,Super Admin,Admin'])->group(function () {
     Route::post('/logout/{role}', [AuthController::class, 'logout'])->name('logout');
+});
+
+
+
+//  user play song
+
+Route::middleware(['auth', 'role:User,Cover Creator,Artist,Composer,Admin,Super Admin', 'verified'])->group(function () {
+    Route::get('/play-song/{id}', [SongController::class, 'playSong'])
+        ->name('play-song');
 });
 
 // User Dashboard Routes
@@ -340,6 +376,8 @@ Route::middleware(['auth', 'role:Super Admin,Admin'])->group(function () {
         })->where('filename', '.*')->name('admin.songs.audio');
     });
 
+
+
     // Album and Genre routes
     // Album Management Routes
     Route::prefix('admin/albums')->group(function () {
@@ -451,11 +489,6 @@ Route::middleware(['auth', 'role:Super Admin,Admin'])->group(function () {
     Route::get('/admin/reports/content', function () {
         return view('admin.reports.content');
     })->name('admin.reports.content');
-
-    // play song
-    Route::get('/play-song/{id}', function ($id) {
-        return view('play-song', compact('id'));
-    })->name('play-song');
 
     //Utility Route
     Route::get('/admin/data/regions', function () {
