@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('products', function (Blueprint $table) {
+        Schema::create('products', function (Blueprint $table) { 
             $table->uuid('id')->primary();
             $table->string('number')->unique()->comment('kode produk unik bisa MSC-134-3443');
             $table->string('name')->unique()->comment('nama produk unik bisa MSC-134-3443');
