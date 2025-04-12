@@ -1,5 +1,7 @@
 <?php
 
+
+use App\Http\Controllers\ActivityLogController;
 use App\Http\Controllers\AdminClaimController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AdminPermissionController;
@@ -12,12 +14,17 @@ use App\Http\Controllers\AdminGenreController;
 use App\Http\Controllers\AdminSongController;
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\EmailController;
 use App\Http\Controllers\SongController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserVerificationController;
 use App\Http\Controllers\HomeController;
 use App\Models\Role;
 use App\Models\User;
+
+
+use App\Services\Admin\SongServices;
+use App\Services\Admin\UserServices;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
@@ -25,8 +32,8 @@ use Illuminate\Support\Facades\File;
 use Spatie\Permission\Models\Permission;
 
 
-use App\Services\Admin\SongServices;
-use App\Services\Admin\UserServices;
+
+
 
 /*
 |--------------------------------------------------------------------------
@@ -365,7 +372,6 @@ Route::middleware(['auth', 'role:Super Admin,Admin'])->group(function () {
             }
             return response()->file($path);
         })->where('filename', '.*')->name('admin.songs.audio');
-
     });
 
     // Album and Genre routes
@@ -402,8 +408,6 @@ Route::middleware(['auth', 'role:Super Admin,Admin'])->group(function () {
         })->name('admin.genres.show');
     });
 
-
-
     //user profile route
     Route::get('/admin/user-profiles', [AdminUserProfileController::class, 'index'])->name('admin.user-profiles.index');
     Route::get('/admin/user-profiles/{id}', [AdminUserProfileController::class, 'show'])->name('admin.user-profiles.show');
@@ -415,7 +419,10 @@ Route::middleware(['auth', 'role:Super Admin,Admin'])->group(function () {
     )->name('admin.user-profiles.remove-picture');
     Route::post('/admin/user-profiles/{id}/suspend', [AdminUserProfileController::class, 'suspend'])->name('admin.user-profiles.suspend');
     Route::post('/admin/user-profiles/{id}/active', [AdminUserProfileController::class, 'active'])->name('admin.user-profiles.active');
-    Route::put('/admin/songs/{id}', [SongController::class, 'update'])->name('profile.songs.update');
+    // Route::put('/admin/songs/{id}', [SongController::class, 'update'])->name('profile.songs.update');
+    Route::delete('/admin/activities/{id}', [ActivityLogController::class, 'destroy'])->name('admin.activities.destroy');
+    Route::post('/admin/send-email', [EmailController::class, 'send'])->name('admin.send.email');
+    // Route::put('/admin/songs/{id}', [SongController::class, 'update'])->name('admin.songs.update');
 
     // Withdraw Verification Routes
     Route::get('/admin/withdrawals', function () {

@@ -133,7 +133,8 @@ class AuthController extends Controller
 
             $role = $user->getRoleNames()->first();
 
-            activity()->withProperties(['ip' => request()->ip()])->log($user->name . ' login');
+            // activity()->withProperties(['ip' => request()->ip()])->log($user->name . ' login');
+            activity()->causedBy($user)->event('login')->withProperties(['ip' => request()->ip()])->log($user->name . ' login'); // Tambahan event 'login'
 
             if ($role == 'Admin' || $role == 'Super Admin') {
                 activity()->withProperties(['ip' => request()->ip()])->log($user->name . ' visited admin dashboard');
@@ -442,7 +443,8 @@ class AuthController extends Controller
     public function logout($role, Request $request)
     {
         $user = Auth::user();
-        activity()->withProperties(['ip' => request()->ip()])->log($user->name . ' has logged out');
+        // activity()->withProperties(['ip' => request()->ip()])->log($user->name . ' has logged out');
+        activity()->causedBy($user)->event('logout')->withProperties(['ip' => request()->ip()])->log($user->name . ' has logged out');
 
         Auth::logout();
         $request->session()->invalidate();

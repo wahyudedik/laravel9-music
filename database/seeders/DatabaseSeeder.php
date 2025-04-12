@@ -23,9 +23,9 @@ class DatabaseSeeder extends Seeder
         // ]);
 
         $this->call([
-            SiteConfigsSeeder::class,
-            RoleSeeder::class,
-            PermissionSeeder::class,
+            // SiteConfigsSeeder::class,
+            // RoleSeeder::class,
+            // PermissionSeeder::class,
             UserSeeder::class,
             // AlbumsSeeder::class,
             // DummySongSeeder::class,
@@ -33,6 +33,10 @@ class DatabaseSeeder extends Seeder
             UserProfileSeeder::class,
             UserSocialMediaSeeder::class,
             GenreSeeder::class,
+            // StreamSeeder::class,
+            // UserProfileSeeder::class,
+            // UserSocialMediaSeeder::class,
+            //  ActivityLogSeeder::class,
         ]);
     }
 }

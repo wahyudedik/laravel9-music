@@ -11,7 +11,7 @@ return new class extends Migration {
             $table->enum('status', ['Active', 'Inactive', 'Pending','Draft', 'Published', 'Scheduled'])
                 ->default('draft')
                 ->after('duration')
-                ->comment('Status lagu: Draft, Published, Scheduled');
+                ->comment('Status lagu: Draft, Published, Scheduled, Actove , Inactive ,Pending');
         });
     }
 

@@ -4,3 +4,12 @@
 3. Register email password = Done
 4. Dashboard User:
 5. Dashboard Admin:
+    - Dashboard
+    - User
+    - Verification = Done
+    - Claims = Done
+    - Music User Profile
+        - User Profiles Management index 
+    - Withdraw
+    - listings
+    - Report
