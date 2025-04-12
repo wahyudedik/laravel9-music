@@ -32,14 +32,39 @@
                         </form>
 
                         <!-- CTA Buttons -->
-                        <div class="d-flex flex-wrap gap-3">
-                            <a href="{{ route('register') }}" class="btn btn-lg btn-primary">
-                                <i class="ti ti-user-plus me-2"></i> Daftar Sekarang
-                            </a>
-                            <a href="{{ route('login') }}" class="btn btn-lg btn-dark">
-                                <i class="ti ti-login me-2"></i> Login
-                            </a>
-                        </div>
+                        @guest
+                            <div class="d-flex flex-wrap gap-3">
+                                <a href="{{ route('register') }}" class="btn btn-lg btn-primary">
+                                    <i class="ti ti-user-plus me-2"></i> Daftar Sekarang
+                                </a>
+                                <a href="{{ route('login') }}" class="btn btn-lg btn-dark">
+                                    <i class="ti ti-login me-2"></i> Login
+                                </a>
+                            </div>
+                        @endguest
+                        @auth
+                            <div class="d-flex align-items-center gap-2">
+                                @php
+                                    $role = auth()->user()->getRoleNames()->first();
+                                @endphp
+                                @if ($role == 'Admin' || $role == 'Super Admin')
+                                    <a href="{{ route('admin.dashboard') }}" class="btn btn-lg btn-primary">
+                                        <i class="ti ti-user-plus me-2"></i> Dashboard
+                                    </a>
+                                @else
+                                    <a href="{{ route('user.dashboard') }}" class="btn btn-lg btn-primary">
+                                        <i class="ti ti-user-plus me-2"></i> Dashboard
+                                    </a>
+                                @endif
+                                <form action="{{ route('logout', ['role' => auth()->user()->getRoleNames()->first()]) }}"
+                                    method="POST">
+                                    @csrf
+                                    <button type="submit" class="btn btn-lg btn-outline-light">
+                                        <i class="ti ti-logout me-2"></i> Logout
+                                    </button>
+                                </form>
+                            </div>
+                        @endauth
                     </div>
                 </div>
             </div>
@@ -57,28 +82,41 @@
 
         <div class="card">
             <div class="list-group list-group-flush">
-                @for ($i = 1; $i <= 5; $i++)
+                @foreach ($songs as $index => $song)
                     <div class="list-group-item py-3 bg-dark border-secondary">
                         <div class="row g-3 align-items-center">
                             <div class="col-auto">
                                 <span
                                     class="d-flex align-items-center justify-content-center bg-primary text-white rounded-circle"
-                                    style="width: 30px; height: 30px;">{{ $i }}</span>
+                                    style="width: 30px; height: 30px;">{{ $loop->iteration }}</span>
                             </div>
                             <div class="col-auto">
                                 <div class="position-relative">
-                                    <img src="https://picsum.photos/300/300?random={{ $i + 50 }}" class="rounded"
-                                        style="width: 50px; height: 50px;" alt="Song Cover">
+                                    @php
+                                        // Extract filename from the 3rd image variant (small)
+                                        $coverImages = explode(',', $song->cover_image ?? '');
+                                        $smallCoverFile = $coverImages[2] ?? null;
+
+                                        // Get just the filename from the path (e.g. "cover_abc_sm.jpeg")
+                                        $filename = $smallCoverFile ? basename($smallCoverFile) : null;
+
+                                        // Generate image URL via route
+                                        $imageUrl = $filename
+                                            ? route('songs.image', ['filename' => $filename])
+                                            : 'https://via.placeholder.com/50';
+                                    @endphp
+                                    <img src="{{ $imageUrl }}" class="rounded" style="width: 50px; height: 50px;"
+                                        alt="{{ $song->title }}">
                                     <button
                                         class="btn btn-icon btn-sm btn-primary rounded-circle position-absolute play-song-btn"
                                         style="bottom: -5px; right: -5px; width: 24px; height: 24px; padding: 0;"
                                         @guest
 onclick="window.location.href='{{ route('login') }}'"
                                         @else
-                                            onclick="window.location.href='{{ route('play-song', ['id' => $i]) }}'" @endguest
-                                        data-song-title="Judul Lagu Populer #{{ $i }}"
-                                        data-artist-name="Artis Populer #{{ $i }}"
-                                        data-cover-image="https://picsum.photos/300/300?random={{ $i + 50 }}">
+                                        onclick="window.location.href='{{ route('play-song', ['id' => $song->id]) }}'" @endguest
+                                        data-song-title="{{ $song->title }}"
+                                        data-artist-name="{{ $song->artist->name ?? 'Unknown Artist' }}"
+                                        data-cover-image="{{ $song->cover_image_url ?? 'https://via.placeholder.com/300' }}">
                                         <i class="ti ti-player-play" style="font-size: 14px;"></i>
                                     </button>
                                     @guest
@@ -90,16 +128,16 @@ onclick="window.location.href='{{ route('login') }}'"
                                 </div>
                             </div>
                             <div class="col">
-                                <h5 class="text-truncate mb-1 text-white">Judul Lagu Populer #{{ $i }}</h5>
-                                <div class="text-muted text-truncate">Artis Populer #{{ $i }}</div>
+                                <h5 class="text-truncate mb-1 text-white">{{ $song->title }}</h5>
+                                <div class="text-muted text-truncate">{{ $song->artist->name ?? 'Unknown Artist' }}</div>
                             </div>
                             <div class="col-auto">
                                 <div class="d-flex gap-3 align-items-center">
                                     <div class="text-muted">
-                                        <i class="ti ti-player-play me-1"></i> {{ rand(1, 50) }}M
+                                        <i class="ti ti-player-play me-1"></i> {{ number_format(rand(1, 50)) }}M
                                     </div>
                                     <div class="text-muted">
-                                        <i class="ti ti-heart me-1"></i> {{ rand(100, 999) }}K
+                                        <i class="ti ti-heart me-1"></i> {{ number_format(rand(100, 999)) }}K
                                     </div>
                                     <div class="dropdown">
                                         <a href="#" class="btn btn-action text-white" data-bs-toggle="dropdown"
@@ -109,10 +147,9 @@ onclick="window.location.href='{{ route('login') }}'"
                                         <div class="dropdown-menu dropdown-menu-end bg-dark text-white">
                                             @auth
                                                 <a class="dropdown-item text-white" href="#" data-bs-toggle="modal"
-                                                    data-bs-target="#addToPlaylistModal"
-                                                    data-song-title="Judul Lagu Populer #{{ $i }}"
-                                                    data-artist-name="Artis Populer #{{ $i }}"
-                                                    data-cover-image="https://picsum.photos/300/300?random={{ $i + 50 }}">
+                                                    data-bs-target="#addToPlaylistModal" data-song-title="{{ $song->title }}"
+                                                    data-artist-name="{{ $song->artist->name ?? 'Unknown Artist' }}"
+                                                    data-cover-image="{{ $song->cover_image_url ?? 'https://via.placeholder.com/300' }}">
                                                     <i class="ti ti-plus me-2"></i> Tambah ke Playlist
                                                 </a>
                                                 <a class="dropdown-item text-white" href="#">
@@ -123,7 +160,6 @@ onclick="window.location.href='{{ route('login') }}'"
                                                     <a class="dropdown-item text-white" href="#">
                                                         <i class="ti ti-bookmark me-2"></i> Tambah ke Wishlist
                                                     </a>
-
                                                     <div class="dropdown-divider border-secondary"></div>
                                                     <a class="dropdown-item text-white" href="#">
                                                         <i class="ti ti-microphone me-2"></i> Buat Cover
@@ -145,7 +181,7 @@ onclick="window.location.href='{{ route('login') }}'"
                             </div>
                         </div>
                     </div>
-                @endfor
+                @endforeach
             </div>
         </div>
     </div>
@@ -160,6 +196,27 @@ onclick="window.location.href='{{ route('login') }}'"
         </div>
 
         <div class="row g-4">
+            @foreach ($artists as $artist)
+                <div class="col-md-6 col-lg-3">
+                    <div class="music-card text-center">
+                        <img src="https://picsum.photos/300/300?random=2" class="rounded-circle mb-3"
+                            style="width: 120px; height: 120px;" alt="Artist">
+                        <h4 class="mb-1 text-white">{{ $artist->name }}</h4>
+                        <p class="text-muted mb-2">{{ rand(5, 30) }} Lagu • {{ rand(1, 10) }}M Penggemar</p>
+                        <div class="d-flex justify-content-center gap-2 mb-3">
+                            <span class="badge bg-purple-lt">
+                                <i class="ti ti-users me-1"></i> {{ rand(1, 10) }}M
+                            </span>
+                            <span class="badge bg-blue-lt">
+                                <i class="ti ti-player-play me-1"></i> {{ rand(10, 500) }}M
+                            </span>
+                        </div>
+                        <a href="#" class="btn btn-sm btn-primary">
+                            <i class="ti ti-user me-1"></i> Lihat Profil
+                        </a>
+                    </div>
+                </div>
+            @endforeach
             @for ($i = 21; $i <= 28; $i++)
                 <div class="col-md-6 col-lg-3">
                     <div class="music-card text-center">
@@ -265,20 +322,24 @@ onclick="window.location.href='{{ route('login') }}'"
     </div>
 
     <!-- Call to Action (Spotify Style) -->
-    <div class="card bg-gradient-dark mb-4">
-        <div class="card-body text-center py-5">
-            <h2 class="mb-3 text-white">Bergabunglah dengan Komunitas Musik Kami</h2>
-            <p class="fs-4 mb-4 text-white">Dengarkan, buat cover, dan bagikan karya musik Anda dengan dunia.</p>
-            <div class="d-flex justify-content-center gap-3">
-                <a href="{{ route('register') }}" class="btn btn-lg btn-primary">
-                    <i class="ti ti-user-plus me-2"></i> Daftar Sekarang
-                </a>
-                <a href="{{ route('login') }}" class="btn btn-lg btn-outline-light">
-                    <i class="ti ti-login me-2"></i> Login
-                </a>
+    @guest
+
+        <div class="card bg-gradient-dark mb-4">
+            <div class="card-body text-center py-5">
+                <h2 class="mb-3 text-white">Bergabunglah dengan Komunitas Musik Kami</h2>
+                <p class="fs-4 mb-4 text-white">Dengarkan, buat cover, dan bagikan karya musik Anda dengan dunia.</p>
+                <div class="d-flex justify-content-center gap-3">
+                    <a href="{{ route('register') }}" class="btn btn-lg btn-primary">
+                        <i class="ti ti-user-plus me-2"></i> Daftar Sekarang
+                    </a>
+                    <a href="{{ route('login') }}" class="btn btn-lg btn-outline-light">
+                        <i class="ti ti-login me-2"></i> Login
+                    </a>
+
+                </div>
             </div>
         </div>
-    </div>
+    @endguest
 
     <!-- Features Section -->
     <div class="row g-4 mb-5">

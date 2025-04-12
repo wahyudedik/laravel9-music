@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Song;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\StreamedResponse;
+use Illuminate\Support\Facades\Auth;
 
 class SongController extends Controller
 {
@@ -65,5 +66,45 @@ class SongController extends Controller
         $song->save();
 
         return redirect()->route('admin.user-profiles.show', $id)->with('success', 'Lagu berhasil diperbarui.');
+    }
+
+    public function playSong(Request $request, $id)
+    {
+
+        $authUser = Auth::user();
+
+        // Ambil data lagu lengkap dengan relasinya
+        $song = Song::with(['album', 'artist', 'genre', 'coverCreator', 'composers'])->findOrFail($id);
+
+        $composers = [];
+        foreach ($song->composers as $composer) {
+            $composers[] = [
+                'id' => $composer->id,
+                'name' => $composer->name,
+                'roleName' => 'Composer',
+            ];
+        }
+        $genre = [
+            'id' => $song->genre->id,
+            'name' => $song->genre->name,
+        ];
+        $artist = [
+            'id' => $song->artist->id,
+            'name' => $song->artist->name,
+            'roleName' => 'Artist',
+        ];
+        $album = [
+            'id' => $song->album->id,
+            'title' => $song->album->title,
+            'artist' => $song->album->artist->name,
+        ];
+
+
+        activity('song')
+            ->withProperties(['ip' => request()->ip()])
+            ->log($authUser->name . ' visited play song ' . $song->title);
+
+
+        return view('play-song', compact('id','song','genre','artist','album','composers'));
     }
 }
