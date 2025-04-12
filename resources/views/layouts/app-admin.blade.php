@@ -317,8 +317,8 @@
                                     <a class="dropdown-item" href="{{ route('admin.songs.index') }}">
                                         <i class="ti ti-list me-2"></i>All Songs
                                     </a>
-                                    <a class="dropdown-item" href="{{ route('admin.songs.create') }}">
-                                        <i class="ti ti-plus me-2"></i>Add New Song
+                                    <a class="dropdown-item" href="{{ route('admin.products.index') }}">
+                                        <i class="ti ti-list me-2"></i>All Products Licensed
                                     </a>
                                     <div class="dropdown-divider"></div>
                                     <a class="dropdown-item" href="{{ route('admin.albums.index') }}">
@@ -334,7 +334,7 @@
                                     <span class="nav-link-icon d-md-none d-lg-inline-block">
                                         <i class="ti ti-user-circle"></i>
                                     </span>
-                                    <span class="nav-link-title">User Profiles</span>
+                                    <span class="nav-link-title">Profiles</span>
                                 </a>
                             </li>
                             <li class="nav-item {{ request()->is('admin/withdrawals*') ? 'active' : '' }}">
@@ -357,19 +357,50 @@
                                 </a>
                                 <div class="dropdown-menu">
                                     <a class="dropdown-item" href="{{ route('admin.listings.songs') }}">
-                                        <i class="ti ti-music me-2"></i>All Songs
+                                        <i class="ti ti-music me-2"></i>All Listings
                                     </a>
                                     <a class="dropdown-item" href="{{ route('admin.listings.covers') }}">
-                                        <i class="ti ti-microphone me-2"></i>Cover Songs
+                                        <i class="ti ti-microphone me-2"></i>Cover
                                     </a>
                                     <div class="dropdown-divider"></div>
                                     <a class="dropdown-item" href="{{ route('admin.listings.published') }}">
-                                        <i class="ti ti-check me-2"></i>Published Songs
+                                        <i class="ti ti-check me-2"></i>Published
                                     </a>
                                     <a class="dropdown-item" href="{{ route('admin.listings.drafts') }}">
-                                        <i class="ti ti-file me-2"></i>Draft Songs
+                                        <i class="ti ti-file me-2"></i>Draft
                                     </a>
                                 </div>
+                            </li>
+
+                            <li class="nav-item {{ request()->is('admin/royalties*') ? 'active' : '' }} dropdown">
+                                <a class="nav-link dropdown-toggle" href="#navbar-royalties"
+                                    data-bs-toggle="dropdown" data-bs-auto-close="false" role="button"
+                                    aria-expanded="false">
+                                    <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                        <i class="ti ti-coin"></i>
+                                    </span>
+                                    <span class="nav-link-title">Royalties</span>
+                                </a>
+                                <div class="dropdown-menu">
+                                    <a class="dropdown-item" href="{{ route('admin.royalties.index') }}">
+                                        <i class="ti ti-list me-2"></i>All Royalties
+                                    </a>
+                                    <a class="dropdown-item" href="{{ route('admin.royalties.reports') }}">
+                                        <i class="ti ti-chart-bar me-2"></i>Reports & Analytics
+                                    </a>
+                                    <a class="dropdown-item" href="{{ route('admin.royalties.settings') }}">
+                                        <i class="ti ti-settings me-2"></i>Settings
+                                    </a>
+                                </div>
+                            </li>
+
+                            <li class="nav-item {{ request()->is('admin/bookings*') ? 'active' : '' }}">
+                                <a class="nav-link" href="{{ route('admin.bookings.index') }}">
+                                    <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                        <i class="ti ti-calendar-event"></i>
+                                    </span>
+                                    <span class="nav-link-title">Booking</span>
+                                </a>
                             </li>
 
                             <li class="nav-item dropdown {{ request()->is('admin/reports*') ? 'active' : '' }}">
@@ -461,7 +492,7 @@
 
             // Flash messages with SweetAlert
             @if (session('success'))
-                Swal.fire({ 
+                Swal.fire({
                     icon: 'success',
                     title: 'Success',
                     text: "{{ session('success') }}",
