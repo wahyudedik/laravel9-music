@@ -100,10 +100,6 @@ Route::get('/covers', function () {
     return view('covers');
 })->name('covers');
 
-// Route dibuat frontend Dashboard User
-// Route dibuat frontend Dashboard admin
-
-
 // Guest Routes
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
@@ -178,7 +174,6 @@ Route::get('/ojo-dadi-demit', function (Request $request) {
 
 
 //  user play song
-
 Route::middleware(['auth', 'role:User,Cover Creator,Artist,Composer,Admin,Super Admin', 'verified'])->group(function () {
     Route::get('/play-song/{id}', [SongController::class, 'playSong'])
         ->name('play-song');
