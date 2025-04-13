@@ -317,9 +317,9 @@
                                     <a class="dropdown-item" href="{{ route('admin.songs.index') }}">
                                         <i class="ti ti-list me-2"></i>All Songs
                                     </a>
-                                    <a class="dropdown-item" href="{{ route('admin.products.index') }}">
+                                    {{-- <a class="dropdown-item" href="{{ route('admin.products.index') }}">
                                         <i class="ti ti-list me-2"></i>All Products Licensed
-                                    </a>
+                                    </a> --}}
                                     <div class="dropdown-divider"></div>
                                     <a class="dropdown-item" href="{{ route('admin.albums.index') }}">
                                         <i class="ti ti-album me-2"></i>Albums
