@@ -34,7 +34,7 @@ use Illuminate\Support\Facades\File;
 use Spatie\Permission\Models\Permission;
 
 
-
+use Illuminate\Support\Facades\Artisan;
 
 
 /*
@@ -47,6 +47,14 @@ use Spatie\Permission\Models\Permission;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+
+Route::get('/run-optimize', function () {
+    Artisan::call('optimize');
+    return 'Artisan optimize executed!';
+});
+
+
 
 // Route dibuat frontend Landing Page atau Home
 Route::get('/', [HomeController::class, 'welcome'])->name('welcome');
