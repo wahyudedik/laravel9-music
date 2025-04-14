@@ -33,6 +33,7 @@ class DatabaseSeeder extends Seeder
             // UserProfileSeeder::class,
             // UserSocialMediaSeeder::class,
             GenreSeeder::class,
+            SocialMediaSeeder::class,
             // UserSocialMediaSeeder::class,
             //  ActivityLogSeeder::class,
         ]);
