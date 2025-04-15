@@ -34,7 +34,7 @@ use Illuminate\Support\Facades\File;
 use Spatie\Permission\Models\Permission;
 
 
-
+use Illuminate\Support\Facades\Artisan;
 
 
 /*
@@ -47,6 +47,14 @@ use Spatie\Permission\Models\Permission;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+
+Route::get('/run-optimize', function () {
+    Artisan::call('optimize');
+    return 'Artisan optimize executed!';
+});
+
+
 
 // Route dibuat frontend Landing Page atau Home
 Route::get('/', [HomeController::class, 'welcome'])->name('welcome');
@@ -417,23 +425,23 @@ Route::middleware(['auth', 'role:Super Admin,Admin'])->group(function () {
     });
 
     // Route Product licensed
-    Route::prefix('admin/products')->group(function () {
-        Route::get('/', function () {
-            return view('admin.products.index');
-        })->name('admin.products.index');
+    // Route::prefix('admin/products')->group(function () {
+    //     Route::get('/', function () {
+    //         return view('admin.products.index');
+    //     })->name('admin.products.index');
 
-        Route::get('/create', function () {
-            return view('admin.products.create');
-        })->name('admin.products.create');
+    //     Route::get('/create', function () {
+    //         return view('admin.products.create');
+    //     })->name('admin.products.create');
 
-        Route::get('/{id}/edit', function ($id) {
-            return view('admin.products.edit', compact('id'));
-        })->name('admin.products.edit');
+    //     Route::get('/{id}/edit', function ($id) {
+    //         return view('admin.products.edit', compact('id'));
+    //     })->name('admin.products.edit');
 
-        Route::get('/{id}', function ($id) {
-            return view('admin.products.show', compact('id'));
-        })->name('admin.products.show');
-    });
+    //     Route::get('/{id}', function ($id) {
+    //         return view('admin.products.show', compact('id'));
+    //     })->name('admin.products.show');
+    // });
 
 
     // Album and Genre routes
@@ -591,34 +599,34 @@ Route::middleware(['auth', 'role:Super Admin,Admin'])->group(function () {
         $json = Storage::disk('local')->get('data/regions.json');
         return response()->json(json_decode($json));
     });
-    Route::get('/admin/data/songs', function (SongServices $songServices) {
-        $search = Request::input('search');
-        $limit = Request::input('limit', 10);
+    Route::get('/admin/data/songs', function (Request $request, SongServices $songServices) {
+        $search = $request->input('search');
+        $limit = $request->input('limit', 10);
         return response()->json($songServices->getAllSongs($search, $limit));
     });
-    Route::get('/admin/data/albums', function (SongServices $songServices) {
-        $search = Request::input('search');
-        $limit = Request::input('limit', 10);
+    Route::get('/admin/data/albums', function (Request $request, SongServices $songServices) {
+        $search = $request->input('search');
+        $limit = $request->input('limit', 10);
         return response()->json($songServices->getAllAlbums($search, $limit));
     });
-    Route::get('/admin/data/genres', function (SongServices $songServices) {
-        $search = Request::input('search');
-        $limit = Request::input('limit', 10);
+    Route::get('/admin/data/genres', function (Request $request, SongServices $songServices) {
+        $search = $request->input('search');
+        $limit = $request->input('limit', 10);
         return response()->json($songServices->getAllGenres($search, $limit));
     });
-    Route::get('/admin/data/users', function (UserServices $uuserServices) {
-        $search = Request::input('search');
-        $limit = Request::input('limit', 10);
+    Route::get('/admin/data/users', function (Request $request, UserServices $uuserServices) {
+        $search = $request->input('search');
+        $limit = $request->input('limit', 10);
         return response()->json($uuserServices->getAllUsers($search, $limit));
     });
-    Route::get('/admin/data/artists', function (UserServices $uuserServices) {
-        $search = Request::input('search');
-        $limit = Request::input('limit', 10);
+    Route::get('/admin/data/artists', function (Request $request, UserServices $uuserServices) {
+        $search = $request->input('search');
+        $limit = $request->input('limit', 10);
         return response()->json($uuserServices->getAllArtist($search, $limit));
     });
-    Route::get('/admin/data/composers', function (UserServices $uuserServices) {
-        $search = Request::input('search');
-        $limit = Request::input('limit', 10);
+    Route::get('/admin/data/composers', function (Request $request, UserServices $uuserServices) {
+        $search = $request->input('search');
+        $limit = $request->input('limit', 10);
         return response()->json($uuserServices->getAllComposer($search, $limit));
     });
 });
