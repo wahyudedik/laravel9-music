@@ -54,8 +54,6 @@ Route::get('/run-optimize', function () {
     return 'Artisan optimize executed!';
 });
 
-
-
 // Route dibuat frontend Landing Page atau Home
 Route::get('/', [HomeController::class, 'welcome'])->name('welcome');
 Route::get('/popular-songs', function () {
@@ -80,8 +78,6 @@ Route::prefix('songs')->group(function () {
     })->name('albums.image');
 });
 
-
-
 Route::get('/audio/{filename}', function ($filename) {
     $path = storage_path('app/public/songs/audio/' . $filename);
     if (!File::exists($path)) {
@@ -99,6 +95,15 @@ Route::get('/composers', function () {
 Route::get('/covers', function () {
     return view('covers');
 })->name('covers');
+Route::get('/favorite-songs', function () {
+    return view('favorite-songs');
+})->name('favorite-songs');
+Route::get('/playlists', function () {
+    return view('playlists');
+})->name('playlists');
+Route::get('/wishlist', function () {
+    return view('wishlist');
+})->name('wishlist.landing');
 
 // Guest Routes
 Route::middleware('guest')->group(function () {
