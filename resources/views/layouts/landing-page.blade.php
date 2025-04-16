@@ -12,381 +12,16 @@
 
     <!-- Flowbite CSS -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.0/flowbite.min.css" rel="stylesheet" />
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Compiled CSS from Mix -->
+    {{-- <link href="{{ asset('css/app.css') }}" rel="stylesheet"> --}}
     <!-- Tabler Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.30.0/tabler-icons.min.css">
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <!-- AOS - Animate On Scroll -->
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        primary: {
-                            "50": "#fef2f2",
-                            "100": "#fee2e2",
-                            "200": "#fecaca",
-                            "300": "#fca5a5",
-                            "400": "#f87171",
-                            "500": "#ef4444",
-                            "600": "#dc2626",
-                            "700": "#b91c1c",
-                            "800": "#991b1b",
-                            "900": "#7f1d1d",
-                            "950": "#450a0a"
-                        },
-                        secondary: {
-                            "50": "#f9fafb",
-                            "100": "#f3f4f6",
-                            "200": "#e5e7eb",
-                            "300": "#d1d5db",
-                            "400": "#9ca3af",
-                            "500": "#6b7280",
-                            "600": "#4b5563",
-                            "700": "#374151",
-                            "800": "#1f2937",
-                            "900": "#111827",
-                            "950": "#030712"
-                        },
-                        spotify: {
-                            dark: "#121212",
-                            darker: "#000000",
-                            card: "#181818",
-                            highlight: "#1DB954",
-                            text: "#FFFFFF",
-                            muted: "#B3B3B3",
-                            border: "#2A2A2A"
-                        }
-                    },
-                    fontFamily: {
-                        'sans': ['Inter', 'sans-serif']
-                    }
-                }
-            }
-        }
-    </script>
-
-    <style>
-        :root {
-            --primary-color: #1DB954;
-            --primary-dark: #1AA34A;
-            --primary-light: #1ED760;
-            --bg-color: #121212;
-            --card-bg: #181818;
-            --sidebar-bg: #000000;
-            --text-color: #ffffff;
-            --text-muted: #B3B3B3;
-            --border-color: #2a2a2a;
-            --sidebar-width: 240px;
-            --mini-player-height: 90px;
-        }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            margin: 0;
-            padding: 0;
-            overflow-x: hidden;
-        }
-
-        /* Sidebar Styles */
-        .sidebar {
-            width: var(--sidebar-width);
-            position: fixed;
-            top: 0;
-            bottom: 0;
-            left: 0;
-            z-index: 100;
-            padding: 0;
-            background-color: var(--sidebar-bg);
-            overflow-y: auto;
-            transition: all 0.3s;
-        }
-
-        .sidebar-logo {
-            padding: 1.5rem;
-            display: flex;
-            align-items: center;
-            color: #fff;
-            text-decoration: none;
-        }
-
-        .sidebar-nav {
-            padding: 1rem 0;
-        }
-
-        .sidebar-nav .nav-link {
-            color: var(--text-muted);
-            padding: 0.75rem 1.5rem;
-            display: flex;
-            align-items: center;
-            border-left: 3px solid transparent;
-            transition: all 0.2s;
-            text-decoration: none;
-        }
-
-        .sidebar-nav .nav-link:hover {
-            color: #fff;
-            background-color: rgba(255, 255, 255, 0.1);
-        }
-
-        .sidebar-nav .nav-link.active {
-            color: #fff;
-            border-left-color: var(--primary-color);
-            background-color: rgba(255, 255, 255, 0.1);
-        }
-
-        .sidebar-nav .nav-link-icon {
-            margin-right: 0.75rem;
-        }
-
-        .sidebar-section-title {
-            color: var(--text-muted);
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            padding: 1rem 1.5rem 0.5rem;
-            font-weight: 600;
-        }
-
-        /* Main Content */
-        .main-content {
-            margin-left: var(--sidebar-width);
-            padding: 2rem;
-            padding-bottom: calc(var(--mini-player-height) + 2rem);
-            min-height: 100vh;
-            transition: all 0.3s;
-        }
-
-        /* Button Styles */
-        .btn-spotify {
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            transition: all 0.2s;
-        }
-
-        .btn-spotify:hover {
-            background-color: var(--primary-light);
-            transform: scale(1.05);
-        }
-
-        .btn-outline-spotify {
-            background-color: transparent;
-            color: var(--primary-color);
-            border: 1px solid var(--primary-color);
-        }
-
-        .btn-outline-spotify:hover {
-            background-color: var(--primary-color);
-            color: white;
-        }
-
-        /* Card Styles */
-        .music-card {
-            background-color: var(--card-bg);
-            border-radius: 8px;
-            padding: 1rem;
-            transition: all 0.3s ease;
-        }
-
-        .music-card:hover {
-            background-color: rgba(255, 255, 255, 0.1);
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
-        }
-
-        .music-card-img {
-            border-radius: 8px;
-            transition: all 0.3s ease;
-        }
-
-        .music-card:hover .music-card-img {
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
-            transform: scale(1.05);
-        }
-
-        /* Hero Section */
-        .hero-section {
-            position: relative;
-            height: 500px;
-            overflow: hidden;
-            border-radius: 8px;
-            margin-bottom: 2rem;
-        }
-
-        .video-background {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.7));
-        }
-
-        .hero-video {
-            min-width: 100%;
-            min-height: 100%;
-            width: auto;
-            height: auto;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            object-fit: cover;
-            opacity: 0.6;
-            filter: blur(2px);
-        }
-
-        .hero-content {
-            position: relative;
-            z-index: 10;
-            padding: 4rem 2rem;
-            height: 100%;
-            display: flex;
-            align-items: center;
-        }
-
-        /* Mini Player */
-        .mini-player {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: var(--mini-player-height);
-            background-color: #181818;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 0 20px;
-            display: none;
-            align-items: center;
-            z-index: 1000;
-            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.3);
-        }
-
-        .mini-player-visible {
-            display: flex;
-        }
-
-        .mini-player-info {
-            display: flex;
-            align-items: center;
-            flex: 1;
-        }
-
-        .mini-player-controls {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .mini-player-progress {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background-color: #3e3e3e;
-        }
-
-        .mini-player-progress-bar {
-            height: 100%;
-            background-color: var(--primary-color);
-            width: 0%;
-        }
-
-        /* Play Button */
-        .play-song-btn {
-            opacity: 0.9;
-            transition: all 0.2s ease;
-        }
-
-        .play-song-btn:hover {
-            opacity: 1;
-            transform: scale(1.1);
-        }
-
-        /* Responsive */
-        @media (max-width: 992px) {
-            .sidebar {
-                transform: translateX(-100%);
-            }
-
-            .sidebar.show {
-                transform: translateX(0);
-            }
-
-            .main-content {
-                margin-left: 0;
-            }
-        }
-
-        /* Animation Classes */
-        .btn-pulse {
-            animation: pulse 1.5s infinite;
-        }
-
-        @keyframes pulse {
-            0% {
-                box-shadow: 0 0 0 0 rgba(29, 185, 84, 0.7);
-            }
-
-            70% {
-                box-shadow: 0 0 0 10px rgba(29, 185, 84, 0);
-            }
-
-            100% {
-                box-shadow: 0 0 0 0 rgba(29, 185, 84, 0);
-            }
-        }
-
-        .badge-animated {
-            animation: badgePop 0.5s ease-out;
-        }
-
-        @keyframes badgePop {
-            0% {
-                transform: scale(0.5);
-                opacity: 0;
-            }
-
-            100% {
-                transform: scale(1);
-                opacity: 1;
-            }
-        }
-
-        .ripple {
-            position: absolute;
-            border-radius: 50%;
-            background-color: rgba(255, 255, 255, 0.4);
-            transform: scale(0);
-            animation: ripple 0.6s linear;
-            pointer-events: none;
-        }
-
-        @keyframes ripple {
-            to {
-                transform: scale(4);
-                opacity: 0;
-            }
-        }
-
-        /* Hover effects */
-        .hover-shadow:hover {
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
-        }
-
-        .transition-transform {
-            transition: transform 0.3s ease;
-        }
-    </style>
+    <!-- Vite Assets -->
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     @yield('styles')
 </head>
@@ -442,31 +77,19 @@
                     <div class="sidebar-section-title mt-4">Koleksi Saya</div>
                     <ul class="nav flex-column">
                         <li class="nav-item">
-                            <a class="nav-link" href="#">
+                            <a class="nav-link {{ Request::is('favorite-songs') ? 'active' : '' }}"
+                                href="{{ route('favorite-songs') }}">
                                 <span class="nav-link-icon"><i class="ti ti-heart"></i></span>
                                 <span>Lagu Favorit</span>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">
+                            <a class="nav-link {{ Request::is('playlists') ? 'active' : '' }}"
+                                href="{{ route('playlists') }}">
                                 <span class="nav-link-icon"><i class="ti ti-playlist"></i></span>
                                 <span>Playlist Saya</span>
                             </a>
                         </li>
-                        @if (Auth::user()->hasAnyRole(['Cover Creator', 'Artist', 'Composer']))
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">
-                                    <span class="nav-link-icon"><i class="ti ti-bookmark"></i></span>
-                                    <span>Wishlist</span>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">
-                                    <span class="nav-link-icon"><i class="ti ti-microphone-2"></i></span>
-                                    <span>Cover Saya</span>
-                                </a>
-                            </li>
-                        @endif
                     </ul>
                 @endauth
             </div>
@@ -748,6 +371,8 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.all.min.js"></script>
     <!-- AOS - Animate On Scroll -->
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <!-- Compiled JS from Mix -->
+    {{-- <script src="{{ asset('js/app.js') }}" defer></script> --}}
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -806,6 +431,11 @@
                 });
             @endif
 
+            // Variables for player functionality - DECLARE ALL VARIABLES FIRST
+            let progressInterval;
+            let progressValue = 0;
+            let isPlaying = false;
+
             // Mini Player Functionality - Enhanced
             const miniPlayer = document.querySelector('.mini-player');
             const miniPlayerTitle = document.getElementById('miniPlayerTitle');
@@ -829,6 +459,48 @@
                 currentTime: 0,
                 duration: 0
             };
+
+            // Progress animation function - DEFINE FUNCTIONS BEFORE USING THEM
+            function startProgressAnimation(initialProgress = 0) {
+                // Use the global progressValue
+                progressValue = initialProgress || 0;
+                if (progressValue >= 100) {
+                    progressValue = 0;
+                }
+                miniPlayerProgressBar.style.width = progressValue + '%';
+
+                // Clear any existing interval
+                clearInterval(progressInterval);
+
+                // Set play button to pause
+                miniPlayerPlayBtn.innerHTML = '<i class="ti ti-player-pause"></i>';
+                isPlaying = true;
+
+                // Start progress animation
+                progressInterval = setInterval(() => {
+                    progressValue += 0.1;
+                    miniPlayerProgressBar.style.width = progressValue + '%';
+
+                    // Update current song data
+                    currentSongData.progress = progressValue;
+                    currentSongData.currentTime = (progressValue / 100) * currentSongData.duration;
+                    sessionStorage.setItem('currentSongData', JSON.stringify(currentSongData));
+
+                    if (progressValue >= 100) {
+                        clearInterval(progressInterval);
+                        miniPlayerPlayBtn.innerHTML = '<i class="ti ti-player-play"></i>';
+                        isPlaying = false;
+
+                        // Update current song data
+                        currentSongData.isPlaying = false;
+                        sessionStorage.setItem('currentSongData', JSON.stringify(currentSongData));
+                    }
+                }, 30); // Approximately 5 minutes for full song
+            }
+
+            function pauseProgressAnimation() {
+                clearInterval(progressInterval);
+            }
 
             // Initialize from session storage if available
             const storedSongData = sessionStorage.getItem('currentSongData');
@@ -913,7 +585,6 @@
             });
 
             // Toggle play/pause
-            let isPlaying = false;
             miniPlayerPlayBtn.addEventListener('click', function() {
                 if (isPlaying) {
                     this.innerHTML = '<i class="ti ti-player-play"></i>';
@@ -996,51 +667,6 @@
                 });
             }
 
-            // Progress animation
-            let progressInterval;
-            let progress = 0;
-
-            function startProgressAnimation(initialProgress = 0) {
-                // Reset progress if it's complete or use provided initial progress
-                progress = initialProgress || 0;
-                if (progress >= 100) {
-                    progress = 0;
-                }
-                miniPlayerProgressBar.style.width = progress + '%';
-
-                // Clear any existing interval
-                clearInterval(progressInterval);
-
-                // Set play button to pause
-                miniPlayerPlayBtn.innerHTML = '<i class="ti ti-player-pause"></i>';
-                isPlaying = true;
-
-                // Start progress animation
-                progressInterval = setInterval(() => {
-                    progress += 0.1;
-                    miniPlayerProgressBar.style.width = progress + '%';
-
-                    // Update current song data
-                    currentSongData.progress = progress;
-                    currentSongData.currentTime = (progress / 100) * currentSongData.duration;
-                    sessionStorage.setItem('currentSongData', JSON.stringify(currentSongData));
-
-                    if (progress >= 100) {
-                        clearInterval(progressInterval);
-                        miniPlayerPlayBtn.innerHTML = '<i class="ti ti-player-play"></i>';
-                        isPlaying = false;
-
-                        // Update current song data
-                        currentSongData.isPlaying = false;
-                        sessionStorage.setItem('currentSongData', JSON.stringify(currentSongData));
-                    }
-                }, 30); // Approximately 5 minutes for full song
-            }
-
-            function pauseProgressAnimation() {
-                clearInterval(progressInterval);
-            }
-
             // Add to Playlist Modal
             const addToPlaylistModal = document.getElementById('addToPlaylistModal');
             if (addToPlaylistModal) {
@@ -1071,6 +697,7 @@
             });
         });
     </script>
+
     @yield('scripts')
 </body>
 
