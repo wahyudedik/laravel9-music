@@ -54,8 +54,6 @@ Route::get('/run-optimize', function () {
     return 'Artisan optimize executed!';
 });
 
-
-
 // Route dibuat frontend Landing Page atau Home
 Route::get('/', [HomeController::class, 'welcome'])->name('welcome');
 Route::get('/popular-songs', function () {
@@ -79,8 +77,6 @@ Route::prefix('songs')->group(function () {
         return response()->file($path);
     })->name('albums.image');
 });
-
-
 
 Route::get('/audio/{filename}', function ($filename) {
     $path = storage_path('app/public/songs/audio/' . $filename);
