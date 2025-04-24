@@ -36,7 +36,10 @@ class Song extends Model
         'cover_image',
         'file_path',
         'duration',
+        'local_zones',
         'status',
+        'created_by',
+        'updated_by',
     ];
 
     protected $casts = [
@@ -83,5 +86,21 @@ class Song extends Model
     public function originalSong()
     {
         return $this->belongsTo(Song::class, 'cover_song_id');
+    }
+
+    // In Song.php
+    public function contributors()
+    {
+        return $this->belongsToMany(User::class, 'song_contributor', 'song_id', 'user_id')
+            ->withPivot('id') // include extra pivot fields if needed
+            ->withTimestamps(); // only if you have created_at/updated_at
+    }
+
+    // In Song.php
+    public function songContributors()
+    {
+        //$song->songContributors()->with('user')->get();
+        return $this->hasMany(SongContributor::class, 'song_id');
+
     }
 }

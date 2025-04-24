@@ -599,6 +599,12 @@ Route::middleware(['auth', 'role:Super Admin,Admin'])->group(function () {
         $json = Storage::disk('local')->get('data/regions.json');
         return response()->json(json_decode($json));
     });
+    Route::get('/admin/data/cities', function () {
+        $json = Storage::disk('local')->get('data/regions.json');
+        $regions = json_decode($json, true);
+        $cities = collect($regions)->pluck('kota')->flatten()->values();
+        return response()->json($cities);
+    });
     Route::get('/admin/data/songs', function (Request $request, SongServices $songServices) {
         $search = $request->input('search');
         $limit = $request->input('limit', 10);
