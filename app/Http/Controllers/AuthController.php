@@ -256,16 +256,21 @@ class AuthController extends Controller
     // Memverifikasi email setelah diklik dari email
     public function verifyEmail(Request $request)
     {
-
-        $user = User::where('email', $request->email)
-            ->where('email_verification_token', $request->token)
-            ->first();
-
-        activity()->withProperties(['ip' => request()->ip()])->log($user->name . ' verifies email');
+        $user = User::where('email', $request->email)->first();
 
         if (!$user) {
+            abort(403, 'Email tidak ditemukan.');
+        }
+
+        if ($user->email_verified_at) {
+            return redirect('/user/dashboard')->with('status', 'Email Anda sudah diverifikasi sebelumnya.');
+        }
+
+        if ($user->email_verification_token !== $request->token) {
             abort(403, 'Kode verifikasi tidak valid.');
         }
+
+        activity()->withProperties(['ip' => request()->ip()])->log($user->name . ' verifies email');
 
         $user->update([
             'email_verified_at' => now(),
@@ -283,6 +288,7 @@ class AuthController extends Controller
 
         return redirect('/user/dashboard')->with('status', 'Email Anda berhasil diverifikasi!');
     }
+
 
     // Mengirim ulang email verifikasi
     public function resendVerificationEmail(Request $request)

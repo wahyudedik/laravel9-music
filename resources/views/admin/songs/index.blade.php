@@ -93,10 +93,10 @@
                                 Bulk Actions
                             </button>
                             <ul class="dropdown-menu" aria-labelledby="bulkActionsDropdown">
-                                <li><a class="dropdown-item bulk-action-btn" href="javascript:void(0)" data-action="activate"><i
-                                            class="ti ti-check me-2"></i>Activate Selected</a></li>
-                                <li><a class="dropdown-item bulk-action-btn" href="javascript:void(0)" data-action="deactivate"><i
-                                            class="ti ti-x me-2"></i>Deactivate Selected</a></li>
+                                <li><a class="dropdown-item bulk-action-btn" href="javascript:void(0)"
+                                        data-action="activate"><i class="ti ti-check me-2"></i>Activate Selected</a></li>
+                                <li><a class="dropdown-item bulk-action-btn" href="javascript:void(0)"
+                                        data-action="deactivate"><i class="ti ti-x me-2"></i>Deactivate Selected</a></li>
                                 <li>
                                     <hr class="dropdown-divider">
                                 </li>
@@ -114,6 +114,7 @@
                                     <input class="form-check-input m-0 align-middle" type="checkbox" id="select-all">
                                 </th>
                                 <th>Title</th>
+                                <th>Creator</th>
                                 <th>Artist</th>
                                 <th>Album</th>
                                 <th>Genre</th>
@@ -154,15 +155,47 @@
                                             <div>{{ $song->title }}</div>
                                         </div>
                                     </td>
-                                    <td>{{ $song->album->artist->name ?? '-' }}</td>
+                                    <td>
+                                        @php
+                                            $creatorName =
+                                                $song->songContributors
+                                                    ->where('role', 'Composer')
+                                                    ->pluck('user.name')
+                                                    ->filter()
+                                                    ->implode(', ') ?? '-';
+
+                                            if (empty($creatorName)) {
+                                                $creatorName = '-';
+                                            }
+                                        @endphp
+
+                                        {{ $creatorName }}
+                                    </td>
+                                    <td>
+                                        @php
+                                            $artistNames =
+                                                $song->songContributors
+                                                    ->where('role', 'Artist')
+                                                    ->pluck('user.name')
+                                                    ->filter()
+                                                    ->implode(', ') ?? '-';
+
+                                            if (empty($artistNames)) {
+                                                $artistNames = '-';
+                                            }
+                                        @endphp
+
+                                        {{ $artistNames }}
+                                    </td>
+
                                     <td>{{ $song->album->title ?? '-' }}</td>
                                     <td>{{ $song->genre->name ?? '-' }}</td>
                                     <td>{{ \Carbon\Carbon::parse($song->release_date)->format('d M Y') }}</td>
                                     <td>
-                                        @if ($song->status == 'Active')
+                                        @if ($song->status == 'Published')
                                             <span class="badge bg-success">Active</span>
-                                        @elseif($song->status == 'Pending')
-                                            <span class="badge bg-warning text-dark">Pending</span>
+                                        @elseif($song->status == 'Draft')
+                                            <span class="badge bg-warning text-white">Draft</span>
                                         @else
                                             <span class="badge bg-danger">Inactive</span>
                                         @endif
