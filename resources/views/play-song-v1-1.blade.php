@@ -409,202 +409,23 @@
 @endsection
 
 @section('content')
+    @php
+        // Extract filename from the 3rd image variant (small)
+        $coverImages = explode(',', $song->cover_image ?? '');
+        $smallCoverFile = $coverImages[2] ?? null;
+
+        // Get just the filename from the path (e.g. "cover_abc_sm.jpeg")
+        $filename = $smallCoverFile ? basename($smallCoverFile) : null;
+
+        // Generate image URL via route
+        $imageUrl = $filename
+            ? route('songs.image', ['filename' => $filename])
+            : 'https://via.placeholder.com/500/500?random=' . $song->id;
+    @endphp
     <div class="container-fluid py-4">
         <div class="row g-4">
             <!-- Main Player Section -->
-            <div class="col-lg-8">
-                <div class="player-container p-4">
-                    <div class="row">
-                        <div class="col-md-5">
-                            @php
-                                // Extract filename from the 3rd image variant (small)
-                                $coverImages = explode(',', $song->cover_image ?? '');
-                                $smallCoverFile = $coverImages[2] ?? null;
 
-                                // Get just the filename from the path (e.g. "cover_abc_sm.jpeg")
-                                $filename = $smallCoverFile ? basename($smallCoverFile) : null;
-
-                                // Generate image URL via route
-                                $imageUrl = $filename
-                                    ? route('songs.image', ['filename' => $filename])
-                                    : 'https://via.placeholder.com/500/500?random=' . $song->id;
-                            @endphp
-
-                            <div class="album-cover-container mb-3">
-                                <img src="{{ $imageUrl }}" alt="Album Cover" class="album-cover">
-                                <div class="album-overlay">
-                                    <button class="play-btn main-play-btn">
-                                        <i class="ti ti-player-play"></i>
-                                    </button>
-                                </div>
-                            </div>
-
-                            <div class="song-actions d-flex justify-content-center gap-3 mb-4">
-                                <a href="#" class="action-btn" id="likeButton">
-                                    <i class="ti ti-heart"></i>
-                                    <span>Like</span>
-                                </a>
-                                <a href="#" class="action-btn" data-bs-toggle="modal" data-bs-target="#shareModal">
-                                    <i class="ti ti-share"></i>
-                                    <span>Share</span>
-                                </a>
-                                <a href="#" class="action-btn" data-bs-toggle="modal"
-                                    data-bs-target="#addToPlaylistModal" data-song-title="{{ $song->title }}"
-                                    data-artist-name="">
-                                    <i class="ti ti-playlist"></i>
-                                    <span>Add</span>
-                                </a>
-                                <a href="#" class="action-btn" id="downloadButton">
-                                    <i class="ti ti-download"></i>
-                                    <span>Download</span>
-                                </a>
-                            </div>
-                        </div>
-                        <div class="col-md-7">
-                            <div class="song-info">
-                                <h2 class="song-title">{{ $song->title }}</h2>
-                                <p class="song-artist"></p>
-                                <div class="badge bg-primary mb-3">{{ $song->genre->name }}</div>
-                            </div>
-
-                            <!-- Waveform visualization -->
-                            <div class="waveform" id="waveform">
-                                @for ($i = 0; $i < 40; $i++)
-                                    <div class="waveform-bar" style="height: {{ rand(5, 30) }}px;"></div>
-                                @endfor
-                            </div>
-
-                            <div class="progress-container" id="progressContainer">
-                                <div class="progress-bar" id="progressBar">
-                                    <div class="progress-handle"></div>
-                                </div>
-                            </div>
-                            <div class="time-info d-flex justify-content-between">
-                                <span id="currentTime">0:00</span>
-                                <span id="totalTime">{{ $song->duration ?? '3:45' }}</span>
-                            </div>
-
-                            @php
-                                $filename = $song->file_path ? basename($song->file_path) : null;
-                                $audioUrl = $filename ? route('songs.audio', ['filename' => $filename]) : null;
-                            @endphp
-
-                            @if ($audioUrl)
-                                <audio id="audioPlayer" class="d-none">
-                                    <source src="{{ $audioUrl }}" type="audio/mpeg">
-                                    Your browser does not support the audio element.
-                                </audio>
-                            @endif
-
-                            <div class="player-controls">
-                                <button class="control-btn" id="shuffleButton">
-                                    <i class="ti ti-shuffle"></i>
-                                </button>
-                                <button class="control-btn" id="prevButton">
-                                    <i class="ti ti-player-track-prev"></i>
-                                </button>
-                                <button class="control-btn play-btn" id="playButton">
-                                    <i class="ti ti-player-play"></i>
-                                </button>
-                                <button class="control-btn" id="nextButton">
-                                    <i class="ti ti-player-track-next"></i>
-                                </button>
-                                <button class="control-btn" id="repeatButton">
-                                    <i class="ti ti-repeat"></i>
-                                </button>
-                            </div>
-
-                            <div class="d-flex justify-content-between align-items-center mt-4">
-                                <div class="volume-container">
-                                    <i class="ti ti-volume btn-speaker" id="volumeIcon" style="cursor: pointer;"></i>
-                                    <div class="volume-slider" id="volumeSlider">
-                                        <div class="volume-level" id="volumeLevel"></div>
-                                        <div class="volume-handle"></div>
-                                    </div>
-                                </div>
-                                <div class="d-flex align-items-center gap-2">
-                                    <span class="text-muted small">Quality:</span>
-                                    <select class="form-select form-select-sm bg-dark text-white border-dark"
-                                        style="width: auto;">
-                                        <option value="high">High (320kbps)</option>
-                                        <option value="medium">Medium (192kbps)</option>
-                                        <option value="low">Low (128kbps)</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Lyrics Section with Collapsible Feature -->
-                    <div class="lyrics-container mt-4">
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <h3 class="card-title text-white mb-0">Lyrics</h3>
-                            <button class="btn btn-sm btn-dark" id="expandLyricsBtn">
-                                <i class="ti ti-arrows-maximize me-1"></i> Full Screen
-                            </button>
-                        </div>
-                        <div class="lyrics-text" id="lyricsText">
-                            {{ $song->lyrics ?? 'No lyrics available for this song.' }}
-                        </div>
-                    </div>
-
-                    <!-- Comments Section with Enhanced UI -->
-                    <div class="player-container mt-4 p-4">
-                        <h3 class="card-title mb-4 text-white">Comments (24)</h3>
-
-                        <div class="comment-form mb-4">
-                            <div class="d-flex">
-                                <img src="{{ Auth::check() ? 'https://ui-avatars.com/api/?name=' . Auth::user()->name . '&background=e53935&color=fff' : 'https://ui-avatars.com/api/?name=Guest&background=333&color=fff' }}"
-                                    class="rounded-circle me-3" style="width: 40px; height: 40px;">
-                                <div class="flex-grow-1">
-                                    <textarea class="form-control bg-dark text-white border-dark" placeholder="Add a comment..." rows="2"></textarea>
-                                    <div class="d-flex justify-content-between align-items-center mt-2">
-                                        <div class="text-muted small">
-                                            <i class="ti ti-info-circle me-1"></i> Be respectful in comments
-                                        </div>
-                                        <button class="btn btn-primary">Post</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        @for ($i = 0; $i < 3; $i++)
-                            <div class="comment-item d-flex mb-4">
-                                <img src="https://ui-avatars.com/api/?name={{ ['John Doe', 'Jane Smith', 'Alex Johnson'][$i] }}&background=e53935&color=fff"
-                                    class="rounded-circle me-3" style="width: 40px; height: 40px;">
-                                <div class="flex-grow-1">
-                                    <div class="d-flex justify-content-between align-items-center mb-1">
-                                        <span
-                                            class="fw-bold text-white">{{ ['John Doe', 'Jane Smith', 'Alex Johnson'][$i] }}</span>
-                                        <span
-                                            class="text-muted small">{{ ['2 hours ago', 'Yesterday', '3 days ago'][$i] }}</span>
-                                    </div>
-                                    <p class="mb-2">
-                                        {{ ['This song is amazing! I can\'t stop listening to it.', 'The beat is so catchy, definitely one of my favorites this year.', 'I love the lyrics, they really speak to me.'][$i] }}
-                                    </p>
-                                    <div class="d-flex gap-3">
-                                        <button class="btn btn-sm btn-link text-muted p-0">
-                                            <i class="ti ti-thumb-up me-1"></i> {{ rand(5, 50) }}
-                                        </button>
-                                        <button class="btn btn-sm btn-link text-muted p-0">
-                                            <i class="ti ti-thumb-down me-1"></i> {{ rand(0, 5) }}
-                                        </button>
-                                        <button class="btn btn-sm btn-link text-muted p-0">
-                                            <i class="ti ti-message-circle me-1"></i> Reply
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        @endfor
-
-                        <div class="text-center mt-3">
-                            <button class="btn btn-dark">
-                                <i class="ti ti-messages me-1"></i> View All Comments
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
             <!-- Sidebar -->
             <div class="col-lg-4">
@@ -616,7 +437,7 @@
                     </div>
 
                     @for ($i = 1; $i <= 5; $i++)
-                        <a href="{{ route('play-song', ($i)) }}" class="text-decoration-none">
+                        <a href="{{ route('play-song', $i) }}" class="text-decoration-none">
                             <div class="related-song-item">
                                 <img src="https://picsum.photos/100/100?random={{ $i }}"
                                     class="related-song-cover">
@@ -733,200 +554,16 @@
     </div>
 
     <!-- Floating action buttons -->
-    <div class="floating-actions">
-        <button class="floating-btn" id="minimizePlayerBtn" title="Minimize Player">
-            <i class="ti ti-minimize"></i>
-        </button>
-        <button class="floating-btn" id="fullscreenBtn" title="Fullscreen Mode">
-            <i class="ti ti-arrows-maximize"></i>
-        </button>
-        <button class="floating-btn" id="equalizerBtn" title="Equalizer">
-            <i class="ti ti-adjustments-horizontal"></i>
-        </button>
-    </div>
 
     <!-- Mini Player with Enhanced UI -->
-    <div class="mini-player" id="miniPlayer">
-        <div class="mini-player-handle" id="miniPlayerHandle"></div>
-        <div class="mini-player-progress">
-            <div class="mini-player-progress-bar" id="miniPlayerProgressBar"></div>
-        </div>
 
-        <div class="mini-player-info">
-            <img src="{{ $imageUrl }}" id="miniPlayerCover" class="rounded me-3" style="width: 56px; height: 56px;"
-                alt="Cover">
-            <div>
-                <div class="fw-bold text-white" id="miniPlayerTitle">{{ $song->title }}</div>
-                <div class="text-secondary small" id="miniPlayerArtist">{{ $song->artist->name ?? '' }}</div>
-            </div>
-            <div class="mini-player-visualizer ms-3" id="miniVisualizer">
-                @for ($i = 0; $i < 10; $i++)
-                    <div class="visualizer-bar" style="height: {{ rand(5, 15) }}px;"></div>
-                @endfor
-            </div>
-        </div>
-        <div class="mini-player-controls">
-            <button class="control-btn" style="width: 36px; height: 36px;" id="miniPrevBtn">
-                <i class="ti ti-player-skip-back"></i>
-            </button>
-            <button class="control-btn play-btn" style="width: 46px; height: 46px;" id="miniPlayBtn">
-                <i class="ti ti-player-play"></i>
-            </button>
-            <button class="control-btn" style="width: 36px; height: 36px;" id="miniNextBtn">
-                <i class="ti ti-player-skip-forward"></i>
-            </button>
-        </div>
-    </div>
 
     <!-- Share Modal -->
-    <div class="modal fade" id="shareModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content bg-dark text-white">
-                <div class="modal-header border-secondary">
-                    <h5 class="modal-title">Share This Song</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
-                        aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="d-flex align-items-center mb-4">
-                        <img src="{{ $imageUrl }}" class="rounded me-3" style="width: 60px; height: 60px;">
-                        <div>
-                            <div class="fw-bold">{{ $song->title }}</div>
-                            <div class="text-muted">{{ $song->artist->name ?? '' }}</div>
-                        </div>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">Share Link</label>
-                        <div class="input-group">
-                            <input type="text" class="form-control bg-dark text-white border-secondary"
-                                value="{{ url()->current() }}" id="shareLink" readonly>
-                            <button class="btn btn-primary" type="button" id="copyLinkBtn">
-                                <i class="ti ti-copy"></i>
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">Share on Social Media</label>
-                        <div class="d-flex gap-2">
-                            <a href="#" class="btn btn-lg btn-icon btn-facebook">
-                                <i class="ti ti-brand-facebook"></i>
-                            </a>
-                            <a href="#" class="btn btn-lg btn-icon btn-twitter">
-                                <i class="ti ti-brand-twitter"></i>
-                            </a>
-                            <a href="#" class="btn btn-lg btn-icon btn-whatsapp">
-                                <i class="ti ti-brand-whatsapp"></i>
-                            </a>
-                            <a href="#" class="btn btn-lg btn-icon btn-telegram">
-                                <i class="ti ti-brand-telegram"></i>
-                            </a>
-                            <a href="#" class="btn btn-lg btn-icon btn-instagram">
-                                <i class="ti ti-brand-instagram"></i>
-                            </a>
-                        </div>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">Embed Player</label>
-                        <textarea class="form-control bg-dark text-white border-secondary" rows="3" readonly><iframe width="100%" height="166" scrolling="no" frameborder="no" src="{{ url()->current() }}?embed=true"></iframe></textarea>
-                    </div>
-                </div>
-                <div class="modal-footer border-secondary">
-                    <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
 
     <!-- Lyrics Full Screen Modal -->
-    <div class="modal fade" id="lyricsModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-fullscreen">
-            <div class="modal-content bg-dark text-white">
-                <div class="modal-header border-secondary">
-                    <h5 class="modal-title">{{ $song->title }} - Lyrics</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
-                        aria-label="Close"></button>
-                </div>
-                <div class="modal-body d-flex flex-column align-items-center justify-content-center">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-md-8 offset-md-2">
-                                <div class="text-center mb-4">
-                                    <img src="{{ $imageUrl }}" class="rounded mb-3"
-                                        style="width: 150px; height: 150px;">
-                                    <h2 class="text-white">{{ $song->title }}</h2>
-                                    <p class="text-muted">{{ $song->artist->name ?? '' }}</p>
-                                </div>
-                                <div class="lyrics-text fs-5" style="line-height: 2;">
-                                    {{ $song->lyrics ?? 'No lyrics available for this song.' }}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer border-secondary">
-                    <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
 
     <!-- Equalizer Modal -->
-    <div class="modal fade" id="equalizerModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content bg-dark text-white">
-                <div class="modal-header border-secondary">
-                    <h5 class="modal-title">Equalizer</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
-                        aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="d-flex justify-content-between mb-3">
-                        <button class="btn btn-sm btn-outline-light">Reset</button>
-                        <div class="btn-group">
-                            <button class="btn btn-sm btn-outline-light">Pop</button>
-                            <button class="btn btn-sm btn-outline-light">Rock</button>
-                            <button class="btn btn-sm btn-outline-light">Jazz</button>
-                            <button class="btn btn-sm btn-outline-light">Classical</button>
-                        </div>
-                    </div>
 
-                    <div class="d-flex justify-content-between align-items-end" style="height: 150px;">
-                        @foreach (['60Hz', '150Hz', '400Hz', '1kHz', '2.4kHz', '6kHz', '15kHz'] as $index => $freq)
-                            <div class="d-flex flex-column align-items-center">
-                                <input type="range" class="form-range eq-slider" min="-12" max="12"
-                                    value="{{ rand(-6, 6) }}" orient="vertical"
-                                    style="height: 120px; writing-mode: bt-lr;">
-                                <span class="text-muted small mt-2">{{ $freq }}</span>
-                            </div>
-                        @endforeach
-                    </div>
-
-                    <div class="mt-4">
-                        <label class="form-label d-flex justify-content-between">
-                            <span>Bass Boost</span>
-                            <span>+6dB</span>
-                        </label>
-                        <input type="range" class="form-range" min="0" max="12" value="6">
-                    </div>
-
-                    <div class="mt-3">
-                        <label class="form-label d-flex justify-content-between">
-                            <span>Reverb</span>
-                            <span>30%</span>
-                        </label>
-                        <input type="range" class="form-range" min="0" max="100" value="30">
-                    </div>
-                </div>
-                <div class="modal-footer border-secondary">
-                    <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Apply</button>
-                </div>
-            </div>
-        </div>
-    </div>
 @endsection
 
 @section('scripts')

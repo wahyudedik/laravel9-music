@@ -88,16 +88,8 @@ class SongController extends Controller
             'id' => $song->genre->id,
             'name' => $song->genre->name,
         ];
-        $artist = [
-            'id' => $song->artist->id,
-            'name' => $song->artist->name,
-            'roleName' => 'Artist',
-        ];
-        $album = [
-            'id' => $song->album->id,
-            'title' => $song->album->title,
-            'artist' => $song->album->artist->name,
-        ];
+        $artist = [];
+        $album = [];
 
 
         activity('song')
@@ -105,6 +97,6 @@ class SongController extends Controller
             ->log($authUser->name . ' visited play song ' . $song->title);
 
 
-        return view('play-song', compact('id','song','genre','artist','album','composers'));
+        return view('play-song-v1-1', compact('id','song','genre','artist','album','composers'));
     }
 }

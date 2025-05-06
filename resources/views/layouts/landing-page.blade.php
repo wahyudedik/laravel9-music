@@ -212,7 +212,7 @@
     </div>
 
     <!-- Mini Player -->
-    <div class="mini-player">
+    {{-- <div class="mini-player">
         <div class="mini-player-progress">
             <div class="mini-player-progress-bar" id="miniPlayerProgressBar"></div>
         </div>
@@ -243,7 +243,7 @@
                 <i class="ti ti-x"></i>
             </button>
         </div>
-    </div>
+    </div> --}}
 
     <!-- Add to Playlist Modal -->
     <div id="addToPlaylistModal" tabindex="-1" aria-hidden="true"
