@@ -21,8 +21,8 @@
     <!-- AOS - Animate On Scroll -->
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <!-- Vite Assets -->
-    {{-- @vite(['resources/css/app.css', 'resources/js/app.js']) --}}
-    <link rel="stylesheet" href="{{asset('build/assets/css/app.css')}}">
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    {{-- <link rel="stylesheet" href="{{asset('build/assets/css/app.css')}}"> --}}
     <script src="{{asset('build/assets/js/app.js')}}"></script>
 
     @yield('styles')

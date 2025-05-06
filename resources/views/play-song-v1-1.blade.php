@@ -425,41 +425,115 @@
     <div class="container-fluid py-4">
         <div class="row g-4">
             <!-- Main Player Section -->
+            <div class="col-lg-8 mb-10">
 
+                <div class="flex flex-wrap  ">
+
+                    <div class="related-songs flex flex-wrap md:w-2/3 " style="padding: 5px;" >
+
+                        <div class="w-full md:w-1/2 p-4">
+                            <div class="aspect-w-16 aspect-h-10 rounded-xl overflow-hidden" style="height: 250px;">
+                                <iframe
+                                  class="w-full h-full"
+                                  src="https://www.youtube.com/embed/yOG7SLqRXRE"
+                                  title="YouTube video player"
+                                  frameborder="0"
+                                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                  allowfullscreen>
+                                </iframe>
+                              </div>
+
+                        </div>
+                        <div class="w-full md:w-1/2 px-4" >
+                            <div class="p-4">
+                                <div class="flex items-center mb-8">
+                                    <div class="flex items-center justify-center h-12 w-12 rounded-full bg-gray-300 overflow-hidden mr-4">
+                                        <img
+                                          src="https://via.placeholder.com/150"
+                                          alt="Avatar"
+                                          class="h-full w-full object-cover"
+                                        >
+                                      </div>
+                                    <h1 class="text-2xl">Song Title</h1>
+
+                                </div>
+                                <h1 class="text-lg mb-4">Lyrics</h1>
+                                <div>
+                                    <p>
+                                        I found my old phone today
+                                        In a box that I had hidden away
+                                        Nostalgia tryin' to lead me astray
+                                        Maybe I'll unwrite some wrongs
+                                        I charged the battery again
+                                        Combinations 'cause my passcode had changed
+                                        Opened up and saw familiar names
+                                        Now I wonder where they've gone
+                                    </p>
+                                    <br>
+                                    <p>
+                                        Conversations with my dead friends
+                                        Messages from all my exes
+                                        I kinda think that this was best left
+                                        In the past, where it belongs
+                                        I feel an overwhelming sadness
+                                        Of all the friends I do not have left
+                                        Seeing how my family has fractured
+                                        Growin' up and movin' on
+
+                                    </p>
+
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="related-songs w-full md:w-1/3 " style="padding: 5px;">
+                        <div class=" p-4">
+
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h3 class="card-title text-white mb-0">Related Songs</h3>
+                                <a href="#" class="btn btn-sm btn-dark">View All</a>
+                            </div>
+
+                            @for ($i = 1; $i <= 5; $i++)
+                                <a href="{{ route('play-song', $i) }}" class="text-decoration-none">
+                                    <div class="related-song-item">
+                                        <img src="https://picsum.photos/100/100?random={{ $i }}"
+                                            class="related-song-cover">
+                                        <div class="flex-grow-1">
+                                            <div class="text-white fw-medium">
+                                                {{ ['After Hours', 'Don\'t Start Now', 'Peaches', 'MONTERO', 'positions', 'Watermelon Sugar', 'Good 4 U', 'Mood', 'Dynamite', 'Circles'][$i % 10] }}
+                                            </div>
+                                            <div class="text-muted small">
+                                                {{ ['The Weeknd', 'Dua Lipa', 'Justin Bieber', 'Lil Nas X', 'Ariana Grande', 'Harry Styles', 'Olivia Rodrigo', '24kGoldn', 'BTS', 'Post Malone'][$i % 10] }}
+                                            </div>
+                                        </div>
+                                        <div class="d-flex align-items-center">
+                                            <span
+                                                class="text-muted me-3">{{ ['3:20', '3:45', '2:56', '4:10', '3:14', '2:54', '3:30', '2:21', '3:19', '3:35'][$i % 10] }}</span>
+                                            <button class="btn btn-sm btn-icon btn-dark play-related-btn">
+                                                <i class="ti ti-player-play"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </a>
+                            @endfor
+
+
+                        </div>
+                    </div>
+
+                </div>
+
+
+            </div>
 
             <!-- Sidebar -->
             <div class="col-lg-4">
-                <!-- Related Songs with Enhanced UI -->
-                <div class="related-songs">
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h3 class="card-title text-white mb-0">Related Songs</h3>
-                        <a href="#" class="btn btn-sm btn-dark">View All</a>
-                    </div>
 
-                    @for ($i = 1; $i <= 5; $i++)
-                        <a href="{{ route('play-song', $i) }}" class="text-decoration-none">
-                            <div class="related-song-item">
-                                <img src="https://picsum.photos/100/100?random={{ $i }}"
-                                    class="related-song-cover">
-                                <div class="flex-grow-1">
-                                    <div class="text-white fw-medium">
-                                        {{ ['After Hours', 'Don\'t Start Now', 'Peaches', 'MONTERO', 'positions', 'Watermelon Sugar', 'Good 4 U', 'Mood', 'Dynamite', 'Circles'][$i % 10] }}
-                                    </div>
-                                    <div class="text-muted small">
-                                        {{ ['The Weeknd', 'Dua Lipa', 'Justin Bieber', 'Lil Nas X', 'Ariana Grande', 'Harry Styles', 'Olivia Rodrigo', '24kGoldn', 'BTS', 'Post Malone'][$i % 10] }}
-                                    </div>
-                                </div>
-                                <div class="d-flex align-items-center">
-                                    <span
-                                        class="text-muted me-3">{{ ['3:20', '3:45', '2:56', '4:10', '3:14', '2:54', '3:30', '2:21', '3:19', '3:35'][$i % 10] }}</span>
-                                    <button class="btn btn-sm btn-icon btn-dark play-related-btn">
-                                        <i class="ti ti-player-play"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </a>
-                    @endfor
-                </div>
+
 
                 <!-- Artist Info with Enhanced UI -->
                 <div class="related-songs mt-4">
@@ -563,7 +637,6 @@
     <!-- Lyrics Full Screen Modal -->
 
     <!-- Equalizer Modal -->
-
 @endsection
 
 @section('scripts')
