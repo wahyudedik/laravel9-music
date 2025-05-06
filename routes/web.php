@@ -61,13 +61,17 @@ Route::get('/popular-songs', function () {
 })->name('popular-songs');
 
 Route::prefix('songs')->group(function () {
+
     Route::get('/image/{filename}', function ($filename) {
+
         $path = storage_path('app/public/songs/' . $filename);
         if (!File::exists($path)) {
             return redirect('https://via.placeholder.com/40');
         }
         return response()->file($path);
+
     })->where('filename', '.*')->name('songs.image');
+
     Route::get('/album/image/{filename}', function ($filename) {
         $path = storage_path('app/public/albums/' . $filename);
         if (!File::exists($path)) {
@@ -76,14 +80,17 @@ Route::prefix('songs')->group(function () {
         }
         return response()->file($path);
     })->name('albums.image');
+
 });
 
 Route::get('/audio/{filename}', function ($filename) {
+
     $path = storage_path('app/public/songs/audio/' . $filename);
     if (!File::exists($path)) {
         return response(null, 204); // No Content
     }
     return response()->file($path);
+
 })->where('filename', '.*')->name('songs.audio');
 
 Route::get('/artists', function () {
