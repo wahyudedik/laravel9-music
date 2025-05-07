@@ -49,7 +49,7 @@
 
                                 <img src="{{ $imageUrl }}" class="rounded" width="200" height="200"
                                     alt="Cover Image">
-                                <h2 class="mt-3 mb-0">{{ $song->album->title }}</h2>
+                                <h2 class="mt-3 mb-0">{{ optional($song->album)->title ?? 'No Album' }}</h2>
                                 <p class="text-muted">{{ '' }}</p>
                                 <div class="mt-3">
                                     {{-- Status Badge --}}
@@ -167,7 +167,7 @@
                                 </div>
                                 <div class="datagrid-item">
                                     <div class="datagrid-title">Album</div>
-                                    <div class="datagrid-content">{{ $song->album->title ?? '' }}</div>
+                                    <div class="datagrid-content">{{ optional($song->album)->title ?? 'No Album' }}</div>
                                 </div>
                                 <div class="datagrid-item">
                                     <div class="datagrid-title">Genre</div>

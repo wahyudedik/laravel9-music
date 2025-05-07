@@ -11,13 +11,26 @@
                         <h2 class="page-title">Dashboard</h2>
                     </div>
                     <div class="col-auto ms-auto">
-                        <div class="btn-list">
-                            <a href="#" class="btn btn-primary d-none d-sm-inline-block">
-                                <i class="ti ti-plus me-2"></i>Create Playlist
-                            </a>
-                            <a href="#" class="btn btn-primary d-sm-none btn-icon">
-                                <i class="ti ti-plus"></i>
-                            </a>
+                        <div class="d-flex align-items-center">
+                            <div class="btn-list me-2">
+                                <a href="{{ route('profile.my-assets') }}" class="btn btn-primary d-none d-sm-inline-block">
+                                    <i class="ti ti-music me-2"></i> My Assets
+                                </a>
+                                <a href="#" class="btn btn-primary d-sm-none btn-icon">
+                                    <i class="ti ti-plus"></i>
+                                </a>
+                            </div>
+
+                            <div class="btn-list">
+                                <a href="#" class="btn btn-primary d-none d-sm-inline-block">
+                                    <i class="ti ti-plus me-2"></i>Create Playlist
+                                </a>
+                                <a href="#" class="btn btn-primary d-sm-none btn-icon">
+                                    <i class="ti ti-plus"></i>
+                                </a>
+                            </div>
+
+
                         </div>
                     </div>
                 </div>
@@ -156,8 +169,8 @@
                                     <div class="subheader">Total Plays</div>
                                     <div class="ms-auto lh-1">
                                         <div class="dropdown">
-                                            <a class="dropdown-toggle text-muted" href="#" data-bs-toggle="dropdown"
-                                                aria-haspopup="true" aria-expanded="false">
+                                            <a class="dropdown-toggle text-muted" href="#"
+                                                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                 <i class="ti ti-dots-vertical"></i>
                                             </a>
                                             <div class="dropdown-menu dropdown-menu-end">
