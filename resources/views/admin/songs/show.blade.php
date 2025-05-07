@@ -50,7 +50,7 @@
                                 <img src="{{ $imageUrl }}" class="rounded" width="200" height="200"
                                     alt="Cover Image">
                                 <h2 class="mt-3 mb-0">{{ $song->album->title }}</h2>
-                                <p class="text-muted">{{ $song->artist->name }}</p>
+                                <p class="text-muted">{{ '' }}</p>
                                 <div class="mt-3">
                                     {{-- Status Badge --}}
                                     @if ($song->status === 'Active')
@@ -163,11 +163,11 @@
                                 </div>
                                 <div class="datagrid-item">
                                     <div class="datagrid-title">Artist</div>
-                                    <div class="datagrid-content">{{ $song->artist->name }}</div>
+                                    <div class="datagrid-content">{{ '' }}</div>
                                 </div>
                                 <div class="datagrid-item">
                                     <div class="datagrid-title">Album</div>
-                                    <div class="datagrid-content">{{ $song->album->title }}</div>
+                                    <div class="datagrid-content">{{ $song->album->title ?? '' }}</div>
                                 </div>
                                 <div class="datagrid-item">
                                     <div class="datagrid-title">Genre</div>
@@ -181,7 +181,7 @@
                                 </div>
                                 <div class="datagrid-item">
                                     <div class="datagrid-title">Duration</div>
-                                    <div class="datagrid-content">{{ gmdate('i:s', $song->duration) }}</div>
+                                    <div class="datagrid-content">{{ $song->duration ? gmdate('i:s', $song->duration) : '00:00' }}</div>
                                 </div>
                                 <div class="datagrid-item">
                                     <div class="datagrid-title">Status</div>
@@ -199,7 +199,7 @@
                                 </div>
                                 <div class="datagrid-item">
                                     <div class="datagrid-title">License Type</div>
-                                    <div class="datagrid-content">{{ $song->license_type ?? '-' }}</div>
+                                    <div class="datagrid-content">{{ 'Cover, Remake , Royalti' }}</div>
                                 </div>
                                 <div class="datagrid-item">
                                     <div class="datagrid-title">License Price</div>
