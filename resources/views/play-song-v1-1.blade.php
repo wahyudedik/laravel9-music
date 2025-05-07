@@ -446,27 +446,15 @@
 
                                 <div class="flex flex-wrap">
 
-                                    <!-- Normal Badge -->
+                                    @foreach ($song->links as $songLink )
+
                                     <a href="#"
                                         class="px-3 mx-1 mb-3 py-1 border-4 border-gray-700 text-white rounded-full text-xs
                                         transition hover:border-red-600 hover:bg-red-600">
-                                        Youtube
+                                        {{$songLink->platform}}
                                     </a>
-                                    <a href="#"
-                                        class="px-3 mx-1 mb-3 py-1 border-4 border-gray-700 text-white rounded-full text-xs
-                                        transition hover:border-red-600 hover:bg-red-600">
-                                        Tiktok
-                                    </a>
-                                    <a href="#"
-                                        class="px-3 mx-1 mb-3 py-1 border-4 border-gray-700 text-white rounded-full text-xs
-                                        transition hover:border-red-600 hover:bg-red-600">
-                                        Instagram
-                                    </a>
-                                    <a href="#"
-                                        class="px-3 mx-1 mb-3 py-1 border-4 border-gray-700 text-white rounded-full text-xs
-                                        transition hover:border-red-600 hover:bg-red-600">
-                                        Facebook
-                                    </a>
+
+                                    @endforeach
 
 
                                     <!-- Active Badge -->
@@ -488,33 +476,13 @@
                                         <img src="https://via.placeholder.com/150" alt="Avatar"
                                             class="h-full w-full object-cover">
                                     </div>
-                                    <h1 class="text-2xl">Song Title</h1>
+                                    <h1 class="text-2xl">{{ $song->title }}</h1>
 
                                 </div>
                                 <h1 class="text-lg mb-4">Lyrics</h1>
                                 <div>
-                                    <p>
-                                        I found my old phone today
-                                        In a box that I had hidden away
-                                        Nostalgia tryin' to lead me astray
-                                        Maybe I'll unwrite some wrongs
-                                        I charged the battery again
-                                        Combinations 'cause my passcode had changed
-                                        Opened up and saw familiar names
-                                        Now I wonder where they've gone
-                                    </p>
-                                    <br>
-                                    <p>
-                                        Conversations with my dead friends
-                                        Messages from all my exes
-                                        I kinda think that this was best left
-                                        In the past, where it belongs
-                                        I feel an overwhelming sadness
-                                        Of all the friends I do not have left
-                                        Seeing how my family has fractured
-                                        Growin' up and movin' on
 
-                                    </p>
+                                    {{!! nl2br($song->lyrics) !!}}
 
 
                                 </div>

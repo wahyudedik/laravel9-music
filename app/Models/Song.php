@@ -109,4 +109,11 @@ class Song extends Model
         return $this->hasMany(SongLicense::class, 'song_id');
 
     }
+
+    public function links()
+    {
+        return $this->hasMany(SongLink::class, 'song_id');
+
+    }
+
 }
