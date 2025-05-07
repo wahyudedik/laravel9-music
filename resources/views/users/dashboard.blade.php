@@ -12,6 +12,7 @@
                     </div>
                     <div class="col-auto ms-auto">
                         <div class="d-flex align-items-center">
+
                             <div class="btn-list me-2">
                                 <a href="{{ route('profile.my-assets') }}" class="btn btn-primary d-none d-sm-inline-block">
                                     <i class="ti ti-music me-2"></i> My Assets
@@ -20,6 +21,7 @@
                                     <i class="ti ti-plus"></i>
                                 </a>
                             </div>
+
 
                             <div class="btn-list">
                                 <a href="#" class="btn btn-primary d-none d-sm-inline-block">
