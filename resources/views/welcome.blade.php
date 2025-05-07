@@ -11,7 +11,7 @@
                     type="video/mp4">
             </video>
         </div>
- 
+
         <!-- Hero Content -->
         <div class="relative z-10 h-full flex items-center p-8">
             <div class="container mx-auto">
