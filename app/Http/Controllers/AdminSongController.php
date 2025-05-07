@@ -490,14 +490,28 @@ class AdminSongController extends Controller
         $authUser = Auth::user();
 
         // Ambil data lagu lengkap dengan relasinya
-        $song = Song::with(['album', 'artist', 'genre', 'coverCreator', 'composers', 'coverVersions..artist'])->findOrFail($id);
+        $song = Song::with([
+            'album',
+            'genre',
+            'licenses' => function ($query) {
+                $query->orderBy('license_type', 'asc');
+            },
+            'songContributors.user'
+        ])->findOrFail($id);
+
         $coverVersions = $song->coverVersions;
+        $artist =SongContributor::with(['user'])->where('song_id',$song->id)
+        ->where('role','Artist')->first();
+        $artistName = '';
+        if($artist){
+            $artistName = $artist->user->name;
+        }
 
         activity('song')
             ->withProperties(['ip' => request()->ip()])
             ->log($authUser->name . ' visited show song form for song: ' . $song->title);
 
-        return view('admin.songs.show', compact('song', 'coverVersions'));
+        return view('admin.songs.show', compact('song', 'coverVersions','artistName'));
     }
 
     public function bulkAction(Request $request)
