@@ -436,12 +436,20 @@
 
                                 <div class="w-full mb-4 aspect-w-16 aspect-h-10 rounded-xl overflow-hidden"
                                     style="height: 250px;">
-                                    {{-- <iframe class="w-full h-full" src="https://www.youtube.com/embed/pHtxTSiPh5I?rel=0"
-                                        title="YouTube video player" frameborder="0"
-                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                        allowfullscreen>
-                                    </iframe> --}}
-                                    <div style="left: 0; width: 100%; height: 0; position: relative; padding-bottom: 56.25%;"><iframe src="https://www.youtube.com/embed/pHtxTSiPh5I?rel=0" style="top: 0; left: 0; width: 100%; height: 100%; position: absolute; border: 0;" allowfullscreen scrolling="no" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share;"></iframe></div>
+
+                                    @foreach ($song->links as $songLink )
+                                        @if ($songLink->platform=='YouTube')
+                                        @php
+                                            $embedSrc = convert_youtube($songLink->link);
+                                        @endphp
+
+                                        <div style="left: 0; width: 100%; height: 100%; position: relative; padding-bottom: 56.25%;"><iframe src="{{$embedSrc}}" style="top: 0; left: 0; width: 100%; height: 100%; position: absolute; border: 0;" allowfullscreen scrolling="no" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share;"></iframe></div>
+
+                                        @endif
+                                    @endforeach
+
+
+
                                 </div>
 
                                 <div class="flex flex-wrap">
@@ -482,7 +490,7 @@
                                 <h1 class="text-lg mb-4">Lyrics</h1>
                                 <div>
 
-                                    {{!! nl2br($song->lyrics) !!}}
+                                    {!! nl2br($song->lyrics) !!}
 
 
                                 </div>

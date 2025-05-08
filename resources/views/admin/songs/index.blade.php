@@ -6,15 +6,15 @@
             <div class="row g-2 align-items-center">
                 <div class="col">
                     <h2 class="page-title">
-                        Song Management
+                        Manajemen Lagu
                     </h2>
-                    <div class="text-muted mt-1">Manage all songs in the system</div>
+                    <div class="text-muted mt-1">Kelola semua lagu dalam sistem</div>
                 </div>
                 <div class="col-auto ms-auto d-print-none">
                     <div class="btn-list">
                         <a href="{{ route('admin.songs.create') }}" class="btn btn-primary d-none d-sm-inline-block">
                             <i class="ti ti-plus me-2"></i>
-                            Add New Song
+                            Tambahkan Lagu Baru
                         </a>
                         <a href="{{ route('admin.songs.create') }}" class="btn btn-primary d-sm-none btn-icon">
                             <i class="ti ti-plus"></i>
@@ -29,7 +29,7 @@
         <div class="container-xl">
             <div class="card mb-4 " style="overflow: auto;">
                 <div class="card-header">
-                    <h3 class="card-title">Filter Songs</h3>
+                    <h3 class="card-title">Filter Lagu</h3>
                 </div>
                 <form id="form-filter" action="{{ route('admin.songs.index') }}" method="GET" class="d-flex">
                     <div class="card-body">
@@ -54,9 +54,9 @@
                                 <label class="form-label">Status</label>
                                 <select id="status-filter" name="fstatus" class="form-select">
                                     <option value="">All Status</option>
-                                    <option value="Active" {{ request('fstatus') == 'Active' ? 'selected' : '' }}>Active
+                                    <option value="Published" {{ request('fstatus') == 'Published' ? 'selected' : '' }}>Release
                                     </option>
-                                    <option value="Pending" {{ request('fstatus') == 'Pending' ? 'selected' : '' }}>Pending
+                                    <option value="Draft" {{ request('fstatus') == 'Draft' ? 'selected' : '' }}>Belum Release
                                     </option>
                                     <option value="Inactive" {{ request('fstatus') == 'Inactive' ? 'selected' : '' }}>
                                         Inactive</option>
@@ -66,7 +66,7 @@
                                 <div class="d-flex justify-content-end">
                                     <a href="{{ route('admin.songs.index') }}" id="reset-filters"
                                         class="btn btn-link me-2">Reset</a>
-                                    <button type="submit" id="apply-filters" class="btn btn-primary">Apply Filters</button>
+                                    <button type="submit" id="apply-filters" class="btn btn-primary">Terapkan Filter</button>
                                 </div>
                             </div>
                         </div>
@@ -76,7 +76,7 @@
 
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
-                    <h3 class="card-title">Song List</h3>
+                    <h3 class="card-title">Daftar Lagu</h3>
                     <div class="d-flex">
                         <form action="{{ route('admin.songs.index') }}" method="GET" class="d-flex">
                             <div class="input-icon me-3">
@@ -90,7 +90,7 @@
                         <div class="dropdown">
                             <button class="btn btn-outline-secondary dropdown-toggle" type="button"
                                 id="bulkActionsDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                                Bulk Actions
+                                Tindakan Massal
                             </button>
                             <ul class="dropdown-menu" aria-labelledby="bulkActionsDropdown">
                                 <li><a class="dropdown-item bulk-action-btn" href="javascript:void(0)"
@@ -113,14 +113,14 @@
                                 <th class="w-1">
                                     <input class="form-check-input m-0 align-middle" type="checkbox" id="select-all">
                                 </th>
-                                <th>Title</th>
-                                <th>Creator</th>
-                                <th>Artist</th>
+                                <th>Judul</th>
+                                <th>Pencipta</th>
+                                <th>Artis</th>
                                 <th>Album</th>
                                 <th>Genre</th>
-                                <th>Release Date</th>
+                                <th>Tanggal Rilis</th>
                                 <th>Status</th>
-                                <th class="w-1">Actions</th>
+                                <th class="w-1">Tindakan</th>
                             </tr>
                         </thead>
                         <tbody id="songs-table-body">
@@ -188,14 +188,14 @@
                                         {{ $artistNames }}
                                     </td>
 
-                                    <td>{{ $song->album->title ?? '-' }}</td>
+                                    <td>{{ $song->album?->title ?? '-' }}</td>
                                     <td>{{ $song->genre->name ?? '-' }}</td>
                                     <td>{{ \Carbon\Carbon::parse($song->release_date)->format('d M Y') }}</td>
                                     <td>
                                         @if ($song->status == 'Published')
-                                            <span class="badge bg-success">Active</span>
+                                            <span class="badge bg-success">Release</span>
                                         @elseif($song->status == 'Draft')
-                                            <span class="badge bg-warning text-white">Draft</span>
+                                            <span class="badge bg-warning text-white">Belum Release</span>
                                         @else
                                             <span class="badge bg-danger">Inactive</span>
                                         @endif

@@ -1,16 +1,32 @@
 <?php
 
-if (!function_exists('youtube_embed')) {
+if (!function_exists('convert_youtube')) {
     function convert_youtube($url)
     {
-        // Match YouTube URL formats
-        $pattern = '%(?:youtube\.com/(?:[^/]+/.+/|(?:v|embed)/|.*[?&]v=)|youtu\.be/)([^"&?/ ]{11})%i';
+        $pattern = '~
+        ^(?:https?://)?      # Protokol opsional
+        (?:www\.)?           # Subdomain www opsional
+        (?:                  # Domain YouTube
+          youtube\.com       # youtube.com
+          /watch\?v=         # Format watch?v=
+          ([^&]+)           # Tangkap ID video (semua karakter kecuali &)
+        | youtube\.com      # Atau domain YouTube dengan format lain
+          /embed/
+          ([^/?&]+)
+        | youtu\.be/         # Atau youtu.be
+          ([^/?&]+)
+        )
+        ~xi';
 
         if (preg_match($pattern, $url, $matches)) {
-            $videoId = $matches[1];
-            return "https://www.youtube.com/embed/{$videoId}";
+            // Gabungkan semua kelompok tangkapan (hanya satu yang akan berisi nilai)
+            $videoId = $matches[1] ?: ($matches[2] ?: $matches[3]);
+
+            if (strlen($videoId) === 11) {
+                return 'https://www.youtube.com/embed/' . $videoId;
+            }
         }
 
-        return null; // or return original $url
+        return null;
     }
 }

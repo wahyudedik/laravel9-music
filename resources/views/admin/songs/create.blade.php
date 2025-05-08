@@ -6,15 +6,15 @@
             <div class="row g-2 align-items-center">
                 <div class="col">
                     <h2 class="page-title">
-                        Add New Song
+                        Tambahkan Lagu Baru
                     </h2>
-                    <div class="text-muted mt-1">Create a new song in the system</div>
+                    <div class="text-muted mt-1">Buat lagu baru di sistem</div>
                 </div>
                 <div class="col-auto ms-auto d-print-none">
                     <div class="btn-list">
                         <a href="{{ route('admin.songs.index') }}" class="btn btn-outline-primary d-none d-sm-inline-block">
                             <i class="ti ti-arrow-left me-2"></i>
-                            Back to Songs
+                            Kembali ke Daftar Lagu
                         </a>
                     </div>
                 </div>
@@ -30,13 +30,13 @@
                         method="post"enctype="multipart/form-data">
                         @csrf
                         <div class="card-header">
-                            <h3 class="card-title">Song Information</h3>
+                            <h3 class="card-title">Informasi Lagu</h3>
                         </div>
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-md-4 col-xl-4">
                                     <div class="mb-3">
-                                        <div class="form-label required">Song Title</div>
+                                        <div class="form-label required">Judul lagu</div>
                                         <input type="text" class="form-control @error('title') is-invalid @enderror"
                                             name="title" placeholder="Enter song title" required
                                             value="{{ old('title') }}">
@@ -52,7 +52,7 @@
                                         <select name="album_id" id="album_id"
                                             class="selectpicker form-control @error('album_id') is-invalid @enderror"
                                             data-live-search="true">
-                                            <option value="">Select Album</option>
+                                            <option value="">Pilih Album</option>
                                         </select>
                                         @error('album_id')
                                             <div class="invalid-feedback">{{ $message }}</div>
@@ -66,7 +66,7 @@
                                         <select name="genre_id" id="genre_id"
                                             class="selectpicker form-control @error('genre_id') is-invalid @enderror"
                                             data-live-search="true" required>
-                                            <option value="">Select Genre</option>
+                                            <option value="">Pilih Genre</option>
                                             @foreach ($genres as $genre)
                                                 <option value="{{ $genre->id }}"
                                                     {{ old('genre_id') == $genre->id ? 'selected' : '' }}>
@@ -81,7 +81,7 @@
 
                                 <div class="col-md-6 col-xl-6">
                                     <div class="mb-3">
-                                        <div class="form-label required">Release Date</div>
+                                        <div class="form-label required">Tanggal Rilis</div>
                                         <input type="date"
                                             class="form-control @error('release_date') is-invalid @enderror"
                                             name="release_date" value="{{ old('release_date', now()->format('Y-m-d')) }}"
@@ -95,8 +95,8 @@
                                     <div class="mb-3">
                                         <div class="form-label required">Status</div>
                                         <select class="form-select" name="status" required>
-                                            <option value="Draft">Draft</option>
-                                            <option value="Published">Published</option>
+                                            <option value="Draft">Belum Release</option>
+                                            <option value="Published">Release</option>
                                             <option value="Inactive">Inactive</option>
                                         </select>
                                     </div>
@@ -104,7 +104,7 @@
 
                                 <div class="col-md-12">
                                     <div class="mb-3">
-                                        <div class="form-label">Description</div>
+                                        <div class="form-label">Deskripsi</div>
                                         <textarea class="form-control @error('description') is-invalid @enderror" name="description" rows="4"
                                             placeholder="Enter song description"></textarea>
                                         @error('description')
@@ -114,7 +114,7 @@
                                 </div>
                                 <div class="col-md-12">
                                     <div class="mb-3">
-                                        <div class="form-label">Lyrics</div>
+                                        <div class="form-label">Lirik</div>
                                         <textarea class="form-control" name="lyrics" rows="4" placeholder="Enter song lyrics"></textarea>
                                     </div>
                                 </div>
@@ -122,7 +122,7 @@
                         </div>
 
                         <div class="card-header">
-                            <h3 class="card-title">Song Creator</h3>
+                            <h3 class="card-title">Pencipta Lagu</h3>
                         </div>
                         <div class="card-body">
 
@@ -134,7 +134,7 @@
 
                                         <div class="form-label required">Composer</div>
                                         <div class="d-flex align-items-center ">
-                                            <select
+                                            {{-- <select
                                                 class="form-control @error('composer_ids') is-invalid @enderror selectpicker "
                                                 name="composer_ids[]" id="composer_ids" data-live-search="true"
                                                 data-size="5" multiple>
@@ -142,7 +142,10 @@
                                             <button type="button" class="btn btn-outline-primary ms-3 btn-clear-composer">
                                                 <i class="ti ti-trash me-2"></i>
                                                 Clear
-                                            </button>
+                                            </button> --}}
+
+                                            <select id="composer_ids" name="composer_ids[]" class="form-control"
+                                                multiple></select>
 
                                         </div>
                                         @error('composer_ids')
@@ -158,7 +161,7 @@
                         </div>
 
                         <div class="card-header">
-                            <h3 class="card-title">Song Links</h3>
+                            <h3 class="card-title">Tautan Lagu</h3>
                         </div>
                         <div class="card-body">
 
@@ -166,11 +169,13 @@
 
                                 <div class="col-md-4">
                                     <div class="form-label">Platform</div>
-                                    <select class="form-control selectpicker" id="platform" name="platform" data-live-search="true"
-                                    data-size="5">
+                                    <select class="form-control selectpicker" id="platform" name="platform"
+                                        data-live-search="true" data-size="5">
                                         <option value="">Select Platform</option>
-                                        @foreach ($socialMedias as $socialMedia )
-                                            <option value="{{ $socialMedia->name }}">{{ $socialMedia->name }}</option>
+                                        @foreach ($socialMedias as $socialMedia)
+                                            <option value="{{ $socialMedia->name }}">
+                                                {{ $socialMedia->name }}
+                                            </option>
                                         @endforeach
                                     </select>
 
@@ -241,35 +246,35 @@
                         </div>
 
                         <div class="card-header">
-                            <h3 class="card-title">Media Files</h3>
+                            <h3 class="card-title">Berkas Media</h3>
                         </div>
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="mb-3">
-                                        <div class="form-label required">Cover Image</div>
+                                        <div class="form-label required">Gambar Sampul</div>
                                         <input type="file"
                                             class="form-control @error('cover_image') is-invalid @enderror"
                                             name="cover_image" accept="image/*" required>
                                         @error('cover_image')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
-                                        <div class="form-hint">Recommended size: 500x500px, max 2MB</div>
+                                        <div class="form-hint">Ukuran yang disarankan: 500x500px, maks 2MB</div>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="mb-3">
-                                        <div class="form-label ">Audio File</div>
+                                        <div class="form-label ">Berkas Audio</div>
                                         <input type="file"
                                             class="form-control @error('file_path') is-invalid @enderror" name="file_path"
                                             accept="audio/*">
                                         @error('file_path')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
-                                        <div class="form-hint">Supported formats: MP3, WAV, FLAC. Max 10MB</div>
+                                        <div class="form-hint">formats:WAV Max 100Mb</div>
                                     </div>
                                     <div class="mb-3">
-                                        <div class="form-label">Duration (seconds)</div>
+                                        <div class="form-label">Durasi (detik)</div>
                                         <input type="number" class="form-control" name="duration"
                                             placeholder="Enter song duration" value="{{ old('duration') }}">
                                     </div>
@@ -277,7 +282,7 @@
                             </div>
                         </div>
                         <div class="card-header">
-                            <h3 class="card-title">Licensing & Rights</h3>
+                            <h3 class="card-title">Lisensi & Harga</h3>
                         </div>
                         <div class="card-body">
                             <div class="row">
@@ -287,11 +292,10 @@
                                         <table class="table">
                                             <thead>
                                                 <tr>
-                                                    <th>License Type</th>
-                                                    <th>Amount Type</th>
-                                                    <th>Local Amount</th>
-                                                    <th>Global Amount</th>
-                                                    <th>License File</th>
+                                                    <th>Jenis Lisensi</th>
+                                                    <th>Jenis Harga</th>
+                                                    <th>Harga Lokal</th>
+                                                    <th>Harga Global</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -326,7 +330,7 @@
                                                             </div>
                                                         </div>
                                                     </td>
-                                                    <td>
+                                                    <td class="d-none">
                                                         <input type="file" class="form-control" name="license_file[]"
                                                             accept=".pdf, .doc, .docx" placeholder="Enter license file">
                                                     </td>
@@ -362,7 +366,7 @@
                                                             </div>
                                                         </div>
                                                     </td>
-                                                    <td>
+                                                    <td class="d-none">
                                                         <input type="file" class="form-control" name="license_file[]"
                                                             accept=".pdf, .doc, .docx" placeholder="Enter license file">
                                                     </td>
@@ -397,7 +401,7 @@
                                                             </div>
                                                         </div>
                                                     </td>
-                                                    <td>
+                                                    <td class="d-none">
                                                         <input type="file" class="form-control" name="license_file[]"
                                                             accept=".pdf, .doc, .docx" placeholder="Enter license file">
                                                     </td>
@@ -414,13 +418,14 @@
                                 </div>
                                 <div class="col-md-12">
                                     <div class="mb-5">
-                                        <div class="form-label required">Local Zones</div>
+                                        <div class="form-label required">Zona Lokal</div>
                                         <div class="d-flex align-items-center ">
                                             <select
                                                 class="form-control @error('local_zones') is-invalid @enderror selectpicker "
-                                                name="local_zones[]" id="local_zones" data-json='@json($lastZones)' data-live-search="true"
+                                                name="local_zones[]" id="local_zones"
+                                                data-json='@json($lastZones)' data-live-search="true"
                                                 data-size="5" multiple>
-                                                <option>Select City</option>
+                                                <option>Pilih Kota</option>
                                             </select>
                                             <button type="button" class="btn btn-outline-primary ms-3 btn-clear-zone">
                                                 <i class="ti ti-trash me-2"></i>
@@ -439,7 +444,7 @@
                                         <label class="form-check">
                                             <input class="form-check-input" type="checkbox" name="allow_cover_version"
                                                 value="1" {{ old('allow_cover_version') ? 'checked' : '' }}>
-                                            <span class="form-check-label">Allow Cover Versions</span>
+                                            <span class="form-check-label">Bisa di Cover</span>
                                         </label>
                                     </div>
                                     <div class="mb-3">
@@ -447,7 +452,7 @@
                                         <label class="form-check">
                                             <input class="form-check-input" type="checkbox" name="allow_commercial_use"
                                                 value="1" {{ old('allow_commercial_use') ? 'checked' : '' }}>
-                                            <span class="form-check-label">Allow Commercial Use</span>
+                                            <span class="form-check-label">Bisa di Komersialkan</span>
                                         </label>
                                     </div>
                                 </div>
@@ -455,9 +460,9 @@
                         </div>
                         <div class="card-footer text-end">
                             <div class="d-flex">
-                                <a href="{{ route('admin.songs.index') }}" class="btn btn-link">Cancel</a>
+                                <a href="{{ route('admin.songs.index') }}" class="btn btn-link">Batal</a>
                                 <button type="submit" class="btn btn-primary ms-auto">
-                                    <i class="ti ti-device-floppy me-2"></i>Save Song
+                                    <i class="ti ti-device-floppy me-2"></i>Simpan Lagu
                                 </button>
                             </div>
                         </div>
@@ -507,6 +512,8 @@
 @section('scripts')
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta2/dist/js/bootstrap-select.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
 
     <script>
@@ -547,20 +554,30 @@
     <script>
         $(document).ready(function() {
 
-            fetchAlbum("#album_id");
 
-            let oldComposerIds = {!! json_encode(old('composer_ids', [])) !!};
-            let composerNames = {!! json_encode(session('composer_names', [])) !!};
-            let composerSelect = $('#composer_ids');
-            oldComposerIds.forEach(function(id) {
-                if (composerSelect.find('option[value="' + id + '"]').length === 0) {
-                    let name = composerNames[id] || 'Selected Composer';
-                    composerSelect.append('<option value="' + id + '" selected>' + name + '</option>');
+            $('#platform option').each(function() {
+                if ($(this).val().toLowerCase() === 'youtube') {
+                    $('#platform').val($(this).val());
+                    return false; // break loop
                 }
             });
 
-            composerSelect.selectpicker("refresh");
-            fetchComposer("#composer_ids", oldComposerIds);
+            $('#platform').selectpicker('refresh');
+
+
+            fetchAlbum("#album_id");
+
+            // let oldComposerIds = {!! json_encode(old('composer_ids', [])) !!};
+            // let composerNames = {!! json_encode(session('composer_names', [])) !!};
+            // let composerSelect = $('#composer_ids');
+            // oldComposerIds.forEach(function(id) {
+            //     if (composerSelect.find('option[value="' + id + '"]').length === 0) {
+            //         let name = composerNames[id] || 'Selected Composer';
+            //         composerSelect.append('<option value="' + id + '" selected>' + name + '</option>');
+            //     }
+            // });
+            // composerSelect.selectpicker("refresh");
+            // fetchComposer("#composer_ids", oldComposerIds);
 
             let oldLocalZones = @json(old('local_zones'));
             fetchCity('#local_zones');
@@ -570,17 +587,53 @@
                 $('#local_zones').selectpicker('refresh');
             });
 
-            document.querySelector('.btn-clear-composer').addEventListener('click', function() {
-                $('#composer_ids').val([]);
-                $('#composer_ids').selectpicker('refresh');
-            });
+            // document.querySelector('.btn-clear-composer').addEventListener('click', function() {
+            //     $('#composer_ids').val([]);
+            //     $('#composer_ids').selectpicker('refresh');
+            // });
 
             $('#btn-add-song-link').on('click', function() {
                 addSongLinks();
             });
 
+            fetchComposerv2();
 
         });
+
+        function fetchComposerv2() {
+
+            $('#composer_ids').select2({
+                placeholder: 'Search composers',
+                minimumInputLength: 2,
+                multiple: true,
+                ajax: {
+                    url: "/admin/data/composers",
+                    type: "GET",
+                    dataType: "json",
+                    delay: 250,
+                    data: function(params) {
+                        return {
+                            search: params.term, // this sends the typed value
+                            limit: 5
+                        };
+                    },
+                    processResults: function(data) {
+                        // Assume server returns array like:
+                        // [{ id: 1, name: "John Doe" }, { id: 2, name: "Jane Smith" }]
+                        return {
+                            results: data.map(function(composer) {
+                                return {
+                                    id: composer.id,
+                                    text: composer.name
+                                };
+                            })
+                        };
+                    },
+                    cache: true
+                }
+            });
+
+        }
 
         function fetchAlbum(selectId, selectedValue = "", search = "") {
             $.ajax({
