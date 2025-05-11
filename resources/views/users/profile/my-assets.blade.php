@@ -12,7 +12,7 @@
                     <div class="col-auto ms-auto">
                         <div class="btn-list">
                             @if (auth()->user()->hasRole('Composer'))
-                                <a href="#" class="btn btn-primary d-none d-sm-inline-block">
+                                <a href="{{route('user.songs.create')}}" class="btn btn-primary d-none d-sm-inline-block">
                                     <i class="ti ti-upload me-2"></i>Upload New Song
                                 </a>
                             @endif

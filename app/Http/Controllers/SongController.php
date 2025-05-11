@@ -6,6 +6,7 @@ use App\Models\Song;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Illuminate\Support\Facades\Auth;
+use App\Models\SongContributor;
 
 class SongController extends Controller
 {
@@ -74,7 +75,23 @@ class SongController extends Controller
         $authUser = Auth::user();
 
         // Ambil data lagu lengkap dengan relasinya
-        $song = Song::with(['album', 'artist', 'genre', 'coverCreator', 'composers'])->findOrFail($id);
+        $song = Song::with([
+            'album',
+            'genre',
+            'links',
+            'licenses' => function ($query) {
+                $query->orderBy('license_type', 'asc');
+            },
+            'songContributors.user'
+        ])->findOrFail($id);
+
+        $coverVersions = $song->coverVersions;
+        $artist =SongContributor::with(['user'])->where('song_id',$song->id)
+        ->where('role','Artist')->first();
+        $artistName = '';
+        if($artist){
+            $artistName = $artist->user->name;
+        }
 
         $composers = [];
         foreach ($song->composers as $composer) {
@@ -97,6 +114,6 @@ class SongController extends Controller
             ->log($authUser->name . ' visited play song ' . $song->title);
 
 
-        return view('play-song-v1-1', compact('id','song','genre','artist','album','composers'));
+        return view('play-song-v1-1', compact('id','song','genre','artist','album'));
     }
 }

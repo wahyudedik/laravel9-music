@@ -14,6 +14,7 @@
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <!-- Vite Assets -->
+
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     <style>
@@ -848,6 +849,10 @@
             opacity: 0;
         }
     </style>
+
+    {{-- <link rel="stylesheet" href="{{asset('build/assets/css/app.css')}}"> --}}
+    {{-- <script src="{{asset('build/assets/js/app.js')}}"></script> --}}
+
 
     @yield('styles')
 </head>
