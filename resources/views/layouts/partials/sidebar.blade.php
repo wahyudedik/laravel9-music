@@ -12,13 +12,13 @@
         <div class="nav-section mb-6">
             <a href="{{ url('/') }}" class="nav-item {{ Request::is('/') ? 'active' : '' }}">
                 <i class="ti ti-home"></i>
-                <span>Home</span>
+                <span>Beranda</span>
             </a>
-            <a href="{{ route('popular-songs') }}" class="nav-item {{ Request::is('popular-songs') ? 'active' : '' }}">
+            <a href="{{ route('trending') }}" class="nav-item {{ Request::is('trending') ? 'active' : '' }}">
                 <i class="ti ti-chart-bar"></i>
                 <span>Trending</span>
             </a>
-            <a href="#" class="nav-item">
+            <a href="{{ route('explore') }}" class="nav-item {{ Request::is('explore') ? 'active' : '' }}">
                 <i class="ti ti-compass"></i>
                 <span>Explore</span>
             </a>

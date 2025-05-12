@@ -1,348 +1,314 @@
 @extends('layouts.landing-page')
 
 @section('content')
-    <!-- Page Header -->
-    <div class="flex justify-between items-center mb-6" data-aos="fade-up">
-        <div>
-            <h2 class="text-3xl font-bold text-white mb-2">Lagu Populer</h2>
-            <div class="text-gray-400">Daftar 50 lagu terpopuler saat ini berdasarkan jumlah stream dan likes</div>
+    <!-- Explore Navigation -->
+    <div class="mb-8">
+        <h1 class="text-3xl font-bold mb-6">Explore</h1>
+
+        <div class="category-nav mb-6">
+            <div class="category-pill active">All</div>
+            <div class="category-pill">Charts</div>
+            <div class="category-pill">New releases</div>
+            <div class="category-pill">Moods & genres</div>
+            <div class="category-pill">For you</div>
+            <div class="category-pill">Trending</div>
+            <div class="category-pill">Pop</div>
+            <div class="category-pill">Hip Hop</div>
+            <div class="category-pill">Rock</div>
+            <div class="category-pill">R&B</div>
+            <div class="category-pill">Electronic</div>
+            <div class="category-pill">Country</div>
+            <div class="category-pill">Latin</div>
         </div>
     </div>
 
-    <!-- Filter Chips -->
-    <div class="flex flex-wrap gap-2 mb-6" data-aos="fade-up" data-aos-delay="100">
-        <div class="inline-flex rounded-md shadow-sm">
-            <button type="button"
-                class="px-4 py-2 text-sm font-medium text-white bg-primary-600 border border-primary-600 rounded-l-lg hover:bg-primary-700 focus:z-10 focus:ring-2 focus:ring-primary-500 focus:text-white">
-                Semua
-            </button>
-            <button type="button"
-                class="px-4 py-2 text-sm font-medium text-gray-300 bg-gray-800 border-t border-b border-gray-600 hover:bg-gray-700 hover:text-white focus:z-10 focus:ring-2 focus:ring-primary-500 focus:text-white">
-                Pop
-            </button>
-            <button type="button"
-                class="px-4 py-2 text-sm font-medium text-gray-300 bg-gray-800 border-t border-b border-gray-600 hover:bg-gray-700 hover:text-white focus:z-10 focus:ring-2 focus:ring-primary-500 focus:text-white">
-                Rock
-            </button>
-            <button type="button"
-                class="px-4 py-2 text-sm font-medium text-gray-300 bg-gray-800 border-t border-b border-gray-600 hover:bg-gray-700 hover:text-white focus:z-10 focus:ring-2 focus:ring-primary-500 focus:text-white">
-                Hip Hop
-            </button>
-            <button type="button"
-                class="px-4 py-2 text-sm font-medium text-gray-300 bg-gray-800 border-t border-b border-gray-600 hover:bg-gray-700 hover:text-white focus:z-10 focus:ring-2 focus:ring-primary-500 focus:text-white">
-                R&B
-            </button>
-            <button type="button"
-                class="px-4 py-2 text-sm font-medium text-gray-300 bg-gray-800 border-r border-t border-b border-gray-600 rounded-r-lg hover:bg-gray-700 hover:text-white focus:z-10 focus:ring-2 focus:ring-primary-500 focus:text-white">
-                Electronic
-            </button>
+    <!-- Trending Now Section -->
+    <section class="mb-12">
+        <div class="section-header flex items-center justify-between mb-5">
+            <h2 class="section-title text-2xl font-bold">Trending Song</h2>
+            <a href="#" class="section-link flex items-center gap-1 hover:text-red-500 transition-colors">
+                See all <i class="ti ti-chevron-right text-sm"></i>
+            </a>
         </div>
-    </div>
 
-    <!-- Popular Songs Grid -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-12" data-aos="fade-up"
-        data-aos-delay="200">
-        @for ($i = 1; $i <= 12; $i++)
-            <div class="group" data-aos="fade-up" data-aos-delay="{{ 200 + $i * 10 }}">
-                <div
-                    class="bg-gray-800 rounded-lg overflow-hidden transition-all duration-300 hover:bg-gray-700 hover:shadow-xl hover:-translate-y-2 h-full">
-                    <div class="relative">
-                        <img src="https://picsum.photos/300/300?random={{ $i + 100 }}"
-                            class="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-110"
-                            alt="Song Cover">
-                        @guest
-                            <span
-                                class="absolute top-2 right-2 inline-flex items-center justify-center p-1.5 text-xs font-bold leading-none text-white bg-gray-900 rounded-full">
-                                <i class="ti ti-lock"></i>
-                            </span>
-                        @endguest
-                    </div>
-                    <div class="p-4">
-                        <h5 class="text-lg font-semibold text-white mb-1 truncate">Judul Lagu Populer #{{ $i }}
-                        </h5>
-                        <p class="text-gray-400 text-sm mb-3 truncate">Artis Populer #{{ rand(1, 20) }}</p>
-                        <div class="flex justify-between items-center mb-3">
-                            <div class="flex gap-2">
-                                <span
-                                    class="inline-flex items-center px-2 py-1 text-xs font-medium rounded-full bg-blue-900 text-blue-200">
-                                    <i class="ti ti-player-play mr-1"></i> {{ rand(1, 50) }}M
-                                </span>
-                                <span
-                                    class="inline-flex items-center px-2 py-1 text-xs font-medium rounded-full bg-red-900 text-red-200">
-                                    <i class="ti ti-heart mr-1"></i> {{ rand(100, 999) }}K
-                                </span>
-                            </div>
-                            <span
-                                class="inline-flex items-center px-2 py-1 text-xs font-medium rounded-full bg-green-900 text-green-200">
-                                <i class="ti ti-calendar mr-1"></i> {{ rand(1, 12) }} bulan
-                            </span>
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-5">
+            @for ($i = 1; $i <= 12; $i++)
+                <div class="scroll-item music-card-item" data-aos="fade-up" data-aos-delay="{{ $i * 50 }}">
+                    <div class="relative group overflow-hidden rounded-lg">
+                        <div
+                            class="absolute top-2 left-2 z-10 bg-red-600 text-white text-xs font-bold px-2 py-1 rounded-full">
+                            <i class="ti ti-trending-up mr-1"></i> Trending
                         </div>
-                        <div class="flex justify-between items-center">
-                            <button
-                                class="text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:ring-primary-800 font-medium rounded-lg text-sm px-3 py-1.5 inline-flex items-center play-song-btn"
-                                @guest
-onclick="window.location.href='{{ route('login') }}'"
-                                @else
-                                    onclick="window.location.href='{{ route('play-song', ['id' => $i]) }}'" @endguest
-                                data-song-title="Judul Lagu Populer #{{ $i }}"
-                                data-artist-name="Artis Populer #{{ rand(1, 20) }}"
-                                data-cover-image="https://picsum.photos/300/300?random={{ $i + 100 }}">
-                                <i class="ti ti-player-play mr-1"></i> Play
-                            </button>
-                            <div class="relative">
-                                <button id="dropdownMenuButton{{ $i }}"
-                                    data-dropdown-toggle="songDropdown{{ $i }}"
-                                    class="text-white bg-gray-800 hover:bg-gray-700 focus:ring-4 focus:ring-gray-700 font-medium rounded-lg text-sm p-1.5 inline-flex items-center">
-                                    <i class="ti ti-dots-vertical"></i>
-                                </button>
-                                <div id="songDropdown{{ $i }}"
-                                    class="hidden z-10 w-44 bg-gray-800 rounded-lg shadow-lg">
-                                    <ul class="py-2 text-sm text-gray-200"
-                                        aria-labelledby="dropdownMenuButton{{ $i }}">
-                                        @auth
-                                            <li>
-                                                <a href="#" class="block px-4 py-2 hover:bg-gray-700"
-                                                    data-modal-target="addToPlaylistModal"
-                                                    data-modal-toggle="addToPlaylistModal"
-                                                    data-song-title="Judul Lagu Populer #{{ $i }}"
-                                                    data-artist-name="Artis Populer #{{ rand(1, 20) }}"
-                                                    data-cover-image="https://picsum.photos/300/300?random={{ $i + 100 }}">
-                                                    <i class="ti ti-plus mr-2"></i> Tambah ke Playlist
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="#" class="block px-4 py-2 hover:bg-gray-700">
-                                                    <i class="ti ti-heart mr-2"></i> Tambah ke Favorit
-                                                </a>
-                                            </li>
-
-                                            @if (Auth::user()->hasAnyRole(['Cover Creator', 'Artist', 'Composer']))
-                                                <li>
-                                                    <a href="#" class="block px-4 py-2 hover:bg-gray-700">
-                                                        <i class="ti ti-bookmark mr-2"></i> Tambah ke Wishlist
-                                                    </a>
-                                                </li>
-                                            @endif
-
-                                            @if (Auth::user()->hasAnyRole(['Cover Creator', 'Artist', 'Composer']))
-                                                <li>
-                                                    <hr class="h-px my-2 bg-gray-600 border-0">
-                                                </li>
-                                                <li>
-                                                    <a href="#" class="block px-4 py-2 hover:bg-gray-700">
-                                                        <i class="ti ti-microphone mr-2"></i> Buat Cover
-                                                    </a>
-                                                </li>
-                                            @endif
-                                        @else
-                                            <li>
-                                                <a href="{{ route('login') }}" class="block px-4 py-2 hover:bg-gray-700">
-                                                    <i class="ti ti-login mr-2"></i> Login untuk Opsi Lainnya
-                                                </a>
-                                            </li>
-                                        @endauth
-
-                                        <li>
-                                            <hr class="h-px my-2 bg-gray-600 border-0">
-                                        </li>
-                                        <li>
-                                            <a href="#" class="block px-4 py-2 hover:bg-gray-700">
-                                                <i class="ti ti-share mr-2"></i> Bagikan
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="{{ route('play-song', ['id' => $i]) }}"
-                                                class="block px-4 py-2 hover:bg-gray-700">
-                                                <i class="ti ti-info-circle mr-2"></i> Detail Lagu
-                                            </a>
-                                        </li>
-                                    </ul>
+                        <img src="https://picsum.photos/300/300?random={{ $i + 300 }}"
+                            alt="Trending Song #{{ $i }}"
+                            class="w-full aspect-square object-cover transition-transform duration-300 group-hover:scale-110">
+                        <div
+                            class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        </div>
+                        <button class="play-song-btn absolute inset-0 flex items-center justify-center"
+                            @guest data-login-required="true" onclick="window.location.href='{{ route('login') }}'" @endguest
+                            data-title="Trending Song #{{ $i }}"
+                            data-artist="Trending Artist #{{ $i }}"
+                            data-cover="https://picsum.photos/300/300?random={{ $i + 300 }}"
+                            data-id="{{ $i + 100 }}" data-duration="{{ rand(180, 320) }}">
+                            <div
+                                class="w-12 h-12 bg-red-600 rounded-full flex items-center justify-center transform translate-y-4 opacity-0 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 shadow-lg hover:bg-red-700 hover:scale-105">
+                                <i class="ti ti-player-play text-white text-xl"></i>
+                            </div>
+                        </button>
+                        @guest
+                            <div class="absolute top-2 right-2">
+                                <div class="bg-gray-900/70 backdrop-blur-sm text-white text-xs p-1 rounded-full">
+                                    <i class="ti ti-lock text-xs"></i>
                                 </div>
                             </div>
+                        @endguest
+                    </div>
+                    <div class="mt-3">
+                        <h3 class="font-semibold text-base truncate" title="Trending Song #{{ $i }}">
+                            Trending Song #{{ $i }}
+                        </h3>
+                        <p class="text-sm text-gray-400 truncate" title="Trending Artist #{{ $i }}">
+                            Trending Artist #{{ $i }}
+                        </p>
+
+                        <div class="flex items-center mt-1">
+                            <span class="text-xs text-gray-500 flex items-center">
+                                Song • {{ rand(1, 50) }}M views
+                            </span>
                         </div>
                     </div>
                 </div>
-            </div>
-        @endfor
-    </div>
-
-    <!-- Trending This Week Section -->
-    <div class="bg-gray-800 rounded-lg shadow-lg mb-10" data-aos="fade-up" data-aos-delay="400">
-        <div class="border-b border-gray-700 px-6 py-4">
-            <h3 class="text-xl font-bold text-white flex items-center">
-                <i class="ti ti-trending-up mr-2 text-primary-500"></i>Trending Minggu Ini
-            </h3>
+            @endfor
         </div>
-        <div class="p-6">
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                @for ($i = 1; $i <= 4; $i++)
-                    <div class="group" data-aos="fade-up" data-aos-delay="{{ 400 + $i * 50 }}">
-                        <div
-                            class="bg-gray-700 rounded-lg overflow-hidden transition-all duration-300 hover:bg-gray-600 hover:shadow-xl hover:-translate-y-2 h-full">
-                            <div class="relative">
-                                <img src="https://picsum.photos/300/300?random={{ $i + 300 }}"
-                                    class="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-110"
-                                    alt="Trending Song">
-                                <span
-                                    class="absolute top-2 right-2 inline-flex items-center px-2 py-1 text-xs font-medium rounded-full bg-red-900 text-red-200">
-                                    <i class="ti ti-flame mr-1"></i> Hot
-                                </span>
+    </section>
+
+    <!-- Trending Playlists Section -->
+    <section class="mb-12">
+        <div class="section-header flex items-center justify-between mb-5">
+            <h2 class="section-title text-2xl font-bold">Trending Playlists</h2>
+            <a href="#" class="section-link flex items-center gap-1 hover:text-red-500 transition-colors">
+                See all <i class="ti ti-chevron-right text-sm"></i>
+            </a>
+        </div>
+
+        <div class="scroll-container">
+            @php
+                $playlists = [
+                    [
+                        'title' => 'Today\'s Hits',
+                        'desc' => 'The most played tracks right now',
+                        'color' => 'from-pink-600 to-red-600',
+                        'songs' => rand(30, 50),
+                    ],
+                    [
+                        'title' => 'Rap Caviar',
+                        'desc' => 'Best hip hop tracks this week',
+                        'color' => 'from-blue-600 to-indigo-600',
+                        'songs' => rand(30, 50),
+                    ],
+                    [
+                        'title' => 'Pop Mix',
+                        'desc' => 'The hottest pop songs',
+                        'color' => 'from-purple-600 to-pink-600',
+                        'songs' => rand(30, 50),
+                    ],
+                    [
+                        'title' => 'Mega Hit Mix',
+                        'desc' => 'A mix of the biggest songs right now',
+                        'color' => 'from-red-600 to-orange-600',
+                        'songs' => rand(30, 50),
+                    ],
+                    [
+                        'title' => 'Chill Vibes',
+                        'desc' => 'Relaxing tunes for your day',
+                        'color' => 'from-teal-600 to-blue-600',
+                        'songs' => rand(30, 50),
+                    ],
+                    [
+                        'title' => 'Dance Party',
+                        'desc' => 'Top electronic and dance hits',
+                        'color' => 'from-green-600 to-teal-600',
+                        'songs' => rand(30, 50),
+                    ],
+                ];
+            @endphp
+
+            @foreach ($playlists as $index => $playlist)
+                <div class="relative" style="min-width: 160px; max-width: 180px;" data-aos="fade-up"
+                    data-aos-delay="{{ $index * 50 }}">
+                    <div class="bg-gray-800 rounded-lg overflow-hidden group">
+                        <div class="aspect-square bg-gradient-to-br {{ $playlist['color'] }} relative">
+                            <div class="absolute inset-0 opacity-40">
+                                <img src="https://picsum.photos/300/300?random={{ $index + 200 }}"
+                                    class="w-full h-full object-cover mix-blend-overlay" alt="{{ $playlist['title'] }}">
                             </div>
-                            <div class="p-4">
-                                <h5 class="text-lg font-semibold text-white mb-1 truncate">Trending Song
-                                    #{{ $i }}</h5>
-                                <p class="text-gray-300 text-sm mb-3 truncate">Trending Artist #{{ $i }}</p>
-                                <div class="flex justify-between items-center">
-                                    <div class="flex gap-2">
-                                        <span
-                                            class="inline-flex items-center px-2 py-1 text-xs font-medium rounded-full bg-blue-900 text-blue-200">
-                                            <i class="ti ti-player-play mr-1"></i> {{ rand(5, 20) }}M
-                                        </span>
-                                        <span
-                                            class="inline-flex items-center px-2 py-1 text-xs font-medium rounded-full bg-red-900 text-red-200">
-                                            <i class="ti ti-heart mr-1"></i> {{ rand(500, 999) }}K
-                                        </span>
-                                    </div>
-                                    <button
-                                        class="text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:ring-primary-800 font-medium rounded-lg text-sm px-3 py-1.5 inline-flex items-center play-song-btn"
-                                        @guest
-onclick="window.location.href='{{ route('login') }}'"
-                                        @else
-                                            onclick="window.location.href='{{ route('play-song', ['id' => $i]) }}'" @endguest
-                                        data-song-title="Trending Song #{{ $i }}"
-                                        data-artist-name="Trending Artist #{{ $i }}"
-                                        data-cover-image="https://picsum.photos/300/300?random={{ $i + 300 }}">
-                                        <i class="ti ti-player-play mr-1"></i> Play
-                                    </button>
-                                </div>
+                            <div
+                                class="absolute bottom-0 right-0 p-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                <button
+                                    class="bg-red-600 hover:bg-red-700 text-white rounded-full p-2 shadow-lg transition transform hover:scale-105">
+                                    <i class="ti ti-player-play"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="p-3">
+                            <h3 class="font-medium text-sm truncate" title="{{ $playlist['title'] }}">
+                                {{ $playlist['title'] }}</h3>
+                            <p class="text-xs text-gray-400 truncate mt-1">{{ $playlist['songs'] }} songs</p>
+                        </div>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+    </section>
+
+    <!-- Trending Artists -->
+    <section class="mb-12">
+        <div class="section-header flex items-center justify-between mb-5">
+            <h2 class="section-title text-2xl font-bold">Trending artists</h2>
+            <a href="#" class="section-link flex items-center gap-1 hover:text-red-500 transition-colors">
+                See all <i class="ti ti-chevron-right text-sm"></i>
+            </a>
+        </div>
+
+        <div class="scroll-container">
+            @php
+                $artists = [
+                    'Taylor Swift',
+                    'The Weeknd',
+                    'Drake',
+                    'Billie Eilish',
+                    'Dua Lipa',
+                    'Bad Bunny',
+                    'Ariana Grande',
+                    'BTS',
+                    'Ed Sheeran',
+                    'Justin Bieber',
+                ];
+            @endphp
+
+            @foreach ($artists as $index => $artist)
+                <div class="scroll-item artist-card" data-aos="fade-up" data-aos-delay="{{ $index * 50 }}">
+                    <div class="relative group">
+                        <div
+                            class="overflow-hidden rounded-full aspect-square border-2 border-transparent group-hover:border-red-500 transition-all duration-300">
+                            <img src="https://picsum.photos/300/300?random={{ $index + 900 }}"
+                                alt="{{ $artist }}"
+                                class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                        </div>
+                        <div class="absolute bottom-0 right-0">
+                            <div
+                                class="w-10 h-10 bg-red-600 rounded-full flex items-center justify-center transform scale-0 group-hover:scale-100 transition-transform duration-300 shadow-lg">
+                                <i class="ti ti-player-play text-white"></i>
                             </div>
                         </div>
                     </div>
-                @endfor
-            </div>
+                    <h3 class="font-medium mt-3 text-center truncate" title="{{ $artist }}">{{ $artist }}
+                    </h3>
+                </div>
+            @endforeach
         </div>
-    </div>
+    </section>
 
-    <!-- New Releases Section -->
-    <div class="bg-gray-800 rounded-lg shadow-lg mb-12" data-aos="fade-up" data-aos-delay="500">
-        <div class="border-b border-gray-700 px-6 py-4">
-            <h3 class="text-xl font-bold text-white flex items-center">
-                <i class="ti ti-sparkles mr-2 text-primary-500"></i>Rilis Terbaru
-            </h3>
-        </div>
-        <div class="p-6">
-            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
-                @for ($i = 1; $i <= 6; $i++)
-                    <div class="group" data-aos="fade-up" data-aos-delay="{{ 500 + $i * 50 }}">
-                        <div
-                            class="bg-gray-700 rounded-lg overflow-hidden transition-all duration-300 hover:bg-gray-600 hover:shadow-xl hover:-translate-y-2 h-full">
-                            <div class="relative">
-                                <img src="https://picsum.photos/300/300?random={{ $i + 400 }}"
-                                    class="w-full h-auto aspect-square object-cover transition-transform duration-500 group-hover:scale-110"
-                                    alt="New Release">
-                                <span
-                                    class="absolute top-2 right-2 inline-flex items-center px-2 py-1 text-xs font-medium rounded-full bg-green-900 text-green-200">Baru</span>
-                            </div>
-                            <div class="p-3">
-                                <h6 class="text-sm font-semibold text-white mb-1 truncate">New Release
-                                    #{{ $i }}</h6>
-                                <p class="text-gray-300 text-xs mb-2 truncate">New Artist #{{ $i }}</p>
-                                <div class="flex justify-between items-center">
-                                    <span
-                                        class="inline-flex items-center px-2 py-0.5 text-xs font-medium rounded-full bg-blue-900 text-blue-200">
-                                        <i class="ti ti-player-play mr-1"></i> {{ rand(100, 500) }}K
-                                    </span>
-                                    <button
-                                        class="text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:ring-primary-800 font-medium rounded-full p-1.5 inline-flex items-center justify-center play-song-btn"
-                                        @guest
-onclick="window.location.href='{{ route('login') }}'"
-                                        @else
-                                            onclick="window.location.href='{{ route('play-song', ['id' => $i]) }}'" @endguest
-                                        data-song-title="New Release #{{ $i }}"
-                                        data-artist-name="New Artist #{{ $i }}"
-                                        data-cover-image="https://picsum.photos/300/300?random={{ $i + 400 }}">
-                                        <i class="ti ti-player-play"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                @endfor
+    <!-- Trending Composer Section -->
+    <section class="mb-12">
+        <div class="section-header flex items-center justify-between mb-6">
+            <h2 class="section-title text-2xl font-bold">Trending composers</h2>
+            <div class="flex items-center space-x-2">
+                <a href="#" class="section-link flex items-center gap-1 hover:text-red-500 transition-colors">
+                    See all <i class="ti ti-chevron-right text-sm"></i>
+                </a>
             </div>
         </div>
-    </div>
 
-    <!-- Genre Highlights -->
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12" data-aos="fade-up" data-aos-delay="600">
-        <div class="bg-gray-800 rounded-lg shadow-lg h-full">
-            <div class="border-b border-gray-700 px-6 py-4">
-                <h3 class="text-xl font-bold text-white flex items-center">
-                    <i class="ti ti-music mr-2 text-primary-500"></i>Pop Hits
-                </h3>
-            </div>
-            <div class="p-4">
-                <ul class="divide-y divide-gray-700">
-                    @for ($i = 1; $i <= 5; $i++)
-                        <li class="py-3 transition-all duration-300 hover:bg-gray-700 hover:translate-x-2 rounded-lg px-2">
-                            <div class="flex items-center space-x-4">
-                                <div class="flex-shrink-0 text-gray-400">{{ $i }}</div>
-                                <div class="flex-shrink-0 relative">
+        <div class="bg-gray-800/30 backdrop-blur-sm rounded-lg overflow-hidden border border-gray-700/50">
+            <div class="p-1">
+                <ul class="divide-y divide-gray-700/50">
+                    @for ($i = 1; $i <= 10; $i++)
+                        <li class="group hover:bg-gray-700/50 transition-all duration-300 rounded-md" data-aos="fade-up"
+                            data-aos-delay="{{ $i * 30 }}">
+                            <div class="flex items-center px-4 py-3">
+                                <div class="text-gray-400 w-6 text-center mr-6">{{ $i }}</div>
+                                <div class="relative flex-shrink-0 mr-4">
                                     <img src="https://picsum.photos/300/300?random={{ $i + 500 }}"
-                                        class="w-10 h-10 rounded-md" alt="Pop Song">
+                                        class="w-12 h-12 rounded object-cover transition-transform duration-300 group-hover:scale-105"
+                                        alt="Composer #{{ $i }}">
                                     <button
-                                        class="absolute -bottom-1 -right-1 text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:ring-primary-800 font-medium rounded-full p-1 inline-flex items-center justify-center play-song-btn"
-                                        data-song-title="Pop Hit #{{ $i }}"
-                                        data-artist-name="Pop Artist #{{ $i }}"
-                                        data-cover-image="https://picsum.photos/300/300?random={{ $i + 500 }}">
-                                        <i class="ti ti-player-play text-xs"></i>
+                                        class="play-song-btn absolute inset-0 bg-red-600/80 rounded opacity-0 group-hover:opacity-100 flex items-center justify-center transition-all duration-300"
+                                        data-title="Composition #{{ $i }}"
+                                        data-artist="Composer #{{ $i }}"
+                                        data-cover="https://picsum.photos/300/300?random={{ $i + 500 }}"
+                                        data-id="{{ $i + 300 }}" data-duration="{{ rand(180, 320) }}">
+                                        <i class="ti ti-player-play text-white"></i>
                                     </button>
                                 </div>
-                                <div class="flex-1 min-w-0">
-                                    <p class="text-sm font-medium text-white truncate">Pop Hit #{{ $i }}</p>
-                                    <p class="text-sm text-gray-400 truncate">Pop Artist #{{ $i }}</p>
-                                </div>
-                                <div
-                                    class="inline-flex items-center text-xs font-medium rounded-full px-2 py-0.5 bg-blue-900 text-blue-200">
-                                    <i class="ti ti-player-play mr-1"></i> {{ rand(1, 10) }}M
-                                </div>
-                            </div>
-                        </li>
-                    @endfor
-                </ul>
-            </div>
-        </div>
-
-        <div class="bg-gray-800 rounded-lg shadow-lg h-full">
-            <div class="border-b border-gray-700 px-6 py-4">
-                <h3 class="text-xl font-bold text-white flex items-center">
-                    <i class="ti ti-music mr-2 text-primary-500"></i>Hip Hop Hits
-                </h3>
-            </div>
-            <div class="p-4">
-                <ul class="divide-y divide-gray-700">
-                    @for ($i = 1; $i <= 5; $i++)
-                        <li class="py-3 transition-all duration-300 hover:bg-gray-700 hover:translate-x-2 rounded-lg px-2">
-                            <div class="flex items-center space-x-4">
-                                <div class="flex-shrink-0 text-gray-400">{{ $i }}</div>
-                                <div class="flex-shrink-0 relative">
-                                    <img src="https://picsum.photos/300/300?random={{ $i + 600 }}"
-                                        class="w-10 h-10 rounded-md" alt="Hip Hop Song">
-                                    <button
-                                        class="absolute -bottom-1 -right-1 text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:ring-primary-800 font-medium rounded-full p-1 inline-flex items-center justify-center play-song-btn"
-                                        data-song-title="Hip Hop Hit #{{ $i }}"
-                                        data-artist-name="Hip Hop Artist #{{ $i }}"
-                                        data-cover-image="https://picsum.photos/300/300?random={{ $i + 600 }}">
-                                        <i class="ti ti-player-play text-xs"></i>
-                                    </button>
-                                </div>
-                                <div class="flex-1 min-w-0">
-                                    <p class="text-sm font-medium text-white truncate">Hip Hop Hit #{{ $i }}
+                                <div class="min-w-0 flex-1 pr-4">
+                                    <p
+                                        class="text-sm font-medium text-white truncate group-hover:text-red-400 transition-colors duration-300">
+                                        Composition #{{ $i }}
                                     </p>
-                                    <p class="text-sm text-gray-400 truncate">Hip Hop Artist #{{ $i }}</p>
+                                    <div class="flex items-center">
+                                        <p class="text-xs text-gray-400 truncate">Composer #{{ $i }}</p>
+                                        @if (rand(0, 1))
+                                            <span
+                                                class="inline-flex items-center ml-2 bg-gray-700 text-gray-300 text-xs px-1.5 py-0.5 rounded">
+                                                <i class="ti ti-music text-xs mr-0.5"></i> Classical
+                                            </span>
+                                        @endif
+                                    </div>
                                 </div>
-                                <div
-                                    class="inline-flex items-center text-xs font-medium rounded-full px-2 py-0.5 bg-blue-900 text-blue-200">
-                                    <i class="ti ti-player-play mr-1"></i> {{ rand(1, 10) }}M
+                                <div class="flex items-center gap-2 text-gray-400">
+                                    <span class="text-xs">{{ rand(2, 5) }}:{{ sprintf('%02d', rand(0, 59)) }}</span>
+                                    @auth
+                                        <button class="p-2 hover:text-red-500 transition-colors">
+                                            <i class="ti ti-heart"></i>
+                                        </button>
+                                    @endauth
+                                    <div class="relative">
+                                        <button class="p-2 hover:text-white transition-colors"
+                                            onclick="toggleMenu('composerMenu{{ $i }}')">
+                                            <i class="ti ti-dots-vertical"></i>
+                                        </button>
+                                        <div class="absolute right-0 mt-2 w-48 bg-gray-800 rounded-lg shadow-lg p-2 hidden z-20"
+                                            id="composerMenu{{ $i }}">
+                                            <ul class="space-y-1">
+                                                @auth
+                                                    <li>
+                                                        <a href="#"
+                                                            class="flex items-center gap-2 text-gray-400 hover:text-white text-sm p-2 rounded hover:bg-gray-700">
+                                                            <i class="ti ti-playlist"></i> Add to playlist
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="#"
+                                                            class="flex items-center gap-2 text-gray-400 hover:text-white text-sm p-2 rounded hover:bg-gray-700">
+                                                            <i class="ti ti-heart"></i> Save to library
+                                                        </a>
+                                                    </li>
+                                                @endauth
+                                                <li>
+                                                    <a href="#"
+                                                        class="flex items-center gap-2 text-gray-400 hover:text-white text-sm p-2 rounded hover:bg-gray-700">
+                                                        <i class="ti ti-share"></i> Share
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="#"
+                                                        class="flex items-center gap-2 text-gray-400 hover:text-white text-sm p-2 rounded hover:bg-gray-700">
+                                                        <i class="ti ti-music"></i> Go to composer
+                                                    </a>
+                                                </li>
+                                                @guest
+                                                    <li>
+                                                        <a href="{{ route('login') }}"
+                                                            class="flex items-center gap-2 text-gray-400 hover:text-white text-sm p-2 rounded hover:bg-gray-700">
+                                                            <i class="ti ti-login"></i> Sign in for more options
+                                                        </a>
+                                                    </li>
+                                                @endguest
+                                            </ul>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </li>
@@ -350,171 +316,52 @@ onclick="window.location.href='{{ route('login') }}'"
                 </ul>
             </div>
         </div>
-    </div>
-
-    <!-- Pagination -->
-    <div class="flex justify-center mt-8 mb-12" data-aos="fade-up" data-aos-delay="700">
-        <nav aria-label="Page navigation">
-            <ul class="inline-flex -space-x-px">
-                <li>
-                    <a href="#"
-                        class="px-3 py-2 ml-0 leading-tight text-gray-400 bg-gray-800 border border-gray-700 rounded-l-lg hover:bg-gray-700 hover:text-white">
-                        <i class="ti ti-chevron-left"></i>
-                    </a>
-                </li>
-                <li>
-                    <a href="#"
-                        class="px-3 py-2 leading-tight text-white bg-primary-600 border border-primary-600 hover:bg-primary-700 hover:text-white">1</a>
-                </li>
-                <li>
-                    <a href="#"
-                        class="px-3 py-2 leading-tight text-gray-400 bg-gray-800 border border-gray-700 hover:bg-gray-700 hover:text-white">2</a>
-                </li>
-                <li>
-                    <a href="#"
-                        class="px-3 py-2 leading-tight text-gray-400 bg-gray-800 border border-gray-700 hover:bg-gray-700 hover:text-white">3</a>
-                </li>
-                <li>
-                    <a href="#"
-                        class="px-3 py-2 leading-tight text-gray-400 bg-gray-800 border border-gray-700 hover:bg-gray-700 hover:text-white">4</a>
-                </li>
-                <li>
-                    <a href="#"
-                        class="px-3 py-2 leading-tight text-gray-400 bg-gray-800 border border-gray-700 hover:bg-gray-700 hover:text-white">5</a>
-                </li>
-                <li>
-                    <a href="#"
-                        class="px-3 py-2 leading-tight text-gray-400 bg-gray-800 border border-gray-700 rounded-r-lg hover:bg-gray-700 hover:text-white">
-                        <i class="ti ti-chevron-right"></i>
-                    </a>
-                </li>
-            </ul>
-        </nav>
-    </div>
-@endsection
-
-@section('styles')
-    <style>
-        /* Pulse animation for trending badges */
-        .bg-red-900 {
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0% {
-                box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.7);
-            }
-
-            70% {
-                box-shadow: 0 0 0 6px rgba(220, 38, 38, 0);
-            }
-
-            100% {
-                box-shadow: 0 0 0 0 rgba(220, 38, 38, 0);
-            }
-        }
-
-        /* Fade in animation for new badges */
-        .bg-green-900 {
-            animation: fadeInOut 3s infinite;
-        }
-
-        @keyframes fadeInOut {
-            0% {
-                opacity: 0.7;
-            }
-
-            50% {
-                opacity: 1;
-            }
-
-            100% {
-                opacity: 0.7;
-            }
-        }
-
-        /* Ripple effect */
-        .ripple {
-            position: absolute;
-            border-radius: 50%;
-            background-color: rgba(255, 255, 255, 0.4);
-            transform: scale(0);
-            animation: ripple 0.6s linear;
-            pointer-events: none;
-        }
-
-        @keyframes ripple {
-            to {
-                transform: scale(4);
-                opacity: 0;
-            }
-        }
-    </style>
+    </section>
 @endsection
 
 @section('scripts')
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Add hover effects for song rows
-            const songRows = document.querySelectorAll('li');
-
-            songRows.forEach(row => {
-                row.addEventListener('mouseenter', function() {
-                    const btn = this.querySelector('.play-song-btn');
-                    if (btn) {
-                        btn.classList.add('scale-110');
-                    }
-                });
-
-                row.addEventListener('mouseleave', function() {
-                    const btn = this.querySelector('.play-song-btn');
-                    if (btn) {
-                        btn.classList.remove('scale-110');
-                    }
+            // Category pill click
+            const categoryPills = document.querySelectorAll('.category-pill');
+            categoryPills.forEach(pill => {
+                pill.addEventListener('click', function() {
+                    categoryPills.forEach(p => p.classList.remove('active'));
+                    this.classList.add('active');
                 });
             });
 
-            // Add ripple effect to buttons
-            const buttons = document.querySelectorAll('button, a');
-            buttons.forEach(button => {
-                button.addEventListener('click', function(e) {
-                    if (!this.classList.contains('play-song-btn') || !this.hasAttribute(
-                        'onclick')) {
-                        const ripple = document.createElement('span');
-                        ripple.classList.add('ripple');
-                        this.appendChild(ripple);
+            // Toggle menu function
+            window.toggleMenu = function(menuId) {
+                const menu = document.getElementById(menuId);
+                if (menu) {
+                    menu.classList.toggle('hidden');
 
-                        const rect = this.getBoundingClientRect();
-                        const size = Math.max(rect.width, rect.height);
-                        const x = e.clientX - rect.left - size / 2;
-                        const y = e.clientY - rect.top - size / 2;
+                    // Close when clicking outside
+                    const closeMenu = function(e) {
+                        if (!menu.contains(e.target) && !e.target.closest(
+                                `[onclick="toggleMenu('${menuId}')"]`)) {
+                            menu.classList.add('hidden');
+                            document.removeEventListener('click', closeMenu);
+                        }
+                    };
 
-                        ripple.style.width = ripple.style.height = `${size}px`;
-                        ripple.style.left = `${x}px`;
-                        ripple.style.top = `${y}px`;
+                    document.addEventListener('click', closeMenu);
+                }
+            };
 
-                        setTimeout(() => {
-                            ripple.remove();
-                        }, 600);
-                    }
-                });
+            // Add animation delay to grid items
+            document.querySelectorAll('.scroll-item').forEach((item, index) => {
+                item.style.setProperty('--index', index);
             });
 
-            // Add active class to filter buttons on click
-            const filterButtons = document.querySelectorAll('.inline-flex button');
-            filterButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    filterButtons.forEach(btn => {
-                        btn.classList.remove('bg-primary-600', 'border-primary-600',
-                            'text-white');
-                        btn.classList.add('bg-gray-800', 'border-gray-600',
-                        'text-gray-300');
-                    });
-
-                    this.classList.remove('bg-gray-800', 'border-gray-600', 'text-gray-300');
-                    this.classList.add('bg-primary-600', 'border-primary-600', 'text-white');
+            // Initialize AOS animation library if it exists
+            if (typeof AOS !== 'undefined') {
+                AOS.init({
+                    duration: 800,
+                    once: true
                 });
-            });
+            }
         });
     </script>
 @endsection
