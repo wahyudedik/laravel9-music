@@ -19,7 +19,7 @@ use Intervention\Image\Drivers\Gd\Driver;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
 
-class AdminSongController extends Controller
+class UserSongController extends Controller
 {
     public function index(Request $request)
     {
@@ -86,7 +86,7 @@ class AdminSongController extends Controller
         //jika masih kosong cek apakah user auth -> city tersedia pake ini datanya untuk isi default local_zones selectpicker
         $songZone = Song::select('local_zones')->where('created_by', Auth::id())->latest()->first();
         $lastZones = [];
-        if ($songZone) {
+        if($songZone){
             $local_zones = explode(',', $songZone->local_zones);
             foreach ($local_zones as $zone) {
                 $lastZones[] = [
@@ -95,7 +95,7 @@ class AdminSongController extends Controller
             }
         }
 
-        return view('admin.songs.create', compact('genres', 'socialMedias', 'lastZones'));
+        return view('users.songs.create', compact('genres', 'socialMedias', 'lastZones'));
     }
 
 
@@ -253,7 +253,8 @@ class AdminSongController extends Controller
 
             DB::commit();
 
-            return redirect()->route('admin.songs.index')->with('success', 'Song successfully added.');
+            return redirect()->route('profile.my-assets')->with('success', 'Song successfully added.');
+
         } catch (\Exception $e) {
             DB::rollBack();
 
@@ -500,10 +501,10 @@ class AdminSongController extends Controller
         ])->findOrFail($id);
 
         $coverVersions = $song->coverVersions;
-        $artist = SongContributor::with(['user'])->where('song_id', $song->id)
-            ->where('role', 'Artist')->first();
+        $artist =SongContributor::with(['user'])->where('song_id',$song->id)
+        ->where('role','Artist')->first();
         $artistName = '';
-        if ($artist) {
+        if($artist){
             $artistName = $artist->user->name;
         }
 
@@ -511,7 +512,7 @@ class AdminSongController extends Controller
             ->withProperties(['ip' => request()->ip()])
             ->log($authUser->name . ' visited show song form for song: ' . $song->title);
 
-        return view('admin.songs.show', compact('song', 'coverVersions', 'artistName'));
+        return view('admin.songs.show', compact('song', 'coverVersions','artistName'));
     }
 
     public function bulkAction(Request $request)
