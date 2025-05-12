@@ -85,12 +85,15 @@ class AdminSongController extends Controller
         //ambil data local_zones jika pada data terakhir jika sudah pernah entri
         //jika masih kosong cek apakah user auth -> city tersedia pake ini datanya untuk isi default local_zones selectpicker
         $songZone = Song::select('local_zones')->where('created_by', Auth::id())->latest()->first();
-        $local_zones = explode(',', $songZone->local_zones);
         $lastZones = [];
-        foreach ($local_zones as $zone) {
-            $lastZones[] = [
-                'name' => trim($zone) // use trim to remove extra spaces
-            ];
+
+        if ($songZone) {
+            $local_zones = explode(',', $songZone->local_zones);
+            foreach ($local_zones as $zone) {
+                $lastZones[] = [
+                    'name' => trim($zone) // use trim to remove extra spaces
+                ];
+            }
         }
 
         return view('admin.songs.create', compact('genres', 'socialMedias', 'lastZones'));
