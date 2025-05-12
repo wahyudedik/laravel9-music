@@ -1,526 +1,899 @@
 @extends('layouts.landing-page')
 
 @section('content')
-    <!-- Hero Section with Video Background -->
-    <div class="relative rounded-xl overflow-hidden mb-10" style="height: 500px;" data-aos="fade-up">
-        <!-- Video Background with Blur and Opacity -->
-        <div class="absolute inset-0 bg-gradient-to-b from-black/30 to-black/70">
-            <video autoplay muted loop
-                class="min-w-full min-h-full object-cover opacity-60 filter blur-sm absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                <source src="{{ asset('video/Electric background video.mp4') }}"
-                    type="video/mp4">
-            </video>
-        </div>
- 
-        <!-- Hero Content -->
-        <div class="relative z-10 h-full flex items-center p-8">
-            <div class="container mx-auto">
-                <div class="max-w-3xl" data-aos="fade-right" data-aos-delay="200">
-                    <h1 class="text-4xl md:text-5xl font-bold text-white mb-4">Temukan Musik Terbaik</h1>
-                    <p class="text-xl md:text-2xl text-gray-300 mb-8">Platform musik Indonesia untuk mendengarkan, membuat
-                        cover, dan berbagi karya musik.</p>
+    <!-- Category Navigation -->
+    <div class="category-nav mb-6">
+        <div class="category-pill active">For you</div>
+        <div class="category-pill">Charts</div>
+        <div class="category-pill">Hip Hop</div>
+        <div class="category-pill">Pop</div>
+        <div class="category-pill">Rock</div>
+        <div class="category-pill">R&B</div>
+        <div class="category-pill">Electronic</div>
+        <div class="category-pill">Jazz</div>
+        <div class="category-pill">Classical</div>
+        <div class="category-pill">Country</div>
+        <div class="category-pill">Indie</div>
+        <div class="category-pill">Metal</div>
+        <div class="category-pill">Mood</div>
+        <div class="category-pill">Workout</div>
+        <div class="category-pill">Focus</div>
+    </div>
 
-                    <!-- Search Section -->
-                    <form action="#" method="GET" class="mb-8">
-                        <div class="relative">
-                            <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                                <i class="ti ti-search text-gray-400"></i>
-                            </div>
-                            <input type="search"
-                                class="block w-full p-4 pl-10 text-sm text-white border border-gray-700 rounded-lg bg-gray-800 focus:ring-primary-500 focus:border-primary-500"
-                                placeholder="Cari judul lagu, nama artis...">
-                            <button type="submit"
-                                class="text-white absolute right-2.5 bottom-2.5 bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-800 font-medium rounded-lg text-sm px-4 py-2">Cari</button>
-                        </div>
-                    </form>
+    <!-- Hero Section -->
+    <section class="mb-10">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div class="lg:col-span-2">
+                <div class="relative h-64 md:h-80 rounded-xl overflow-hidden">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-black/20"></div>
+                    <img src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?q=80&w=1200"
+                        class="w-full h-full object-cover" alt="Featured artist">
+                    <div class="absolute bottom-0 left-0 p-6">
+                        <span class="text-sm bg-red-600 text-white px-2 py-1 rounded-full">Featured Artist</span>
+                        <h1 class="text-3xl font-bold mt-2 mb-1">This Week's Highlights</h1>
+                        <p class="text-gray-300 mb-4">Discover the latest trending songs and artists</p>
+                        <button
+                            class="bg-white text-black hover:bg-gray-200 font-medium py-2 px-6 rounded-full flex items-center gap-2 transition">
+                            <i class="ti ti-player-play"></i> Listen Now
+                        </button>
+                    </div>
+                </div>
+            </div>
 
-                    <!-- CTA Buttons -->
-                    @guest
-                        <div class="flex flex-wrap gap-4" data-aos="fade-up" data-aos-delay="400">
-                            <a href="{{ route('register') }}"
-                                class="text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:ring-primary-800 font-medium rounded-lg text-base px-6 py-3.5 inline-flex items-center">
-                                <i class="ti ti-user-plus mr-2"></i> Daftar Sekarang
-                            </a>
-                            <a href="{{ route('login') }}"
-                                class="text-white bg-gray-800 hover:bg-gray-700 focus:ring-4 focus:ring-gray-700 font-medium rounded-lg text-base px-6 py-3.5 inline-flex items-center">
-                                <i class="ti ti-login mr-2"></i> Login
-                            </a>
+            <div class="hidden lg:block">
+                <div
+                    class="rounded-xl overflow-hidden bg-gradient-to-br from-blue-700 to-purple-700 p-5 h-80 flex flex-col justify-between">
+                    <div>
+                        <h2 class="text-xl font-bold mb-1">Your Daily Mix</h2>
+                        <p class="text-white/80 text-sm">Personalized music just for you</p>
+                    </div>
+                    <div>
+                        <div class="flex -space-x-4">
+                            <img class="w-12 h-12 rounded-full border-2 border-blue-800"
+                                src="https://images.unsplash.com/photo-1561303009-3297186a3217?q=80&w=100" alt="">
+                            <img class="w-12 h-12 rounded-full border-2 border-blue-800"
+                                src="https://images.unsplash.com/photo-1606623957377-5e3aaa2a0f18?q=80&w=100"
+                                alt="">
+                            <img class="w-12 h-12 rounded-full border-2 border-blue-800"
+                                src="https://images.unsplash.com/photo-1577805947697-89e18249d767?q=80&w=100"
+                                alt="">
                         </div>
-                    @endguest
-                    @auth
-                        <div class="flex items-center gap-4" data-aos="fade-up" data-aos-delay="400">
-                            @php
-                                $role = auth()->user()->getRoleNames()->first();
-                            @endphp
-                            @if ($role == 'Admin' || $role == 'Super Admin')
-                                <a href="{{ route('admin.dashboard') }}"
-                                    class="text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:ring-primary-800 font-medium rounded-lg text-base px-6 py-3.5 inline-flex items-center">
-                                    <i class="ti ti-dashboard mr-2"></i> Dashboard
-                                </a>
-                            @else
-                                <a href="{{ route('user.dashboard') }}"
-                                    class="text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:ring-primary-800 font-medium rounded-lg text-base px-6 py-3.5 inline-flex items-center">
-                                    <i class="ti ti-user mr-2"></i> Dashboard
-                                </a>
-                            @endif
-                            <form action="{{ route('logout', ['role' => auth()->user()->getRoleNames()->first()]) }}"
-                                method="POST">
-                                @csrf
-                                <button type="submit"
-                                    class="text-white bg-gray-800 hover:bg-gray-700 focus:ring-4 focus:ring-gray-700 font-medium rounded-lg text-base px-6 py-3.5 inline-flex items-center">
-                                    <i class="ti ti-logout mr-2"></i> Logout
-                                </button>
-                            </form>
-                        </div>
-                    @endauth
+                        <p class="mt-4 text-sm text-white/80">Based on your recent listening</p>
+                        <button
+                            class="mt-3 bg-white/20 hover:bg-white/30 text-white font-medium py-2 px-4 rounded-full text-sm transition">
+                            Play Mix
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    </section>
 
-    <!-- Popular Songs Section -->
-    <div class="mb-12" data-aos="fade-up">
-        <div class="flex justify-between items-center mb-6">
-            <h2 class="text-2xl font-bold text-white flex items-center">
-                <i class="ti ti-music text-primary-500 mr-2"></i>Lagu Populer
-            </h2>
-            <a href="{{ route('popular-songs') }}"
-                class="text-white bg-gray-800 hover:bg-gray-700 focus:ring-4 focus:ring-gray-700 font-medium rounded-lg text-sm px-5 py-2.5 inline-flex items-center">
-                Lihat Semua <i class="ti ti-chevron-right ml-1"></i>
+    <!-- Recently Played Section - horizontal scroll -->
+    <section class="mb-12">
+        <div class="section-header flex items-center justify-between mb-5">
+            <h2 class="section-title text-2xl font-bold">Recently Played</h2>
+            <a href="" class="section-link flex items-center gap-1 hover:text-red-500 transition-colors">
+                See All <i class="ti ti-chevron-right text-sm"></i>
             </a>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            @foreach ($songs as $index => $song)
-                <div class="group" data-aos="fade-up" data-aos-delay="{{ 100 + $index * 50 }}">
-                    <div
-                        class="bg-gray-800 p-4 rounded-lg transition-all duration-300 hover:bg-gray-700 hover:shadow-xl hover:-translate-y-2">
-                        @php
-                            $coverImages = explode(',', $song->cover_image ?? '');
-                            $smallCoverFile = $coverImages[2] ?? null;
-                            $filename = $smallCoverFile ? basename($smallCoverFile) : null;
-                            $imageUrl = $filename
-                                ? route('songs.image', ['filename' => $filename])
-                                : 'https://via.placeholder.com/300';
-                        @endphp
-                        <div class="flex flex-col items-center">
-                            <div class="relative mb-4">
-                                <img src="{{ $imageUrl }}"
-                                    class="w-32 h-32 rounded-lg object-cover transition-all duration-300 group-hover:shadow-lg"
-                                    alt="{{ $song->title }}">
-                                <div
-                                    class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg">
-                                    <button
-                                        class="text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:ring-primary-800 font-medium rounded-full p-3 inline-flex items-center justify-center play-song-btn"
-                                        @guest
-onclick="window.location.href='{{ route('login') }}'"
-                                        @else
-                                            onclick="window.location.href='{{ route('play-song', ['id' => $song->id]) }}'" @endguest>
+        <div class="scroll-container">
+            @php
+                $recentSongs = [
+                    [
+                        'title' => 'Blinding Lights',
+                        'artist' => 'The Weeknd',
+                        'img' => 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?q=80&w=300',
+                    ],
+                    [
+                        'title' => 'Bad Guy',
+                        'artist' => 'Billie Eilish',
+                        'img' => 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?q=80&w=300',
+                    ],
+                    [
+                        'title' => 'Stay',
+                        'artist' => 'The Kid LAROI, Justin Bieber',
+                        'img' => 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?q=80&w=300',
+                    ],
+                    [
+                        'title' => 'Levitating',
+                        'artist' => 'Dua Lipa',
+                        'img' => 'https://images.unsplash.com/photo-1496293455970-f8581aae0e3b?q=80&w=300',
+                    ],
+                    [
+                        'title' => 'Anti-Hero',
+                        'artist' => 'Taylor Swift',
+                        'img' => 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?q=80&w=300',
+                    ],
+                    [
+                        'title' => 'As It Was',
+                        'artist' => 'Harry Styles',
+                        'img' => 'https://images.unsplash.com/photo-1501612780327-45045538702b?q=80&w=300',
+                    ],
+                    [
+                        'title' => 'Blinding Lights',
+                        'artist' => 'The Weeknd',
+                        'img' => 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?q=80&w=300',
+                    ],
+                    [
+                        'title' => 'Bad Guy',
+                        'artist' => 'Billie Eilish',
+                        'img' => 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?q=80&w=300',
+                    ],
+                    [
+                        'title' => 'Stay',
+                        'artist' => 'The Kid LAROI, Justin Bieber',
+                        'img' => 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?q=80&w=300',
+                    ],
+                    [
+                        'title' => 'Levitating',
+                        'artist' => 'Dua Lipa',
+                        'img' => 'https://images.unsplash.com/photo-1496293455970-f8581aae0e3b?q=80&w=300',
+                    ],
+                    [
+                        'title' => 'Anti-Hero',
+                        'artist' => 'Taylor Swift',
+                        'img' => 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?q=80&w=300',
+                    ],
+                    [
+                        'title' => 'As It Was',
+                        'artist' => 'Harry Styles',
+                        'img' => 'https://images.unsplash.com/photo-1501612780327-45045538702b?q=80&w=300',
+                    ],
+                ];
+            @endphp
+
+            @foreach ($recentSongs as $song)
+                <div class="scroll-item music-card-item" data-aos="fade-up" data-aos-delay="{{ $loop->index * 50 }}">
+                    <div class="relative group overflow-hidden rounded-xl">
+                        <img src="{{ $song['img'] }}" alt="{{ $song['title'] }}"
+                            class="w-full aspect-square object-cover transition-transform duration-300 group-hover:scale-110">
+                        <div
+                            class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        </div>
+                        <button class="play-song-btn absolute inset-0 flex items-center justify-center">
+                            <div
+                                class="w-12 h-12 bg-red-600 rounded-full flex items-center justify-center transform translate-y-4 opacity-0 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 shadow-lg hover:bg-red-700 hover:scale-105">
+                                <i class="ti ti-player-play text-white text-xl"></i>
+                            </div>
+                        </button>
+                    </div>
+                    <div class="mt-3">
+                        <h3 class="font-semibold text-base truncate" title="{{ $song['title'] }}">{{ $song['title'] }}</h3>
+                        <p class="text-sm text-gray-400 truncate" title="{{ $song['artist'] }}">{{ $song['artist'] }}</p>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+    </section>
+
+    <!-- Popular Artists Section -->
+    <section class="mb-12">
+        <div class="section-header flex items-center justify-between mb-5">
+            <h2 class="section-title text-2xl font-bold">Popular Artists</h2>
+            <a href="#" class="section-link flex items-center gap-1 hover:text-red-500 transition-colors">
+                See All <i class="ti ti-chevron-right text-sm"></i>
+            </a>
+        </div>
+
+        <div class="scroll-container">
+            @php
+                $popularArtists = [
+                    [
+                        'name' => 'Taylor Swift',
+                        'img' => 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=300',
+                    ],
+                    [
+                        'name' => 'The Weeknd',
+                        'img' => 'https://images.unsplash.com/photo-1483412033650-1015ddeb83d1?q=80&w=300',
+                    ],
+                    [
+                        'name' => 'Drake',
+                        'img' => 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?q=80&w=300',
+                    ],
+                    [
+                        'name' => 'Dua Lipa',
+                        'img' => 'https://images.unsplash.com/photo-1496293455970-f8581aae0e3b?q=80&w=300',
+                    ],
+                    [
+                        'name' => 'Ed Sheeran',
+                        'img' => 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?q=80&w=300',
+                    ],
+                    [
+                        'name' => 'Billie Eilish',
+                        'img' => 'https://images.unsplash.com/photo-1501612780327-45045538702b?q=80&w=300',
+                    ],
+                    [
+                        'name' => 'Taylor Swift',
+                        'img' => 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=300',
+                    ],
+                    [
+                        'name' => 'The Weeknd',
+                        'img' => 'https://images.unsplash.com/photo-1483412033650-1015ddeb83d1?q=80&w=300',
+                    ],
+                    [
+                        'name' => 'Drake',
+                        'img' => 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?q=80&w=300',
+                    ],
+                    [
+                        'name' => 'Dua Lipa',
+                        'img' => 'https://images.unsplash.com/photo-1496293455970-f8581aae0e3b?q=80&w=300',
+                    ],
+                    [
+                        'name' => 'Ed Sheeran',
+                        'img' => 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?q=80&w=300',
+                    ],
+                    [
+                        'name' => 'Billie Eilish',
+                        'img' => 'https://images.unsplash.com/photo-1501612780327-45045538702b?q=80&w=300',
+                    ],
+                ];
+            @endphp
+
+            @foreach ($popularArtists as $artist)
+                <div class="scroll-item artist-card" data-aos="fade-up" data-aos-delay="{{ $loop->index * 50 }}">
+                    <div class="relative group">
+                        <div
+                            class="overflow-hidden rounded-full aspect-square border-2 border-transparent group-hover:border-red-500 transition-all duration-300">
+                            <img src="{{ $artist['img'] }}" alt="{{ $artist['name'] }}"
+                                class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                        </div>
+                        <div class="absolute bottom-0 right-0">
+                            <div
+                                class="w-10 h-10 bg-red-600 rounded-full flex items-center justify-center transform scale-0 group-hover:scale-100 transition-transform duration-300 shadow-lg">
+                                <i class="ti ti-player-play text-white"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <h3 class="font-medium mt-3 text-center truncate" title="{{ $artist['name'] }}">{{ $artist['name'] }}
+                    </h3>
+                </div>
+            @endforeach
+        </div>
+    </section>
+
+    <!-- Trending Songs Section -->
+    <section class="mb-12">
+        <div class="section-header flex items-center justify-between mb-5">
+            <h2 class="section-title text-2xl font-bold">Trending Songs</h2>
+            <a href="#" class="section-link flex items-center gap-1 hover:text-red-500 transition-colors">
+                See All <i class="ti ti-chevron-right text-sm"></i>
+            </a>
+        </div>
+
+        <div class="scroll-container">
+            @php
+                $trendingSongs = [
+                    [
+                        'title' => 'Anti-Hero',
+                        'artist' => 'Taylor Swift',
+                        'img' => 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?q=80&w=300',
+                    ],
+                    [
+                        'title' => 'Blinding Lights',
+                        'artist' => 'The Weeknd',
+                        'img' => 'https://images.unsplash.com/photo-1504509546545-e000b4a62425?q=80&w=300',
+                    ],
+                    [
+                        'title' => 'Rich Flex',
+                        'artist' => 'Drake',
+                        'img' => 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?q=80&w=300',
+                    ],
+                    [
+                        'title' => 'Levitating',
+                        'artist' => 'Dua Lipa',
+                        'img' => 'https://images.unsplash.com/photo-1501386761578-eac5c94b800a?q=80&w=300',
+                    ],
+                    [
+                        'title' => 'Shape of You',
+                        'artist' => 'Ed Sheeran',
+                        'img' => 'https://images.unsplash.com/photo-1468164016595-6108e4c60c8b?q=80&w=300',
+                    ],
+                    [
+                        'title' => 'bad guy',
+                        'artist' => 'Billie Eilish',
+                        'img' => 'https://images.unsplash.com/photo-1514320291840-2e0a9bf2a9ae?q=80&w=300',
+                    ],
+                    [
+                        'title' => 'Anti-Hero',
+                        'artist' => 'Taylor Swift',
+                        'img' => 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?q=80&w=300',
+                    ],
+                    [
+                        'title' => 'Blinding Lights',
+                        'artist' => 'The Weeknd',
+                        'img' => 'https://images.unsplash.com/photo-1504509546545-e000b4a62425?q=80&w=300',
+                    ],
+                    [
+                        'title' => 'Rich Flex',
+                        'artist' => 'Drake',
+                        'img' => 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?q=80&w=300',
+                    ],
+                    [
+                        'title' => 'Levitating',
+                        'artist' => 'Dua Lipa',
+                        'img' => 'https://images.unsplash.com/photo-1501386761578-eac5c94b800a?q=80&w=300',
+                    ],
+                    [
+                        'title' => 'Shape of You',
+                        'artist' => 'Ed Sheeran',
+                        'img' => 'https://images.unsplash.com/photo-1468164016595-6108e4c60c8b?q=80&w=300',
+                    ],
+                    [
+                        'title' => 'bad guy',
+                        'artist' => 'Billie Eilish',
+                        'img' => 'https://images.unsplash.com/photo-1514320291840-2e0a9bf2a9ae?q=80&w=300',
+                    ],
+                ];
+            @endphp
+
+            @foreach ($trendingSongs as $index => $song)
+                <div class="scroll-item music-card-item">
+                    <div class="relative group overflow-hidden rounded-xl">
+                        <div
+                            class="absolute top-2 left-2 z-10 bg-red-600 text-white text-xs font-bold px-2 py-1 rounded-full">
+                            #{{ $index + 1 }}
+                        </div>
+                        <img src="{{ $song['img'] }}" alt="{{ $song['title'] }}"
+                            class="w-full aspect-square object-cover transition-transform duration-300 group-hover:scale-110">
+                        <div
+                            class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        </div>
+                        <button class="play-song-btn absolute inset-0 flex items-center justify-center">
+                            <div
+                                class="w-12 h-12 bg-red-600 rounded-full flex items-center justify-center transform translate-y-4 opacity-0 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 shadow-lg hover:bg-red-700 hover:scale-105">
+                                <i class="ti ti-player-play text-white text-xl"></i>
+                            </div>
+                        </button>
+                    </div>
+                    <div class="mt-3">
+                        <h3 class="font-semibold text-base truncate" title="{{ $song['title'] }}">{{ $song['title'] }}
+                        </h3>
+                        <p class="text-sm text-gray-400 truncate" title="{{ $song['artist'] }}">{{ $song['artist'] }}
+                        </p>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+    </section>
+
+    <!-- Cover Songs Section -->
+    <section class="mb-12">
+        <div class="section-header flex items-center justify-between mb-5">
+            <h2 class="section-title text-2xl font-bold">Cover Songs</h2>
+            <a href="#" class="section-link flex items-center gap-1 hover:text-red-500 transition-colors">
+                See All <i class="ti ti-chevron-right text-sm"></i>
+            </a>
+        </div>
+
+        <div class="scroll-container">
+            @php
+                $coverSongs = [
+                    [
+                        'title' => 'Zombie (Cover)',
+                        'artist' => 'Bad Wolves',
+                        'original' => 'The Cranberries',
+                        'img' => 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?q=80&w=300',
+                    ],
+                    [
+                        'title' => 'Hurt (Cover)',
+                        'artist' => 'Johnny Cash',
+                        'original' => 'Nine Inch Nails',
+                        'img' => 'https://images.unsplash.com/photo-1453090927415-5f45085b65c0?q=80&w=300',
+                    ],
+                    [
+                        'title' => 'Sound of Silence (Cover)',
+                        'artist' => 'Disturbed',
+                        'original' => 'Simon & Garfunkel',
+                        'img' => 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?q=80&w=300',
+                    ],
+                    [
+                        'title' => 'Nothing Compares 2 U (Cover)',
+                        'artist' => 'Sinéad O\'Connor',
+                        'original' => 'Prince',
+                        'img' => 'https://images.unsplash.com/photo-1494232410401-ad00d5433cfa?q=80&w=300',
+                    ],
+                    [
+                        'title' => 'Zombie (Cover)',
+                        'artist' => 'Bad Wolves',
+                        'original' => 'The Cranberries',
+                        'img' => 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?q=80&w=300',
+                    ],
+                    [
+                        'title' => 'Hurt (Cover)',
+                        'artist' => 'Johnny Cash',
+                        'original' => 'Nine Inch Nails',
+                        'img' => 'https://images.unsplash.com/photo-1453090927415-5f45085b65c0?q=80&w=300',
+                    ],
+                    [
+                        'title' => 'Sound of Silence (Cover)',
+                        'artist' => 'Disturbed',
+                        'original' => 'Simon & Garfunkel',
+                        'img' => 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?q=80&w=300',
+                    ],
+                    [
+                        'title' => 'Nothing Compares 2 U (Cover)',
+                        'artist' => 'Sinéad O\'Connor',
+                        'original' => 'Prince',
+                        'img' => 'https://images.unsplash.com/photo-1494232410401-ad00d5433cfa?q=80&w=300',
+                    ],
+                    [
+                        'title' => 'Zombie (Cover)',
+                        'artist' => 'Bad Wolves',
+                        'original' => 'The Cranberries',
+                        'img' => 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?q=80&w=300',
+                    ],
+                    [
+                        'title' => 'Hurt (Cover)',
+                        'artist' => 'Johnny Cash',
+                        'original' => 'Nine Inch Nails',
+                        'img' => 'https://images.unsplash.com/photo-1453090927415-5f45085b65c0?q=80&w=300',
+                    ],
+                    [
+                        'title' => 'Sound of Silence (Cover)',
+                        'artist' => 'Disturbed',
+                        'original' => 'Simon & Garfunkel',
+                        'img' => 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?q=80&w=300',
+                    ],
+                    [
+                        'title' => 'Nothing Compares 2 U (Cover)',
+                        'artist' => 'Sinéad O\'Connor',
+                        'original' => 'Prince',
+                        'img' => 'https://images.unsplash.com/photo-1494232410401-ad00d5433cfa?q=80&w=300',
+                    ],
+                ];
+            @endphp
+
+            @foreach ($coverSongs as $song)
+                <div class="scroll-item cover-card">
+                    <div class="relative group overflow-hidden rounded-xl">
+                        <img src="{{ $song['img'] }}" alt="{{ $song['title'] }}"
+                            class="w-full aspect-square object-cover transition-transform duration-300 group-hover:scale-110">
+                        <div
+                            class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-40 group-hover:opacity-80 transition-opacity duration-300">
+                        </div>
+                        <button class="play-song-btn absolute inset-0 flex items-center justify-center">
+                            <div
+                                class="w-12 h-12 bg-red-600 rounded-full flex items-center justify-center transform translate-y-4 opacity-0 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 shadow-lg hover:bg-red-700 hover:scale-105">
+                                <i class="ti ti-player-play text-white text-xl"></i>
+                            </div>
+                        </button>
+                        <div
+                            class="absolute bottom-0 left-0 right-0 p-3 text-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+                            <span class="bg-black/50 text-xs px-2 py-1 rounded-full backdrop-blur-sm">Cover Song</span>
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <h3 class="font-semibold text-base truncate" title="{{ $song['title'] }}">{{ $song['title'] }}
+                        </h3>
+                        <p class="text-sm text-gray-400 truncate" title="{{ $song['artist'] }}">{{ $song['artist'] }}
+                        </p>
+                        <p class="text-xs text-gray-500 mt-1">Originally by <span
+                                class="text-red-500">{{ $song['original'] }}</span></p>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+    </section>
+
+    <!-- Popular Composers Section -->
+    <section class="mb-12">
+        <div class="section-header flex items-center justify-between mb-5">
+            <h2 class="section-title text-2xl font-bold">Popular Composers</h2>
+            <a href="#" class="section-link flex items-center gap-1 hover:text-red-500 transition-colors">
+                See All <i class="ti ti-chevron-right text-sm"></i>
+            </a>
+        </div>
+
+        <div class="scroll-container">
+            @php
+                $composers = [
+                    [
+                        'name' => 'Hans Zimmer',
+                        'genre' => 'Film Score',
+                        'img' => 'https://images.unsplash.com/photo-1507838153414-b4b713384a76?q=80&w=300',
+                    ],
+                    [
+                        'name' => 'John Williams',
+                        'genre' => 'Classical/Film',
+                        'img' => 'https://images.unsplash.com/photo-1465847899084-d164df4dedc6?q=80&w=300',
+                    ],
+                    [
+                        'name' => 'Ennio Morricone',
+                        'genre' => 'Film Score',
+                        'img' => 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?q=80&w=300',
+                    ],
+                    [
+                        'name' => 'Max Richter',
+                        'genre' => 'Contemporary Classical',
+                        'img' => 'https://images.unsplash.com/photo-1513883049090-d91fb58d69e1?q=80&w=300',
+                    ],
+                    [
+                        'name' => 'Hans Zimmer',
+                        'genre' => 'Film Score',
+                        'img' => 'https://images.unsplash.com/photo-1507838153414-b4b713384a76?q=80&w=300',
+                    ],
+                    [
+                        'name' => 'John Williams',
+                        'genre' => 'Classical/Film',
+                        'img' => 'https://images.unsplash.com/photo-1465847899084-d164df4dedc6?q=80&w=300',
+                    ],
+                    [
+                        'name' => 'Ennio Morricone',
+                        'genre' => 'Film Score',
+                        'img' => 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?q=80&w=300',
+                    ],
+                    [
+                        'name' => 'Max Richter',
+                        'genre' => 'Contemporary Classical',
+                        'img' => 'https://images.unsplash.com/photo-1513883049090-d91fb58d69e1?q=80&w=300',
+                    ],
+                ];
+            @endphp
+
+            @foreach ($composers as $composer)
+                <div class="scroll-item composer-card">
+                    <div class="relative group">
+                        <div
+                            class="overflow-hidden rounded-full border-2 border-gray-700 aspect-square group-hover:border-red-500 transition-all duration-300">
+                            <img src="{{ $composer['img'] }}" alt="{{ $composer['name'] }}"
+                                class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                        </div>
+                        <div class="absolute bottom-0 right-0">
+                            <div
+                                class="w-10 h-10 bg-red-600 rounded-full flex items-center justify-center transform scale-0 group-hover:scale-100 transition-transform duration-300 shadow-lg">
+                                <i class="ti ti-player-play text-white"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-3 text-center">
+                        <h3 class="font-semibold truncate" title="{{ $composer['name'] }}">{{ $composer['name'] }}</h3>
+                        <p class="text-sm text-gray-400 truncate" title="{{ $composer['genre'] }}">
+                            {{ $composer['genre'] }}</p>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+    </section>
+
+    <!-- New Releases Section -->
+    <section class="mb-12">
+        <div class="section-header flex items-center justify-between mb-5">
+            <h2 class="section-title text-2xl font-bold flex items-center gap-2">
+                New Releases
+                <span class="bg-red-600 text-white text-xs px-2 py-0.5 rounded-full">New</span>
+            </h2>
+            <a href="#" class="section-link flex items-center gap-1 hover:text-red-500 transition-colors">
+                See All <i class="ti ti-chevron-right text-sm"></i>
+            </a>
+        </div>
+
+        <div class="scroll-container">
+            @php
+                $newReleases = [
+                    [
+                        'title' => 'Midnight Rain',
+                        'artist' => 'Taylor Swift',
+                        'date' => 'Oct 21, 2023',
+                        'img' => 'https://images.unsplash.com/photo-1494232410401-ad00d5433cfa?q=80&w=300',
+                    ],
+                    [
+                        'title' => 'Last Night',
+                        'artist' => 'Morgan Wallen',
+                        'date' => 'Oct 20, 2023',
+                        'img' => 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?q=80&w=300',
+                    ],
+                    [
+                        'title' => 'Flowers',
+                        'artist' => 'Miley Cyrus',
+                        'date' => 'Oct 19, 2023',
+                        'img' => 'https://images.unsplash.com/photo-1453090927415-5f45085b65c0?q=80&w=300',
+                    ],
+                    [
+                        'title' => 'Kill Bill',
+                        'artist' => 'SZA',
+                        'date' => 'Oct 18, 2023',
+                        'img' => 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?q=80&w=300',
+                    ],
+                    [
+                        'title' => 'Anti-Hero',
+                        'artist' => 'Taylor Swift',
+                        'date' => 'Oct 17, 2023',
+                        'img' => 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?q=80&w=300',
+                    ],
+                    [
+                        'title' => 'Unholy',
+                        'artist' => 'Sam Smith',
+                        'date' => 'Oct 16, 2023',
+                        'img' => 'https://images.unsplash.com/photo-1496293455970-f8581aae0e3b?q=80&w=300',
+                    ],
+                    [
+                        'title' => 'As It Was',
+                        'artist' => 'Harry Styles',
+                        'date' => 'Oct 15, 2023',
+                        'img' => 'https://images.unsplash.com/photo-1587653263995-422546a7a559?q=80&w=300',
+                    ],
+                    [
+                        'title' => 'About Damn Time',
+                        'artist' => 'Lizzo',
+                        'date' => 'Oct 14, 2023',
+                        'img' => 'https://images.unsplash.com/photo-1526218626217-dc65a29bb444?q=80&w=300',
+                    ],
+                    [
+                        'title' => 'Stay With Me',
+                        'artist' => 'Calvin Harris',
+                        'date' => 'Oct 13, 2023',
+                        'img' => 'https://images.unsplash.com/photo-1571266028997-41675a1b9b1f?q=80&w=300',
+                    ],
+                    [
+                        'title' => 'Break My Soul',
+                        'artist' => 'Beyoncé',
+                        'date' => 'Oct 12, 2023',
+                        'img' => 'https://images.unsplash.com/photo-1513883049090-d91fb58d69e1?q=80&w=300',
+                    ],
+                ];
+            @endphp
+
+            @foreach ($newReleases as $index => $release)
+                <div class="scroll-item new-release-card">
+                    <div class="relative group overflow-hidden rounded-xl bg-gray-800/50">
+                        <div class="absolute top-0 right-0 z-10">
+                            <span class="bg-red-600 text-white text-xs px-2 py-1 opacity-80">NEW</span>
+                        </div>
+                        <img src="{{ $release['img'] }}" alt="{{ $release['title'] }}"
+                            class="w-full aspect-square object-cover transition-transform duration-300 group-hover:scale-110 group-hover:opacity-70">
+                        <div
+                            class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-40 group-hover:opacity-80 transition-opacity duration-300">
+                        </div>
+                        <button class="play-song-btn absolute inset-0 flex items-center justify-center">
+                            <div
+                                class="w-12 h-12 bg-red-600 rounded-full flex items-center justify-center transform translate-y-4 opacity-0 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 shadow-lg hover:bg-red-700 hover:scale-105">
+                                <i class="ti ti-player-play text-white text-xl"></i>
+                            </div>
+                        </button>
+                        <div
+                            class="absolute bottom-0 left-0 right-0 p-3 text-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+                            <div class="flex justify-between items-center">
+                                <i class="ti ti-calendar text-xs"></i>
+                                <span class="text-xs">{{ $release['date'] }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <h3 class="font-semibold text-base truncate" title="{{ $release['title'] }}">
+                            {{ $release['title'] }}</h3>
+                        <p class="text-sm text-gray-400 truncate" title="{{ $release['artist'] }}">
+                            {{ $release['artist'] }}</p>
+                        <div class="flex items-center mt-1 text-xs text-gray-500">
+                            <i class="ti ti-calendar text-red-500 mr-1"></i>
+                            <span>Released {{ $release['date'] }}</span>
+                        </div>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+    </section>
+
+    <!-- Charts Section - Horizontal Scroll -->
+    <section class="mb-10">
+        <div class="section-header">
+            <h2 class="section-title">Top Charts</h2>
+            <a href="#" class="section-link">See All</a>
+        </div>
+
+        <div class="scroll-container">
+            @php
+                $charts = [
+                    [
+                        'name' => 'Global Top 50',
+                        'desc' => 'The most played tracks on Playlist Music right now',
+                        'img' => 'https://images.unsplash.com/photo-1526218626217-dc65a29bb444?q=80&w=300',
+                        'color' => 'from-blue-600 to-purple-600',
+                    ],
+                    [
+                        'name' => 'Indonesia Top Hits',
+                        'desc' => 'The hottest tracks in Indonesia this week',
+                        'img' => 'https://images.unsplash.com/photo-1587653263995-422546a7a559?q=80&w=300',
+                        'color' => 'from-red-600 to-orange-600',
+                    ],
+                    [
+                        'name' => 'Viral Hits',
+                        'desc' => 'Tracks going viral on social media',
+                        'img' => 'https://images.unsplash.com/photo-1496293455970-f8581aae0e3b?q=80&w=300',
+                        'color' => 'from-green-600 to-emerald-600',
+                    ],
+                    [
+                        'name' => 'Rising Artists',
+                        'desc' => 'Emerging talent making waves',
+                        'img' => 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?q=80&w=300',
+                        'color' => 'from-yellow-500 to-amber-600',
+                    ],
+                    [
+                        'name' => 'Dance & Electronic',
+                        'desc' => 'Top electronic music tracks this month',
+                        'img' => 'https://images.unsplash.com/photo-1571266028997-41675a1b9b1f?q=80&w=300',
+                        'color' => 'from-cyan-600 to-blue-600',
+                    ],
+                ];
+            @endphp
+
+            @foreach ($charts as $chart)
+                <div class="chart-card" style="min-width: 300px; max-width: 350px;">
+                    <div class="bg-gray-800 rounded-xl overflow-hidden">
+                        <div class="relative h-36">
+                            <div class="absolute inset-0 bg-gradient-to-br {{ $chart['color'] }} opacity-60"></div>
+                            <img src="{{ $chart['img'] }}"
+                                class="absolute w-full h-full object-cover mix-blend-overlay opacity-50"
+                                alt="{{ $chart['name'] }}">
+                            <div class="absolute inset-0 flex flex-col justify-between p-4">
+                                <div class="text-xs uppercase tracking-wider">CHART</div>
+                                <div>
+                                    <h3 class="text-xl font-bold">{{ $chart['name'] }}</h3>
+                                    <p class="text-sm opacity-90">{{ $chart['desc'] }}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="p-3">
+                            @for ($i = 1; $i <= 3; $i++)
+                                <div class="flex items-center py-2 {{ $i < 3 ? 'border-b border-gray-700' : '' }}">
+                                    <div class="w-6 text-center text-gray-400 mr-3">{{ $i }}</div>
+                                    <div class="w-10 h-10 rounded overflow-hidden mr-3">
+                                        <img src="https://picsum.photos/300/300?random={{ rand(100, 999) }}"
+                                            class="w-full h-full object-cover" alt="Chart song">
+                                    </div>
+                                    <div class="min-w-0 flex-grow">
+                                        <div class="text-sm font-medium truncate">Chart Song Title {{ $i }}
+                                        </div>
+                                        <div class="text-xs text-gray-400 truncate">Chart Artist {{ $i }}</div>
+                                    </div>
+                                    <button class="text-gray-400 hover:text-white ml-2">
                                         <i class="ti ti-player-play"></i>
                                     </button>
                                 </div>
-                            </div>
-                            <h3 class="text-lg font-semibold text-white text-center mb-1">{{ $song->title }}</h3>
-                            <p class="text-gray-400 text-sm text-center mb-3">{{ $song->artist->name ?? 'Unknown Artist' }}
-                            </p>
-                            <div class="flex justify-center gap-2 mb-3">
-                                <span
-                                    class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-900 text-purple-200">
-                                    <i class="ti ti-player-play mr-1"></i> {{ number_format(rand(1, 50)) }}M
-                                </span>
-                                <span
-                                    class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-900 text-blue-200">
-                                    <i class="ti ti-heart mr-1"></i> {{ number_format(rand(100, 999)) }}K
-                                </span>
-                            </div>
-                            <div class="flex justify-center gap-2">
-                                <button
-                                    class="text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:ring-primary-800 font-medium rounded-lg text-xs px-3 py-1.5 inline-flex items-center"
-                                    @guest
-onclick="window.location.href='{{ route('login') }}'"
-                                    @else
-                                        onclick="window.location.href='{{ route('play-song', ['id' => $song->id]) }}'" @endguest>
-                                    <i class="ti ti-player-play mr-1"></i> Play
-                                </button>
-                                <button type="button"
-                                    class="text-white bg-gray-800 hover:bg-gray-700 focus:ring-4 focus:ring-gray-700 font-medium rounded-lg text-xs px-3 py-1.5 inline-flex items-center"
-                                    data-modal-target="addToPlaylistModal" data-modal-toggle="addToPlaylistModal"
-                                    data-song-title="{{ $song->title }}"
-                                    data-artist-name="{{ $song->artist->name ?? 'Unknown Artist' }}"
-                                    data-cover-image="{{ $imageUrl }}">
-                                    <i class="ti ti-plus mr-1"></i> Playlist
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            @endforeach
-        </div>
-    </div>
+                            @endfor
 
-    <!-- Popular Artists Section -->
-    <div class="mb-12" data-aos="fade-up">
-        <div class="flex justify-between items-center mb-6">
-            <h2 class="text-2xl font-bold text-white flex items-center">
-                <i class="ti ti-microphone text-primary-500 mr-2"></i>Artis Populer
-            </h2>
-            <a href="{{ route('artists') }}"
-                class="text-white bg-gray-800 hover:bg-gray-700 focus:ring-4 focus:ring-gray-700 font-medium rounded-lg text-sm px-5 py-2.5 inline-flex items-center">
-                Lihat Semua <i class="ti ti-chevron-right ml-1"></i>
-            </a>
-        </div>
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            @foreach ($artists as $index => $artist)
-                <div class="group" data-aos="fade-up" data-aos-delay="{{ 100 + $index * 50 }}">
-                    <div
-                        class="bg-gray-800 p-4 rounded-lg transition-all duration-300 hover:bg-gray-700 hover:shadow-xl hover:-translate-y-2 text-center">
-                        <img src="https://picsum.photos/300/300?random={{ $artist->id }}"
-                            class="w-32 h-32 rounded-full mx-auto mb-4 object-cover transition-all duration-300 group-hover:shadow-lg"
-                            alt="{{ $artist->name }}">
-                        <h3 class="text-lg font-semibold text-white mb-1">{{ $artist->name }}</h3>
-                        <p class="text-gray-400 text-sm mb-3">{{ rand(5, 30) }} Lagu • {{ rand(1, 10) }}M Penggemar
-                        </p>
-                        <div class="flex justify-center gap-2 mb-4">
-                            <span
-                                class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-900 text-purple-200">
-                                <i class="ti ti-users mr-1"></i> {{ rand(1, 10) }}M
-                            </span>
-                            <span
-                                class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-900 text-blue-200">
-                                <i class="ti ti-player-play mr-1"></i> {{ rand(10, 500) }}M
-                            </span>
-                        </div>
-                        <a href="#"
-                            class="text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:ring-primary-800 font-medium rounded-lg text-sm px-5 py-2.5 inline-flex items-center justify-center">
-                            <i class="ti ti-user mr-1"></i> Lihat Profil
-                        </a>
-                    </div>
-                </div>
-            @endforeach
-            @for ($i = 21; $i <= 24; $i++)
-                <div class="group" data-aos="fade-up" data-aos-delay="{{ 100 + $i * 50 }}">
-                    <div
-                        class="bg-gray-800 p-4 rounded-lg transition-all duration-300 hover:bg-gray-700 hover:shadow-xl hover:-translate-y-2 text-center">
-                        <img src="https://picsum.photos/300/300?random={{ $i }}"
-                            class="w-32 h-32 rounded-full mx-auto mb-4 object-cover transition-all duration-300 group-hover:shadow-lg"
-                            alt="Artist">
-                        <h3 class="text-lg font-semibold text-white mb-1">Artis Populer #{{ $i - 20 }}</h3>
-                        <p class="text-gray-400 text-sm mb-3">{{ rand(5, 30) }} Lagu • {{ rand(1, 10) }}M Penggemar
-                        </p>
-                        <div class="flex justify-center gap-2 mb-4">
-                            <span
-                                class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-900 text-purple-200">
-                                <i class="ti ti-users mr-1"></i> {{ rand(1, 10) }}M
-                            </span>
-                            <span
-                                class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-900 text-blue-200">
-                                <i class="ti ti-player-play mr-1"></i> {{ rand(10, 500) }}M
-                            </span>
-                        </div>
-                        <a href="#"
-                            class="text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:ring-primary-800 font-medium rounded-lg text-sm px-5 py-2.5 inline-flex items-center justify-center">
-                            <i class="ti ti-user mr-1"></i> Lihat Profil
-                        </a>
-                    </div>
-                </div>
-            @endfor
-        </div>
-    </div>
-
-    <!-- Popular Covers Section -->
-    <div class="mb-12" data-aos="fade-up">
-        <div class="flex justify-between items-center mb-6">
-            <h2 class="text-2xl font-bold text-white flex items-center">
-                <i class="ti ti-disc text-primary-500 mr-2"></i>Cover Populer
-            </h2>
-            <a href="{{ route('covers') }}"
-                class="text-white bg-gray-800 hover:bg-gray-700 focus:ring-4 focus:ring-gray-700 font-medium rounded-lg text-sm px-5 py-2.5 inline-flex items-center">
-                Lihat Semua <i class="ti ti-chevron-right ml-1"></i>
-            </a>
-        </div>
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            @for ($i = 41; $i <= 48; $i++)
-                <div class="group" data-aos="fade-up" data-aos-delay="{{ 100 + ($i - 40) * 50 }}">
-                    <div
-                        class="bg-gray-800 p-4 rounded-lg transition-all duration-300 hover:bg-gray-700 hover:shadow-xl hover:-translate-y-2">
-                        <div class="relative mb-3">
-                            <img src="https://picsum.photos/300/300?random={{ $i }}"
-                                class="w-full h-48 object-cover rounded-lg transition-all duration-300 group-hover:shadow-lg"
-                                alt="Cover Art">
-                            <button
-                                class="absolute bottom-2 right-2 text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:ring-primary-800 font-medium rounded-full p-3 inline-flex items-center justify-center play-song-btn"
-                                @guest
-onclick="window.location.href='{{ route('login') }}'"
-                                @else
-                                    onclick="window.location.href='{{ route('play-song', ['id' => $i]) }}'" @endguest
-                                data-song-title="Cover Lagu #{{ $i - 40 }}"
-                                data-artist-name="Cover Artist {{ $i - 40 }}"
-                                data-cover-image="https://picsum.photos/300/300?random={{ $i }}">
-                                <i class="ti ti-player-play"></i>
-                            </button>
-                            @guest
-                                <span
-                                    class="absolute top-2 right-2 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-gray-900 rounded-full">
-                                    <i class="ti ti-lock"></i>
-                                </span>
-                            @endguest
-                        </div>
-                        <h3 class="text-lg font-semibold text-white truncate mb-1">Cover Lagu #{{ $i - 40 }}</h3>
-                        <p class="text-gray-400 text-sm truncate mb-3">Oleh: Cover Artist {{ $i - 40 }}</p>
-                        <div class="flex gap-2">
-                            <span
-                                class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-900 text-blue-200">
-                                <i class="ti ti-player-play mr-1"></i> {{ rand(100, 999) }}K
-                            </span>
-                            <span
-                                class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-900 text-red-200">
-                                <i class="ti ti-heart mr-1"></i> {{ rand(10, 99) }}K
-                            </span>
-                        </div>
-                    </div>
-                </div>
-            @endfor
-        </div>
-    </div>
-
-    <!-- Popular Composers Section -->
-    <div class="mb-12" data-aos="fade-up">
-        <div class="flex justify-between items-center mb-6">
-            <h2 class="text-2xl font-bold text-white flex items-center">
-                <i class="ti ti-note text-primary-500 mr-2"></i>Pencipta Lagu Teratas
-            </h2>
-            <a href="{{ route('composers') }}"
-                class="text-white bg-gray-800 hover:bg-gray-700 focus:ring-4 focus:ring-gray-700 font-medium rounded-lg text-sm px-5 py-2.5 inline-flex items-center">
-                Lihat Semua <i class="ti ti-chevron-right ml-1"></i>
-            </a>
-        </div>
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            @for ($i = 31; $i <= 38; $i++)
-                <div class="group" data-aos="fade-up" data-aos-delay="{{ 100 + ($i - 30) * 50 }}">
-                    <div
-                        class="bg-gray-800 p-4 rounded-lg transition-all duration-300 hover:bg-gray-700 hover:shadow-xl hover:-translate-y-2 text-center">
-                        <img src="https://picsum.photos/300/300?random={{ $i }}"
-                            class="w-32 h-32 rounded-full mx-auto mb-4 object-cover transition-all duration-300 group-hover:shadow-lg"
-                            alt="Composer">
-                        <h3 class="text-lg font-semibold text-white mb-1">Pencipta #{{ $i - 30 }}</h3>
-                        <p class="text-gray-400 text-sm mb-3">{{ rand(20, 100) }} karya • {{ rand(100, 900) }}K Penggemar
-                        </p>
-                        <div class="flex justify-center gap-2 mb-4">
-                            <span
-                                class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-900 text-blue-200">
-                                <i class="ti ti-player-play mr-1"></i> {{ rand(50, 800) }}M
-                            </span>
-                        </div>
-                        <a href="#"
-                            class="text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:ring-primary-800 font-medium rounded-lg text-sm px-5 py-2.5 inline-flex items-center justify-center">
-                            <i class="ti ti-user mr-1"></i> Lihat Profil
-                        </a>
-                    </div>
-                </div>
-            @endfor
-        </div>
-    </div>
-
-    <!-- Call to Action -->
-    @guest
-        <div class="mb-12" data-aos="fade-up">
-            <div class="bg-gradient-to-r from-gray-900 to-gray-800 rounded-xl p-8 text-center">
-                <h2 class="text-3xl font-bold text-white mb-4">Bergabunglah dengan Komunitas Musik Kami</h2>
-                <p class="text-xl text-gray-300 mb-8">Dengarkan, buat cover, dan bagikan karya musik Anda dengan dunia.</p>
-                <div class="flex flex-wrap justify-center gap-4">
-                    <a href="{{ route('register') }}"
-                        class="text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:ring-primary-800 font-medium rounded-lg text-base px-6 py-3.5 inline-flex items-center">
-                        <i class="ti ti-user-plus mr-2"></i> Daftar Sekarang
-                    </a>
-                    <a href="{{ route('login') }}"
-                        class="text-white bg-gray-800 hover:bg-gray-700 focus:ring-4 focus:ring-gray-700 font-medium rounded-lg text-base px-6 py-3.5 inline-flex items-center">
-                        <i class="ti ti-login mr-2"></i> Login
-                    </a>
-                </div>
-            </div>
-        </div>
-    @endguest
-
-    <!-- Features Section -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12" data-aos="fade-up">
-        <div data-aos="fade-up" data-aos-delay="100">
-            <div
-                class="bg-gray-800 rounded-xl p-6 h-full transition-all duration-300 hover:bg-gray-700 hover:shadow-xl hover:-translate-y-2">
-                <div class="bg-primary-600 w-16 h-16 rounded-full flex items-center justify-center mb-6 mx-auto">
-                    <i class="ti ti-music text-3xl text-white"></i>
-                </div>
-                <h3 class="text-xl font-bold text-white text-center mb-4">Dengarkan Musik</h3>
-                <p class="text-gray-300 text-center">Akses jutaan lagu dari berbagai genre dan artis favorit Anda.
-                    Streaming kualitas tinggi kapan saja dan di mana saja.</p>
-            </div>
-        </div>
-        <div data-aos="fade-up" data-aos-delay="200">
-            <div
-                class="bg-gray-800 rounded-xl p-6 h-full transition-all duration-300 hover:bg-gray-700 hover:shadow-xl hover:-translate-y-2">
-                <div class="bg-primary-600 w-16 h-16 rounded-full flex items-center justify-center mb-6 mx-auto">
-                    <i class="ti ti-microphone text-3xl text-white"></i>
-                </div>
-                <h3 class="text-xl font-bold text-white text-center mb-4">Buat Cover</h3>
-                <p class="text-gray-300 text-center">Tunjukkan bakat Anda dengan membuat cover lagu favorit. Dapatkan
-                    pengakuan dan bangun basis penggemar Anda sendiri.</p>
-            </div>
-        </div>
-        <div data-aos="fade-up" data-aos-delay="300">
-            <div
-                class="bg-gray-800 rounded-xl p-6 h-full transition-all duration-300 hover:bg-gray-700 hover:shadow-xl hover:-translate-y-2">
-                <div class="bg-primary-600 w-16 h-16 rounded-full flex items-center justify-center mb-6 mx-auto">
-                    <i class="ti ti-share text-3xl text-white"></i>
-                </div>
-                <h3 class="text-xl font-bold text-white text-center mb-4">Bagikan Karya</h3>
-                <p class="text-gray-300 text-center">Bagikan karya musik Anda dengan dunia. Dapatkan umpan balik, komentar,
-                    dan bangun komunitas musik Anda sendiri.</p>
-            </div>
-        </div>
-    </div>
-
-    <!-- Trending Now Section -->
-    <div class="mb-12" data-aos="fade-up">
-        <div class="flex justify-between items-center mb-6">
-            <h2 class="text-2xl font-bold text-white flex items-center">
-                <i class="ti ti-trending-up text-primary-500 mr-2"></i>Trending Sekarang
-            </h2>
-        </div>
-
-        <div class="bg-gray-800 rounded-xl p-6">
-            <div class="overflow-x-auto">
-                <table class="w-full text-sm text-left text-gray-400">
-                    <thead class="text-xs uppercase text-gray-400 border-b border-gray-700">
-                        <tr>
-                            <th scope="col" class="px-6 py-3">#</th>
-                            <th scope="col" class="px-6 py-3">Judul</th>
-                            <th scope="col" class="px-6 py-3">Artis</th>
-                            <th scope="col" class="px-6 py-3">Album</th>
-                            <th scope="col" class="px-6 py-3">Durasi</th>
-                            <th scope="col" class="px-6 py-3">Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @for ($i = 1; $i <= 5; $i++)
-                            <tr class="border-b border-gray-700 hover:bg-gray-700 transition-colors duration-200">
-                                <td class="px-6 py-4">{{ $i }}</td>
-                                <td class="px-6 py-4">
-                                    <div class="flex items-center">
-                                        <img src="https://picsum.photos/300/300?random={{ 60 + $i }}"
-                                            class="w-10 h-10 rounded mr-3" alt="Album Cover">
-                                        <span class="font-medium text-white">Trending Song #{{ $i }}</span>
-                                    </div>
-                                </td>
-                                <td class="px-6 py-4">Trending Artist {{ $i }}</td>
-                                <td class="px-6 py-4">Album {{ $i }}</td>
-                                <td class="px-6 py-4">{{ rand(2, 4) }}:{{ sprintf('%02d', rand(0, 59)) }}</td>
-                                <td class="px-6 py-4">
-                                    <div class="flex gap-2">
-                                        <button
-                                            class="text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:ring-primary-800 font-medium rounded-full p-2 inline-flex items-center justify-center play-song-btn"
-                                            data-song-title="Trending Song #{{ $i }}"
-                                            data-artist-name="Trending Artist {{ $i }}"
-                                            data-cover-image="https://picsum.photos/300/300?random={{ 60 + $i }}">
-                                            <i class="ti ti-player-play"></i>
-                                        </button>
-                                        <button type="button"
-                                            class="text-white bg-gray-800 hover:bg-gray-700 focus:ring-4 focus:ring-gray-700 font-medium rounded-full p-2 inline-flex items-center justify-center"
-                                            data-modal-target="addToPlaylistModal" data-modal-toggle="addToPlaylistModal"
-                                            data-song-title="Trending Song #{{ $i }}"
-                                            data-artist-name="Trending Artist {{ $i }}"
-                                            data-cover-image="https://picsum.photos/300/300?random={{ 60 + $i }}">
-                                            <i class="ti ti-plus"></i>
-                                        </button>
-                                        <button
-                                            class="text-white bg-gray-800 hover:bg-gray-700 focus:ring-4 focus:ring-gray-700 font-medium rounded-full p-2 inline-flex items-center justify-center">
-                                            <i class="ti ti-heart"></i>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                        @endfor
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-
-    <!-- New Releases Section -->
-    <div class="mb-12" data-aos="fade-up">
-        <div class="flex justify-between items-center mb-6">
-            <h2 class="text-2xl font-bold text-white flex items-center">
-                <i class="ti ti-calendar-event text-primary-500 mr-2"></i>Rilis Terbaru
-            </h2>
-        </div>
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-            @for ($i = 51; $i <= 56; $i++)
-                <div class="group" data-aos="fade-up" data-aos-delay="{{ 100 + ($i - 50) * 50 }}">
-                    <div
-                        class="bg-gray-800 p-3 rounded-lg transition-all duration-300 hover:bg-gray-700 hover:shadow-xl hover:-translate-y-2">
-                        <div class="relative mb-3">
-                            <img src="https://picsum.photos/300/300?random={{ $i }}"
-                                class="w-full h-auto aspect-square object-cover rounded-lg transition-all duration-300 group-hover:shadow-lg"
-                                alt="Album Cover">
-                            <div
-                                class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg">
-                                <button
-                                    class="text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:ring-primary-800 font-medium rounded-full p-3 inline-flex items-center justify-center play-song-btn"
-                                    data-song-title="New Release #{{ $i - 50 }}"
-                                    data-artist-name="New Artist {{ $i - 50 }}"
-                                    data-cover-image="https://picsum.photos/300/300?random={{ $i }}">
+                            <div class="pt-3 flex items-center justify-between">
+                                <button class="text-sm text-blue-400 hover:text-blue-300">View Full Chart</button>
+                                <button class="bg-red-600 hover:bg-red-700 text-white rounded-full p-2">
                                     <i class="ti ti-player-play"></i>
                                 </button>
                             </div>
                         </div>
-                        <h3 class="text-sm font-semibold text-white truncate">New Release #{{ $i - 50 }}</h3>
-                        <p class="text-gray-400 text-xs truncate">New Artist {{ $i - 50 }}</p>
                     </div>
                 </div>
-            @endfor
+            @endforeach
         </div>
-    </div>
+    </section>
+
+    <!-- Curated Mixes Section - Horizontal Scroll -->
+    <section class="mb-10">
+        <div class="section-header">
+            <h2 class="section-title">Made For You</h2>
+        </div>
+
+        <div class="scroll-container">
+            @php
+                $mixes = [
+                    [
+                        'name' => 'Discover Weekly',
+                        'desc' => 'Your personal playlist, updated every Monday',
+                        'color' => 'bg-gradient-to-br from-purple-900 to-blue-900',
+                        'icon' => 'ti-bulb',
+                    ],
+                    [
+                        'name' => 'Daily Mix 1',
+                        'desc' => 'Featuring artists you love and new discoveries',
+                        'color' => 'bg-gradient-to-br from-green-900 to-teal-900',
+                        'icon' => 'ti-vinyl',
+                    ],
+                    [
+                        'name' => 'Daily Mix 2',
+                        'desc' => 'More of what you like',
+                        'color' => 'bg-gradient-to-br from-red-900 to-pink-900',
+                        'icon' => 'ti-vinyl',
+                    ],
+                    [
+                        'name' => 'Release Radar',
+                        'desc' => 'New music from artists you follow',
+                        'color' => 'bg-gradient-to-br from-blue-900 to-indigo-900',
+                        'icon' => 'ti-radar',
+                    ],
+                    [
+                        'name' => 'On Repeat',
+                        'desc' => 'Songs you\'ve been playing most',
+                        'color' => 'bg-gradient-to-br from-amber-900 to-orange-900',
+                        'icon' => 'ti-repeat',
+                    ],
+                    [
+                        'name' => 'Time Capsule',
+                        'desc' => 'Songs from your past that you love',
+                        'color' => 'bg-gradient-to-br from-gray-900 to-slate-800',
+                        'icon' => 'ti-clock',
+                    ],
+                ];
+            @endphp
+
+            @foreach ($mixes as $mix)
+                <div class="music-card" style="width: 180px;">
+                    <div class="aspect-square {{ $mix['color'] }} relative">
+                        <div
+                            class="absolute top-4 right-4 w-10 h-10 bg-white/10 rounded-full flex items-center justify-center">
+                            <i class="ti {{ $mix['icon'] }} text-white"></i>
+                        </div>
+                        <div class="absolute bottom-0 left-0 p-4">
+                            <h3 class="text-lg font-bold">{{ $mix['name'] }}</h3>
+                            <p class="text-xs text-white/80 line-clamp-2">{{ $mix['desc'] }}</p>
+                        </div>
+                    </div>
+
+                    <div class="p-3 flex justify-between items-center">
+                        <button
+                            class="play-button bg-red-600 hover:bg-red-700 w-10 h-10 flex items-center justify-center rounded-full shadow scale-90">
+                            <i class="ti ti-player-play"></i>
+                        </button>
+                        <button class="text-gray-400 hover:text-white">
+                            <i class="ti ti-dots-vertical"></i>
+                        </button>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+    </section>
 @endsection
 
 @section('scripts')
     <script>
-        // Add custom animations for music cards
         document.addEventListener('DOMContentLoaded', function() {
-            // Add hover effects to trending rows
-            const trendingRows = document.querySelectorAll('tbody tr');
-            trendingRows.forEach(row => {
-                row.addEventListener('mouseenter', function() {
-                    this.classList.add('bg-gray-700');
-                    this.style.transform = 'translateX(5px)';
-                });
+            // Set animation delay for scroll items
+            document.querySelectorAll('.scroll-item').forEach((item, index) => {
+                item.style.setProperty('--index', index);
+            });
 
-                row.addEventListener('mouseleave', function() {
-                    this.classList.remove('bg-gray-700');
-                    this.style.transform = '';
+            // Smooth drag scrolling for horizontal containers
+            const sliders = document.querySelectorAll('.scroll-container');
+
+            sliders.forEach(container => {
+                container.addEventListener('wheel', (e) => {
+                    if (e.deltaY !== 0) {
+                        e.preventDefault();
+                        container.scrollLeft += e.deltaY;
+                    }
                 });
             });
 
-            // Add ripple effect to buttons
-            const buttons = document.querySelectorAll('button, a.btn');
-            buttons.forEach(button => {
-                button.addEventListener('click', function(e) {
-                    const rect = this.getBoundingClientRect();
-                    const x = e.clientX - rect.left;
-                    const y = e.clientY - rect.top;
+            // Category navigation pill click
+            const categoryPills = document.querySelectorAll('.category-pill');
 
-                    const ripple = document.createElement('span');
-                    ripple.classList.add('ripple');
-                    ripple.style.left = `${x}px`;
-                    ripple.style.top = `${y}px`;
+            categoryPills.forEach(pill => {
+                pill.addEventListener('click', function() {
+                    categoryPills.forEach(p => p.classList.remove('active'));
+                    this.classList.add('active');
 
-                    this.appendChild(ripple);
-
-                    setTimeout(() => {
-                        ripple.remove();
-                    }, 600);
+                    // Here you would typically filter content based on the selected category
                 });
+            });
+
+            // Play buttons hover effects
+            const musicCards = document.querySelectorAll('.music-card');
+            musicCards.forEach(card => {
+                const overlay = card.querySelector('.card-overlay');
+                const playButton = card.querySelector('.play-button');
+
+                if (overlay && playButton) {
+                    card.addEventListener('mouseenter', function() {
+                        overlay.classList.add('opacity-100');
+                        playButton.classList.add('opacity-100');
+                        playButton.style.transform = 'translateY(0)';
+                    });
+
+                    card.addEventListener('mouseleave', function() {
+                        overlay.classList.remove('opacity-100');
+                        playButton.classList.remove('opacity-100');
+                        playButton.style.transform = 'translateY(10px)';
+                    });
+                }
             });
         });
     </script>

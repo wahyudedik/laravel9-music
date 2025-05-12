@@ -56,6 +56,13 @@ Route::get('/run-optimize', function () {
 
 // Route dibuat frontend Landing Page atau Home
 Route::get('/', [HomeController::class, 'welcome'])->name('welcome');
+Route::get('/trending', function () {
+    return view('trending');
+})->name('trending');
+Route::get('/explore', function () {
+    return view('explore');
+})->name('explore');
+
 Route::get('/popular-songs', function () {
     return view('popular-songs');
 })->name('popular-songs');
