@@ -411,6 +411,15 @@
                     }
                 });
             @endif
+
+            @if (session('info'))
+                Swal.fire({
+                    icon: 'info',
+                    title: 'Info',
+                    text: "{{ session('info') }}",
+                    showConfirmButton: false,
+                });
+            @endif
         });
     </script>
     @yield('scripts')

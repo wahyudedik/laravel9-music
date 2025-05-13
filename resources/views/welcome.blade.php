@@ -1,11 +1,10 @@
 @extends('layouts.landing-page')
 
 @section('content')
-
     <!-- Category Navigation -->
     <div class="category-nav mb-6">
-        <div class="category-pill active">For you</div>
-        <div class="category-pill">Charts</div>
+        <div class="category-pill active">Untuk Anda</div>
+        <div class="category-pill">Tangga Lagu</div>
         <div class="category-pill">Hip Hop</div>
         <div class="category-pill">Pop</div>
         <div class="category-pill">Rock</div>
@@ -31,11 +30,11 @@
                         class="w-full h-full object-cover" alt="Featured artist">
                     <div class="absolute bottom-0 left-0 p-6">
                         <span class="text-sm bg-red-600 text-white px-2 py-1 rounded-full">Featured Artist</span>
-                        <h1 class="text-3xl font-bold mt-2 mb-1">This Week's Highlights</h1>
-                        <p class="text-gray-300 mb-4">Discover the latest trending songs and artists</p>
+                        <h1 class="text-3xl font-bold mt-2 mb-1">Trending Minggu Ini</h1>
+                        <p class="text-gray-300 mb-4">Temukan lagu dan artis yang sedang tren terbaru</p>
                         <button
                             class="bg-white text-black hover:bg-gray-200 font-medium py-2 px-6 rounded-full flex items-center gap-2 transition">
-                            <i class="ti ti-player-play"></i> Listen Now
+                            <i class="ti ti-player-play"></i> Lihat Sekarang
                         </button>
                     </div>
                 </div>
@@ -46,14 +45,13 @@
                     class="rounded-xl overflow-hidden bg-gradient-to-br from-blue-700 to-purple-700 p-5 h-80 flex flex-col justify-between">
                     <div>
                         <h2 class="text-xl font-bold mb-1">Your Daily Mix</h2>
-                        <p class="text-white/80 text-sm">Personalized music just for you</p>
+                        <p class="text-white/80 text-sm">Musik yang dipersonalisasi hanya untuk Anda</p>
                     </div>
                     <div>
                         <div class="flex -space-x-4">
-                            <img class="w-12 h-12 rounded-full border-2 border-blue-800"
-                                src="https://images.unsplash.com/photo-1561303009-3297186a3217?q=80&w=100" alt="">
-                            <img class="w-12 h-12 rounded-full border-2 border-blue-800"
-                                src="https://images.unsplash.com/photo-1606623957377-5e3aaa2a0f18?q=80&w=100"
+                            <img class="w-12 h-12 rounded-full border-2 border-blue-800" src="https://i.pravatar.cc/400"
+                                alt="">
+                            <img class="w-12 h-12 rounded-full border-2 border-blue-800" src="https://i.pravatar.cc/400"
                                 alt="">
                             <img class="w-12 h-12 rounded-full border-2 border-blue-800"
                                 src="https://images.unsplash.com/photo-1577805947697-89e18249d767?q=80&w=100"
@@ -61,7 +59,7 @@
 
 
                         </div>
-                        <p class="mt-4 text-sm text-white/80">Based on your recent listening</p>
+                        <p class="mt-4 text-sm text-white/80">Berdasarkan pengamatan Anda baru-baru ini</p>
                         <button
                             class="mt-3 bg-white/20 hover:bg-white/30 text-white font-medium py-2 px-4 rounded-full text-sm transition">
                             Play Mix
@@ -82,6 +80,66 @@
         </div>
 
         <div class="scroll-container">
+
+            @foreach ($songs as $song)
+                @php
+                    // Extract filename from the 3rd image variant (small)
+                    $coverImages = explode(',', $song->cover_image ?? '');
+                    $smallCoverFile = $coverImages[2] ?? null;
+                    // Get just the filename from the path (e.g. "cover_abc_sm.jpeg")
+                    $filename = $smallCoverFile ? basename($smallCoverFile) : null;
+                    // Generate image URL via route
+                    $imageUrl = $filename
+                        ? route('songs.image', ['filename' => $filename])
+                        : 'https://via.placeholder.com/500/500?random=' . $song->id;
+                @endphp
+                @php
+                    $creatorName =
+                        $song->songContributors
+                            ->where('role', 'Composer')
+                            ->pluck('user.name')
+                            ->filter()
+                            ->implode(', ') ?? '-';
+
+                    if (empty($creatorName)) {
+                        $creatorName = '-';
+                    }
+
+                    $artistName =
+                        $song->songContributors
+                            ->where('role', 'Artist')
+                            ->pluck('user.name')
+                            ->filter()
+                            ->implode(', ') ?? '-';
+
+                    if (empty($artistName)) {
+                        $artistName = 'No Artist';
+                    }
+                @endphp
+
+                <div class="scroll-item music-card-item" data-aos="fade-up" data-aos-delay="{{ 1 * 50 }}">
+                    <div class="relative group overflow-hidden rounded-xl">
+                        <img src="{{ $imageUrl }}" alt="{{ $song->title }}"
+                            class="w-full aspect-square object-cover transition-transform duration-300 group-hover:scale-110">
+                        <div
+                            class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        </div>
+                        <button class="play-song-btn absolute inset-0 flex items-center justify-center"
+                            {{ Auth::guest() ? 'data-login-required=true onclick=window.location.href=\'' . route('login') . '\'' : '' }}>
+                            <div
+                                class="w-12 h-12 bg-red-600 rounded-full flex items-center justify-center transform translate-y-4 opacity-0 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 shadow-lg hover:bg-red-700 hover:scale-105">
+                                <i class="ti ti-player-play text-white text-xl"></i>
+                            </div>
+                        </button>
+                    </div>
+                    <div class="mt-3">
+                        <h3 class="font-semibold text-base truncate" title="{{ $song->title }}">{{ $song->title }}</h3>
+                        <p class="text-sm text-gray-400 truncate" title="{{ $artistName }}">{{ $artistName }}</p>
+                    </div>
+                </div>
+            @endforeach
+
+
             @php
                 $recentSongs = [
                     [
@@ -155,7 +213,8 @@
                         <div
                             class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                         </div>
-                        <button class="play-song-btn absolute inset-0 flex items-center justify-center">
+                        <button class="play-song-btn absolute inset-0 flex items-center justify-center"
+                            {{ Auth::guest() ? 'data-login-required=true onclick=window.location.href=\'' . route('login') . '\'' : '' }}>
                             <div
                                 class="w-12 h-12 bg-red-600 rounded-full flex items-center justify-center transform translate-y-4 opacity-0 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 shadow-lg hover:bg-red-700 hover:scale-105">
                                 <i class="ti ti-player-play text-white text-xl"></i>
@@ -163,7 +222,8 @@
                         </button>
                     </div>
                     <div class="mt-3">
-                        <h3 class="font-semibold text-base truncate" title="{{ $song['title'] }}">{{ $song['title'] }}</h3>
+                        <h3 class="font-semibold text-base truncate" title="{{ $song['title'] }}">{{ $song['title'] }}
+                        </h3>
                         <p class="text-sm text-gray-400 truncate" title="{{ $song['artist'] }}">{{ $song['artist'] }}</p>
                     </div>
                 </div>
@@ -249,7 +309,8 @@
                             </div>
                         </div>
                     </div>
-                    <h3 class="font-medium mt-3 text-center truncate" title="{{ $artist['name'] }}">{{ $artist['name'] }}
+                    <h3 class="font-medium mt-3 text-center truncate" title="{{ $artist['name'] }}">
+                        {{ $artist['name'] }}
                     </h3>
                 </div>
             @endforeach
@@ -266,6 +327,7 @@
         </div>
 
         <div class="scroll-container">
+
             @php
                 $trendingSongs = [
                     [
@@ -773,7 +835,7 @@
     <!-- Curated Mixes Section - Horizontal Scroll -->
     <section class="mb-10">
         <div class="section-header">
-            <h2 class="section-title">Made For You</h2>
+            <h2 class="section-title">Dibuat Untuk Anda</h2>
         </div>
 
         <div class="scroll-container">

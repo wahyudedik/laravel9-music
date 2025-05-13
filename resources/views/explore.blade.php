@@ -86,7 +86,7 @@
                             class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                         </div>
                         <button class="play-song-btn absolute inset-0 flex items-center justify-center"
-                            @guest data-login-required="true" onclick="window.location.href='{{ route('login') }}'" @endguest
+                        {{ Auth::guest() ? 'data-login-required=true onclick=window.location.href=\''.route('login').'\'' : '' }}
                             data-title="New Song #{{ $i }}" data-artist="Artist #{{ $i }}"
                             data-cover="https://picsum.photos/300/300?random={{ $i + 400 }}"
                             data-id="{{ $i + 200 }}" data-duration="{{ rand(180, 320) }}">

@@ -17,7 +17,7 @@
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-    
+
     <!-- Application Styles -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
@@ -40,7 +40,7 @@
         </main>
 
         <!-- Player Bar -->
-        @include('layouts.partials.player-bar')
+        {{-- @include('layouts.partials.player-bar') --}}
 
         <!-- Full Screen Player -->
         @include('layouts.partials.fullscreen-player')
@@ -132,6 +132,15 @@
                     confirmButtonColor: '#e62117',
                     background: '#2a2a2a',
                     color: '#fff'
+                });
+            @endif
+
+            @if (session('info'))
+                Swal.fire({
+                    icon: 'info',
+                    title: 'Info',
+                    text: "{{ session('info') }}",
+                    showConfirmButton: false,
                 });
             @endif
         });

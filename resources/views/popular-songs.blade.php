@@ -33,7 +33,8 @@
 
         <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-5">
             @for ($i = 1; $i <= 12; $i++)
-                <div class="scroll-item music-card-item" data-aos="fade-up" data-aos-delay="{{ $i * 50 }}">
+                <div class="scroll-item music-card-item" id="recently-item-music"
+                    data-id="123" data-aos="fade-up" data-aos-delay="{{ $i * 50 }}">
                     <div class="relative group overflow-hidden rounded-lg">
                         <div
                             class="absolute top-2 left-2 z-10 bg-red-600 text-white text-xs font-bold px-2 py-1 rounded-full">
@@ -46,7 +47,7 @@
                             class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                         </div>
                         <button class="play-song-btn absolute inset-0 flex items-center justify-center"
-                            @guest data-login-required="true" onclick="window.location.href='{{ route('login') }}'" @endguest
+                        {{ Auth::guest() ? 'data-login-required=true onclick=window.location.href=\''.route('login').'\'' : '' }}
                             data-title="Trending Song #{{ $i }}"
                             data-artist="Trending Artist #{{ $i }}"
                             data-cover="https://picsum.photos/300/300?random={{ $i + 300 }}"
@@ -143,8 +144,7 @@
                                 <img src="https://picsum.photos/300/300?random={{ $index + 200 }}"
                                     class="w-full h-full object-cover mix-blend-overlay" alt="{{ $playlist['title'] }}">
                             </div>
-                            <div
-                                class="absolute bottom-0 right-0 p-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <div class="absolute bottom-0 right-0 p-2 opacity-0 group-hover:opacity-100 transition-opacity">
                                 <button
                                     class="bg-red-600 hover:bg-red-700 text-white rounded-full p-2 shadow-lg transition transform hover:scale-105">
                                     <i class="ti ti-player-play"></i>
@@ -192,8 +192,7 @@
                     <div class="relative group">
                         <div
                             class="overflow-hidden rounded-full aspect-square border-2 border-transparent group-hover:border-red-500 transition-all duration-300">
-                            <img src="https://picsum.photos/300/300?random={{ $index + 900 }}"
-                                alt="{{ $artist }}"
+                            <img src="https://picsum.photos/300/300?random={{ $index + 900 }}" alt="{{ $artist }}"
                                 class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
                         </div>
                         <div class="absolute bottom-0 right-0">
@@ -321,6 +320,12 @@
 
 @section('scripts')
     <script>
+        window.App = {
+            loggedIn: @json(Auth::check())
+        };
+    </script>
+
+    <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Category pill click
             const categoryPills = document.querySelectorAll('.category-pill');
@@ -363,5 +368,7 @@
                 });
             }
         });
+
+
     </script>
 @endsection

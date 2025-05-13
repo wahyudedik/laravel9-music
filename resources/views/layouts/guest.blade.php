@@ -200,7 +200,7 @@
     <!-- SweetAlert2 JS -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-        // Password visibility toggle 
+        // Password visibility toggle
         document.addEventListener('DOMContentLoaded', function() {
             const toggles = document.querySelectorAll('.password-toggle');
             toggles.forEach(toggle => {
@@ -231,6 +231,15 @@
                     title: 'Error',
                     text: "{{ session('error') }}",
                     showConfirmButton: true
+                });
+            @endif
+
+            @if (session('info'))
+                Swal.fire({
+                    icon: 'info',
+                    title: 'Info',
+                    text: "{{ session('info') }}",
+                    showConfirmButton: false,
                 });
             @endif
         });

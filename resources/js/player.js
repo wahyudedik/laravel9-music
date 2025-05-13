@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const closePlayerButton = document.getElementById('closePlayerButton');
     const fullscreenPlayerButton = document.getElementById('fullscreenPlayerButton');
     const closeFullscreenPlayer = document.getElementById('closeFullscreenPlayer');
+    const closeFullscreenPlayer2 = document.getElementById('closeFullscreenPlayer2');
     const progressBar = document.getElementById('progressBar');
     const fullscreenProgressBar = document.getElementById('fullscreenProgressBar');
     const fullscreenProgressHandle = document.getElementById('fullscreenProgressHandle');
@@ -43,17 +44,18 @@ document.addEventListener('DOMContentLoaded', function () {
     };
 
     // Load saved song from session storage (if exists)
-    function loadCurrentSong() {
-        const saved = sessionStorage.getItem('currentSong');
-        if (saved) {
-            currentSong = JSON.parse(saved);
+    function loadCurrentSong(element) {
+        showDetailSong(element)
+        // const saved = sessionStorage.getItem('currentSong');
+        // if (saved) {
+        //     currentSong = JSON.parse(saved);
 
-            // Show player if we have a song
-            if (currentSong.title) {
-                showPlayer();
-                updatePlayerUI();
-            }
-        }
+        //     // Show player if we have a song
+        //     if (currentSong.title) {
+        //         showPlayer();
+        //         updatePlayerUI();
+        //     }
+        // }
     }
 
     // Save current song to session storage
@@ -64,7 +66,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // Show the player bar
     function showPlayer() {
         if (!isPlayerVisible) {
-            playerBar.classList.remove('hidden');
+            // playerBar.classList.remove('hidden');
             isPlayerVisible = true;
         }
     }
@@ -94,44 +96,47 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Update player UI with current song info
     function updatePlayerUI() {
-        // Mini player
-        playerTitle.textContent = currentSong.title;
-        playerArtist.textContent = currentSong.artist;
-        playerCover.src = currentSong.cover || 'https://via.placeholder.com/48';
-        progressBar.style.width = currentSong.progress + '%';
 
-        // Fullscreen player
-        fullscreenTitle.textContent = currentSong.title;
-        fullscreenArtist.textContent = currentSong.artist;
-        fullscreenCover.src = currentSong.cover || 'https://via.placeholder.com/480';
-        fullscreenAlbum.textContent = currentSong.album || 'Unknown Album • 2023';
-        fullscreenProgressBar.style.width = currentSong.progress + '%';
-        fullscreenProgressHandle.style.left = currentSong.progress + '%';
-
-        // Set play/pause button state
-        if (currentSong.isPlaying) {
-            playButton.innerHTML = '<i class="ti ti-player-pause"></i>';
-            fullscreenPlayButton.innerHTML = '<i class="ti ti-player-pause text-2xl"></i>';
-            // Add rotation animation to album cover
-            fullscreenCover.classList.add('album-rotating');
-        } else {
-            playButton.innerHTML = '<i class="ti ti-player-play"></i>';
-            fullscreenPlayButton.innerHTML = '<i class="ti ti-player-play text-2xl"></i>';
-            // Pause rotation animation
-            fullscreenCover.classList.remove('album-rotating');
-        }
-
-        // Update queue display
-        document.getElementById('queueCurrentTitle').textContent = currentSong.title;
-        document.getElementById('queueCurrentArtist').textContent = currentSong.artist;
-        document.getElementById('queueCurrentCover').src = currentSong.cover || 'https://via.placeholder.com/48';
-
-        // Also update view-specific displays
-        document.getElementById('visualizerTitle').textContent = currentSong.title;
-        document.getElementById('visualizerArtist').textContent = currentSong.artist;
-        document.getElementById('videoTitle').textContent = currentSong.title;
-        document.getElementById('videoArtist').textContent = currentSong.artist;
     }
+    // function updatePlayerUI() {
+    //     // Mini player
+    //     playerTitle.textContent = currentSong.title;
+    //     playerArtist.textContent = currentSong.artist;
+    //     playerCover.src = currentSong.cover || 'https://via.placeholder.com/48';
+    //     progressBar.style.width = currentSong.progress + '%';
+
+    //     // Fullscreen player
+    //     fullscreenTitle.textContent = currentSong.title;
+    //     fullscreenArtist.textContent = currentSong.artist;
+    //     fullscreenCover.src = currentSong.cover || 'https://via.placeholder.com/480';
+    //     fullscreenAlbum.textContent = currentSong.album || 'Unknown Album • 2023';
+    //     fullscreenProgressBar.style.width = currentSong.progress + '%';
+    //     fullscreenProgressHandle.style.left = currentSong.progress + '%';
+
+    //     // Set play/pause button state
+    //     if (currentSong.isPlaying) {
+    //         playButton.innerHTML = '<i class="ti ti-player-pause"></i>';
+    //         fullscreenPlayButton.innerHTML = '<i class="ti ti-player-pause text-2xl"></i>';
+    //         // Add rotation animation to album cover
+    //         fullscreenCover.classList.add('album-rotating');
+    //     } else {
+    //         playButton.innerHTML = '<i class="ti ti-player-play"></i>';
+    //         fullscreenPlayButton.innerHTML = '<i class="ti ti-player-play text-2xl"></i>';
+    //         // Pause rotation animation
+    //         fullscreenCover.classList.remove('album-rotating');
+    //     }
+
+    //     // Update queue display
+    //     document.getElementById('queueCurrentTitle').textContent = currentSong.title;
+    //     document.getElementById('queueCurrentArtist').textContent = currentSong.artist;
+    //     document.getElementById('queueCurrentCover').src = currentSong.cover || 'https://via.placeholder.com/48';
+
+    //     // Also update view-specific displays
+    //     document.getElementById('visualizerTitle').textContent = currentSong.title;
+    //     document.getElementById('visualizerArtist').textContent = currentSong.artist;
+    //     document.getElementById('videoTitle').textContent = currentSong.title;
+    //     document.getElementById('videoArtist').textContent = currentSong.artist;
+    // }
 
     // Event listeners for buttons
 
@@ -143,18 +148,37 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // Open fullscreen player
-    if (fullscreenPlayerButton) {
-        fullscreenPlayerButton.addEventListener('click', function () {
-            if (isPlayerVisible) {
-                fullscreenPlayer.classList.remove('hidden');
-                document.body.style.overflow = 'hidden'; // Prevent background scrolling
-            }
-        });
+    // if (fullscreenPlayerButton) {
+    //     fullscreenPlayerButton.addEventListener('click', function () {
+    //         if (isPlayerVisible) {
+    //             fullscreenPlayer.classList.remove('hidden');
+    //             document.body.style.overflow = 'hidden'; // Prevent background scrolling
+    //         }
+    //     });
+    // }
+
+    function showDetailSong(songId) {
+        if (isPlayerVisible) {
+            fullscreenPlayer.classList.remove('hidden');
+            document.body.style.overflow = 'hidden'; // Prevent background scrolling
+        }
+
     }
 
     // Close fullscreen player
     if (closeFullscreenPlayer) {
         closeFullscreenPlayer.addEventListener('click', function () {
+            fullscreenPlayer.classList.add('closing');
+            setTimeout(() => {
+                fullscreenPlayer.classList.remove('closing');
+                fullscreenPlayer.classList.add('hidden');
+                document.body.style.overflow = ''; // Restore scrolling
+            }, 300);
+        });
+    }
+
+    if (closeFullscreenPlayer2) {
+        closeFullscreenPlayer2.addEventListener('click', function () {
             fullscreenPlayer.classList.add('closing');
             setTimeout(() => {
                 fullscreenPlayer.classList.remove('closing');
@@ -359,7 +383,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         <div class="pt-4 border-t border-gray-700">
                             <p class="text-sm mb-2">Copy link</p>
                             <div class="flex">
-                                <input type="text" readonly value="https://music.example.com/song/123456" 
+                                <input type="text" readonly value="https://music.example.com/song/123456"
                                    class="flex-1 p-2 bg-gray-700 border border-gray-600 rounded-l text-sm">
                                 <button class="bg-red-600 hover:bg-red-700 px-4 rounded-r">
                                     <i class="ti ti-copy"></i>
@@ -463,39 +487,41 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Start updating progress
     function startProgressUpdate() {
-        // Clear any existing interval
-        clearInterval(progressInterval);
-
-        // Update progress every 300ms (for demonstration)
-        progressInterval = setInterval(() => {
-            currentSong.progress += 0.1;
-            currentSong.currentTime = (currentSong.progress / 100) * currentSong.duration;
-
-            // Update UI
-            progressBar.style.width = currentSong.progress + '%';
-            fullscreenProgressBar.style.width = currentSong.progress + '%';
-            fullscreenProgressHandle.style.left = currentSong.progress + '%';
-
-            // Update time displays
-            document.getElementById('currentTime').textContent = formatTime(currentSong.currentTime);
-            document.getElementById('totalTime').textContent = formatTime(currentSong.duration);
-            document.getElementById('fullscreenCurrentTime').textContent = formatTime(currentSong.currentTime);
-            document.getElementById('fullscreenTotalTime').textContent = formatTime(currentSong.duration);
-
-            // Save state
-            saveCurrentSong();
-
-            // If song ended
-            if (currentSong.progress >= 100) {
-                clearInterval(progressInterval);
-                currentSong.isPlaying = false;
-                currentSong.progress = 0;
-                currentSong.currentTime = 0;
-                updatePlayerUI();
-                saveCurrentSong();
-            }
-        }, 300);
     }
+    // function startProgressUpdate() {
+    //     // Clear any existing interval
+    //     clearInterval(progressInterval);
+
+    //     // Update progress every 300ms (for demonstration)
+    //     progressInterval = setInterval(() => {
+    //         currentSong.progress += 0.1;
+    //         currentSong.currentTime = (currentSong.progress / 100) * currentSong.duration;
+
+    //         // Update UI
+    //         progressBar.style.width = currentSong.progress + '%';
+    //         fullscreenProgressBar.style.width = currentSong.progress + '%';
+    //         fullscreenProgressHandle.style.left = currentSong.progress + '%';
+
+    //         // Update time displays
+    //         document.getElementById('currentTime').textContent = formatTime(currentSong.currentTime);
+    //         document.getElementById('totalTime').textContent = formatTime(currentSong.duration);
+    //         document.getElementById('fullscreenCurrentTime').textContent = formatTime(currentSong.currentTime);
+    //         document.getElementById('fullscreenTotalTime').textContent = formatTime(currentSong.duration);
+
+    //         // Save state
+    //         saveCurrentSong();
+
+    //         // If song ended
+    //         if (currentSong.progress >= 100) {
+    //             clearInterval(progressInterval);
+    //             currentSong.isPlaying = false;
+    //             currentSong.progress = 0;
+    //             currentSong.currentTime = 0;
+    //             updatePlayerUI();
+    //             saveCurrentSong();
+    //         }
+    //     }, 300);
+    // }
 
     // Stop progress updates
     function stopProgressUpdate() {
@@ -568,6 +594,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // Play song click handler - works with song items in the UI
     document.querySelectorAll('.play-song-btn').forEach(button => {
         button.addEventListener('click', function (e) {
+
             // Only prevent default if not a login link
             if (!this.hasAttribute('data-login-required')) {
                 e.preventDefault();
@@ -578,6 +605,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 const cover = this.getAttribute('data-cover') || 'https://via.placeholder.com/300';
                 const album = this.getAttribute('data-album') || 'Unknown Album';
                 const songId = this.getAttribute('data-id') || Date.now().toString();
+
                 const duration = parseInt(this.getAttribute('data-duration') || 300);
 
                 // Update current song
@@ -595,26 +623,28 @@ document.addEventListener('DOMContentLoaded', function () {
                 };
 
                 // Show player, update UI, save state and start playing
+                // showPlayer();
                 showPlayer();
+                showDetailSong(songId);
                 updatePlayerUI();
                 saveCurrentSong();
-                stopProgressUpdate();
-                startProgressUpdate();
+                // stopProgressUpdate();
+                // startProgressUpdate();
 
                 // Show notification
-                if (typeof Swal !== 'undefined') {
-                    Swal.fire({
-                        text: `Now playing: ${title} - ${artist}`,
-                        toast: true,
-                        position: 'top-end',
-                        showConfirmButton: false,
-                        timer: 3000,
-                        timerProgressBar: true,
-                        background: '#333',
-                        color: '#fff',
-                        iconHtml: '<i class="ti ti-music text-red-500"></i>'
-                    });
-                }
+                // if (typeof Swal !== 'undefined') {
+                //     Swal.fire({
+                //         text: `Now playing: ${title} - ${artist}`,
+                //         toast: true,
+                //         position: 'top-end',
+                //         showConfirmButton: false,
+                //         timer: 3000,
+                //         timerProgressBar: true,
+                //         background: '#333',
+                //         color: '#fff',
+                //         iconHtml: '<i class="ti ti-music text-red-500"></i>'
+                //     });
+                // }
             }
         });
     });
@@ -1046,7 +1076,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // Initialize player functionality when document is loaded
     function initPlayer() {
         // Load saved song if exists
-        loadCurrentSong();
+        //loadCurrentSong();
 
         // Set initial volume
         if (volumeSlider && currentSong.volume) {
@@ -1072,7 +1102,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 });
             }
         }
-        
+
         // Setup mobile player bar functionality
         setupMobilePlayerBar();
     }
@@ -1089,17 +1119,17 @@ document.addEventListener('DOMContentLoaded', function () {
     // Handle player bar click on mobile
     function setupMobilePlayerBar() {
         const playerBar = document.getElementById('playerBar');
-        
+
         if (playerBar) {
             // Add click event to the entire player bar for mobile
             playerBar.addEventListener('click', function(e) {
                 // Only open fullscreen when clicking on non-interactive elements on mobile
                 if (window.innerWidth <= 768) {
                     // Check if not clicking on button, slider, or progress bar
-                    if (!e.target.closest('.player-button') && 
-                        !e.target.closest('.volume-slider') && 
+                    if (!e.target.closest('.player-button') &&
+                        !e.target.closest('.volume-slider') &&
                         !e.target.closest('.player-progress')) {
-                        
+
                         // Open fullscreen player
                         if (fullscreenPlayer && fullscreenPlayer.classList.contains('hidden')) {
                             fullscreenPlayer.classList.remove('hidden');
