@@ -54,9 +54,11 @@
                                 <label class="form-label">Status</label>
                                 <select id="status-filter" name="fstatus" class="form-select">
                                     <option value="">All Status</option>
-                                    <option value="Published" {{ request('fstatus') == 'Published' ? 'selected' : '' }}>Release
+                                    <option value="Published" {{ request('fstatus') == 'Published' ? 'selected' : '' }}>
+                                        Release
                                     </option>
-                                    <option value="Draft" {{ request('fstatus') == 'Draft' ? 'selected' : '' }}>Belum Release
+                                    <option value="Draft" {{ request('fstatus') == 'Draft' ? 'selected' : '' }}>Belum
+                                        Release
                                     </option>
                                     <option value="Inactive" {{ request('fstatus') == 'Inactive' ? 'selected' : '' }}>
                                         Inactive</option>
@@ -66,7 +68,8 @@
                                 <div class="d-flex justify-content-end">
                                     <a href="{{ route('admin.songs.index') }}" id="reset-filters"
                                         class="btn btn-link me-2">Reset</a>
-                                    <button type="submit" id="apply-filters" class="btn btn-primary">Terapkan Filter</button>
+                                    <button type="submit" id="apply-filters" class="btn btn-primary">Terapkan
+                                        Filter</button>
                                 </div>
                             </div>
                         </div>
@@ -136,9 +139,7 @@
                                     $filename = $smallCoverFile ? basename($smallCoverFile) : null;
 
                                     // Generate image URL via route
-                                    $imageUrl = $filename
-                                        ? route('admin.songs.image', ['filename' => $filename])
-                                        : 'https://via.placeholder.com/40';
+                                    $imageUrl = $filename ? route('admin.songs.image', ['filename' => $filename]) : 'https://via.placeholder.com/40';
                                 @endphp
 
                                 <tr class="song-row" data-album="{{ $song->album->title ?? '-' }}"

@@ -101,6 +101,89 @@
                                             <i class="ti ti-search me-1"></i> Search
                                         </button>
                                     </div>
+                                    <br>
+                                    <div class="table-responsive">
+                                        <table class="table table-vcenter card-table">
+                                            <thead>
+                                                <tr>
+                                                    <th>#</th>
+                                                    <th>Title</th>
+                                                    <th>Artist</th>
+                                                    <th>Albums</th>
+
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach ($allSongs ?? [] as $index => $song)
+                                                    @php
+                                                        $types = ['Purchased', 'Cover', 'Release', 'Draft', 'Upload'];
+                                                        $statuses = ['Active', 'Pending', 'Published', 'Draft'];
+                                                    @endphp
+
+                                                    <tr>
+                                                        <td>{{ $index + 1 }}</td>
+                                                        <td>
+                                                            <div class="d-flex align-items-center">
+                                                                <span class="avatar me-2"
+                                                                    style="background-image: url(https://picsum.photos/40/40?random={{ $index + 30 }})"></span>
+                                                                <div>{{ $song->title }}</div>
+                                                            </div>
+                                                        </td>
+                                                        <td>{{ $song->artist ? $song->artist->name : 'Unknown Artist' }}
+                                                        </td>
+                                                        <td>{{ $song->album->title ?? 'Single' }}</td>
+                                                        <td>
+                                                            <div class="btn-list flex-nowrap">
+
+                                                                <div class="dropdown">
+                                                                    <button class="btn btn-icon btn-sm btn-ghost-secondary"
+                                                                        data-bs-toggle="dropdown">
+                                                                        <i class="ti ti-dots-vertical"></i>
+                                                                    </button>
+                                                                    <div class="dropdown-menu dropdown-menu-end">
+                                                                        <a href="{{ route('user.songs.show', $song->id) }}"
+                                                                            class="dropdown-item">
+                                                                            <i class="ti ti-eye me-2"></i>View
+                                                                        </a>
+                                                                        <a href="#" class="dropdown-item">
+                                                                            <i class="ti ti-credit-card me-2"></i>Add To
+                                                                            Cart
+                                                                        </a>
+                                                                        {{-- <a href="#" class="dropdown-item">
+                                                                            <i class="ti ti-share me-2"></i>Share
+                                                                        </a> --}}
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+
+
+                                                    </tr>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                    <div class="d-flex mt-4">
+                                        <ul class="pagination ms-auto">
+                                            <li class="page-item disabled">
+                                                <a class="page-link" href="#" tabindex="-1" aria-disabled="true">
+                                                    <i class="ti ti-chevron-left"></i>
+                                                    prev
+                                                </a>
+                                            </li>
+                                            <li class="page-item active"><a class="page-link" href="#">1</a>
+                                            </li>
+                                            <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                            <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                            <li class="page-item">
+                                                <a class="page-link" href="#">
+                                                    next
+                                                    <i class="ti ti-chevron-right"></i>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
                                 </form>
 
                                 @if (isset($results) && count($results) > 0)
@@ -161,6 +244,7 @@
                         </div>
                     </div>
                 </div>
+
 
                 <!-- Stats Cards -->
                 <div class="row mb-4">
@@ -320,12 +404,8 @@
                                                     <i class="ti ti-player-play "></i>
 
                                                     @php
-                                                        $filename = $song->file_path
-                                                            ? basename($song->file_path)
-                                                            : null;
-                                                        $audioUrl = $filename
-                                                            ? route('songs.audio', ['filename' => $filename])
-                                                            : null;
+                                                        $filename = $song->file_path ? basename($song->file_path) : null;
+                                                        $audioUrl = $filename ? route('songs.audio', ['filename' => $filename]) : null;
                                                     @endphp
 
                                                     @if ($audioUrl)
@@ -624,12 +704,8 @@
                                                     <i class="ti ti-player-play"></i>
 
                                                     @php
-                                                        $filename = $song->file_path
-                                                            ? basename($song->file_path)
-                                                            : null;
-                                                        $audioUrl = $filename
-                                                            ? route('songs.audio', ['filename' => $filename])
-                                                            : null;
+                                                        $filename = $song->file_path ? basename($song->file_path) : null;
+                                                        $audioUrl = $filename ? route('songs.audio', ['filename' => $filename]) : null;
                                                     @endphp
 
                                                     @if ($audioUrl)

@@ -77,7 +77,6 @@ Route::prefix('songs')->group(function () {
             return redirect('https://via.placeholder.com/40');
         }
         return response()->file($path);
-
     })->where('filename', '.*')->name('songs.image');
 
     Route::get('/album/image/{filename}', function ($filename) {
@@ -88,7 +87,6 @@ Route::prefix('songs')->group(function () {
         }
         return response()->file($path);
     })->name('albums.image');
-
 });
 
 Route::get('/audio/{filename}', function ($filename) {
@@ -98,7 +96,6 @@ Route::get('/audio/{filename}', function ($filename) {
         return response(null, 204); // No Content
     }
     return response()->file($path);
-
 })->where('filename', '.*')->name('songs.audio');
 
 Route::get('/artists', function () {
@@ -280,7 +277,6 @@ Route::middleware(['auth', 'role:User,Cover Creator,Artist,Composer', 'verified'
             }
             return response()->file($path);
         })->where('filename', '.*')->name('user.songs.audio');
-
     });
 
     // Notifikasi Route
@@ -410,7 +406,6 @@ Route::middleware(['auth', 'role:User,Cover Creator,Artist,Composer', 'verified'
         $limit = $request->input('limit', 10);
         return response()->json($uuserServices->getAllComposer($search, $limit));
     });
-
 });
 
 // Admin Routes

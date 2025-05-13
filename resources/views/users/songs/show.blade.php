@@ -1,4 +1,4 @@
-@extends('layouts.app-admin')
+@extends('layouts.app')
 
 @section('content')
     <div class="page-header d-print-none">
@@ -12,11 +12,7 @@
                 </div>
                 <div class="col-auto ms-auto d-print-none">
                     <div class="btn-list">
-                        <a href="{{ route('admin.songs.edit', $song->id) }}" class="btn btn-primary d-none d-sm-inline-block">
-                            <i class="ti ti-edit me-2"></i>
-                            Edit Song
-                        </a>
-                        <a href="{{ route('admin.songs.index') }}" class="btn btn-outline-primary d-none d-sm-inline-block">
+                        <a href="{{ route('user.dashboard') }}" class="btn btn-outline-primary d-none d-sm-inline-block">
                             <i class="ti ti-arrow-left me-2"></i>
                             Back to Songs
                         </a>
@@ -32,37 +28,7 @@
                 <div class="col-lg-4">
                     <div class="card">
                         <div class="card-body">
-                            <div class="text-center mb-4">
-                                @php
-                                    // Extract filename from the 3rd image variant (small)
-                                    $coverImages = explode(',', $song->cover_image ?? '');
-                                    $smallCoverFile = $coverImages[2] ?? null;
 
-                                    // Get just the filename from the path (e.g. "cover_abc_sm.jpeg")
-                                    $filename = $smallCoverFile ? basename($smallCoverFile) : null;
-
-                                    // Generate image URL via route
-                                    $imageUrl = $filename ? route('admin.songs.image', ['filename' => $filename]) : 'https://via.placeholder.com/300';
-                                @endphp
-
-                                <img src="{{ $imageUrl }}" class="rounded" width="200" height="200"
-                                    alt="Cover Image">
-                                <h2 class="mt-3 mb-0">{{ optional($song->album)->title ?? 'No Album' }}</h2>
-                                <p class="text-muted">{{ '' }}</p>
-                                <div class="mt-3">
-                                    {{-- Status Badge --}}
-                                    @if ($song->status === 'Active')
-                                        <span class="badge bg-success">Active</span>
-                                    @elseif ($song->status === 'Pending')
-                                        <span class="badge bg-warning text-dark">Pending</span>
-                                    @elseif ($song->status === 'Inactive')
-                                        <span class="badge bg-danger">Inactive</span>
-                                    @else
-                                        <span class="badge bg-secondary">{{ $song->status }}</span>
-                                    @endif
-                                    <span class="badge bg-blue ms-2">{{ $song->license_type }}</span>
-                                </div>
-                            </div>
                             <div class="mt-4">
                                 @php
                                     $filename = $song->file_path ? basename($song->file_path) : null;
@@ -76,16 +42,50 @@
                                     </audio>
                                 @endif
 
+                                <div class="mt-4 mb-3">
+                                    @if ($youtubeEmbedLink)
+                                        <h3>Putar di YouTube</h3>
+                                        <p>Link Embed : {{ $youtubeEmbedLink }}</p>
 
+                                        <div class="ratio ratio-16x9" style="max-width: 640px; margin: 0 auto;">
+                                            <iframe src="{{ $youtubeEmbedLink }}" title="YouTube video player"
+                                                frameborder="0"
+                                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                                allowfullscreen>
+                                            </iframe>
+                                        </div>
+                                    @else
+                                        <p>Tautan YouTube tidak tersedia untuk lagu ini.</p>
+                                    @endif
+                                </div>
+                                <div class="text-center">
+                                    @php
 
+                                        $coverImages = explode(',', $song->cover_image ?? '');
+                                        $smallCoverFile = $coverImages[2] ?? null;
 
-                                <div class="d-flex justify-content-center">
-                                    <button class="btn btn-outline-primary me-2">
-                                        <i class="ti ti-download me-2"></i>Download
-                                    </button>
-                                    <button class="btn btn-outline-danger">
-                                        <i class="ti ti-share me-2"></i>Share
-                                    </button>
+                                        $filename = $smallCoverFile ? basename($smallCoverFile) : null;
+
+                                        $imageUrl = $filename ? route('admin.songs.image', ['filename' => $filename]) : 'https://via.placeholder.com/300';
+                                    @endphp
+
+                                    <img src="{{ $imageUrl }}" class="rounded" width="200" height="200"
+                                        alt="Cover Image">
+                                    <h2 class="mt-3 mb-0">{{ optional($song->album)->title ?? 'No Album' }}</h2>
+                                    <p class="text-muted">{{ '' }}</p>
+                                    <div class="mt-3">
+                                        {{-- Status Badge --}}
+                                        @if ($song->status === 'Active')
+                                            <span class="badge bg-success">Active</span>
+                                        @elseif ($song->status === 'Pending')
+                                            <span class="badge bg-warning text-dark">Pending</span>
+                                        @elseif ($song->status === 'Inactive')
+                                            <span class="badge bg-danger">Inactive</span>
+                                        @else
+                                            <span class="badge bg-secondary">{{ $song->status }}</span>
+                                        @endif
+                                        <span class="badge bg-blue ms-2">{{ $song->license_type }}</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>

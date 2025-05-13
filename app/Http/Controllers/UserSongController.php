@@ -86,7 +86,7 @@ class UserSongController extends Controller
         //jika masih kosong cek apakah user auth -> city tersedia pake ini datanya untuk isi default local_zones selectpicker
         $songZone = Song::select('local_zones')->where('created_by', Auth::id())->latest()->first();
         $lastZones = [];
-        if($songZone){
+        if ($songZone) {
             $local_zones = explode(',', $songZone->local_zones);
             foreach ($local_zones as $zone) {
                 $lastZones[] = [
@@ -254,7 +254,6 @@ class UserSongController extends Controller
             DB::commit();
 
             return redirect()->route('profile.my-assets')->with('success', 'Song successfully added.');
-
         } catch (\Exception $e) {
             DB::rollBack();
 
@@ -497,22 +496,31 @@ class UserSongController extends Controller
             'licenses' => function ($query) {
                 $query->orderBy('license_type', 'asc');
             },
-            'songContributors.user'
+            'songContributors.user',
+            'links'
         ])->findOrFail($id);
 
         $coverVersions = $song->coverVersions;
-        $artist =SongContributor::with(['user'])->where('song_id',$song->id)
-        ->where('role','Artist')->first();
+        $artist = SongContributor::with(['user'])->where('song_id', $song->id)
+            ->where('role', 'Artist')->first();
         $artistName = '';
-        if($artist){
+        if ($artist) {
             $artistName = $artist->user->name;
         }
+
+        $youtubeLinkModel = $song->links->where('platform', 'YouTube')->first();
+        $youtubeEmbedLink = null;
+
+        if ($youtubeLinkModel && $youtubeLinkModel->link) {
+            $youtubeEmbedLink = $youtubeLinkModel->link;
+        }
+
 
         activity('song')
             ->withProperties(['ip' => request()->ip()])
             ->log($authUser->name . ' visited show song form for song: ' . $song->title);
 
-        return view('admin.songs.show', compact('song', 'coverVersions','artistName'));
+        return view('users.songs.show', compact('song', 'coverVersions', 'artistName', 'youtubeEmbedLink'));
     }
 
     public function bulkAction(Request $request)
@@ -586,8 +594,6 @@ class UserSongController extends Controller
             'message' => 'Selected songs have been ' . $request->action . 'd.'
         ]);
     }
-
-
 
     public function destroy($id)
     {
