@@ -57,16 +57,15 @@ $role = Auth::user()->getRoleNames()->first();
 
                         <!-- Dropdown panel -->
                         <div x-show="open" @click.away="open = false" x-transition
-                            class="origin-top-right absolute left-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-50"
+                            class="origin-top-right absolute left-0 mt-2 w-56 rounded-lg shadow-lg bg-black ring-1 ring-gray-600 ring-opacity-4 focus:outline-none z-50"
                             role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
                             <div class="py-1" role="none">
-
                                 @if ($role == 'Artist' || $role == 'Cover' || $role == 'Composer')
-                                    <a href="#" class="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100"
+                                    <a href="#" class="text-white block px-4 py-2 text-sm hover:bg-gray-800 hover:text-white"
                                         role="menuitem">Cover</a>
                                 @endif
                                 @if ($role == 'Artist' || $role == 'Composer')
-                                    <a href="#" class="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100"
+                                    <a href="#" class="text-white block px-4 py-2 text-sm hover:bg-gray-800 hover:text-white"
                                         role="menuitem">Remake</a>
                                 @endif
                             </div>
@@ -92,15 +91,15 @@ $role = Auth::user()->getRoleNames()->first();
 
                         <!-- Dropdown panel -->
                         <div x-show="open" @click.away="open = false" x-transition
-                            class="origin-top-right absolute left-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-50"
+                            class="origin-top-right absolute left-0 mt-2 w-56 rounded-lg shadow-lg bg-black ring-1 ring-gray-600 ring-opacity-4 focus:outline-none z-50"
                             role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
                             <div class="py-1" role="none">
                                 @if ($role == 'Artist' || $role == 'Cover' || $role == 'Composer')
-                                    <a href="#" class="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100"
+                                    <a href="#" class="text-white block px-4 py-2 text-sm hover:bg-gray-800 hover:text-white"
                                         role="menuitem">Cover</a>
                                 @endif
                                 @if ($role == 'Artist' || $role == 'Composer')
-                                    <a href="#" class="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100"
+                                    <a href="#" class="text-white block px-4 py-2 text-sm hover:bg-gray-800 hover:text-white"
                                         role="menuitem">Remake</a>
                                 @endif
                             </div>
