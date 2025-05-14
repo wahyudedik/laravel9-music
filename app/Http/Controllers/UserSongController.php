@@ -484,7 +484,6 @@ class UserSongController extends Controller
         }
     }
 
-
     public function show(Request $request, $id)
     {
         $authUser = Auth::user();
@@ -508,14 +507,13 @@ class UserSongController extends Controller
             $artistName = $artist->user->name;
         }
 
+        // Ambil data link YouTube
         $youtubeLinkModel = $song->links->where('platform', 'YouTube')->first();
         $youtubeEmbedLink = null;
 
         if ($youtubeLinkModel && $youtubeLinkModel->link) {
             $youtubeEmbedLink = $youtubeLinkModel->link;
         }
-
-
         activity('song')
             ->withProperties(['ip' => request()->ip()])
             ->log($authUser->name . ' visited show song form for song: ' . $song->title);

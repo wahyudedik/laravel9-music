@@ -45,8 +45,7 @@
                                 <div class="mt-4 mb-3">
                                     @if ($youtubeEmbedLink)
                                         <h3>Putar di YouTube</h3>
-                                        <p>Link Embed : {{ $youtubeEmbedLink }}</p>
-
+                                        {{-- <p>Link Embed : {{ $youtubeEmbedLink }}</p> --}}
                                         <div class="ratio ratio-16x9" style="max-width: 640px; margin: 0 auto;">
                                             <iframe src="{{ $youtubeEmbedLink }}" title="YouTube video player"
                                                 frameborder="0"
@@ -69,8 +68,8 @@
                                         $imageUrl = $filename ? route('admin.songs.image', ['filename' => $filename]) : 'https://via.placeholder.com/300';
                                     @endphp
 
-                                    <img src="{{ $imageUrl }}" class="rounded" width="200" height="200"
-                                        alt="Cover Image">
+                                    {{-- <img src="{{ $imageUrl }}" class="rounded" width="200" height="200"
+                                        alt="Cover Image"> --}}
                                     <h2 class="mt-3 mb-0">{{ optional($song->album)->title ?? 'No Album' }}</h2>
                                     <p class="text-muted">{{ '' }}</p>
                                     <div class="mt-3">

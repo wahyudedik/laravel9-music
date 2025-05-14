@@ -21,17 +21,20 @@ class UserController extends Controller
     {
         $query = $request->input('q');
         $results = [];
-        $allSongs = Song::with('artist')->get();
 
         if ($query) {
             $results = Song::where('title', 'like', "%$query%")
                 ->orWhereHas('artist', function ($q) use ($query) {
                     $q->where('name', 'like', "%$query%");
                 })
-                ->with('artist')
-                ->get();
+                ->with('artist', 'album')
+                ->paginate(5);
+            $allSongs = null;
+        } else {
+            $allSongs = Song::with('artist', 'album')
+                ->orderBy('created_at', 'desc')
+                ->paginate(5);
         }
-
         $popularSongs = Song::with('artist')
             ->select('songs.id', 'songs.title', DB::raw('COUNT(streams.song_id) as stream_count'))
             ->leftJoin('streams', 'songs.id', '=', 'streams.song_id')

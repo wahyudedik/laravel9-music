@@ -102,39 +102,27 @@
                                         </button>
                                     </div>
                                     <br>
-                                    <div class="table-responsive">
-                                        <table class="table table-vcenter card-table">
-                                            <thead>
-                                                <tr>
-                                                    <th>#</th>
-                                                    <th>Title</th>
-                                                    <th>Artist</th>
-                                                    <th>Albums</th>
+                                </form>
 
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                @foreach ($allSongs ?? [] as $index => $song)
-                                                    @php
-                                                        $types = ['Purchased', 'Cover', 'Release', 'Draft', 'Upload'];
-                                                        $statuses = ['Active', 'Pending', 'Published', 'Draft'];
-                                                    @endphp
-
-                                                    <tr>
-                                                        <td>{{ $index + 1 }}</td>
-                                                        <td>
-                                                            <div class="d-flex align-items-center">
-                                                                <span class="avatar me-2"
-                                                                    style="background-image: url(https://picsum.photos/40/40?random={{ $index + 30 }})"></span>
-                                                                <div>{{ $song->title }}</div>
-                                                            </div>
-                                                        </td>
-                                                        <td>{{ $song->artist ? $song->artist->name : 'Unknown Artist' }}
-                                                        </td>
-                                                        <td>{{ $song->album->title ?? 'Single' }}</td>
-                                                        <td>
+                                @if (isset($results) && count($results) > 0)
+                                    <h4 class="mt-4 mb-3">Search Results for "{{ $query }}"</h4>
+                                    <div class="card">
+                                        <div class="list-group list-group-flush">
+                                            @foreach ($results as $song)
+                                                <div class="list-group-item">
+                                                    <div class="row align-items-center">
+                                                        <div class="col-auto">
+                                                            <span class="avatar me-2"
+                                                                style="background-image: url(https://picsum.photos/40/40?random={{ $loop->iteration }})"></span>
+                                                        </div>
+                                                        <div class="col">
+                                                            <div class="font-weight-medium">{{ $song->title }}</div>
+                                                            <div class="text-muted">
+                                                                {{ $song->artist ? $song->artist->name : 'Unknown Artist' }}
+                                                                - {{ $song->album->title ?? 'Single' }}</div>
+                                                        </div>
+                                                        <div class="col-auto">
                                                             <div class="btn-list flex-nowrap">
-
                                                                 <div class="dropdown">
                                                                     <button class="btn btn-icon btn-sm btn-ghost-secondary"
                                                                         data-bs-toggle="dropdown">
@@ -149,85 +137,14 @@
                                                                             <i class="ti ti-credit-card me-2"></i>Add To
                                                                             Cart
                                                                         </a>
-                                                                        {{-- <a href="#" class="dropdown-item">
-                                                                            <i class="ti ti-share me-2"></i>Share
-                                                                        </a> --}}
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                        </td>
-
-
-                                                    </tr>
-                                                @endforeach
-                                            </tbody>
-                                        </table>
-                                    </div>
-
-                                    <div class="d-flex mt-4">
-                                        <ul class="pagination ms-auto">
-                                            <li class="page-item disabled">
-                                                <a class="page-link" href="#" tabindex="-1" aria-disabled="true">
-                                                    <i class="ti ti-chevron-left"></i>
-                                                    prev
-                                                </a>
-                                            </li>
-                                            <li class="page-item active"><a class="page-link" href="#">1</a>
-                                            </li>
-                                            <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                            <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                            <li class="page-item">
-                                                <a class="page-link" href="#">
-                                                    next
-                                                    <i class="ti ti-chevron-right"></i>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </form>
-
-                                @if (isset($results) && count($results) > 0)
-                                    <h4 class="mt-4 mb-3">Search Results for "{{ $query }}"</h4>
-                                    <div class="list-group">
-                                        @foreach ($results as $song)
-                                            <div class="list-group-item">
-                                                <div class="row align-items-center">
-                                                    <div class="col-auto">
-                                                        <span class="avatar"
-                                                            style="background-image: url(https://picsum.photos/40/40?random={{ $loop->iteration }})"></span>
-                                                    </div>
-                                                    <div class="col">
-                                                        <div class="d-flex justify-content-between">
-                                                            <div>
-                                                                <div class="font-weight-medium">{{ $song->title }}
-                                                                </div>
-                                                                <div class="text-muted">
-                                                                    {{ $song->artist ? $song->artist->name : 'Unknown Artist' }}
-                                                                </div>
-                                                            </div>
-                                                            <div class="btn-list">
-                                                                <button class="btn btn-icon btn-sm btn-primary play-song"
-                                                                    data-song-id="{{ $song->id }}"
-                                                                    data-bs-toggle="tooltip" title="Play">
-                                                                    <i class="ti ti-player-play"></i>
-                                                                </button>
-                                                                <button class="btn btn-icon btn-sm btn-outline-secondary"
-                                                                    data-bs-toggle="tooltip" title="Add to playlist">
-                                                                    <i class="ti ti-plus"></i>
-                                                                </button>
-                                                            </div>
                                                         </div>
-
                                                     </div>
-
-                                                    <audio id="audio-player" controls style="display: none;"></audio>
-
-                                                    </body>
-
-                                                    </html>
                                                 </div>
-                                            </div>
-                                        @endforeach
+                                            @endforeach
+                                        </div>
                                     </div>
                                 @elseif (isset($query))
                                     <div class="empty mt-4">
@@ -239,12 +156,84 @@
                                             No results found for "{{ $query }}". Try using different keywords.
                                         </p>
                                     </div>
+                                @else
+                                    <h3 class="mt-4 mb-3">All Songs</h3>
+                                    <div class="table-responsive">
+                                        <table class="table table-vcenter card-table">
+                                            <thead>
+                                                <tr>
+                                                    <th>#</th>
+                                                    <th>Title</th>
+                                                    <th>Artist</th>
+                                                    <th>Albums</th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach ($allSongs ?? [] as $index => $song)
+                                                    <tr>
+                                                        <td>{{ $index + 1 }}</td>
+                                                        <td>
+                                                            <div class="d-flex align-items-center">
+                                                                <span class="avatar me-2"
+                                                                    style="background-image: url(https://picsum.photos/40/40?random={{ $index + 30 }})"></span>
+                                                                <div>{{ $song->title }}</div>
+                                                            </div>
+                                                        </td>
+                                                        <td>{{ $song->artist ? $song->artist->name : 'Unknown Artist' }}
+                                                        </td>
+                                                        <td>{{ $song->album->title ?? 'Single' }}</td>
+                                                        <td>
+                                                            <div class="btn-list flex-nowrap">
+                                                                <div class="dropdown">
+                                                                    <button class="btn btn-icon btn-sm btn-ghost-secondary"
+                                                                        data-bs-toggle="dropdown">
+                                                                        <i class="ti ti-dots-vertical"></i>
+                                                                    </button>
+                                                                    <div class="dropdown-menu dropdown-menu-end">
+                                                                        <a href="{{ route('user.songs.show', $song->id) }}"
+                                                                            class="dropdown-item">
+                                                                            <i class="ti ti-eye me-2"></i>View
+                                                                        </a>
+                                                                        <a href="#" class="dropdown-item">
+                                                                            <i class="ti ti-credit-card me-2"></i>Add To
+                                                                            Cart
+                                                                        </a>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="d-flex mt-4">
+                                        <ul class="pagination ms-auto">
+                                            <li class="page-item disabled">
+                                                <a class="page-link" href="#" tabindex="-1" aria-disabled="true">
+                                                    <i class="ti ti-chevron-left"></i>
+                                                    prev
+                                                </a>
+                                            </li>
+                                            <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                                            <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                            <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                            <li class="page-item">
+                                                <a class="page-link" href="#">
+                                                    next
+                                                    <i class="ti ti-chevron-right"></i>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
                                 @endif
+
+                                <audio id="audio-player" controls style="display: none;"></audio>
                             </div>
                         </div>
                     </div>
                 </div>
-
 
                 <!-- Stats Cards -->
                 <div class="row mb-4">
@@ -892,6 +881,10 @@
                         });
                 });
             });
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelector('input[name="q"]').value = '';
         });
     </script>
 @endsection
