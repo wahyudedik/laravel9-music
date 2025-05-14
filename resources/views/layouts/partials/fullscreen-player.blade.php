@@ -47,7 +47,7 @@ $role = Auth::user()->getRoleNames()->first();
                         <button @click="open = !open" type="button"
                             class="inline-flex justify-center w-full rounded-full border border-gray-300 shadow-sm px-4 py-2 bg-black text-sm font-medium text-gray-50 hover:bg-gray-50 hover:text-gray-800"
                             id="menu-button" aria-expanded="true" aria-haspopup="true">
-                            Beli Lisensi
+                            Beli
                             <svg class="-mr-1 ml-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none"
                                 viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -62,11 +62,11 @@ $role = Auth::user()->getRoleNames()->first();
                             <div class="py-1" role="none">
                                 @if ($role == 'Artist' || $role == 'Cover' || $role == 'Composer')
                                     <a href="#" class="text-white block px-4 py-2 text-sm hover:bg-gray-800 hover:text-white"
-                                        role="menuitem">Cover</a>
+                                        role="menuitem">Lisensi Cover</a>
                                 @endif
                                 @if ($role == 'Artist' || $role == 'Composer')
                                     <a href="#" class="text-white block px-4 py-2 text-sm hover:bg-gray-800 hover:text-white"
-                                        role="menuitem">Remake</a>
+                                        role="menuitem">Lisensi Remake</a>
                                 @endif
                             </div>
                         </div>
@@ -96,11 +96,11 @@ $role = Auth::user()->getRoleNames()->first();
                             <div class="py-1" role="none">
                                 @if ($role == 'Artist' || $role == 'Cover' || $role == 'Composer')
                                     <a href="#" class="text-white block px-4 py-2 text-sm hover:bg-gray-800 hover:text-white"
-                                        role="menuitem">Cover</a>
+                                        role="menuitem">Lisensi Cover</a>
                                 @endif
                                 @if ($role == 'Artist' || $role == 'Composer')
                                     <a href="#" class="text-white block px-4 py-2 text-sm hover:bg-gray-800 hover:text-white"
-                                        role="menuitem">Remake</a>
+                                        role="menuitem">Lisensi Remake</a>
                                 @endif
                             </div>
                         </div>
