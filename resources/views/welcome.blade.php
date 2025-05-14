@@ -1,6 +1,7 @@
 @extends('layouts.landing-page')
 
 @section('content')
+
     <!-- Category Navigation -->
     <div class="category-nav mb-6">
         <div class="category-pill active">For you</div>
@@ -56,6 +57,8 @@
                             <img class="w-12 h-12 rounded-full border-2 border-blue-800"
                                 src="https://images.unsplash.com/photo-1577805947697-89e18249d767?q=80&w=100"
                                 alt="">
+
+
                         </div>
                         <p class="mt-4 mb-2 text-sm text-white/80">Based on your recent listening</p>
                         <a href="{{ route('mix_trending') }}"

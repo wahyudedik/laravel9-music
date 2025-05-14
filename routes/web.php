@@ -20,6 +20,7 @@ use App\Http\Controllers\EmailController;
 use App\Http\Controllers\SongController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserVerificationController;
+use App\Http\Controllers\UserSongController;
 use App\Http\Controllers\HomeController;
 use App\Models\Role;
 use App\Models\User;
@@ -277,6 +278,28 @@ Route::middleware(['auth', 'role:User,Cover Creator,Artist,Composer', 'verified'
         return view('users.playlist-detail');
     })->name('playlist.detail');
 
+
+    Route::prefix('/songs')->group(function () {
+
+        Route::get('/', [UserSongController::class, 'index'])->name('user.songs.index');
+        Route::get('/create', [UserSongController::class, 'create'])->name('user.songs.create');
+        Route::post('/store', [UserSongController::class, 'store'])->name('user.songs.store');
+        Route::get('/{id}/edit', [UserSongController::class, 'edit'])->name('user.songs.edit');
+        Route::put('/{song}', [UserSongController::class, 'update'])->name('user.songs.update');
+        Route::post('/songs/bulk-action', [UserSongController::class, 'bulkAction'])->name('user.songs.bulk-action');
+        Route::get('/{id}', [UserSongController::class, 'show'])->name('user.songs.show');
+        Route::delete('/{song}', [UserSongController::class, 'destroy'])->name('user.songs.destroy');
+
+        Route::get('/audio/{filename}', function ($filename) {
+            $path = storage_path('app/public/songs/audio/' . $filename);
+            if (!File::exists($path)) {
+                return response(null, 204); // No Content
+            }
+            return response()->file($path);
+        })->where('filename', '.*')->name('user.songs.audio');
+
+    });
+
     // Notifikasi Route
     Route::get('/notifications', function () {
         return view('users.notifications');
@@ -361,6 +384,50 @@ Route::middleware(['auth', 'role:User,Cover Creator,Artist,Composer', 'verified'
     Route::get('/wallet/withdraw/history', function () {
         return view('users.wallet.withdraw-history');
     })->name('user.wallet.withdraw.history');
+
+
+    //Utility Route
+    Route::get('/user/data/regions', function () {
+        $json = Storage::disk('local')->get('data/regions.json');
+        return response()->json(json_decode($json));
+    });
+    Route::get('/user/data/cities', function () {
+        $json = Storage::disk('local')->get('data/regions.json');
+        $regions = json_decode($json, true);
+        $cities = collect($regions)->pluck('kota')->flatten()->values();
+        return response()->json($cities);
+    });
+    Route::get('/user/data/songs', function (Request $request, SongServices $songServices) {
+        $search = $request->input('search');
+        $limit = $request->input('limit', 10);
+        return response()->json($songServices->getAllSongs($search, $limit));
+    });
+    Route::get('/user/data/albums', function (Request $request, SongServices $songServices) {
+        $search = $request->input('search');
+        $limit = $request->input('limit', 10);
+        return response()->json($songServices->getAllAlbums($search, $limit));
+    });
+    Route::get('/user/data/genres', function (Request $request, SongServices $songServices) {
+        $search = $request->input('search');
+        $limit = $request->input('limit', 10);
+        return response()->json($songServices->getAllGenres($search, $limit));
+    });
+    Route::get('/user/data/users', function (Request $request, UserServices $uuserServices) {
+        $search = $request->input('search');
+        $limit = $request->input('limit', 10);
+        return response()->json($uuserServices->getAllUsers($search, $limit));
+    });
+    Route::get('/user/data/artists', function (Request $request, UserServices $uuserServices) {
+        $search = $request->input('search');
+        $limit = $request->input('limit', 10);
+        return response()->json($uuserServices->getAllArtist($search, $limit));
+    });
+    Route::get('/user/data/composers', function (Request $request, UserServices $uuserServices) {
+        $search = $request->input('search');
+        $limit = $request->input('limit', 10);
+        return response()->json($uuserServices->getAllComposer($search, $limit));
+    });
+
 });
 
 // Admin Routes

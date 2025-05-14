@@ -103,4 +103,17 @@ class Song extends Model
         return $this->hasMany(SongContributor::class, 'song_id');
 
     }
+
+    public function licenses()
+    {
+        return $this->hasMany(SongLicense::class, 'song_id');
+
+    }
+
+    public function links()
+    {
+        return $this->hasMany(SongLink::class, 'song_id');
+
+    }
+
 }

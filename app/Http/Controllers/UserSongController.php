@@ -19,7 +19,7 @@ use Intervention\Image\Drivers\Gd\Driver;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
 
-class AdminSongController extends Controller
+class UserSongController extends Controller
 {
     public function index(Request $request)
     {
@@ -95,7 +95,7 @@ class AdminSongController extends Controller
             }
         }
 
-        return view('admin.songs.create', compact('genres', 'socialMedias', 'lastZones'));
+        return view('users.songs.create', compact('genres', 'socialMedias', 'lastZones'));
     }
 
 
@@ -253,7 +253,8 @@ class AdminSongController extends Controller
 
             DB::commit();
 
-            return redirect()->route('admin.songs.index')->with('success', 'Song successfully added.');
+            return redirect()->route('profile.my-assets')->with('success', 'Song successfully added.');
+
         } catch (\Exception $e) {
             DB::rollBack();
 

@@ -1,7 +1,7 @@
-@extends('layouts.app-admin')
+@extends('layouts.app')
 
 @section('content')
-    <div class="page-header d-print-none">
+    <div class="page-header d-print-none py-4">
         <div class="container-xl">
             <div class="row g-2 align-items-center">
                 <div class="col">
@@ -12,9 +12,9 @@
                 </div>
                 <div class="col-auto ms-auto d-print-none">
                     <div class="btn-list">
-                        <a href="{{ route('admin.songs.index') }}" class="btn btn-outline-primary d-none d-sm-inline-block">
+                        <a href="{{ route('profile.my-assets') }}" class="btn btn-outline-primary d-none d-sm-inline-block">
                             <i class="ti ti-arrow-left me-2"></i>
-                            Kembali ke Daftar Lagu
+                            Kembali ke MyAsset
                         </a>
                     </div>
                 </div>
@@ -26,7 +26,7 @@
         <div class="container-xl">
             <div class="row row-cards">
                 <div class="col-12">
-                    <form class="card" action="{{ route('admin.songs.store') }}"
+                    <form class="card" action="{{ route('user.songs.store') }}"
                         method="post"enctype="multipart/form-data">
                         @csrf
                         <div class="card-header">
@@ -138,14 +138,15 @@
                                                 class="form-control @error('composer_ids') is-invalid @enderror selectpicker "
                                                 name="composer_ids[]" id="composer_ids" data-live-search="true"
                                                 data-size="5" multiple>
-                                            </select>
-                                            <button type="button" class="btn btn-outline-primary ms-3 btn-clear-composer">
-                                                <i class="ti ti-trash me-2"></i>
-                                                Clear
-                                            </button> --}}
+                                            </select> --}}
 
                                             <select id="composer_ids" name="composer_ids[]" class="form-control"
                                                 multiple></select>
+
+                                            {{-- <button type="button" class="btn btn-outline-primary ms-3 btn-clear-composer">
+                                                <i class="ti ti-trash me-2"></i>
+                                                Clear
+                                            </button> --}}
 
                                         </div>
                                         @error('composer_ids')
@@ -171,7 +172,7 @@
                                     <div class="form-label">Platform</div>
                                     <select class="form-control selectpicker" id="platform" name="platform"
                                         data-live-search="true" data-size="5">
-                                        <option value="">Select Platform</option>
+                                        <option value="">Pilih Platform</option>
                                         @foreach ($socialMedias as $socialMedia)
                                             <option value="{{ $socialMedia->name }}">
                                                 {{ $socialMedia->name }}
@@ -262,7 +263,7 @@
                                         <div class="form-hint">Ukuran yang disarankan: 500x500px, maks 2MB</div>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-6 d-none">
                                     <div class="mb-3">
                                         <div class="form-label ">Berkas Audio</div>
                                         <input type="file"
@@ -460,7 +461,7 @@
                         </div>
                         <div class="card-footer text-end">
                             <div class="d-flex">
-                                <a href="{{ route('admin.songs.index') }}" class="btn btn-link">Batal</a>
+                                <a href="{{ route('profile.my-assets') }}" class="btn btn-link">Batal</a>
                                 <button type="submit" class="btn btn-primary ms-auto">
                                     <i class="ti ti-device-floppy me-2"></i>Simpan Lagu
                                 </button>
@@ -507,6 +508,11 @@
             transform: none;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
         }
+
+        #composer_ids+.select2-container .select2-selection--multiple {
+            min-height: 35.6px !important;
+            line-height: 24px;
+        }
     </style>
 @endpush
 @section('scripts')
@@ -541,7 +547,7 @@
                         confirmButtonColor: '#e53935'
                     }).then((result) => {
                         if (result.isConfirmed) {
-                            window.location.href = "{{ route('admin.songs.index') }}";
+                            window.location.href = "{{ route('profile.my-assets') }}";
                         }
                     });
                 }, 1500);
@@ -553,7 +559,6 @@
 
     <script>
         $(document).ready(function() {
-
 
             $('#platform option').each(function() {
                 if ($(this).val().toLowerCase() === 'youtube') {
@@ -576,6 +581,7 @@
             //         composerSelect.append('<option value="' + id + '" selected>' + name + '</option>');
             //     }
             // });
+
             // composerSelect.selectpicker("refresh");
             // fetchComposer("#composer_ids", oldComposerIds);
 
@@ -596,6 +602,7 @@
                 addSongLinks();
             });
 
+
             fetchComposerv2();
 
         });
@@ -607,7 +614,7 @@
                 minimumInputLength: 2,
                 multiple: true,
                 ajax: {
-                    url: "/admin/data/composers",
+                    url: "/user/data/composers",
                     type: "GET",
                     dataType: "json",
                     delay: 250,
@@ -637,7 +644,7 @@
 
         function fetchAlbum(selectId, selectedValue = "", search = "") {
             $.ajax({
-                url: "/admin/data/albums",
+                url: "/user/data/albums",
                 type: "GET",
                 data: {
                     search: search,
@@ -662,7 +669,7 @@
 
         function fetchComposer(selectId, selectedValues = [], search = "") {
             $.ajax({
-                url: "/admin/data/composers",
+                url: "/user/data/composers",
                 type: "GET",
                 data: {
                     search: search,
@@ -685,7 +692,7 @@
         }
 
         function fetchCity(selector, selectedLocalZone) {
-            fetch('/admin/data/cities')
+            fetch('/user/data/cities')
                 .then(response => response.json())
                 .then(data => {
                     let select = document.querySelector(selector);
@@ -800,7 +807,15 @@
             $('#song-link-lists').append(songItem);
 
             $('#link').val('');
-            $('#platform').val('');
+
+            $('#platform option').each(function() {
+                if ($(this).val().toLowerCase() === 'youtube') {
+                    $('#platform').val($(this).val());
+                    return false; // break loop
+                }
+            });
+
+            $('#platform').selectpicker('refresh');
 
 
         }
