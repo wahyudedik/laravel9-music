@@ -5,7 +5,8 @@
     <div class="mb-8" id="cartContainer">
         <div class="w-full mb-4 flex justify-between items-center flex-wrap ">
             <h1 class="text-3xl font-bold mb-3"><i class="ti ti-shopping-cart mr-2 "></i> Order (3 item)</h1>
-            <a href="" class=" text-md px-4 py-2 bg-red-600 flex items-center justify-center rounded-xl mb-3 hover:bg-red-700 hover:text-white">
+            <a href=""
+                class=" text-md px-4 py-2 bg-red-600 flex items-center justify-center rounded-xl mb-3 hover:bg-red-700 hover:text-white">
                 <i class="ti ti-trash mr-2"></i>
                 Hapus Order
             </a>
@@ -38,8 +39,8 @@
 
                                 <div class="flex justify-between items-center bg-gray-900 p-3 rounded-md w-11/12">
                                     <div class="flex items-center">
-                                        <img id="fullscreenPlayerCoverAvatar" src="https://picsum.photos/14" alt="Song Cover"
-                                            class="w-12 h-12 rounded-lg object-cover mr-4" />
+                                        <img id="fullscreenPlayerCoverAvatar" src="https://picsum.photos/14"
+                                            alt="Song Cover" class="w-12 h-12 rounded-lg object-cover mr-4" />
                                         <div>
                                             <p class="text-sm font-medium text-white">Lagu: Freedom Sound</p>
                                             <p class="text-sm text-gray-400">Lisensi: Cover</p>
@@ -65,8 +66,8 @@
 
                                 <div class="flex justify-between items-center bg-gray-900 p-3 rounded-md w-11/12">
                                     <div class="flex items-center">
-                                        <img id="fullscreenPlayerCoverAvatar" src="https://picsum.photos/14" alt="Song Cover"
-                                            class="w-12 h-12 rounded-lg object-cover mr-4" />
+                                        <img id="fullscreenPlayerCoverAvatar" src="https://picsum.photos/14"
+                                            alt="Song Cover" class="w-12 h-12 rounded-lg object-cover mr-4" />
                                         <div>
                                             <p class="text-sm font-medium text-white">Lagu: Summer Vibe</p>
                                             <p class="text-sm text-gray-400">Lisensi: Remake</p>
@@ -113,8 +114,8 @@
 
                                 <div class="flex justify-between items-center bg-gray-900 p-3 rounded-md w-11/12">
                                     <div class="flex items-center">
-                                        <img id="fullscreenPlayerCoverAvatar" src="https://picsum.photos/14" alt="Song Cover"
-                                            class="w-12 h-12 rounded-lg object-cover mr-4" />
+                                        <img id="fullscreenPlayerCoverAvatar" src="https://picsum.photos/14"
+                                            alt="Song Cover" class="w-12 h-12 rounded-lg object-cover mr-4" />
                                         <div>
                                             <p class="text-sm font-medium text-white">Lagu: Chill Beat</p>
                                             <p class="text-sm text-gray-400">Lisensi: Remake</p>
@@ -162,10 +163,10 @@
                         </div>
 
                         <div class="w-full">
-                            <button
-                                class="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-6 rounded-lg shadow-md transition duration-200 w-full mt-8">
-                                Bayar Sekarang
-                            </button>
+                            <a href="{{route('payment',['method' => 'cart','idUser' => Auth::id()])}}"
+                                class="block bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-6 rounded-lg shadow-md transition duration-200 mt-8 text-center text-lg">
+                                Bayar
+                            </a>
                         </div>
                     </div>
                 </div>

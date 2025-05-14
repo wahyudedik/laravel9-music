@@ -22,6 +22,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserVerificationController;
 use App\Http\Controllers\UserSongController;
 use App\Http\Controllers\UserCartController;
+use App\Http\Controllers\UserPaymentController;
 use App\Http\Controllers\HomeController;
 use App\Models\Role;
 use App\Models\User;
@@ -78,7 +79,6 @@ Route::prefix('songs')->group(function () {
             return redirect('https://via.placeholder.com/40');
         }
         return response()->file($path);
-
     })->where('filename', '.*')->name('songs.image');
 
     Route::get('/album/image/{filename}', function ($filename) {
@@ -89,7 +89,6 @@ Route::prefix('songs')->group(function () {
         }
         return response()->file($path);
     })->name('albums.image');
-
 });
 
 Route::get('/audio/{filename}', function ($filename) {
@@ -99,7 +98,6 @@ Route::get('/audio/{filename}', function ($filename) {
         return response(null, 204); // No Content
     }
     return response()->file($path);
-
 })->where('filename', '.*')->name('songs.audio');
 
 Route::get('/artists', function () {
@@ -203,6 +201,10 @@ Route::middleware(['auth', 'role:User,Cover Creator,Artist,Composer,Admin,Super 
 Route::middleware(['auth', 'role:User,Cover Creator,Artist,Composer', 'verified'])->group(function () {
     Route::get('/cart/{idUser}', [UserCartController::class, 'index'])
         ->name('cart');
+    Route::get('/payment/{method}/{idUser}', [UserPaymentController::class, 'index'])
+        ->name('payment');
+    Route::get('/payment/done', [UserPaymentController::class, 'done'])
+        ->name('payment-done');
 });
 
 // User Dashboard Routes
@@ -286,7 +288,6 @@ Route::middleware(['auth', 'role:User,Cover Creator,Artist,Composer', 'verified'
             }
             return response()->file($path);
         })->where('filename', '.*')->name('user.songs.audio');
-
     });
 
     // Notifikasi Route
@@ -416,7 +417,6 @@ Route::middleware(['auth', 'role:User,Cover Creator,Artist,Composer', 'verified'
         $limit = $request->input('limit', 10);
         return response()->json($uuserServices->getAllComposer($search, $limit));
     });
-
 });
 
 // Admin Routes

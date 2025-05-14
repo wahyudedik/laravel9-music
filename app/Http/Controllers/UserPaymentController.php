@@ -19,48 +19,18 @@ use Intervention\Image\Drivers\Gd\Driver;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
 
-class UserCartController extends Controller
+
+class UserPaymentController extends Controller
 {
-    public function index(Request $request,$idUser)
+    public function index(Request $request, $method, $idUser)
     {
         $data = [];
-        return view('cart', compact('data'));
+        return view('payment', compact('data'));
     }
 
-
-    public function create()
+    public function done(Request $request)
     {
-
-    }
-
-
-    public function store(Request $request)
-    {
-
-    }
-
-
-
-
-    public function edit(Request $request, $id)
-    {
-
-    }
-
-    public function update(Request $request, $id)
-    {
-
-
-    }
-
-
-    public function show(Request $request, $id)
-    {
-
-    }
-
-    public function destroy($id)
-    {
-
+        $data = [];
+        return view('payment-done', compact('data'));
     }
 }

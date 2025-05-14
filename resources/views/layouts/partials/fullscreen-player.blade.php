@@ -61,11 +61,11 @@ $role = Auth::user()->getRoleNames()->first();
                             role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
                             <div class="py-1" role="none">
                                 @if ($role == 'Artist' || $role == 'Cover' || $role == 'Composer')
-                                    <a href="#" class="text-white block px-4 py-2 text-sm hover:bg-gray-800 hover:text-white"
+                                    <a href="{{ route('payment', ['method' => 'buynow','idUser' => Auth::id()]) }}" class="text-white block px-4 py-2 text-sm hover:bg-gray-800 hover:text-white"
                                         role="menuitem">Lisensi Cover</a>
                                 @endif
                                 @if ($role == 'Artist' || $role == 'Composer')
-                                    <a href="#" class="text-white block px-4 py-2 text-sm hover:bg-gray-800 hover:text-white"
+                                    <a href="{{ route('payment', ['method' => 'buynow','idUser' => Auth::id()]) }}" class="text-white block px-4 py-2 text-sm hover:bg-gray-800 hover:text-white"
                                         role="menuitem">Lisensi Remake</a>
                                 @endif
                             </div>
@@ -95,11 +95,11 @@ $role = Auth::user()->getRoleNames()->first();
                             role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
                             <div class="py-1" role="none">
                                 @if ($role == 'Artist' || $role == 'Cover' || $role == 'Composer')
-                                    <a href="#" class="text-white block px-4 py-2 text-sm hover:bg-gray-800 hover:text-white"
+                                    <a href="{{ route('cart', ['idUser' => Auth::id()]) }}" class="text-white block px-4 py-2 text-sm hover:bg-gray-800 hover:text-white"
                                         role="menuitem">Lisensi Cover</a>
                                 @endif
                                 @if ($role == 'Artist' || $role == 'Composer')
-                                    <a href="#" class="text-white block px-4 py-2 text-sm hover:bg-gray-800 hover:text-white"
+                                    <a href="{{ route('cart', ['idUser' => Auth::id()]) }}" class="text-white block px-4 py-2 text-sm hover:bg-gray-800 hover:text-white"
                                         role="menuitem">Lisensi Remake</a>
                                 @endif
                             </div>
