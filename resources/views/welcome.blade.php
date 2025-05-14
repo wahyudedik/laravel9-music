@@ -4,7 +4,6 @@
     <!-- Category Navigation -->
     <div class="category-nav mb-6">
         <div class="category-pill active">For you</div>
-        <div class="category-pill">Charts</div>
         <div class="category-pill">Hip Hop</div>
         <div class="category-pill">Pop</div>
         <div class="category-pill">Rock</div>
@@ -29,13 +28,13 @@
                     <img src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?q=80&w=1200"
                         class="w-full h-full object-cover" alt="Featured artist">
                     <div class="absolute bottom-0 left-0 p-6">
-                        <span class="text-sm bg-red-600 text-white px-2 py-1 rounded-full">Featured Artist</span>
+                        <span class="text-sm bg-red-600 text-white px-2 py-1 rounded-full">Featured Trend</span>
                         <h1 class="text-3xl font-bold mt-2 mb-1">This Week's Highlights</h1>
-                        <p class="text-gray-300 mb-4">Discover the latest trending songs and artists</p>
-                        <button
-                            class="bg-white text-black hover:bg-gray-200 font-medium py-2 px-6 rounded-full flex items-center gap-2 transition">
+                        <p class="text-gray-300 mb-4">Discover the latest trending songs, artists, and etc.</p>
+                        <a href="{{ route('trending') }}"
+                            class="inline-flex bg-white text-black hover:bg-gray-200 font-medium py-2 px-4 rounded-full items-center gap-2 transition">
                             <i class="ti ti-player-play"></i> Listen Now
-                        </button>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -58,11 +57,11 @@
                                 src="https://images.unsplash.com/photo-1577805947697-89e18249d767?q=80&w=100"
                                 alt="">
                         </div>
-                        <p class="mt-4 text-sm text-white/80">Based on your recent listening</p>
-                        <button
-                            class="mt-3 bg-white/20 hover:bg-white/30 text-white font-medium py-2 px-4 rounded-full text-sm transition">
+                        <p class="mt-4 mb-2 text-sm text-white/80">Based on your recent listening</p>
+                        <a href="{{ route('mix_trending') }}"
+                            class="mt-5 bg-white/20 hover:bg-white/30 text-white font-medium py-2 px-4 rounded-full text-sm transition">
                             Play Mix
-                        </button>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -73,7 +72,8 @@
     <section class="mb-12">
         <div class="section-header flex items-center justify-between mb-5">
             <h2 class="section-title text-2xl font-bold">Recently Played</h2>
-            <a href="" class="section-link flex items-center gap-1 hover:text-red-500 transition-colors">
+            <a href="{{ route('recently_played') }}"
+                class="section-link flex items-center gap-1 hover:text-red-500 transition-colors">
                 See All <i class="ti ti-chevron-right text-sm"></i>
             </a>
         </div>
@@ -172,7 +172,8 @@
     <section class="mb-12">
         <div class="section-header flex items-center justify-between mb-5">
             <h2 class="section-title text-2xl font-bold">Popular Artists</h2>
-            <a href="#" class="section-link flex items-center gap-1 hover:text-red-500 transition-colors">
+            <a href="{{ route('artists') }}"
+                class="section-link flex items-center gap-1 hover:text-red-500 transition-colors">
                 See All <i class="ti ti-chevron-right text-sm"></i>
             </a>
         </div>
@@ -234,17 +235,13 @@
             @foreach ($popularArtists as $artist)
                 <div class="scroll-item artist-card" data-aos="fade-up" data-aos-delay="{{ $loop->index * 50 }}">
                     <div class="relative group">
-                        <div
-                            class="overflow-hidden rounded-full aspect-square border-2 border-transparent group-hover:border-red-500 transition-all duration-300">
-                            <img src="{{ $artist['img'] }}" alt="{{ $artist['name'] }}"
-                                class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
-                        </div>
-                        <div class="absolute bottom-0 right-0">
+                        <a href="{{ route('artist.profile', $loop->index + 1) }}" class="block">
                             <div
-                                class="w-10 h-10 bg-red-600 rounded-full flex items-center justify-center transform scale-0 group-hover:scale-100 transition-transform duration-300 shadow-lg">
-                                <i class="ti ti-player-play text-white"></i>
+                                class="overflow-hidden rounded-full aspect-square border-2 border-transparent group-hover:border-red-500 transition-all duration-300">
+                                <img src="{{ $artist['img'] }}" alt="{{ $artist['name'] }}"
+                                    class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
                             </div>
-                        </div>
+                        </a>
                     </div>
                     <h3 class="font-medium mt-3 text-center truncate" title="{{ $artist['name'] }}">{{ $artist['name'] }}
                     </h3>
@@ -257,7 +254,8 @@
     <section class="mb-12">
         <div class="section-header flex items-center justify-between mb-5">
             <h2 class="section-title text-2xl font-bold">Trending Songs</h2>
-            <a href="#" class="section-link flex items-center gap-1 hover:text-red-500 transition-colors">
+            <a href="{{ route('popular-songs') }}"
+                class="section-link flex items-center gap-1 hover:text-red-500 transition-colors">
                 See All <i class="ti ti-chevron-right text-sm"></i>
             </a>
         </div>
@@ -362,7 +360,8 @@
     <section class="mb-12">
         <div class="section-header flex items-center justify-between mb-5">
             <h2 class="section-title text-2xl font-bold">Cover Songs</h2>
-            <a href="#" class="section-link flex items-center gap-1 hover:text-red-500 transition-colors">
+            <a href="{{ route('covers') }}"
+                class="section-link flex items-center gap-1 hover:text-red-500 transition-colors">
                 See All <i class="ti ti-chevron-right text-sm"></i>
             </a>
         </div>
@@ -481,7 +480,8 @@
     <section class="mb-12">
         <div class="section-header flex items-center justify-between mb-5">
             <h2 class="section-title text-2xl font-bold">Popular Composers</h2>
-            <a href="#" class="section-link flex items-center gap-1 hover:text-red-500 transition-colors">
+            <a href="{{ route('composers') }}"
+                class="section-link flex items-center gap-1 hover:text-red-500 transition-colors">
                 See All <i class="ti ti-chevron-right text-sm"></i>
             </a>
         </div>
@@ -534,24 +534,21 @@
 
             @foreach ($composers as $composer)
                 <div class="scroll-item composer-card">
-                    <div class="relative group">
-                        <div
-                            class="overflow-hidden rounded-full border-2 border-gray-700 aspect-square group-hover:border-red-500 transition-all duration-300">
-                            <img src="{{ $composer['img'] }}" alt="{{ $composer['name'] }}"
-                                class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
-                        </div>
-                        <div class="absolute bottom-0 right-0">
+                    <a href="{{ route('composer.profile', $loop->index + 1) }}" class="block">
+                        <div class="relative group">
                             <div
-                                class="w-10 h-10 bg-red-600 rounded-full flex items-center justify-center transform scale-0 group-hover:scale-100 transition-transform duration-300 shadow-lg">
-                                <i class="ti ti-player-play text-white"></i>
+                                class="overflow-hidden rounded-full border-2 border-gray-700 aspect-square group-hover:border-red-500 transition-all duration-300">
+                                <img src="{{ $composer['img'] }}" alt="{{ $composer['name'] }}"
+                                    class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
                             </div>
                         </div>
-                    </div>
-                    <div class="mt-3 text-center">
-                        <h3 class="font-semibold truncate" title="{{ $composer['name'] }}">{{ $composer['name'] }}</h3>
-                        <p class="text-sm text-gray-400 truncate" title="{{ $composer['genre'] }}">
-                            {{ $composer['genre'] }}</p>
-                    </div>
+                        <div class="mt-3 text-center">
+                            <h3 class="font-semibold truncate" title="{{ $composer['name'] }}">{{ $composer['name'] }}
+                            </h3>
+                            <p class="text-sm text-gray-400 truncate" title="{{ $composer['genre'] }}">
+                                {{ $composer['genre'] }}</p>
+                        </div>
+                    </a>
                 </div>
             @endforeach
         </div>
@@ -669,173 +666,6 @@
                             <i class="ti ti-calendar text-red-500 mr-1"></i>
                             <span>Released {{ $release['date'] }}</span>
                         </div>
-                    </div>
-                </div>
-            @endforeach
-        </div>
-    </section>
-
-    <!-- Charts Section - Horizontal Scroll -->
-    <section class="mb-10">
-        <div class="section-header">
-            <h2 class="section-title">Top Charts</h2>
-            <a href="#" class="section-link">See All</a>
-        </div>
-
-        <div class="scroll-container">
-            @php
-                $charts = [
-                    [
-                        'name' => 'Global Top 50',
-                        'desc' => 'The most played tracks on Playlist Music right now',
-                        'img' => 'https://images.unsplash.com/photo-1526218626217-dc65a29bb444?q=80&w=300',
-                        'color' => 'from-blue-600 to-purple-600',
-                    ],
-                    [
-                        'name' => 'Indonesia Top Hits',
-                        'desc' => 'The hottest tracks in Indonesia this week',
-                        'img' => 'https://images.unsplash.com/photo-1587653263995-422546a7a559?q=80&w=300',
-                        'color' => 'from-red-600 to-orange-600',
-                    ],
-                    [
-                        'name' => 'Viral Hits',
-                        'desc' => 'Tracks going viral on social media',
-                        'img' => 'https://images.unsplash.com/photo-1496293455970-f8581aae0e3b?q=80&w=300',
-                        'color' => 'from-green-600 to-emerald-600',
-                    ],
-                    [
-                        'name' => 'Rising Artists',
-                        'desc' => 'Emerging talent making waves',
-                        'img' => 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?q=80&w=300',
-                        'color' => 'from-yellow-500 to-amber-600',
-                    ],
-                    [
-                        'name' => 'Dance & Electronic',
-                        'desc' => 'Top electronic music tracks this month',
-                        'img' => 'https://images.unsplash.com/photo-1571266028997-41675a1b9b1f?q=80&w=300',
-                        'color' => 'from-cyan-600 to-blue-600',
-                    ],
-                ];
-            @endphp
-
-            @foreach ($charts as $chart)
-                <div class="chart-card" style="min-width: 300px; max-width: 350px;">
-                    <div class="bg-gray-800 rounded-xl overflow-hidden">
-                        <div class="relative h-36">
-                            <div class="absolute inset-0 bg-gradient-to-br {{ $chart['color'] }} opacity-60"></div>
-                            <img src="{{ $chart['img'] }}"
-                                class="absolute w-full h-full object-cover mix-blend-overlay opacity-50"
-                                alt="{{ $chart['name'] }}">
-                            <div class="absolute inset-0 flex flex-col justify-between p-4">
-                                <div class="text-xs uppercase tracking-wider">CHART</div>
-                                <div>
-                                    <h3 class="text-xl font-bold">{{ $chart['name'] }}</h3>
-                                    <p class="text-sm opacity-90">{{ $chart['desc'] }}</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="p-3">
-                            @for ($i = 1; $i <= 3; $i++)
-                                <div class="flex items-center py-2 {{ $i < 3 ? 'border-b border-gray-700' : '' }}">
-                                    <div class="w-6 text-center text-gray-400 mr-3">{{ $i }}</div>
-                                    <div class="w-10 h-10 rounded overflow-hidden mr-3">
-                                        <img src="https://picsum.photos/300/300?random={{ rand(100, 999) }}"
-                                            class="w-full h-full object-cover" alt="Chart song">
-                                    </div>
-                                    <div class="min-w-0 flex-grow">
-                                        <div class="text-sm font-medium truncate">Chart Song Title {{ $i }}
-                                        </div>
-                                        <div class="text-xs text-gray-400 truncate">Chart Artist {{ $i }}</div>
-                                    </div>
-                                    <button class="text-gray-400 hover:text-white ml-2">
-                                        <i class="ti ti-player-play"></i>
-                                    </button>
-                                </div>
-                            @endfor
-
-                            <div class="pt-3 flex items-center justify-between">
-                                <button class="text-sm text-blue-400 hover:text-blue-300">View Full Chart</button>
-                                <button class="bg-red-600 hover:bg-red-700 text-white rounded-full p-2">
-                                    <i class="ti ti-player-play"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            @endforeach
-        </div>
-    </section>
-
-    <!-- Curated Mixes Section - Horizontal Scroll -->
-    <section class="mb-10">
-        <div class="section-header">
-            <h2 class="section-title">Made For You</h2>
-        </div>
-
-        <div class="scroll-container">
-            @php
-                $mixes = [
-                    [
-                        'name' => 'Discover Weekly',
-                        'desc' => 'Your personal playlist, updated every Monday',
-                        'color' => 'bg-gradient-to-br from-purple-900 to-blue-900',
-                        'icon' => 'ti-bulb',
-                    ],
-                    [
-                        'name' => 'Daily Mix 1',
-                        'desc' => 'Featuring artists you love and new discoveries',
-                        'color' => 'bg-gradient-to-br from-green-900 to-teal-900',
-                        'icon' => 'ti-vinyl',
-                    ],
-                    [
-                        'name' => 'Daily Mix 2',
-                        'desc' => 'More of what you like',
-                        'color' => 'bg-gradient-to-br from-red-900 to-pink-900',
-                        'icon' => 'ti-vinyl',
-                    ],
-                    [
-                        'name' => 'Release Radar',
-                        'desc' => 'New music from artists you follow',
-                        'color' => 'bg-gradient-to-br from-blue-900 to-indigo-900',
-                        'icon' => 'ti-radar',
-                    ],
-                    [
-                        'name' => 'On Repeat',
-                        'desc' => 'Songs you\'ve been playing most',
-                        'color' => 'bg-gradient-to-br from-amber-900 to-orange-900',
-                        'icon' => 'ti-repeat',
-                    ],
-                    [
-                        'name' => 'Time Capsule',
-                        'desc' => 'Songs from your past that you love',
-                        'color' => 'bg-gradient-to-br from-gray-900 to-slate-800',
-                        'icon' => 'ti-clock',
-                    ],
-                ];
-            @endphp
-
-            @foreach ($mixes as $mix)
-                <div class="music-card" style="width: 180px;">
-                    <div class="aspect-square {{ $mix['color'] }} relative">
-                        <div
-                            class="absolute top-4 right-4 w-10 h-10 bg-white/10 rounded-full flex items-center justify-center">
-                            <i class="ti {{ $mix['icon'] }} text-white"></i>
-                        </div>
-                        <div class="absolute bottom-0 left-0 p-4">
-                            <h3 class="text-lg font-bold">{{ $mix['name'] }}</h3>
-                            <p class="text-xs text-white/80 line-clamp-2">{{ $mix['desc'] }}</p>
-                        </div>
-                    </div>
-
-                    <div class="p-3 flex justify-between items-center">
-                        <button
-                            class="play-button bg-red-600 hover:bg-red-700 w-10 h-10 flex items-center justify-center rounded-full shadow scale-90">
-                            <i class="ti ti-player-play"></i>
-                        </button>
-                        <button class="text-gray-400 hover:text-white">
-                            <i class="ti ti-dots-vertical"></i>
-                        </button>
                     </div>
                 </div>
             @endforeach

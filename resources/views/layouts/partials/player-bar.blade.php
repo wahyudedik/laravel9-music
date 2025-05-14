@@ -17,7 +17,7 @@
     <div class="player-center">
         <div class="player-controls">
             <button class="player-button" id="shuffleButton">
-                <i class="ti ti-arrows-shuffle"></i>
+                <i class="ti ti-arrows-shuffle"></i> 
             </button>
             <button class="player-button" id="prevButton">
                 <i class="ti ti-player-skip-back"></i>
