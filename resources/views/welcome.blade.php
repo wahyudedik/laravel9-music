@@ -125,7 +125,14 @@
                             class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                         </div>
                         <button class="play-song-btn absolute inset-0 flex items-center justify-center"
-                            {{ Auth::guest() ? 'data-login-required=true onclick=window.location.href=\'' . route('login') . '\'' : '' }}>
+                            {{ Auth::guest() ? 'data-login-required=true onclick=window.location.href=\'' . route('login') . '\'' : '' }}
+
+                            data-title="{{ $song->title }}"
+                            data-artist="{{ $artistName }}"
+                            data-cover="{{ $imageUrl }}"
+                            data-id="{{ $song->id }}" data-duration="{{ rand(180, 320) }}"
+
+                            >
                             <div
                                 class="w-12 h-12 bg-red-600 rounded-full flex items-center justify-center transform translate-y-4 opacity-0 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 shadow-lg hover:bg-red-700 hover:scale-105">
                                 <i class="ti ti-player-play text-white text-xl"></i>

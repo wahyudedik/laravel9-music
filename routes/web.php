@@ -21,6 +21,7 @@ use App\Http\Controllers\SongController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserVerificationController;
 use App\Http\Controllers\UserSongController;
+use App\Http\Controllers\UserCartController;
 use App\Http\Controllers\HomeController;
 use App\Models\Role;
 use App\Models\User;
@@ -193,10 +194,15 @@ Route::get('/ojo-dadi-demit', function (Request $request) {
 });
 
 
-//  user play song
 Route::middleware(['auth', 'role:User,Cover Creator,Artist,Composer,Admin,Super Admin', 'verified'])->group(function () {
     Route::get('/play-song/{id}', [SongController::class, 'playSong'])
-        ->name('play-song');
+        ->name('play-showSongng');
+    Route::get('/show-song/{id}', [SongController::class, 'showSong'])
+        ->name('show-song');
+});
+Route::middleware(['auth', 'role:User,Cover Creator,Artist,Composer', 'verified'])->group(function () {
+    Route::get('/cart/{idUser}', [UserCartController::class, 'index'])
+        ->name('cart');
 });
 
 // User Dashboard Routes

@@ -1,5 +1,5 @@
 <!-- Full Screen Player -->
-<div id="fullscreenPlayer" class="fixed inset-0 bg-black/95 z-[100] hidden backdrop-blur-xl flex flex-col">
+<div id="fullscreenPlayer" data-id="" class="fixed inset-0 bg-black/95 z-[100] hidden backdrop-blur-xl flex flex-col">
     <div class="flex justify-between items-center p-5 border-b border-white/10">
         <div class="flex items-center gap-4">
             <button id="closeFullscreenPlayer" class="text-white hover:text-red-500 transition-colors">
@@ -18,31 +18,107 @@
         <!-- Left: Album Art and Song Info -->
 
         <div class="w-full md:w-7/12 flex flex-col items-center justify-center p-6 relative player-view" id="coverView">
+
             <div class="relative w-full aspect-square rounded-lg overflow-auto shadow-2xl mb-6">
 
-                @php
-                    $embedUrl = convert_youtubev2('https://www.youtube.com/shorts/6JKSGOCPkEA');
-                @endphp
-                <iframe class="absolute top-0 left-0 w-full h-full" src="{{ $embedUrl }}" frameborder="0"
+                <iframe class="absolute top-0 left-0 w-full h-full" id="fullscreenPlayerEmbed" src=""
+                    frameborder="0"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                     allowfullscreen>
                 </iframe>
 
-
             </div>
+
+
 
 
         </div>
 
         <!-- Right: Tabs (Lyrics, Related, Up Next) -->
         <div class="w-full md:w-5/12 bg-white/5 flex flex-col">
+
+            <div class="flex flex-wrap px-4 pt-4 pb-2">
+                <div class="flex items-center mr-2 mb-2">
+
+                    <div class="relative inline-block text-left" x-data="{ open: false }">
+                        <button @click="open = !open" type="button"
+                            class="inline-flex justify-center w-full rounded-full border border-gray-300 shadow-sm px-4 py-2 bg-black text-sm font-medium text-gray-50 hover:bg-gray-50 hover:text-gray-800"
+                            id="menu-button" aria-expanded="true" aria-haspopup="true">
+                            Beli Lisensi
+                            <svg class="-mr-1 ml-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </button>
+
+                        <!-- Dropdown panel -->
+                        <div x-show="open" @click.away="open = false" x-transition
+                            class="origin-top-right absolute left-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-50"
+                            role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
+                            <div class="py-1" role="none">
+                                <a href="#" class="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100"
+                                    role="menuitem">Cover</a>
+                                <a href="#" class="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100"
+                                    role="menuitem">Remake</a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="flex items-center mr-2 mb-2">
+
+                    <div class="relative inline-block text-left" x-data="{ open: false }">
+                        <button @click="open = !open" type="button"
+                            class="inline-flex justify-center w-full rounded-full border border-gray-300 shadow-sm px-4 py-2 bg-black text-sm font-medium text-gray-50 hover:bg-gray-50 hover:text-gray-800"
+                            id="menu-button" aria-expanded="true" aria-haspopup="true">
+                            <i class="ti ti-shopping-cart mx-2 mt-1"></i>
+                            Tambah Order
+                            <svg class="-mr-1 ml-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </button>
+
+                        <!-- Dropdown panel -->
+                        <div x-show="open" @click.away="open = false" x-transition
+                            class="origin-top-right absolute left-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-50"
+                            role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
+                            <div class="py-1" role="none">
+                                <a href="#" class="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100"
+                                    role="menuitem">Cover</a>
+                                <a href="#" class="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100"
+                                    role="menuitem">Remake</a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="flex items-center mr-2 mb-2">
+
+                    <div class="relative inline-block text-left">
+                        <button type="button"
+                            class="inline-flex justify-center w-full rounded-full border border-gray-300 shadow-sm px-4 py-2 bg-black text-sm font-medium text-gray-50 hover:bg-gray-50 hover:text-gray-800"
+                            id="menu-button">
+                            Profit Sharing
+                        </button>
+
+
+                    </div>
+
+                </div>
+            </div>
+
             <div class="border-b border-white/10">
                 <div class="flex">
                     <button class="player-tab-btn active" data-tab="lyrics">
-                        Lyrics
+                        Lirik
                     </button>
                     <button class="player-tab-btn" data-tab="related">
-                        Related
+                        Terkait
                     </button>
                     <button class="player-tab-btn" data-tab="queue">
                         Up Next
@@ -54,22 +130,11 @@
                 <!-- Lyrics Tab -->
                 <div class="tab-content active" id="lyrics-tab">
                     <div class="flex justify-between items-center mb-4">
-                        <h3 class="text-lg font-medium">Lyrics</h3>
+                        <h3 class="text-lg font-medium">Lirik Lagu</h3>
                         <span class="text-xs text-gray-400">Source: Lyrics Provider</span>
                     </div>
-                    <div class="lyrics-content space-y-6 text-gray-300">
-                        <p class="lyrics-line">First line of the song lyrics</p>
-                        <p class="lyrics-line">Second line that continues the verse</p>
-                        <p class="lyrics-line">And another line follows this way</p>
-                        <p class="lyrics-line active">This is the currently playing line</p>
-                        <p class="lyrics-line">The lyrics continue as the song plays</p>
-                        <p class="lyrics-line">More lyrics for the current song</p>
-                        <p class="lyrics-line">This is the chorus part perhaps</p>
-                        <p class="lyrics-line">More lyrics for demonstration</p>
-                        <p class="lyrics-line">The song continues with more verses</p>
-                        <p class="lyrics-line">Until it reaches the end eventually</p>
-                        <p class="lyrics-line">Each line represents a lyric line</p>
-                        <p class="lyrics-line">In the actual song being played</p>
+                    <div class="lyrics-content space-y-6 text-gray-300" id="fullscreenPlayerLyrics">
+
                     </div>
                 </div>
 
@@ -102,7 +167,7 @@
                     <div class="space-y-3">
                         <div class="flex items-center gap-3 p-2 bg-white/10 rounded-md">
                             <div class="text-red-500 text-xs font-medium">NOW</div>
-                            <img id="queueCurrentCover" src="https://via.placeholder.com/48" alt="Current song"
+                            <img id="queueCurrentCover" src="https://picsum.photos/48" alt="Current song"
                                 class="w-12 h-12 rounded">
                             <div class="min-w-0 flex-1">
                                 <h4 id="queueCurrentTitle" class="text-sm font-medium truncate">Current Song</h4>
@@ -152,16 +217,19 @@
 
     <!-- Player Controls -->
     <div class="p-6 border-t border-white/10">
-        <div class="max-w-4xl mx-auto">
-
+        <div class="w-full mx-auto">
+            <div></div>
             <div class="flex items-center">
+
                 <div class="flex justify-center items-center">
-                    <img src="https://placehold.co/14" alt="Song Cover"
-                    class="w-16 h-16 rounded-lg object-cover mr-4" />
+                    <img id="fullscreenPlayerCoverAvatar" src="https://placehold.co/14" alt="Song Cover"
+                        class="w-16 h-16 rounded-lg object-cover mr-4" />
                 </div>
+
                 <div class="flex flex-col">
-                    <h2 class="text-xl font-semibold text-gray-100">Song Title</h2>
-                    <p class="text-gray-300 text-sm mt-1">Artist Name</p>
+                    <div id="fullscreenPlayerAlbum"></div>
+                    <h2 id="fullscreenPlayerSongTitle" class="text-xl font-semibold text-gray-100">Song Title </h2>
+                    <p id="fullscreenPlayerArtist" class="text-gray-300 text-sm">Artist Name</p>
                 </div>
 
             </div>
@@ -185,8 +253,7 @@
     <div class="hidden w-full md:w-7/12 flex-col items-center justify-center p-6 relative player-view" id="videoView">
         <div class="relative w-full max-w-xl aspect-video rounded-lg overflow-hidden shadow-2xl mb-6">
             <div class="absolute inset-0 bg-black flex items-center justify-center">
-                <img src="https://via.placeholder.com/640x360" alt="Video thumbnail"
-                    class="w-full h-full object-cover">
+                <img src="https://picsum.photos/640/360" alt="Video thumbnail" class="w-full h-full object-cover">
                 <div class="absolute inset-0 flex items-center justify-center">
                     <span class="text-white/50">No video available</span>
                 </div>
@@ -196,3 +263,11 @@
     </div>
 </div>
 
+@push('script')
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+
+        });
+    </script>
+@endpush
