@@ -1,4 +1,7 @@
 <!-- Full Screen Player -->
+@php
+$role = Auth::user()->getRoleNames()->first();
+@endphp
 <div id="fullscreenPlayer" data-id="" class="fixed inset-0 bg-black/95 z-[100] hidden backdrop-blur-xl flex flex-col">
     <div class="flex justify-between items-center p-5 border-b border-white/10">
         <div class="flex items-center gap-4">
@@ -57,10 +60,15 @@
                             class="origin-top-right absolute left-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-50"
                             role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
                             <div class="py-1" role="none">
-                                <a href="#" class="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100"
-                                    role="menuitem">Cover</a>
-                                <a href="#" class="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100"
-                                    role="menuitem">Remake</a>
+
+                                @if ($role == 'Artist' || $role == 'Cover' || $role == 'Composer')
+                                    <a href="#" class="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100"
+                                        role="menuitem">Cover</a>
+                                @endif
+                                @if ($role == 'Artist' || $role == 'Composer')
+                                    <a href="#" class="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100"
+                                        role="menuitem">Remake</a>
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -87,10 +95,14 @@
                             class="origin-top-right absolute left-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-50"
                             role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
                             <div class="py-1" role="none">
-                                <a href="#" class="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100"
-                                    role="menuitem">Cover</a>
-                                <a href="#" class="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100"
-                                    role="menuitem">Remake</a>
+                                @if ($role == 'Artist' || $role == 'Cover' || $role == 'Composer')
+                                    <a href="#" class="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100"
+                                        role="menuitem">Cover</a>
+                                @endif
+                                @if ($role == 'Artist' || $role == 'Composer')
+                                    <a href="#" class="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100"
+                                        role="menuitem">Remake</a>
+                                @endif
                             </div>
                         </div>
                     </div>
