@@ -1,6 +1,6 @@
 <!-- Full Screen Player -->
 @php
-$role = Auth::user()->getRoleNames()->first();
+$role =  Auth::user() ? Auth::user()->getRoleNames()->first() : '';
 @endphp
 <div id="fullscreenPlayer" data-id="" class="fixed inset-0 bg-black/95 z-[100] hidden backdrop-blur-xl flex flex-col">
     <div class="flex justify-between items-center p-5 border-b border-white/10">
