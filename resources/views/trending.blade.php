@@ -3,7 +3,7 @@
 @section('content')
     <!-- Explore Navigation -->
     <div class="mb-8">
-        <h1 class="text-3xl font-bold mb-6">Explore</h1>
+        <h1 class="text-3xl font-bold mb-6">Trending</h1>
 
         <div class="category-nav mb-6">
             <div class="category-pill active">All</div>

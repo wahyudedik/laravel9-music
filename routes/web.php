@@ -60,6 +60,14 @@ Route::get('/run-optimize', function () {
 
 // Route dibuat frontend Landing Page atau Home
 Route::get('/', [HomeController::class, 'welcome'])->name('welcome');
+Route::get('/mix-trending', function () {
+    return view('mix_trending');
+})->name('mix_trending');
+
+Route::get('/recently-played', function () {
+    return view('recently_played');
+})->name('recently_played');
+
 Route::get('/trending', function () {
     return view('trending');
 })->name('trending');
@@ -112,12 +120,21 @@ Route::get('/audio/{filename}', function ($filename) {
 Route::get('/artists', function () {
     return view('artists');
 })->name('artists');
+Route::get('/artist/{id}', function ($id) {
+    return view('artist-profile', compact('id'));
+})->name('artist.profile');
 Route::get('/composers', function () {
     return view('composers');
 })->name('composers');
+Route::get('/composer/{id}', function ($id) {
+    return view('composer-profile', compact('id'));
+})->name('composer.profile');
 Route::get('/covers', function () {
     return view('covers');
 })->name('covers');
+Route::get('/cover/{id}', function ($id) {
+    return view('cover-profile', compact('id'));
+})->name('cover.profile');
 Route::get('/favorite-songs', function () {
     return view('favorite-songs');
 })->name('favorite-songs');
