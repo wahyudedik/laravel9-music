@@ -13,7 +13,7 @@
     --sidebar-width: 250px;
     --sidebar-width-collapsed: 72px;
     --header-height: 64px;
-    --player-height: 72px;
+    --player-height: 0px;
 }
 
 body {
@@ -665,7 +665,7 @@ body.sidebar-collapsed .main-content {
     transition: all 0.2s ease;
 }
 
-.section-link:hover {
+.section-link:hover { 
     color: #e62117;
 }
 
@@ -686,4 +686,24 @@ body.sidebar-collapsed .main-content {
     animation: fadeInUp 0.5s ease forwards;
     animation-delay: calc(var(--index) * 0.1s);
     opacity: 0;
+}
+
+/* Mix trending page specific styles */
+.group:hover .ti-dots-vertical {
+    color: var(--color-text);
+}
+
+.group {
+    cursor: pointer;
+}
+
+/* Animation for play button hover */
+@keyframes scaleIn {
+    0% { transform: scale(0.8); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+.group:hover .ti-player-play,
+.relative:hover .ti-player-play {
+    animation: scaleIn 0.2s ease forwards;
 }

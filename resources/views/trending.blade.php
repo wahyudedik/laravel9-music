@@ -3,7 +3,7 @@
 @section('content')
     <!-- Explore Navigation -->
     <div class="mb-8">
-        <h1 class="text-3xl font-bold mb-6">Explore</h1>
+        <h1 class="text-3xl font-bold mb-6">Trending</h1>
 
         <div class="category-nav mb-6">
             <div class="category-pill active">All</div>
@@ -43,7 +43,7 @@
                             class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                         </div>
                         <button class="play-song-btn absolute inset-0 flex items-center justify-center"
-                            @guest data-login-required="true" onclick="window.location.href='{{ route('login') }}'" @endguest
+                        {{ Auth::guest() ? 'data-login-required=true onclick=window.location.href=\''.route('login').'\'' : '' }}
                             data-title="Trending Song #{{ $i }}"
                             data-artist="Trending Artist #{{ $i }}"
                             data-cover="https://picsum.photos/300/300?random={{ $i + 300 }}"

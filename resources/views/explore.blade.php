@@ -18,7 +18,7 @@
     <section class="mb-12">
         <div class="section-header flex items-center justify-between mb-5">
             <h2 class="section-title text-2xl font-bold">New Artists</h2>
-            <a href="#" class="section-link flex items-center gap-1 hover:text-red-500 transition-colors">
+            <a href="{{ route('artists') }}" class="section-link flex items-center gap-1 hover:text-red-500 transition-colors">
                 See all <i class="ti ti-chevron-right text-sm"></i>
             </a>
         </div>
@@ -67,7 +67,7 @@
     <section class="mb-12">
         <div class="section-header flex items-center justify-between mb-5">
             <h2 class="section-title text-2xl font-bold">New Songs</h2>
-            <a href="#" class="section-link flex items-center gap-1 hover:text-red-500 transition-colors">
+            <a href="{{ route('popular-songs') }}" class="section-link flex items-center gap-1 hover:text-red-500 transition-colors">
                 See all <i class="ti ti-chevron-right text-sm"></i>
             </a>
         </div>
@@ -86,7 +86,7 @@
                             class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                         </div>
                         <button class="play-song-btn absolute inset-0 flex items-center justify-center"
-                            @guest data-login-required="true" onclick="window.location.href='{{ route('login') }}'" @endguest
+                        {{ Auth::guest() ? 'data-login-required=true onclick=window.location.href=\''.route('login').'\'' : '' }}
                             data-title="New Song #{{ $i }}" data-artist="Artist #{{ $i }}"
                             data-cover="https://picsum.photos/300/300?random={{ $i + 400 }}"
                             data-id="{{ $i + 200 }}" data-duration="{{ rand(180, 320) }}">
@@ -116,7 +116,7 @@
     <section class="mb-12">
         <div class="section-header flex items-center justify-between mb-5">
             <h2 class="section-title text-2xl font-bold">New Composers</h2>
-            <a href="#" class="section-link flex items-center gap-1 hover:text-red-500 transition-colors">
+            <a href="{{ route('composers') }}" class="section-link flex items-center gap-1 hover:text-red-500 transition-colors">
                 See all <i class="ti ti-chevron-right text-sm"></i>
             </a>
         </div>
@@ -199,7 +199,7 @@
     <section class="mb-12">
         <div class="section-header flex items-center justify-between mb-5">
             <h2 class="section-title text-2xl font-bold">New Covers</h2>
-            <a href="#" class="section-link flex items-center gap-1 hover:text-red-500 transition-colors">
+            <a href="{{ route('covers') }}" class="section-link flex items-center gap-1 hover:text-red-500 transition-colors">
                 See all <i class="ti ti-chevron-right text-sm"></i>
             </a>
         </div>
@@ -290,115 +290,6 @@
                     </div>
                 </div>
             @endforeach
-        </div>
-    </section>
-
-    <!-- Top New Releases Section -->
-    <section class="mb-12">
-        <div class="section-header flex items-center justify-between mb-6">
-            <h2 class="section-title text-2xl font-bold">Top New Releases</h2>
-            <div class="flex items-center space-x-2">
-                <button class="text-sm bg-gray-800 hover:bg-gray-700 text-white py-1.5 px-4 rounded-full transition">
-                    Play all
-                </button>
-                <a href="#" class="section-link flex items-center gap-1 hover:text-red-500 transition-colors">
-                    See all <i class="ti ti-chevron-right text-sm"></i>
-                </a>
-            </div>
-        </div>
-
-        <div class="bg-gray-800/30 backdrop-blur-sm rounded-lg overflow-hidden border border-gray-700/50">
-            <div class="p-1">
-                <ul class="divide-y divide-gray-700/50">
-                    @for ($i = 1; $i <= 10; $i++)
-                        <li class="group hover:bg-gray-700/50 transition-all duration-300 rounded-md" data-aos="fade-up"
-                            data-aos-delay="{{ $i * 30 }}">
-                            <div class="flex items-center px-4 py-3">
-                                <div class="text-gray-400 w-6 text-center mr-6">{{ $i }}</div>
-                                <div class="relative flex-shrink-0 mr-4">
-                                    <img src="https://picsum.photos/300/300?random={{ $i + 9000 }}"
-                                        class="w-12 h-12 rounded object-cover transition-transform duration-300 group-hover:scale-105"
-                                        alt="New Release #{{ $i }}">
-                                    <button
-                                        class="play-song-btn absolute inset-0 bg-red-600/80 rounded opacity-0 group-hover:opacity-100 flex items-center justify-center transition-all duration-300"
-                                        data-title="New Release #{{ $i }}"
-                                        data-artist="Artist #{{ $i }}"
-                                        data-cover="https://picsum.photos/300/300?random={{ $i + 9000 }}"
-                                        data-id="{{ $i + 500 }}" data-duration="{{ rand(180, 320) }}">
-                                        <i class="ti ti-player-play text-white"></i>
-                                    </button>
-                                </div>
-                                <div class="min-w-0 flex-1 pr-4">
-                                    <p
-                                        class="text-sm font-medium text-white truncate group-hover:text-red-400 transition-colors duration-300">
-                                        New Release #{{ $i }}
-                                    </p>
-                                    <div class="flex items-center">
-                                        <p class="text-xs text-gray-400 truncate">Artist #{{ $i }}</p>
-                                        <span
-                                            class="inline-flex items-center ml-2 bg-red-600/20 text-red-400 text-xs px-1.5 py-0.5 rounded">
-                                            <i class="ti ti-calendar text-xs mr-0.5"></i> NEW
-                                        </span>
-                                    </div>
-                                </div>
-                                <div class="flex items-center gap-2 text-gray-400">
-                                    <span class="text-xs">{{ rand(2, 5) }}:{{ sprintf('%02d', rand(0, 59)) }}</span>
-                                    @auth
-                                        <button class="p-2 hover:text-red-500 transition-colors">
-                                            <i class="ti ti-heart"></i>
-                                        </button>
-                                    @endauth
-                                    <div class="relative">
-                                        <button class="p-2 hover:text-white transition-colors"
-                                            onclick="toggleMenu('releasesMenu{{ $i }}')">
-                                            <i class="ti ti-dots-vertical"></i>
-                                        </button>
-                                        <div class="absolute right-0 mt-2 w-48 bg-gray-800 rounded-lg shadow-lg p-2 hidden z-20"
-                                            id="releasesMenu{{ $i }}">
-                                            <ul class="space-y-1">
-                                                @auth
-                                                    <li>
-                                                        <a href="#"
-                                                            class="flex items-center gap-2 text-gray-400 hover:text-white text-sm p-2 rounded hover:bg-gray-700">
-                                                            <i class="ti ti-playlist"></i> Add to playlist
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="#"
-                                                            class="flex items-center gap-2 text-gray-400 hover:text-white text-sm p-2 rounded hover:bg-gray-700">
-                                                            <i class="ti ti-heart"></i> Save to library
-                                                        </a>
-                                                    </li>
-                                                @endauth
-                                                <li>
-                                                    <a href="#"
-                                                        class="flex items-center gap-2 text-gray-400 hover:text-white text-sm p-2 rounded hover:bg-gray-700">
-                                                        <i class="ti ti-share"></i> Share
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a href="#"
-                                                        class="flex items-center gap-2 text-gray-400 hover:text-white text-sm p-2 rounded hover:bg-gray-700">
-                                                        <i class="ti ti-music"></i> Go to artist
-                                                    </a>
-                                                </li>
-                                                @guest
-                                                    <li>
-                                                        <a href="{{ route('login') }}"
-                                                            class="flex items-center gap-2 text-gray-400 hover:text-white text-sm p-2 rounded hover:bg-gray-700">
-                                                            <i class="ti ti-login"></i> Sign in for more options
-                                                        </a>
-                                                    </li>
-                                                @endguest
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                    @endfor
-                </ul>
-            </div>
         </div>
     </section>
 @endsection

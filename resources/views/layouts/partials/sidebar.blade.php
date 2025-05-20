@@ -22,6 +22,23 @@
                 <i class="ti ti-compass"></i>
                 <span>Explore</span>
             </a>
+            @auth
+                <a href="{{ route('cart', ['idUser' => Auth::id()]) }}"
+                    class="nav-item relative {{ Request::is('cart') ? 'active' : '' }}">
+                    <i class="ti ti-shopping-cart"></i>
+                    <div class="relative">
+                        <div>Order</div>
+                        <span
+                        class="absolute top-0 -right-8 inline-flex items-center justify-center px-1.5 py-0.5 pb-1 text-xs font-bold leading-none text-white bg-red-600 rounded-full">
+                        0
+                    </span>
+
+                    </div>
+
+                    <!-- Red badge counter -->
+                </a>
+            @endauth
+
         </div>
 
         @auth

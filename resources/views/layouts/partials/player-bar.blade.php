@@ -6,7 +6,7 @@
 
     <div class="player-left">
         <div class="player-thumbnail">
-            <img src="https://via.placeholder.com/48" id="playerCover" alt="Music cover">
+            <img src="https://picsum.photos/48" id="playerCover" alt="Music cover">
         </div>
         <div class="player-details">
             <div class="player-song-title" id="playerTitle">Select a song</div>
@@ -17,7 +17,7 @@
     <div class="player-center">
         <div class="player-controls">
             <button class="player-button" id="shuffleButton">
-                <i class="ti ti-arrows-shuffle"></i>
+                <i class="ti ti-arrows-shuffle"></i> 
             </button>
             <button class="player-button" id="prevButton">
                 <i class="ti ti-player-skip-back"></i>

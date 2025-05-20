@@ -1,3 +1,4 @@
+
 <header class="music-header">
     <div class="header-left">
         <button class="mobile-menu-toggle" id="mobileMenuToggle">
@@ -50,19 +51,19 @@
                             @php
                                 $role = Auth::user()->getRoleNames()->first();
                             @endphp
-                            
+
                             @if ($role == 'Admin' || $role == 'Super Admin')
-                                <a href="{{ route('admin.dashboard') }}" 
+                                <a href="{{ route('admin.dashboard') }}"
                                    class="w-full text-left flex items-center gap-2 text-gray-400 hover:text-white text-sm py-1">
                                     <i class="ti ti-dashboard"></i> Dashboard
                                 </a>
                             @else
-                                <a href="{{ route('user.dashboard') }}" 
+                                <a href="{{ route('user.dashboard') }}"
                                    class="w-full text-left flex items-center gap-2 text-gray-400 hover:text-white text-sm py-1">
                                     <i class="ti ti-dashboard"></i> Dashboard
                                 </a>
                             @endif
-                            
+
                             <form action="{{ url('logout/' . Auth::user()->getRoleNames()->first()) }}" method="POST">
                                 @csrf
                                 <button type="submit"
@@ -83,12 +84,12 @@
     document.addEventListener('DOMContentLoaded', function() {
         const userMenuButton = document.getElementById('userMenuButton');
         const userDropdown = document.getElementById('userDropdown');
-        
+
         if (userMenuButton && userDropdown) {
             userMenuButton.addEventListener('click', function() {
                 userDropdown.classList.toggle('hidden');
             });
-            
+
             // Close dropdown when clicking outside
             document.addEventListener('click', function(event) {
                 if (!userMenuButton.contains(event.target) && !userDropdown.contains(event.target)) {

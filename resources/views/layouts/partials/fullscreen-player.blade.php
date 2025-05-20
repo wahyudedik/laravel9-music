@@ -1,113 +1,135 @@
 <!-- Full Screen Player -->
-<div id="fullscreenPlayer" class="fixed inset-0 bg-black/95 z-[100] hidden backdrop-blur-xl flex flex-col">
+@php
+$role =  Auth::user() ? Auth::user()->getRoleNames()->first() : '';
+@endphp
+<div id="fullscreenPlayer" data-id="" class="fixed inset-0 bg-black/95 z-[100] hidden backdrop-blur-xl flex flex-col">
     <div class="flex justify-between items-center p-5 border-b border-white/10">
         <div class="flex items-center gap-4">
             <button id="closeFullscreenPlayer" class="text-white hover:text-red-500 transition-colors">
                 <i class="ti ti-chevron-down text-2xl"></i>
             </button>
             <div>
-                <h2 class="text-lg font-medium">Now Playing</h2>
-                <p class="text-sm text-gray-400" id="fullscreenSource">From: Your Library</p>
+                <h2 class="text-lg font-medium">Dimainkan Saat ini</h2>
+                {{-- <p class="text-sm text-gray-400" id="fullscreenSource">From: Your Library</p> --}}
             </div>
         </div>
         <div class="flex items-center gap-4">
-            <button class="player-button hover:text-red-500" id="castButton" title="Cast to device">
-                <i class="ti ti-cast text-xl"></i>
-            </button>
-            <div class="relative">
-                <button class="player-button hover:text-red-500" id="moreOptionsButton" title="More options">
-                    <i class="ti ti-dots-vertical text-xl"></i>
-                </button>
-                <div class="absolute right-0 mt-2 w-60 bg-gray-800 rounded-lg shadow-lg p-2 hidden z-20" id="playerOptionsMenu">
-                    <ul class="space-y-1">
-                        <li>
-                            <a href="#" class="flex items-center gap-2 text-gray-400 hover:text-white text-sm p-2 rounded hover:bg-gray-700">
-                                <i class="ti ti-share"></i> Share song
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#" class="flex items-center gap-2 text-gray-400 hover:text-white text-sm p-2 rounded hover:bg-gray-700">
-                                <i class="ti ti-download"></i> Download for offline
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#" class="flex items-center gap-2 text-gray-400 hover:text-white text-sm p-2 rounded hover:bg-gray-700">
-                                <i class="ti ti-info-circle"></i> View song details
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#" class="flex items-center gap-2 text-gray-400 hover:text-white text-sm p-2 rounded hover:bg-gray-700">
-                                <i class="ti ti-report"></i> Report issue
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
         </div>
     </div>
 
-    <div class="flex-1 flex flex-col md:flex-row overflow-hidden">
+    <div class="flex-1 flex flex-col md:flex-row overflow-auto">
         <!-- Left: Album Art and Song Info -->
+
         <div class="w-full md:w-7/12 flex flex-col items-center justify-center p-6 relative player-view" id="coverView">
-            <div class="relative w-full max-w-md aspect-square rounded-lg overflow-hidden shadow-2xl mb-6">
-                <img id="fullscreenCover" src="https://via.placeholder.com/480" alt="Album cover"
-                    class="w-full h-full object-cover album-rotating">
-                <div class="absolute inset-0 bg-black/20 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity">
-                    <div class="flex gap-4">
-                        <button class="bg-red-600 hover:bg-red-700 w-14 h-14 rounded-full flex items-center justify-center shadow-lg transition-all hover:scale-110">
-                            <i class="ti ti-player-play text-white text-2xl"></i>
-                        </button>
-                    </div>
-                </div>
+
+            <div class="relative w-full aspect-square rounded-lg overflow-auto shadow-2xl mb-6">
+
+                <iframe class="absolute top-0 left-0 w-full h-full" id="fullscreenPlayerEmbed" src=""
+                    frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowfullscreen>
+                </iframe>
+
             </div>
 
-            <div class="text-center mb-5 w-full max-w-md">
-                <h2 id="fullscreenTitle" class="text-2xl font-bold truncate">Song Title</h2>
-                <p id="fullscreenArtist" class="text-gray-400 truncate">Artist Name</p>
-                <p id="fullscreenAlbum" class="text-gray-500 text-sm mt-1">Album Name • 2023</p>
-            </div>
 
-            <div class="flex items-center gap-6 mt-2 w-full max-w-md justify-center">
-                <button class="player-action-btn" id="addToPlaylistButton" title="Add to playlist">
-                    <i class="ti ti-playlist-add text-xl"></i>
-                </button>
-                <button class="player-action-btn" id="fullscreenLikeButton" title="Add to favorites">
-                    <i class="ti ti-heart text-xl"></i>
-                </button>
-                <button class="player-action-btn" id="remakeButton" title="Remake">
-                    <i class="ti ti-refresh text-xl"></i>
-                </button>
-                <button class="player-action-btn" id="downloadButton" title="Download">
-                    <i class="ti ti-download text-xl"></i>
-                </button>
-                <button class="player-action-btn" id="shareButton" title="Share">
-                    <i class="ti ti-share text-xl"></i>
-                </button>
-            </div>
-            
-            <!-- View selector buttons -->
-            <div class="flex gap-3 mt-8">
-                <button class="player-view-btn active" data-view="cover" title="Cover view">
-                    <i class="ti ti-disc text-xl"></i>
-                </button>
-                <button class="player-view-btn" data-view="visualizer" title="Visualizer">
-                    <i class="ti ti-waveform text-xl"></i>
-                </button>
-                <button class="player-view-btn" data-view="video" title="Video">
-                    <i class="ti ti-video text-xl"></i>
-                </button>
-            </div>
+
+
         </div>
 
         <!-- Right: Tabs (Lyrics, Related, Up Next) -->
         <div class="w-full md:w-5/12 bg-white/5 flex flex-col">
+
+            <div class="flex flex-wrap px-4 pt-4 pb-2">
+                <div class="flex items-center mr-2 mb-2">
+
+                    <div class="relative inline-block text-left" x-data="{ open: false }">
+                        <button @click="open = !open" type="button"
+                            class="inline-flex justify-center w-full rounded-full border border-gray-300 shadow-sm px-4 py-2 bg-black text-sm font-medium text-gray-50 hover:bg-gray-50 hover:text-gray-800"
+                            id="menu-button" aria-expanded="true" aria-haspopup="true">
+                            Beli
+                            <svg class="-mr-1 ml-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </button>
+
+                        <!-- Dropdown panel -->
+                        <div x-show="open" @click.away="open = false" x-transition
+                            class="origin-top-right absolute left-0 mt-2 w-56 rounded-lg shadow-lg bg-black ring-1 ring-gray-600 ring-opacity-4 focus:outline-none z-50"
+                            role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
+                            <div class="py-1" role="none">
+                                @if ($role == 'Artist' || $role == 'Cover' || $role == 'Composer')
+                                    <a href="{{ route('payment', ['method' => 'buynow','idUser' => Auth::id()]) }}" class="text-white block px-4 py-2 text-sm hover:bg-gray-800 hover:text-white"
+                                        role="menuitem">Lisensi Cover</a>
+                                @endif
+                                @if ($role == 'Artist' || $role == 'Composer')
+                                    <a href="{{ route('payment', ['method' => 'buynow','idUser' => Auth::id()]) }}" class="text-white block px-4 py-2 text-sm hover:bg-gray-800 hover:text-white"
+                                        role="menuitem">Lisensi Remake</a>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="flex items-center mr-2 mb-2">
+
+                    <div class="relative inline-block text-left" x-data="{ open: false }">
+                        <button @click="open = !open" type="button"
+                            class="inline-flex justify-center w-full rounded-full border border-gray-300 shadow-sm px-4 py-2 bg-black text-sm font-medium text-gray-50 hover:bg-gray-50 hover:text-gray-800"
+                            id="menu-button" aria-expanded="true" aria-haspopup="true">
+                            <i class="ti ti-shopping-cart mx-2 mt-1"></i>
+                            Tambah Order
+                            <svg class="-mr-1 ml-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </button>
+
+                        <!-- Dropdown panel -->
+                        <div x-show="open" @click.away="open = false" x-transition
+                            class="origin-top-right absolute left-0 mt-2 w-56 rounded-lg shadow-lg bg-black ring-1 ring-gray-600 ring-opacity-4 focus:outline-none z-50"
+                            role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
+                            <div class="py-1" role="none">
+                                @if ($role == 'Artist' || $role == 'Cover' || $role == 'Composer')
+                                    <a href="{{ route('cart', ['idUser' => Auth::id()]) }}" class="text-white block px-4 py-2 text-sm hover:bg-gray-800 hover:text-white"
+                                        role="menuitem">Lisensi Cover</a>
+                                @endif
+                                @if ($role == 'Artist' || $role == 'Composer')
+                                    <a href="{{ route('cart', ['idUser' => Auth::id()]) }}" class="text-white block px-4 py-2 text-sm hover:bg-gray-800 hover:text-white"
+                                        role="menuitem">Lisensi Remake</a>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="flex items-center mr-2 mb-2">
+
+                    <div class="relative inline-block text-left">
+                        <button type="button"
+                            class="inline-flex justify-center w-full rounded-full border border-gray-300 shadow-sm px-4 py-2 bg-black text-sm font-medium text-gray-50 hover:bg-gray-50 hover:text-gray-800"
+                            id="menu-button">
+                            Profit Sharing
+                        </button>
+
+
+                    </div>
+
+                </div>
+            </div>
+
             <div class="border-b border-white/10">
                 <div class="flex">
                     <button class="player-tab-btn active" data-tab="lyrics">
-                        Lyrics
+                        Lirik
                     </button>
                     <button class="player-tab-btn" data-tab="related">
-                        Related
+                        Terkait
                     </button>
                     <button class="player-tab-btn" data-tab="queue">
                         Up Next
@@ -119,22 +141,11 @@
                 <!-- Lyrics Tab -->
                 <div class="tab-content active" id="lyrics-tab">
                     <div class="flex justify-between items-center mb-4">
-                        <h3 class="text-lg font-medium">Lyrics</h3>
+                        <h3 class="text-lg font-medium">Lirik Lagu</h3>
                         <span class="text-xs text-gray-400">Source: Lyrics Provider</span>
                     </div>
-                    <div class="lyrics-content space-y-6 text-gray-300">
-                        <p class="lyrics-line">First line of the song lyrics</p>
-                        <p class="lyrics-line">Second line that continues the verse</p>
-                        <p class="lyrics-line">And another line follows this way</p>
-                        <p class="lyrics-line active">This is the currently playing line</p>
-                        <p class="lyrics-line">The lyrics continue as the song plays</p>
-                        <p class="lyrics-line">More lyrics for the current song</p>
-                        <p class="lyrics-line">This is the chorus part perhaps</p>
-                        <p class="lyrics-line">More lyrics for demonstration</p>
-                        <p class="lyrics-line">The song continues with more verses</p>
-                        <p class="lyrics-line">Until it reaches the end eventually</p>
-                        <p class="lyrics-line">Each line represents a lyric line</p>
-                        <p class="lyrics-line">In the actual song being played</p>
+                    <div class="lyrics-content space-y-6 text-gray-300" id="fullscreenPlayerLyrics">
+
                     </div>
                 </div>
 
@@ -144,8 +155,8 @@
                     <div class="space-y-3">
                         @for ($i = 1; $i <= 10; $i++)
                             <div class="flex items-center gap-3 p-2 rounded-md hover:bg-white/5 transition-colors">
-                                <img src="https://picsum.photos/80/80?random={{ $i }}"
-                                    alt="Related song" class="w-12 h-12 rounded">
+                                <img src="https://picsum.photos/80/80?random={{ $i }}" alt="Related song"
+                                    class="w-12 h-12 rounded">
                                 <div class="min-w-0 flex-1">
                                     <h4 class="text-sm font-medium truncate">Related Song {{ $i }}</h4>
                                     <p class="text-xs text-gray-400 truncate">Artist {{ $i }}</p>
@@ -167,8 +178,8 @@
                     <div class="space-y-3">
                         <div class="flex items-center gap-3 p-2 bg-white/10 rounded-md">
                             <div class="text-red-500 text-xs font-medium">NOW</div>
-                            <img id="queueCurrentCover" src="https://via.placeholder.com/48"
-                                alt="Current song" class="w-12 h-12 rounded">
+                            <img id="queueCurrentCover" src="https://picsum.photos/48" alt="Current song"
+                                class="w-12 h-12 rounded">
                             <div class="min-w-0 flex-1">
                                 <h4 id="queueCurrentTitle" class="text-sm font-medium truncate">Current Song</h4>
                                 <p id="queueCurrentArtist" class="text-xs text-gray-400 truncate">Current Artist</p>
@@ -189,7 +200,8 @@
                             @endphp
 
                             @foreach ($queueSongs as $index => $song)
-                                <div class="flex items-center gap-3 p-2 rounded-md hover:bg-white/5 transition-colors queue-song-item">
+                                <div
+                                    class="flex items-center gap-3 p-2 rounded-md hover:bg-white/5 transition-colors queue-song-item">
                                     <div class="text-gray-500 text-xs w-6 text-center">{{ $index + 1 }}</div>
                                     <img src="https://picsum.photos/80/80?random={{ $index + 20 }}"
                                         alt="{{ $song['title'] }}" class="w-12 h-12 rounded">
@@ -216,82 +228,57 @@
 
     <!-- Player Controls -->
     <div class="p-6 border-t border-white/10">
-        <div class="max-w-4xl mx-auto">
-            <div class="flex items-center gap-4">
-                <span id="fullscreenCurrentTime" class="text-sm text-gray-400">0:00</span>
-                <div id="fullscreenProgressContainer"
-                    class="flex-1 relative h-2 bg-white/10 rounded-full cursor-pointer">
-                    <div id="fullscreenProgressBar" class="absolute h-full bg-red-600 rounded-full"
-                        style="width: 30%"></div>
-                    <div id="fullscreenProgressHandle" class="absolute w-4 h-4 bg-white rounded-full -mt-1"
-                        style="left: 30%"></div>
+        <div class="w-full mx-auto">
+            <div></div>
+            <div class="flex items-center">
+
+                <div class="flex justify-center items-center">
+                    <img id="fullscreenPlayerCoverAvatar" src="https://placehold.co/14" alt="Song Cover"
+                        class="w-16 h-16 rounded-lg object-cover mr-4" />
                 </div>
-                <span id="fullscreenTotalTime" class="text-sm text-gray-400">3:30</span>
+
+                <div class="flex flex-col">
+                    <div id="fullscreenPlayerAlbum"></div>
+                    <h2 id="fullscreenPlayerSongTitle" class="text-xl font-semibold text-gray-100">Song Title </h2>
+                    <p id="fullscreenPlayerArtist" class="text-gray-300 text-sm">Artist Name</p>
+                </div>
+
             </div>
 
-            <div class="flex flex-wrap items-center justify-between mt-4 gap-4">
-                <div class="flex items-center">
-                    <button class="player-button text-gray-300 hover:text-white" id="fullscreenMuteButton">
-                        <i class="ti ti-volume"></i>
-                    </button>
-                    <input type="range" min="0" max="100" value="80" class="volume-slider mx-2"
-                        id="fullscreenVolumeSlider">
-                </div>
 
-                <div class="flex items-center justify-center gap-6">
-                    <button class="player-button text-gray-300 hover:text-white" id="fullscreenShuffleButton">
-                        <i class="ti ti-arrows-shuffle text-xl"></i>
-                    </button>
-                    <button class="player-button text-gray-300 hover:text-white" id="fullscreenPrevButton">
-                        <i class="ti ti-player-skip-back text-2xl"></i>
-                    </button>
-                    <button
-                        class="player-button main bg-white text-black hover:bg-gray-200 rounded-full w-14 h-14 flex items-center justify-center"
-                        id="fullscreenPlayButton">
-                        <i class="ti ti-player-pause text-2xl"></i>
-                    </button>
-                    <button class="player-button text-gray-300 hover:text-white" id="fullscreenNextButton">
-                        <i class="ti ti-player-skip-forward text-2xl"></i>
-                    </button>
-                    <button class="player-button text-gray-300 hover:text-white" id="fullscreenRepeatButton">
-                        <i class="ti ti-repeat text-xl"></i>
-                    </button>
-                </div>
-
-                <div>
-                    <!-- Additional controls can be added here -->
-                </div>
-            </div>
         </div>
+
     </div>
-    
+
     <!-- Additional views (initially hidden) -->
-    <div class="hidden w-full md:w-7/12 flex-col items-center justify-center p-6 relative player-view" id="visualizerView">
-        <div class="relative w-full max-w-md aspect-square rounded-lg overflow-hidden shadow-2xl mb-6 bg-gradient-to-br from-purple-900 to-blue-900">
+    <div class="hidden w-full md:w-7/12 flex-col items-center justify-center p-6 relative player-view"
+        id="visualizerView">
+        <div
+            class="relative w-full max-w-md aspect-square rounded-lg overflow-hidden shadow-2xl mb-6 bg-gradient-to-br from-purple-900 to-blue-900">
             <div class="absolute inset-0 flex items-center justify-center">
                 <canvas id="audioVisualizer" class="w-full h-full"></canvas>
             </div>
         </div>
-        
-        <div class="text-center mb-5 w-full max-w-md">
-            <h2 id="visualizerTitle" class="text-2xl font-bold truncate">Song Title</h2>
-            <p id="visualizerArtist" class="text-gray-400 truncate">Artist Name</p>
-        </div>
     </div>
-    
+
     <div class="hidden w-full md:w-7/12 flex-col items-center justify-center p-6 relative player-view" id="videoView">
         <div class="relative w-full max-w-xl aspect-video rounded-lg overflow-hidden shadow-2xl mb-6">
             <div class="absolute inset-0 bg-black flex items-center justify-center">
-                <img src="https://via.placeholder.com/640x360" alt="Video thumbnail" class="w-full h-full object-cover">
+                <img src="https://picsum.photos/640/360" alt="Video thumbnail" class="w-full h-full object-cover">
                 <div class="absolute inset-0 flex items-center justify-center">
                     <span class="text-white/50">No video available</span>
                 </div>
             </div>
         </div>
-        
-        <div class="text-center mb-5 w-full max-w-md">
-            <h2 id="videoTitle" class="text-2xl font-bold truncate">Song Title</h2>
-            <p id="videoArtist" class="text-gray-400 truncate">Artist Name</p>
-        </div>
+
     </div>
 </div>
+
+@push('script')
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+
+        });
+    </script>
+@endpush
