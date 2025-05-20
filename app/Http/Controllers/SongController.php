@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Illuminate\Support\Facades\Auth;
 use App\Models\SongContributor;
+use App\Models\SongLink;
 
 class SongController extends Controller
 {
@@ -86,10 +87,10 @@ class SongController extends Controller
         ])->findOrFail($id);
 
         $coverVersions = $song->coverVersions;
-        $artist =SongContributor::with(['user'])->where('song_id',$song->id)
-        ->where('role','Artist')->first();
+        $artist = SongContributor::with(['user'])->where('song_id', $song->id)
+            ->where('role', 'Artist')->first();
         $artistName = '';
-        if($artist){
+        if ($artist) {
             $artistName = $artist->user->name;
         }
 
@@ -114,6 +115,57 @@ class SongController extends Controller
             ->log($authUser->name . ' visited play song ' . $song->title);
 
 
-        return view('play-song-v1-1', compact('id','song','genre','artist','album'));
+        return view('play-song-v1-1', compact('id', 'song', 'genre', 'artist', 'album'));
+    }
+
+    public function showSong(Request $request, $id)
+    {
+        $authUser = Auth::user();
+
+        $song = Song::with([
+            'album',
+            'genre',
+            'links',
+            'licenses' => fn($q) => $q->orderBy('license_type', 'asc'),
+            'songContributors.user'
+        ])->findOrFail($id);
+
+        $composerName = $song->songContributors
+            ->where('role', 'Composer')
+            ->pluck('user.name')
+            ->filter()
+            ->implode(', ') ?: '-';
+
+        $artistName = $song->songContributors
+            ->where('role', 'Artist')
+            ->pluck('user.name')
+            ->filter()
+            ->implode(', ') ?: 'No Artist';
+
+        if ($authUser) {
+            activity('song')
+                ->withProperties(['ip' => request()->ip()])
+                ->log($authUser->name . ' visited play song ' . $song->title);
+        }
+
+        $youtubeLink = $song->links
+        ->where('platform', 'YouTube')
+        ->pluck('link')
+        ->first();
+        $embedUrl = $youtubeLink ? convert_youtubev2($youtubeLink) : null;
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Show song success',
+            'data' => [
+                'id' => $id,
+                'song' => $song,
+                'genre' => $song->genre,
+                'album' => $song->album,
+                'artistName' => $artistName,
+                'composerName' => $composerName,
+                'embedUrl' => $embedUrl,
+            ],
+        ]);
     }
 }

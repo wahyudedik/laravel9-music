@@ -14,6 +14,7 @@ use App\Http\Controllers\AdminVerificationController;
 use App\Http\Controllers\AdminAlbumController;
 use App\Http\Controllers\AdminGenreController;
 use App\Http\Controllers\AdminSongController;
+use App\Http\Controllers\AdminSettingController;
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\EmailController;
@@ -21,6 +22,8 @@ use App\Http\Controllers\SongController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserVerificationController;
 use App\Http\Controllers\UserSongController;
+use App\Http\Controllers\UserCartController;
+use App\Http\Controllers\UserPaymentController;
 use App\Http\Controllers\HomeController;
 use App\Models\Role;
 use App\Models\User;
@@ -86,6 +89,14 @@ Route::prefix('songs')->group(function () {
         }
         return response()->file($path);
     })->where('filename', '.*')->name('songs.image');
+
+    Route::get('/setting/image/{filename}', function ($filename) {
+        $path = storage_path('app/public/settings/' . $filename);
+        if (!File::exists($path)) {
+            return redirect('https://via.placeholder.com/40');
+        }
+        return response()->file($path);
+    })->where('filename', '.*')->name('settings.image');
 
     Route::get('/album/image/{filename}', function ($filename) {
         $path = storage_path('app/public/albums/' . $filename);
@@ -207,10 +218,19 @@ Route::get('/ojo-dadi-demit', function (Request $request) {
 });
 
 
-//  user play song
 Route::middleware(['auth', 'role:User,Cover Creator,Artist,Composer,Admin,Super Admin', 'verified'])->group(function () {
     Route::get('/play-song/{id}', [SongController::class, 'playSong'])
-        ->name('play-song');
+        ->name('play-showSongng');
+    Route::get('/show-song/{id}', [SongController::class, 'showSong'])
+        ->name('show-song');
+});
+Route::middleware(['auth', 'role:User,Cover Creator,Artist,Composer', 'verified'])->group(function () {
+    Route::get('/cart/{idUser}', [UserCartController::class, 'index'])
+        ->name('cart');
+    Route::get('/payment/{method}/{idUser}', [UserPaymentController::class, 'index'])
+        ->name('payment');
+    Route::get('/payment/done', [UserPaymentController::class, 'done'])
+        ->name('payment-done');
 });
 
 // User Dashboard Routes
@@ -628,9 +648,13 @@ Route::middleware(['auth', 'role:Super Admin,Admin'])->group(function () {
         return view('admin.profile');
     })->name('admin.profile');
 
-    Route::get('/admin/settings', function () {
-        return view('admin.settings');
-    })->name('admin.settings');
+
+    // Site Setting
+    Route::prefix('admin/settings')->group(function () {
+        Route::get('/', [AdminSettingController::class, 'index'])->name('admin.settings');
+        Route::post('/store', [AdminSettingController::class, 'store'])->name('admin.settings.store');
+    });
+
 
     // Live Chat Route
     Route::get('/admin/chat', function () {

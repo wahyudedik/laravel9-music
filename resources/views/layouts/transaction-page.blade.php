@@ -19,10 +19,11 @@
 
 
     <!-- Application Styles -->
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-    {{-- <link rel="stylesheet" href="{{asset('build/assets/app-a390f3c8.css ')}}">
+    {{-- @vite(['resources/css/app.css', 'resources/js/app.js']) --}}
+    <link rel="stylesheet" href="{{asset('build/assets/app-a390f3c8.css ')}}">
     <link rel="stylesheet" href="{{asset('build/assets/app-897add02.css ')}}">
-    <script src="{{asset('build/assets/app-49cf7fa2.js ')}}"></script> --}}
+    <script src="{{asset('build/assets/app-49cf7fa2.js ')}}"></script>
+
 
     @yield('styles')
 </head>
@@ -45,7 +46,7 @@
         {{-- @include('layouts.partials.player-bar') --}}
 
         <!-- Full Screen Player -->
-        {{-- @include('layouts.partials.fullscreen-player') --}}
+        @include('layouts.partials.fullscreen-player')
     </div>
 
     <!-- JavaScript Libraries -->

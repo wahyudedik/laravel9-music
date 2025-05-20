@@ -16,6 +16,7 @@ use App\Mail\VerifyEmailMail;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
 use Spatie\Activitylog\Models\Activity;
+use Illuminate\Support\Facades\Redirect;
 
 use App\Models\User;
 
@@ -46,6 +47,14 @@ class AuthController extends Controller
      */
     public function handleGoogleCallback(Request $request)
     {
+
+        // User denied access or something went wrong
+        if ($request->has('error')) {
+            // Optional: log or notify
+            // return redirect()->route('login')->withErrors(['msg' => 'Access was denied']);
+            return Redirect::route('login')->with('info', 'Login with Google was canceled.');
+        }
+
         activity()->withProperties(['ip' => request()->ip()])->log('user tries to login via google');
 
         $googleUser = Socialite::driver('google')->user();

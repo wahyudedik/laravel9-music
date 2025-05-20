@@ -6,7 +6,7 @@
 
     <div class="player-left">
         <div class="player-thumbnail">
-            <img src="https://via.placeholder.com/48" id="playerCover" alt="Music cover">
+            <img src="https://picsum.photos/48" id="playerCover" alt="Music cover">
         </div>
         <div class="player-details">
             <div class="player-song-title" id="playerTitle">Select a song</div>

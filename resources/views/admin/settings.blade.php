@@ -30,7 +30,8 @@
                         <div class="card-body">
                             <div class="d-flex align-items-center mb-3">
                                 <div class="me-3">
-                                    <span class="avatar avatar-sm" style="background-image: url({{ asset('img/favicon.png') }})"></span>
+                                    <span class="avatar avatar-sm"
+                                        style="background-image: url({{ asset('img/favicon.png') }})"></span>
                                 </div>
                                 <div>
                                     <div class="font-weight-medium">Playlist Music</div>
@@ -38,31 +39,42 @@
                                 </div>
                             </div>
                             <div class="list-group list-group-transparent">
-                                <a href="#general" class="list-group-item list-group-item-action d-flex align-items-center active" data-bs-toggle="scroll">
+                                <a href="#general"
+                                    class="list-group-item list-group-item-action d-flex align-items-center active"
+                                    data-bs-toggle="scroll">
                                     <i class="ti ti-settings me-2"></i>
                                     General
                                 </a>
-                                <a href="#appearance" class="list-group-item list-group-item-action d-flex align-items-center" data-bs-toggle="scroll">
+                                <a href="#appearance"
+                                    class="list-group-item list-group-item-action d-flex align-items-center"
+                                    data-bs-toggle="scroll">
                                     <i class="ti ti-palette me-2"></i>
                                     Appearance
                                 </a>
-                                <a href="#notifications" class="list-group-item list-group-item-action d-flex align-items-center" data-bs-toggle="scroll">
+                                <a href="#notifications"
+                                    class="list-group-item list-group-item-action d-flex align-items-center"
+                                    data-bs-toggle="scroll">
                                     <i class="ti ti-bell me-2"></i>
                                     Notifications
                                 </a>
-                                <a href="#security" class="list-group-item list-group-item-action d-flex align-items-center" data-bs-toggle="scroll">
+                                <a href="#security" class="list-group-item list-group-item-action d-flex align-items-center"
+                                    data-bs-toggle="scroll">
                                     <i class="ti ti-shield-lock me-2"></i>
                                     Security
                                 </a>
-                                <a href="#integrations" class="list-group-item list-group-item-action d-flex align-items-center" data-bs-toggle="scroll">
+                                <a href="#integrations"
+                                    class="list-group-item list-group-item-action d-flex align-items-center"
+                                    data-bs-toggle="scroll">
                                     <i class="ti ti-plug me-2"></i>
                                     Integrations
                                 </a>
-                                <a href="#backup" class="list-group-item list-group-item-action d-flex align-items-center" data-bs-toggle="scroll">
+                                <a href="#backup" class="list-group-item list-group-item-action d-flex align-items-center"
+                                    data-bs-toggle="scroll">
                                     <i class="ti ti-cloud-upload me-2"></i>
                                     Backup & Export
                                 </a>
-                                <a href="#advanced" class="list-group-item list-group-item-action d-flex align-items-center" data-bs-toggle="scroll">
+                                <a href="#advanced" class="list-group-item list-group-item-action d-flex align-items-center"
+                                    data-bs-toggle="scroll">
                                     <i class="ti ti-adjustments-horizontal me-2"></i>
                                     Advanced
                                 </a>
@@ -70,53 +82,64 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="col-lg-9">
+
                     <div class="card" id="general">
                         <div class="card-header">
                             <h3 class="card-title">General Settings</h3>
                         </div>
                         <div class="card-body">
-                            <form>
+                            <form action="{{ route('admin.settings.store') }}" method="POST">
+                                @csrf
                                 <div class="mb-3">
-                                    <label class="form-label">Site Name</label>
-                                    <input type="text" class="form-control" value="Playlist Music" placeholder="Your site name">
+                                    <label class="form-label">Nama Situs</label>
+                                    <input type="text" class="form-control" name="site_name"
+                                        value="{{ $generalSettings['site_name'] }}" placeholder="Nama situs Anda">
                                 </div>
                                 <div class="mb-3">
-                                    <label class="form-label">Site Description</label>
-                                    <textarea class="form-control" rows="2">A platform for music lovers, artists, and composers to share and discover music.</textarea>
+                                    <label class="form-label">Deskripsi</label>
+                                    <textarea class="form-control" name="site_description" rows="2">{{ $generalSettings['site_description'] }}</textarea>
                                 </div>
                                 <div class="row mb-3">
                                     <div class="col-md-6">
                                         <label class="form-label">Admin Email</label>
-                                        <input type="email" class="form-control" value="admin@playlistmusic.com" placeholder="Admin email address">
+                                        <input type="email" class="form-control" name="admin_email"
+                                            value="{{ $generalSettings['admin_email'] }}" placeholder="Alamat email admin">
                                     </div>
                                     <div class="col-md-6">
                                         <label class="form-label">Support Email</label>
-                                        <input type="email" class="form-control" value="support@playlistmusic.com" placeholder="Support email address">
+                                        <input type="email" class="form-control" name="support_email"
+                                            value="{{ $generalSettings['support_email'] }}"
+                                            placeholder="Alamat email support">
                                     </div>
                                 </div>
                                 <div class="row mb-3">
                                     <div class="col-md-6">
-                                        <label class="form-label">Default Language</label>
-                                        <select class="form-select">
-                                            <option value="en" selected>English</option>
-                                            <option value="id">Indonesian</option>
-                                            <option value="es">Spanish</option>
-                                            <option value="fr">French</option>
+                                        <label class="form-label">Default Bahasa</label>
+                                        <select class="form-select" name="default_language">
+                                            <option value="id"
+                                                {{ $generalSettings['default_language'] == 'id' ? 'selected' : '' }}>
+                                                Indonesia</option>
+                                            <option value="en"
+                                                {{ $generalSettings['default_language'] == 'en' ? 'selected' : '' }}>English
+                                            </option>
                                         </select>
                                     </div>
-                                                                        <div class="col-md-6">
+
+                                    <div class="col-md-6">
                                         <label class="form-label">Default Timezone</label>
-                                        <select class="form-select">
-                                            <option value="UTC" selected>UTC</option>
-                                            <option value="Asia/Jakarta">Asia/Jakarta (GMT+7)</option>
-                                            <option value="America/New_York">America/New_York (GMT-5)</option>
-                                            <option value="Europe/London">Europe/London (GMT+0)</option>
+                                        <select class="form-select" name="default_timezone">
+                                            <option value="Asia/Jakarta"
+                                                {{ $generalSettings['default_timezone'] == 'Asia/Jakarta' ? 'selected' : '' }}>
+                                                Asia/Jakarta (GMT+7)</option>
+                                            <option value="UTC"
+                                                {{ $generalSettings['default_timezone'] == 'UTC' ? 'selected' : '' }}>UTC
+                                            </option>
                                         </select>
                                     </div>
                                 </div>
-                                <div class="mb-3">
+                                {{-- <div class="mb-3">
                                     <label class="form-check form-switch">
                                         <input class="form-check-input" type="checkbox" checked>
                                         <span class="form-check-label">Enable user registration</span>
@@ -127,9 +150,53 @@
                                         <input class="form-check-input" type="checkbox" checked>
                                         <span class="form-check-label">Require email verification</span>
                                     </label>
-                                </div>
+                                </div> --}}
                                 <div class="form-footer">
-                                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                                    <button type="submit" name="btnSaveGeneralSetting" value="SaveGeneralSetting"
+                                        class="btn btn-primary">Simpan</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="card mt-3" id="seo">
+                        <div class="card-header">
+                            <h3 class="card-title">SEO Settings</h3>
+                        </div>
+                        <div class="card-body">
+                            <form action="{{ route('admin.settings.store') }}" method="POST">
+                                @csrf
+                                <div class="mb-3">
+                                    <label class="form-label">Meta Title</label>
+                                    <input type="text" class="form-control" name="meta_title"
+                                        value="{{ $seoSettings['meta_title'] }}" placeholder="Judul meta">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Meta Description</label>
+                                    <textarea class="form-control" name="meta_description" rows="2">{{ $seoSettings['meta_description'] }}</textarea>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Meta Keyword</label>
+                                    <input type="text" class="form-control" name="meta_keywords"
+                                        value="{{ $seoSettings['meta_keywords'] }}" placeholder="Judul meta">
+                                </div>
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label">Canonical Url</label>
+                                        <input type="url" class="form-control" name="canonical_url"
+                                            value="{{ $seoSettings['canonical_url'] }}" placeholder="Link canonical">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Image Url</label>
+                                        <input type="url" class="form-control" name="og_image_url"
+                                            value="{{ $seoSettings['og_image_url'] }}"
+                                            placeholder="Link gambar atau logo url">
+                                    </div>
+                                </div>
+
+                                <div class="form-footer">
+                                    <button type="submit" name="btnSaveSeoSetting" value="SaveSeoSetting"
+                                        class="btn btn-primary">Simpan</button>
                                 </div>
                             </form>
                         </div>
@@ -140,24 +207,32 @@
                             <h3 class="card-title">Appearance Settings</h3>
                         </div>
                         <div class="card-body">
-                            <form>
+                            <form action="{{ route('admin.settings.store') }}" method="POST"
+                                enctype="multipart/form-data">
+                                @csrf
                                 <div class="mb-3">
                                     <label class="form-label">Theme Mode</label>
                                     <div class="form-selectgroup">
                                         <label class="form-selectgroup-item">
-                                            <input type="radio" name="theme-mode" value="light" class="form-selectgroup-input" checked>
+                                            <input type="radio" name="theme_mode" value="light"
+                                                class="form-selectgroup-input"
+                                                {{ $themeSettings['theme_mode'] == 'light' ? 'checked' : '' }}>
                                             <span class="form-selectgroup-label">
                                                 <i class="ti ti-sun me-2"></i>Light
                                             </span>
                                         </label>
                                         <label class="form-selectgroup-item">
-                                            <input type="radio" name="theme-mode" value="dark" class="form-selectgroup-input">
+                                            <input type="radio" name="theme_mode" value="dark"
+                                                class="form-selectgroup-input"
+                                                {{ $themeSettings['theme_mode'] == 'dark' ? 'checked' : '' }}>
                                             <span class="form-selectgroup-label">
                                                 <i class="ti ti-moon me-2"></i>Dark
                                             </span>
                                         </label>
                                         <label class="form-selectgroup-item">
-                                            <input type="radio" name="theme-mode" value="auto" class="form-selectgroup-input">
+                                            <input type="radio" name="theme_mode" value="auto"
+                                                class="form-selectgroup-input"
+                                                {{ $themeSettings['theme_mode'] == 'dark' ? 'checked' : '' }}>
                                             <span class="form-selectgroup-label">
                                                 <i class="ti ti-device-desktop me-2"></i>Auto
                                             </span>
@@ -169,31 +244,41 @@
                                     <div class="row g-2">
                                         <div class="col-auto">
                                             <label class="form-colorinput">
-                                                <input name="primary-color" type="radio" value="red" class="form-colorinput-input" checked>
+                                                <input name="primary-color" type="radio" value="red"
+                                                    class="form-colorinput-input"
+                                                    {{ $themeSettings['primary_color'] == 'red' ? 'checked' : '' }}>
                                                 <span class="form-colorinput-color bg-red"></span>
                                             </label>
                                         </div>
                                         <div class="col-auto">
                                             <label class="form-colorinput">
-                                                <input name="primary-color" type="radio" value="blue" class="form-colorinput-input">
+                                                <input name="primary-color" type="radio" value="blue"
+                                                    class="form-colorinput-input"
+                                                    {{ $themeSettings['primary_color'] == 'red' ? 'blue' : '' }}>
                                                 <span class="form-colorinput-color bg-blue"></span>
                                             </label>
                                         </div>
                                         <div class="col-auto">
                                             <label class="form-colorinput">
-                                                <input name="primary-color" type="radio" value="green" class="form-colorinput-input">
+                                                <input name="primary-color" type="radio" value="green"
+                                                    class="form-colorinput-input"
+                                                    {{ $themeSettings['primary_color'] == 'red' ? 'green' : '' }}>
                                                 <span class="form-colorinput-color bg-green"></span>
                                             </label>
                                         </div>
                                         <div class="col-auto">
                                             <label class="form-colorinput">
-                                                <input name="primary-color" type="radio" value="purple" class="form-colorinput-input">
+                                                <input name="primary-color" type="radio" value="purple"
+                                                    class="form-colorinput-input"
+                                                    {{ $themeSettings['primary_color'] == 'red' ? 'purple' : '' }}>
                                                 <span class="form-colorinput-color bg-purple"></span>
                                             </label>
                                         </div>
                                         <div class="col-auto">
                                             <label class="form-colorinput">
-                                                <input name="primary-color" type="radio" value="orange" class="form-colorinput-input">
+                                                <input name="primary-color" type="radio" value="orange"
+                                                    class="form-colorinput-input"
+                                                    {{ $themeSettings['primary_color'] == 'red' ? 'orange' : '' }}>
                                                 <span class="form-colorinput-color bg-orange"></span>
                                             </label>
                                         </div>
@@ -203,11 +288,26 @@
                                     <label class="form-label">Logo</label>
                                     <div class="row align-items-center">
                                         <div class="col-auto">
-                                            <img src="{{ asset('img/favicon.png') }}" alt="Current Logo" class="avatar avatar-xl">
+                                            @php
+                                                $logoUrl = $themeSettings['logo_url'] ?? url('img/favicon.png');
+                                                $logoSrc = asset('img/favicon.png');
+                                                if (strpos($logoUrl, "http") !== false) {
+                                                    $logoSrc = $logoUrl;
+                                                } elseif (strpos($logoUrl, ",") !== false) {
+                                                    $logoSrc = explode(',', $themeSettings['logo_url'] ?? '');
+                                                    $smallImg = $logoSrc[2] ?? null;
+                                                    $filename = $smallImg ? basename($smallImg) : null;
+                                                    $logoSrc = $filename
+                                                        ? route('settings.image', ['filename' => $filename])
+                                                        : asset('img/favicon.png');
+                                                }
+                                            @endphp
+                                            <img src="{{ $logoSrc }}" alt="Current Logo" class="avatar avatar-xl">
                                         </div>
                                         <div class="col">
                                             <input type="file" class="form-control" accept="image/*">
-                                            <small class="form-hint">Recommended size: 512x512px. Max file size: 2MB.</small>
+                                            <small class="form-hint">Recommended size: 512x512px. Max file size:
+                                                2MB.</small>
                                         </div>
                                     </div>
                                 </div>
@@ -215,22 +315,39 @@
                                     <label class="form-label">Favicon</label>
                                     <div class="row align-items-center">
                                         <div class="col-auto">
-                                            <img src="{{ asset('img/favicon.png') }}" alt="Current Favicon" class="avatar avatar-md">
+                                            @php
+                                                $logoUrl = $themeSettings['favicon_url'] ?? asset('img/favicon.png');
+                                                $logoSrc = asset('img/favicon.png');
+                                                if (strpos($logoUrl, "http") !== false) {
+                                                    $logoSrc = $logoUrl;
+                                                } elseif (strpos($logoUrl, ",") !== false) {
+                                                    $logoSrc = explode(',', $themeSettings['favicon_url'] ?? '');
+                                                    $smallImg = $logoSrc[2] ?? null;
+                                                    $filename = $smallImg ? basename($smallImg) : null;
+                                                    $logoSrc = $filename
+                                                        ? route('settings.image', ['filename' => $filename])
+                                                        : asset('img/favicon.png');
+                                                }
+                                            @endphp
+                                            <img src="{{ $themeSettings['favicon_url'] ?? asset('img/favicon.png') }} " alt="Current Favicon" class="avatar avatar-md">
                                         </div>
                                         <div class="col">
                                             <input type="file" class="form-control" accept="image/png,image/x-icon">
-                                            <small class="form-hint">Recommended size: 32x32px or 16x16px. Max file size: 1MB.</small>
+                                            <small class="form-hint">Recommended size: 32x32px or 16x16px. Max file size:
+                                                1MB.</small>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-check form-switch">
-                                        <input class="form-check-input" type="checkbox" checked>
+                                        <input class="form-check-input" type="checkbox"
+                                            {{ $themeSettings['show_footer'] == 'yes' ? 'checked' : '' }}>
                                         <span class="form-check-label">Show footer</span>
                                     </label>
                                 </div>
                                 <div class="form-footer">
-                                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                                    <button type="submit" class="btn btn-primary" name="btnSaveThemeSetting"
+                                        value="SaveThemeSetting">Save Changes</button>
                                 </div>
                             </form>
                         </div>
@@ -246,7 +363,8 @@
                                     <h4 class="mb-3">Email Notifications</h4>
                                     <div class="form-selectgroup form-selectgroup-boxes d-flex flex-column">
                                         <label class="form-selectgroup-item flex-fill">
-                                            <input type="checkbox" name="email-new-user" value="1" class="form-selectgroup-input" checked>
+                                            <input type="checkbox" name="email-new-user" value="1"
+                                                class="form-selectgroup-input" checked>
                                             <div class="form-selectgroup-label d-flex align-items-center p-3">
                                                 <div class="me-3">
                                                     <span class="form-selectgroup-check"></span>
@@ -260,7 +378,8 @@
                                             </div>
                                         </label>
                                         <label class="form-selectgroup-item flex-fill">
-                                            <input type="checkbox" name="email-verification" value="1" class="form-selectgroup-input" checked>
+                                            <input type="checkbox" name="email-verification" value="1"
+                                                class="form-selectgroup-input" checked>
                                             <div class="form-selectgroup-label d-flex align-items-center p-3">
                                                 <div class="me-3">
                                                     <span class="form-selectgroup-check"></span>
@@ -268,13 +387,15 @@
                                                 <div class="form-selectgroup-label-content d-flex align-items-center">
                                                     <div>
                                                         <div class="font-weight-medium">Verification Requests</div>
-                                                        <div class="text-muted">Send email when a new verification request is submitted</div>
+                                                        <div class="text-muted">Send email when a new verification request
+                                                            is submitted</div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </label>
                                         <label class="form-selectgroup-item flex-fill">
-                                            <input type="checkbox" name="email-song-upload" value="1" class="form-selectgroup-input">
+                                            <input type="checkbox" name="email-song-upload" value="1"
+                                                class="form-selectgroup-input">
                                             <div class="form-selectgroup-label d-flex align-items-center p-3">
                                                 <div class="me-3">
                                                     <span class="form-selectgroup-check"></span>
@@ -282,13 +403,15 @@
                                                 <div class="form-selectgroup-label-content d-flex align-items-center">
                                                     <div>
                                                         <div class="font-weight-medium">New Song Uploads</div>
-                                                        <div class="text-muted">Send email when a new song is uploaded</div>
+                                                        <div class="text-muted">Send email when a new song is uploaded
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </label>
                                         <label class="form-selectgroup-item flex-fill">
-                                            <input type="checkbox" name="email-system" value="1" class="form-selectgroup-input" checked>
+                                            <input type="checkbox" name="email-system" value="1"
+                                                class="form-selectgroup-input" checked>
                                             <div class="form-selectgroup-label d-flex align-items-center p-3">
                                                 <div class="me-3">
                                                     <span class="form-selectgroup-check"></span>
@@ -296,7 +419,8 @@
                                                 <div class="form-selectgroup-label-content d-flex align-items-center">
                                                     <div>
                                                         <div class="font-weight-medium">System Notifications</div>
-                                                        <div class="text-muted">Send email for important system events</div>
+                                                        <div class="text-muted">Send email for important system events
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -305,7 +429,8 @@
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label">Email Sender Name</label>
-                                    <input type="text" class="form-control" value="Playlist Music" placeholder="Sender name">
+                                    <input type="text" class="form-control" value="Playlist Music"
+                                        placeholder="Sender name">
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label">Email Template</label>
@@ -332,7 +457,8 @@
                                     <label class="form-label">Password Requirements</label>
                                     <div class="form-selectgroup form-selectgroup-boxes d-flex flex-column">
                                         <label class="form-selectgroup-item flex-fill">
-                                            <input type="checkbox" name="password-min-length" value="1" class="form-selectgroup-input" checked>
+                                            <input type="checkbox" name="password-min-length" value="1"
+                                                class="form-selectgroup-input" checked>
                                             <div class="form-selectgroup-label d-flex align-items-center p-3">
                                                 <div class="me-3">
                                                     <span class="form-selectgroup-check"></span>
@@ -340,13 +466,15 @@
                                                 <div class="form-selectgroup-label-content d-flex align-items-center">
                                                     <div>
                                                         <div class="font-weight-medium">Minimum Length (8 characters)</div>
-                                                        <div class="text-muted">Require passwords to be at least 8 characters long</div>
+                                                        <div class="text-muted">Require passwords to be at least 8
+                                                            characters long</div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </label>
                                         <label class="form-selectgroup-item flex-fill">
-                                            <input type="checkbox" name="password-uppercase" value="1" class="form-selectgroup-input" checked>
+                                            <input type="checkbox" name="password-uppercase" value="1"
+                                                class="form-selectgroup-input" checked>
                                             <div class="form-selectgroup-label d-flex align-items-center p-3">
                                                 <div class="me-3">
                                                     <span class="form-selectgroup-check"></span>
@@ -360,7 +488,8 @@
                                             </div>
                                         </label>
                                         <label class="form-selectgroup-item flex-fill">
-                                            <input type="checkbox" name="password-numbers" value="1" class="form-selectgroup-input" checked>
+                                            <input type="checkbox" name="password-numbers" value="1"
+                                                class="form-selectgroup-input" checked>
                                             <div class="form-selectgroup-label d-flex align-items-center p-3">
                                                 <div class="me-3">
                                                     <span class="form-selectgroup-check"></span>
@@ -374,15 +503,17 @@
                                             </div>
                                         </label>
                                         <label class="form-selectgroup-item flex-fill">
-                                            <input type="checkbox" name="password-special" value="1" class="form-selectgroup-input">
+                                            <input type="checkbox" name="password-special" value="1"
+                                                class="form-selectgroup-input">
                                             <div class="form-selectgroup-label d-flex align-items-center p-3">
                                                 <div class="me-3">
                                                     <span class="form-selectgroup-check"></span>
                                                 </div>
                                                 <div class="form-selectgroup-label-content d-flex align-items-center">
                                                     <div>
-                                                                                                                <div class="font-weight-medium">Special Characters</div>
-                                                        <div class="text-muted">Require at least one special character</div>
+                                                        <div class="font-weight-medium">Special Characters</div>
+                                                        <div class="text-muted">Require at least one special character
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -394,11 +525,13 @@
                                     <div class="row">
                                         <div class="col-md-6">
                                             <label class="form-label">Session Timeout (minutes)</label>
-                                            <input type="number" class="form-control" value="120" min="5" max="1440">
+                                            <input type="number" class="form-control" value="120" min="5"
+                                                max="1440">
                                         </div>
                                         <div class="col-md-6">
                                             <label class="form-label">Remember Me Duration (days)</label>
-                                            <input type="number" class="form-control" value="30" min="1" max="365">
+                                            <input type="number" class="form-control" value="30" min="1"
+                                                max="365">
                                         </div>
                                     </div>
                                 </div>
@@ -451,10 +584,11 @@
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label">Tracking ID</label>
-                                    <input type="text" class="form-control" value="UA-123456789-1" placeholder="UA-XXXXXXXXX-X">
+                                    <input type="text" class="form-control" value="UA-123456789-1"
+                                        placeholder="UA-XXXXXXXXX-X">
                                 </div>
                             </div>
-                            
+
                             <div class="mb-4">
                                 <div class="d-flex align-items-center mb-3">
                                     <div class="me-3">
@@ -477,7 +611,7 @@
                                     <input type="text" class="form-control" placeholder="XXXXXXXXXXXXXXXXXX">
                                 </div>
                             </div>
-                            
+
                             <div class="mb-4">
                                 <div class="d-flex align-items-center mb-3">
                                     <div class="me-3">
@@ -497,10 +631,11 @@
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label">API Key</label>
-                                    <input type="text" class="form-control" value="AIzaSyD1234567890abcdef" placeholder="API Key">
+                                    <input type="text" class="form-control" value="AIzaSyD1234567890abcdef"
+                                        placeholder="API Key">
                                 </div>
                             </div>
-                            
+
                             <div class="mb-4">
                                 <div class="d-flex align-items-center mb-3">
                                     <div class="me-3">
@@ -521,15 +656,17 @@
                                 <div class="row">
                                     <div class="col-md-6 mb-3">
                                         <label class="form-label">Client ID</label>
-                                        <input type="text" class="form-control" value="1234567890abcdef" placeholder="Client ID">
+                                        <input type="text" class="form-control" value="1234567890abcdef"
+                                            placeholder="Client ID">
                                     </div>
                                     <div class="col-md-6 mb-3">
                                         <label class="form-label">Client Secret</label>
-                                        <input type="password" class="form-control" value="1234567890abcdef" placeholder="Client Secret">
+                                        <input type="password" class="form-control" value="1234567890abcdef"
+                                            placeholder="Client Secret">
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <div class="form-footer">
                                 <button type="submit" class="btn btn-primary">Save Changes</button>
                             </div>
@@ -545,7 +682,8 @@
                                 <h4 class="mb-3">Database Backup</h4>
                                 <div class="form-selectgroup form-selectgroup-boxes d-flex flex-column">
                                     <label class="form-selectgroup-item flex-fill">
-                                        <input type="checkbox" name="backup-auto" value="1" class="form-selectgroup-input" checked>
+                                        <input type="checkbox" name="backup-auto" value="1"
+                                            class="form-selectgroup-input" checked>
                                         <div class="form-selectgroup-label d-flex align-items-center p-3">
                                             <div class="me-3">
                                                 <span class="form-selectgroup-check"></span>
@@ -593,7 +731,7 @@
                                     </button>
                                 </div>
                             </div>
-                            
+
                             <div class="mb-3">
                                 <h4 class="mb-3">Data Export</h4>
                                 <div class="row">
@@ -643,7 +781,7 @@
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <div class="form-footer">
                                 <button type="submit" class="btn btn-primary">Save Changes</button>
                             </div>
@@ -659,7 +797,7 @@
                                 <i class="ti ti-alert-triangle me-2"></i>
                                 These settings are for advanced users. Incorrect configuration may cause system issues.
                             </div>
-                            
+
                             <div class="mb-3">
                                 <label class="form-label">Cache Settings</label>
                                 <div class="row">
@@ -673,7 +811,8 @@
                                     </div>
                                     <div class="col-md-6 mb-3">
                                         <label class="form-label">Cache Lifetime (minutes)</label>
-                                        <input type="number" class="form-control" value="60" min="1" max="10080">
+                                        <input type="number" class="form-control" value="60" min="1"
+                                            max="10080">
                                     </div>
                                 </div>
                                 <div class="mb-3">
@@ -682,9 +821,9 @@
                                     </button>
                                 </div>
                             </div>
-                            
+
                             <div class="mb-3">
-                                                                <label class="form-label">Queue Settings</label>
+                                <label class="form-label">Queue Settings</label>
                                 <div class="row">
                                     <div class="col-md-6 mb-3">
                                         <label class="form-label">Queue Connection</label>
@@ -696,11 +835,12 @@
                                     </div>
                                     <div class="col-md-6 mb-3">
                                         <label class="form-label">Queue Worker Timeout (seconds)</label>
-                                        <input type="number" class="form-control" value="60" min="10" max="3600">
+                                        <input type="number" class="form-control" value="60" min="10"
+                                            max="3600">
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <div class="mb-3">
                                 <label class="form-label">Log Settings</label>
                                 <div class="row">
@@ -728,7 +868,7 @@
                                     </button>
                                 </div>
                             </div>
-                            
+
                             <div class="mb-3">
                                 <label class="form-label">Maintenance Mode</label>
                                 <div class="d-flex align-items-center mb-3">
@@ -748,11 +888,12 @@
                                     <div class="mb-3">
                                         <label class="form-label">Allowed IPs (comma separated)</label>
                                         <input type="text" class="form-control" placeholder="127.0.0.1, 192.168.1.1">
-                                        <small class="form-hint">These IPs will still be able to access the site during maintenance</small>
+                                        <small class="form-hint">These IPs will still be able to access the site during
+                                            maintenance</small>
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <div class="form-footer">
                                 <button type="submit" class="btn btn-primary">Save Changes</button>
                             </div>
@@ -770,12 +911,12 @@
             // Handle maintenance mode toggle
             const maintenanceToggle = document.getElementById('maintenance-mode');
             const maintenanceOptions = document.getElementById('maintenance-options');
-            
+
             if (maintenanceToggle && maintenanceOptions) {
                 maintenanceToggle.addEventListener('change', function() {
                     if (this.checked) {
                         maintenanceOptions.classList.remove('d-none');
-                        
+
                         // Show confirmation dialog
                         Swal.fire({
                             title: 'Enable Maintenance Mode?',
@@ -796,22 +937,22 @@
                     }
                 });
             }
-            
+
             // Handle form submissions
-            const forms = document.querySelectorAll('form');
-            forms.forEach(form => {
-                form.addEventListener('submit', function(e) {
-                    e.preventDefault();
-                    
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Settings Saved',
-                        text: 'Your settings have been updated successfully',
-                        confirmButtonColor: '#e53935',
-                    });
-                });
-            });
-            
+            // const forms = document.querySelectorAll('form');
+            // forms.forEach(form => {
+            //     form.addEventListener('submit', function(e) {
+            //         e.preventDefault();
+
+            //         Swal.fire({
+            //             icon: 'success',
+            //             title: 'Settings Saved',
+            //             text: 'Your settings have been updated successfully',
+            //             confirmButtonColor: '#e53935',
+            //         });
+            //     });
+            // });
+
             // Handle clear cache button
             const clearCacheBtn = document.querySelector('button:contains("Clear Cache")');
             if (clearCacheBtn) {
@@ -836,7 +977,7 @@
                     });
                 });
             }
-            
+
             // Handle clear logs button
             const clearLogsBtn = document.querySelector('button:contains("Clear Logs")');
             if (clearLogsBtn) {
@@ -861,7 +1002,7 @@
                     });
                 });
             }
-            
+
             // Handle manual backup button
             const manualBackupBtn = document.querySelector('button:contains("Create Manual Backup")');
             if (manualBackupBtn) {
@@ -874,7 +1015,7 @@
                             Swal.showLoading();
                         }
                     });
-                    
+
                     // Simulate backup process
                     setTimeout(() => {
                         Swal.fire({
@@ -886,24 +1027,24 @@
                     }, 2000);
                 });
             }
-            
+
             // Handle scroll to section
             document.querySelectorAll('[data-bs-toggle="scroll"]').forEach(link => {
                 link.addEventListener('click', function(e) {
                     e.preventDefault();
-                    
+
                     // Remove active class from all links
                     document.querySelectorAll('[data-bs-toggle="scroll"]').forEach(el => {
                         el.classList.remove('active');
                     });
-                    
+
                     // Add active class to clicked link
                     this.classList.add('active');
-                    
+
                     // Scroll to section
                     const targetId = this.getAttribute('href');
                     const targetElement = document.querySelector(targetId);
-                    
+
                     if (targetElement) {
                         window.scrollTo({
                             top: targetElement.offsetTop - 20,
@@ -915,6 +1056,3 @@
         });
     </script>
 @endsection
-
-
-
