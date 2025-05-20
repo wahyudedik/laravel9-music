@@ -14,6 +14,7 @@ use App\Http\Controllers\AdminVerificationController;
 use App\Http\Controllers\AdminAlbumController;
 use App\Http\Controllers\AdminGenreController;
 use App\Http\Controllers\AdminSongController;
+use App\Http\Controllers\AdminSettingController;
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\EmailController;
@@ -80,6 +81,14 @@ Route::prefix('songs')->group(function () {
         }
         return response()->file($path);
     })->where('filename', '.*')->name('songs.image');
+
+    Route::get('/setting/image/{filename}', function ($filename) {
+        $path = storage_path('app/public/settings/' . $filename);
+        if (!File::exists($path)) {
+            return redirect('https://via.placeholder.com/40');
+        }
+        return response()->file($path);
+    })->where('filename', '.*')->name('settings.image');
 
     Route::get('/album/image/{filename}', function ($filename) {
         $path = storage_path('app/public/albums/' . $filename);
@@ -622,9 +631,13 @@ Route::middleware(['auth', 'role:Super Admin,Admin'])->group(function () {
         return view('admin.profile');
     })->name('admin.profile');
 
-    Route::get('/admin/settings', function () {
-        return view('admin.settings');
-    })->name('admin.settings');
+
+    // Site Setting
+    Route::prefix('admin/settings')->group(function () {
+        Route::get('/', [AdminSettingController::class, 'index'])->name('admin.settings');
+        Route::post('/store', [AdminSettingController::class, 'store'])->name('admin.settings.store');
+    });
+
 
     // Live Chat Route
     Route::get('/admin/chat', function () {
