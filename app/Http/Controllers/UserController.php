@@ -21,52 +21,55 @@ class UserController extends Controller
     {
         $query = $request->input('q');
         $results = [];
-        $allSongs = Song::with('artist')->get();
 
         if ($query) {
             $results = Song::where('title', 'like', "%$query%")
                 ->orWhereHas('artist', function ($q) use ($query) {
                     $q->where('name', 'like', "%$query%");
                 })
-                ->with('artist')
-                ->get();
+                ->with('artist', 'album')
+                ->paginate(5);
+            $allSongs = null;
+        } else {
+            $allSongs = Song::with('artist', 'album')
+                ->orderBy('created_at', 'desc')
+                ->paginate(5);
         }
-
         $popularSongs = Song::with('artist')
-            ->select('songs.id','songs.title', DB::raw('COUNT(streams.song_id) as stream_count'))
+            ->select('songs.id', 'songs.title', DB::raw('COUNT(streams.song_id) as stream_count'))
             ->leftJoin('streams', 'songs.id', '=', 'streams.song_id')
-            ->groupBy('songs.id','songs.title')
+            ->groupBy('songs.id', 'songs.title')
             ->orderByDesc('stream_count')
             ->limit(5)
             ->get();
 
 
         // Artis Populer (berdasarkan jumlah stream lagu mereka)
-        $popularArtists = User::select('users.name','users.id', DB::raw('COUNT(streams.song_id) as stream_count'))
+        $popularArtists = User::select('users.name', 'users.id', DB::raw('COUNT(streams.song_id) as stream_count'))
             ->leftJoin('songs', 'users.id', '=', 'songs.artist_id')
             ->leftJoin('streams', 'songs.id', '=', 'streams.song_id')
             ->whereNotNull('songs.artist_id')
-            ->groupBy('users.id','users.name')
+            ->groupBy('users.id', 'users.name')
             ->orderByDesc('stream_count')
             ->limit(5)
             ->get();
 
         // Pencipta Populer (berdasarkan jumlah stream lagu mereka)
-        $popularComposers = User::select('users.name','users.id', DB::raw('COUNT(streams.id) as stream_count'))
+        $popularComposers = User::select('users.name', 'users.id', DB::raw('COUNT(streams.id) as stream_count'))
             ->join('composer_song', 'users.id', '=', 'composer_song.user_id')
             ->join('songs', 'composer_song.song_id', '=', 'songs.id')
             ->leftJoin('streams', 'songs.id', '=', 'streams.song_id')
-            ->groupBy('users.id','users.name')
+            ->groupBy('users.id', 'users.name')
             ->orderByDesc('stream_count')
             ->limit(5)
             ->get();
 
         // Cover Creator Populer (berdasarkan jumlah stream lagu yang menggunakan cover mereka)
-        $popularCoverCreators = User::select('users.name','users.id', DB::raw('COUNT(streams.song_id) as stream_count'))
+        $popularCoverCreators = User::select('users.name', 'users.id', DB::raw('COUNT(streams.song_id) as stream_count'))
             ->leftJoin('songs', 'users.id', '=', 'songs.cover_creator_id')
             ->leftJoin('streams', 'songs.id', '=', 'streams.song_id')
             ->whereNotNull('songs.cover_creator_id')
-            ->groupBy('users.id','users.name')
+            ->groupBy('users.id', 'users.name')
             ->orderByDesc('stream_count')
             ->limit(5)
             ->get();
