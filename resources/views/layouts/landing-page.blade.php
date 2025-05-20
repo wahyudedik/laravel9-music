@@ -40,10 +40,10 @@
         </main>
 
         <!-- Player Bar -->
-        @include('layouts.partials.player-bar')
+        {{-- @include('layouts.partials.player-bar') --}}
 
         <!-- Full Screen Player -->
-        @include('layouts.partials.fullscreen-player')
+        {{-- @include('layouts.partials.fullscreen-player') --}}
     </div>
 
     <!-- JavaScript Libraries -->
