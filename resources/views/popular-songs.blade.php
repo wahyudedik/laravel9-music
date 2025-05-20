@@ -27,90 +27,12 @@
             <h2 class="section-title text-2xl font-bold">Popular Tracks</h2>
         </div>
 
-        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-            @php
-                $popularSongs = [
-                    [
-                        'title' => 'Blinding Lights',
-                        'artist' => 'The Weeknd',
-                        'img' => 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?q=80&w=300',
-                    ],
-                    [
-                        'title' => 'Bad Guy',
-                        'artist' => 'Billie Eilish',
-                        'img' => 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?q=80&w=300',
-                    ],
-                    [
-                        'title' => 'Stay',
-                        'artist' => 'The Kid LAROI, Justin Bieber',
-                        'img' => 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?q=80&w=300',
-                    ],
-                    [
-                        'title' => 'Levitating',
-                        'artist' => 'Dua Lipa',
-                        'img' => 'https://images.unsplash.com/photo-1496293455970-f8581aae0e3b?q=80&w=300',
-                    ],
-                    [
-                        'title' => 'Anti-Hero',
-                        'artist' => 'Taylor Swift',
-                        'img' => 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?q=80&w=300',
-                    ],
-                    [
-                        'title' => 'As It Was',
-                        'artist' => 'Harry Styles',
-                        'img' => 'https://images.unsplash.com/photo-1501612780327-45045538702b?q=80&w=300',
-                    ],
-                    [
-                        'title' => 'Heat Waves',
-                        'artist' => 'Glass Animals',
-                        'img' => 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?q=80&w=300',
-                    ],
-                    [
-                        'title' => 'Easy On Me',
-                        'artist' => 'Adele',
-                        'img' => 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?q=80&w=300',
-                    ],
-                    [
-                        'title' => 'good 4 u',
-                        'artist' => 'Olivia Rodrigo',
-                        'img' => 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?q=80&w=300',
-                    ],
-                    [
-                        'title' => 'Save Your Tears',
-                        'artist' => 'The Weeknd',
-                        'img' => 'https://images.unsplash.com/photo-1496293455970-f8581aae0e3b?q=80&w=300',
-                    ],
-                    [
-                        'title' => 'Shape of You',
-                        'artist' => 'Ed Sheeran',
-                        'img' => 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?q=80&w=300',
-                    ],
-                    [
-                        'title' => 'Watermelon Sugar',
-                        'artist' => 'Harry Styles',
-                        'img' => 'https://images.unsplash.com/photo-1501612780327-45045538702b?q=80&w=300',
-                    ],
-                    [
-                        'title' => 'Montero',
-                        'artist' => 'Lil Nas X',
-                        'img' => 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?q=80&w=300',
-                    ],
-                    [
-                        'title' => 'Dynamite',
-                        'artist' => 'BTS',
-                        'img' => 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?q=80&w=300',
-                    ],
-                    [
-                        'title' => 'Drivers License',
-                        'artist' => 'Olivia Rodrigo',
-                        'img' => 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?q=80&w=300',
-                    ],
-                ];
-            @endphp
-
-            @foreach ($popularSongs as $index => $song)
-                <div class="music-card-item" data-aos="fade-up" data-aos-delay="{{ $index * 50 }}">
-                    <div class="relative group overflow-hidden rounded-xl">
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-5">
+            @for ($i = 1; $i <= 12; $i++)
+                <div class="scroll-item music-card-item" id="recently-item-music"
+                    data-id="123" data-aos="fade-up" data-aos-delay="{{ $i * 50 }}">
+                    <div class="relative group overflow-hidden rounded-lg">
+       
                         <div
                             class="absolute top-2 left-2 z-10 bg-red-600 text-white text-xs font-bold px-2 py-1 rounded-full">
                             #{{ $index + 1 }}
@@ -120,7 +42,13 @@
                         <div
                             class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                         </div>
-                        <button class="play-song-btn absolute inset-0 flex items-center justify-center">
+                        <button class="play-song-btn absolute inset-0 flex items-center justify-center"
+                        {{ Auth::guest() ? 'data-login-required=true onclick=window.location.href=\''.route('login').'\'' : '' }}
+                            data-title="Trending Song #{{ $i }}"
+                            data-artist="Trending Artist #{{ $i }}"
+                            data-cover="https://picsum.photos/300/300?random={{ $i + 300 }}"
+                            data-id="{{ $i + 100 }}" data-duration="{{ rand(180, 320) }}">
+
                             <div
                                 class="w-12 h-12 bg-red-600 rounded-full flex items-center justify-center transform translate-y-4 opacity-0 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 shadow-lg hover:bg-red-700 hover:scale-105">
                                 <i class="ti ti-player-play text-white text-xl"></i>
@@ -202,16 +130,32 @@
                 ];
             @endphp
 
-            @foreach ($newReleases as $index => $release)
-                <div class="scroll-item new-release-card">
-                    <div class="relative group overflow-hidden rounded-xl bg-gray-800/50">
-                        <div class="absolute top-0 right-0 z-10">
-                            <span class="bg-red-600 text-white text-xs px-2 py-1 opacity-80">NEW</span>
+
+            @foreach ($playlists as $index => $playlist)
+                <div class="relative" style="min-width: 160px; max-width: 180px;" data-aos="fade-up"
+                    data-aos-delay="{{ $index * 50 }}">
+                    <div class="bg-gray-800 rounded-lg overflow-hidden group">
+                        <div class="aspect-square bg-gradient-to-br {{ $playlist['color'] }} relative">
+                            <div class="absolute inset-0 opacity-40">
+                                <img src="https://picsum.photos/300/300?random={{ $index + 200 }}"
+                                    class="w-full h-full object-cover mix-blend-overlay" alt="{{ $playlist['title'] }}">
+                            </div>
+                            <div class="absolute bottom-0 right-0 p-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                <button
+                                    class="bg-red-600 hover:bg-red-700 text-white rounded-full p-2 shadow-lg transition transform hover:scale-105">
+                                    <i class="ti ti-player-play"></i>
+                                </button>
+                            </div>
+
+
                         </div>
                         <img src="{{ $release['img'] }}" alt="{{ $release['title'] }}"
                             class="w-full aspect-square object-cover transition-transform duration-300 group-hover:scale-110 group-hover:opacity-70">
                         <div
-                            class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-40 group-hover:opacity-80 transition-opacity duration-300">
+                            class="overflow-hidden rounded-full aspect-square border-2 border-transparent group-hover:border-red-500 transition-all duration-300">
+                            <img src="https://picsum.photos/300/300?random={{ $index + 900 }}" alt="{{ $artist }}"
+                                class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+
                         </div>
                         <button class="play-song-btn absolute inset-0 flex items-center justify-center">
                             <div
@@ -233,6 +177,12 @@
 @endsection
 
 @section('scripts')
+    <script>
+        window.App = {
+            loggedIn: @json(Auth::check())
+        };
+    </script>
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Set animation delay for scroll items
@@ -262,5 +212,7 @@
                 });
             });
         });
+
+
     </script>
 @endsection
