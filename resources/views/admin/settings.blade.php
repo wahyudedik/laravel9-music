@@ -45,6 +45,12 @@
                                     <i class="ti ti-settings me-2"></i>
                                     General
                                 </a>
+                                <a href="#seo"
+                                    class="list-group-item list-group-item-action d-flex align-items-center"
+                                    data-bs-toggle="scroll">
+                                    <i class="ti ti-world me-2"></i>
+                                    SEO
+                                </a>
                                 <a href="#appearance"
                                     class="list-group-item list-group-item-action d-flex align-items-center"
                                     data-bs-toggle="scroll">
@@ -68,7 +74,7 @@
                                     <i class="ti ti-plug me-2"></i>
                                     Integrations
                                 </a>
-                                <a href="#backup" class="list-group-item list-group-item-action d-flex align-items-center"
+                                {{-- <a href="#backup" class="list-group-item list-group-item-action d-flex align-items-center"
                                     data-bs-toggle="scroll">
                                     <i class="ti ti-cloud-upload me-2"></i>
                                     Backup & Export
@@ -77,7 +83,7 @@
                                     data-bs-toggle="scroll">
                                     <i class="ti ti-adjustments-horizontal me-2"></i>
                                     Advanced
-                                </a>
+                                </a> --}}
                             </div>
                         </div>
                     </div>
@@ -244,7 +250,7 @@
                                     <div class="row g-2">
                                         <div class="col-auto">
                                             <label class="form-colorinput">
-                                                <input name="primary-color" type="radio" value="red"
+                                                <input name="primary_color" type="radio" value="red"
                                                     class="form-colorinput-input"
                                                     {{ $themeSettings['primary_color'] == 'red' ? 'checked' : '' }}>
                                                 <span class="form-colorinput-color bg-red"></span>
@@ -252,33 +258,33 @@
                                         </div>
                                         <div class="col-auto">
                                             <label class="form-colorinput">
-                                                <input name="primary-color" type="radio" value="blue"
+                                                <input name="primary_color" type="radio" value="blue"
                                                     class="form-colorinput-input"
-                                                    {{ $themeSettings['primary_color'] == 'red' ? 'blue' : '' }}>
+                                                    {{ $themeSettings['primary_color'] == 'blue' ? 'checked' : '' }}>
                                                 <span class="form-colorinput-color bg-blue"></span>
                                             </label>
                                         </div>
                                         <div class="col-auto">
                                             <label class="form-colorinput">
-                                                <input name="primary-color" type="radio" value="green"
+                                                <input name="primary_color" type="radio" value="green"
                                                     class="form-colorinput-input"
-                                                    {{ $themeSettings['primary_color'] == 'red' ? 'green' : '' }}>
+                                                    {{ $themeSettings['primary_color'] == 'green' ? 'checked' : '' }}>
                                                 <span class="form-colorinput-color bg-green"></span>
                                             </label>
                                         </div>
                                         <div class="col-auto">
                                             <label class="form-colorinput">
-                                                <input name="primary-color" type="radio" value="purple"
+                                                <input name="primary_color" type="radio" value="purple"
                                                     class="form-colorinput-input"
-                                                    {{ $themeSettings['primary_color'] == 'red' ? 'purple' : '' }}>
+                                                    {{ $themeSettings['primary_color'] == 'purple' ? 'checked' : '' }}>
                                                 <span class="form-colorinput-color bg-purple"></span>
                                             </label>
                                         </div>
                                         <div class="col-auto">
                                             <label class="form-colorinput">
-                                                <input name="primary-color" type="radio" value="orange"
+                                                <input name="primary_color" type="radio" value="orange"
                                                     class="form-colorinput-input"
-                                                    {{ $themeSettings['primary_color'] == 'red' ? 'orange' : '' }}>
+                                                    {{ $themeSettings['primary_color'] == 'orange' ? 'checked' : '' }}>
                                                 <span class="form-colorinput-color bg-orange"></span>
                                             </label>
                                         </div>
@@ -305,7 +311,7 @@
                                             <img src="{{ $logoSrc }}" alt="Current Logo" class="avatar avatar-xl">
                                         </div>
                                         <div class="col">
-                                            <input type="file" class="form-control" accept="image/*">
+                                            <input type="file" class="form-control" name="logo_file" accept="image/*">
                                             <small class="form-hint">Recommended size: 512x512px. Max file size:
                                                 2MB.</small>
                                         </div>
@@ -316,23 +322,23 @@
                                     <div class="row align-items-center">
                                         <div class="col-auto">
                                             @php
-                                                $logoUrl = $themeSettings['favicon_url'] ?? asset('img/favicon.png');
-                                                $logoSrc = asset('img/favicon.png');
-                                                if (strpos($logoUrl, "http") !== false) {
-                                                    $logoSrc = $logoUrl;
-                                                } elseif (strpos($logoUrl, ",") !== false) {
-                                                    $logoSrc = explode(',', $themeSettings['favicon_url'] ?? '');
-                                                    $smallImg = $logoSrc[2] ?? null;
+                                                $favUrl = $themeSettings['favicon_url'] ?? asset('img/favicon.png');
+                                                $favSrc = asset('img/favicon.png');
+                                                if (strpos($favUrl, "http") !== false) {
+                                                    $favSrc = $favUrl;
+                                                } elseif (strpos($favUrl, "storage") !== false) {
+                                                    $favSrc = explode(',', $themeSettings['favicon_url'] ?? '');
+                                                    $smallImg = $favSrc[0] ?? null;
                                                     $filename = $smallImg ? basename($smallImg) : null;
-                                                    $logoSrc = $filename
+                                                    $favSrc = $filename
                                                         ? route('settings.image', ['filename' => $filename])
                                                         : asset('img/favicon.png');
                                                 }
                                             @endphp
-                                            <img src="{{ $themeSettings['favicon_url'] ?? asset('img/favicon.png') }} " alt="Current Favicon" class="avatar avatar-md">
+                                            <img src="{{ $favSrc }} " alt="Current Favicon" class="avatar avatar-md">
                                         </div>
                                         <div class="col">
-                                            <input type="file" class="form-control" accept="image/png,image/x-icon">
+                                            <input type="file" class="form-control" name="favicon_file" accept="image/png,image/x-icon">
                                             <small class="form-hint">Recommended size: 32x32px or 16x16px. Max file size:
                                                 1MB.</small>
                                         </div>
@@ -340,7 +346,7 @@
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-check form-switch">
-                                        <input class="form-check-input" type="checkbox"
+                                        <input class="form-check-input" type="checkbox" name="show_footer" value="yes"
                                             {{ $themeSettings['show_footer'] == 'yes' ? 'checked' : '' }}>
                                         <span class="form-check-label">Show footer</span>
                                     </label>
@@ -673,7 +679,7 @@
                         </div>
                     </div>
 
-                    <div class="card mt-3" id="backup">
+                    {{-- <div class="card mt-3" id="backup">
                         <div class="card-header">
                             <h3 class="card-title">Backup & Export</h3>
                         </div>
@@ -786,9 +792,9 @@
                                 <button type="submit" class="btn btn-primary">Save Changes</button>
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
 
-                    <div class="card mt-3" id="advanced">
+                    {{-- <div class="card mt-3" id="advanced">
                         <div class="card-header">
                             <h3 class="card-title">Advanced Settings</h3>
                         </div>
@@ -898,7 +904,8 @@
                                 <button type="submit" class="btn btn-primary">Save Changes</button>
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
+
                 </div>
             </div>
         </div>
