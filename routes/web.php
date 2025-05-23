@@ -256,15 +256,18 @@ Route::middleware(['auth', 'role:User,Cover Creator,Artist,Composer', 'verified'
     // Untuk memutar lagu di halaman user setelah login dan menu search
     Route::get('/user/dashboard/play/{id}', [UserController::class, 'play'])->name('user.dashboard.play');
 
-    // Profile
-    Route::get('/profile/edit', function () {
-        return view('users.profile.edit');
-    })->name('profile.edit');
+    // Penambahan update profile from all user
+    Route::get('/profile/edit', [UserController::class, 'editProfile'])->name('profile.edit');
+    Route::post('/profile/update', [UserController::class, 'updateProfile'])->name('user.profile.update');
+    Route::post('/profile/change-password', [UserController::class, 'changePassword'])->name('user.change-password');
+    Route::post('/profile/social-media/update', [UserController::class, 'updateSocialMedia'])->name('user.socialmedia.update'); // Route baru untuk media sosial
 
-    // MyAsset Profile Route
-    Route::get('/profile/my-assets', function () {
-        return view('users.profile.my-assets');
-    })->name('profile.my-assets');
+
+    Route::get('/profile/my-assets', [UserController::class, 'myAssets'])->name('user.profile.my-assets');
+
+    // Route::get('/profile/my-assets', function () {
+    //     return view('users.profile.my-assets');
+    // })->name('profile.my-assets');
 
     Route::get('/profile/my-assets/purchased', function () {
         return view('users.profile.purchased-songs');

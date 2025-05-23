@@ -57,74 +57,91 @@
                                 <h3 class="card-title">Basic Information</h3>
                             </div>
                             <div class="card-body">
-                                <form action="#" method="POST" enctype="multipart/form-data">
+                                <form action="{{ route('user.profile.update') }}" method="POST"
+                                    enctype="multipart/form-data">
                                     @csrf
                                     <div class="row mb-4">
                                         <div class="col-12 text-center mb-3">
                                             <div class="avatar avatar-xl mb-3 mx-auto position-relative"
-                                                style="background-image: url(https://ui-avatars.com/api/?name=John+Doe&background=e53935&color=fff&size=200)">
+                                                style="background-image: url({{ $user->profile_picture ? asset('storage/' . $user->profile_picture) : 'https://ui-avatars.com/api/?name=' . urlencode($user->name) . '&background=e53935&color=fff' }})">
                                                 <div class="position-absolute bottom-0 end-0">
                                                     <label for="avatar-upload" class="btn btn-sm btn-primary rounded-circle"
                                                         style="width: 32px; height: 32px; padding: 0; line-height: 32px;">
                                                         <i class="ti ti-pencil"></i>
                                                     </label>
-                                                    <input type="file" id="avatar-upload" name="avatar" class="d-none">
+                                                    <input type="file" id="avatar-upload" name="profile_picture"
+                                                        class="d-none">
                                                 </div>
                                             </div>
-                                            <p class="text-muted small">Click the pencil icon to change your profile picture
+                                            <p class="text-muted small">Click the pencil icon to change your profile
+                                                picture
                                             </p>
                                         </div>
                                     </div>
                                     <div class="row mb-3">
-                                        <div class="col-md-6">
-                                            <label class="form-label">First Name</label>
-                                            <input type="text" class="form-control" name="first_name" value="John">
+                                        <div class="col-lg-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">First Name</label>
+                                                <input type="text" class="form-control" name="first_name"
+                                                    value="{{ explode(' ', $user->name)[0] ?? '' }}">
+                                            </div>
                                         </div>
-                                        <div class="col-md-6">
-                                            <label class="form-label">Last Name</label>
-                                            <input type="text" class="form-control" name="last_name" value="Doe">
+                                        <div class="col-lg-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Last Name</label>
+                                                <input type="text" class="form-control" name="last_name"
+                                                    value="{{ isset(explode(' ', $user->name)[1]) ? implode(' ', array_slice(explode(' ', $user->name), 1)) : '' }}">
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="row mb-3">
-                                        <div class="col-md-6">
-                                            <label class="form-label">Email</label>
-                                            <input type="email" class="form-control" name="email"
-                                                value="john.doe@example.com" disabled>
-                                            <small class="form-hint">Email cannot be changed</small>
+                                        <div class="row mb-3">
+                                            <div class="col-md-6">
+                                                <label class="form-label">Email</label>
+                                                <input type="email" class="form-control" name="email"
+                                                    value="{{ old('email', $user->email) }}" disabled>
+                                                <small class="form-hint">Email cannot be changed</small>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label">Phone Number</label>
+                                                <input type="tel" class="form-control" name="phone"
+                                                    value="{{ old('phone', $user->phone) }}">
+                                            </div>
                                         </div>
-                                        <div class="col-md-6">
-                                            <label class="form-label">Phone Number</label>
-                                            <input type="tel" class="form-control" name="phone"
-                                                value="+62 812 3456 7890">
+
+                                        <div class="col-lg-12">
+                                            <div class="mb-3">
+                                                <label class="form-label">Bio</label>
+
+                                                <textarea class="form-control" name="bio" rows="3">{{ $userProfile ? $userProfile->bio : '' }}</textarea>
+
+
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label class="form-label">Bio</label>
-                                        <textarea class="form-control" name="bio" rows="4">Music enthusiast with a passion for creating and sharing amazing sounds. I've been playing guitar for over 10 years and producing music for the last 5.</textarea>
-                                    </div>
-                                    <div class="row mb-3">
-                                        <div class="col-md-6">
-                                            <label class="form-label">Date of Birth</label>
-                                            <input type="date" class="form-control" name="birth_date" value="1990-01-15">
+                                        <div class="row mb-3">
+                                            <div class="col-md-6">
+                                                <label class="form-label">Date of Birth</label>
+                                                <input type="date" class="form-control" name="birthdate"
+                                                    value="{{ $userProfile ? $userProfile->birthdate : '' }}">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label">Gender</label>
+                                                <select class="form-select" name="gender">
+                                                    <option value="male"
+                                                        {{ $userProfile && $userProfile->gender == 'male' ? 'selected' : '' }}>
+                                                        Male</option>
+                                                    <option value="female"
+                                                        {{ $userProfile && $userProfile->gender == 'female' ? 'selected' : '' }}>
+                                                        Female</option>
+                                                </select>
+                                            </div>
                                         </div>
-                                        <div class="col-md-6">
-                                            <label class="form-label">Gender</label>
-                                            <select class="form-select" name="gender">
-                                                <option value="male" selected>Male</option>
-                                                <option value="female">Female</option>
-                                                <option value="other">Other</option>
-                                                <option value="prefer_not_to_say">Prefer not to say</option>
-                                            </select>
+                                        <div class="mb-3">
+                                            <label class="form-label">Location</label>
+                                            <input type="text" class="form-control" name="location"
+                                                value="{{ old('region', $user->region) }}">
                                         </div>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label class="form-label">Location</label>
-                                        <input type="text" class="form-control" name="location"
-                                            value="Jakarta, Indonesia">
-                                    </div>
-                                    <div class="form-footer">
-                                        <button type="submit" class="btn btn-primary">Save Changes</button>
-                                    </div>
+                                        <div class="form-footer">
+                                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                                        </div>
                                 </form>
                             </div>
                         </div>
@@ -135,17 +152,23 @@
                                 <h3 class="card-title">Account & Security</h3>
                             </div>
                             <div class="card-body">
-                                <form action="#" method="POST">
+                                <form action="{{ route('user.change-password') }}" method="POST">
                                     @csrf
                                     <h4 class="mb-3">Change Password</h4>
                                     <div class="mb-3">
                                         <label class="form-label">Current Password</label>
                                         <input type="password" class="form-control" name="current_password">
+                                        @error('current_password')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                     <div class="row mb-3">
                                         <div class="col-md-6">
                                             <label class="form-label">New Password</label>
                                             <input type="password" class="form-control" name="new_password">
+                                            @error('new_password')
+                                                <div class="text-danger">{{ $message }}</div>
+                                            @enderror
                                         </div>
                                         <div class="col-md-6">
                                             <label class="form-label">Confirm New Password</label>
@@ -250,63 +273,84 @@
                                 <h3 class="card-title">Social Profiles</h3>
                             </div>
                             <div class="card-body">
-                                <form action="#" method="POST">
+                                <form action="{{ route('user.socialmedia.update') }}" method="POST">
                                     @csrf
+
                                     <div class="mb-3">
                                         <label class="form-label">
                                             <i class="ti ti-brand-instagram text-pink me-2"></i>Instagram
                                         </label>
                                         <div class="input-group">
-                                            <span class="input-group-text">instagram.com/</span>
+                                            <span class="input-group-text">https://instagram.com/</span>
                                             <input type="text" class="form-control" name="instagram"
-                                                value="johndoemusic">
+                                                value="{{ old('instagram', $socialMedia['instagram'] ?? '') }}">
+
                                         </div>
+                                        @error('instagram')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                     <div class="mb-3">
                                         <label class="form-label">
                                             <i class="ti ti-brand-twitter text-blue me-2"></i>Twitter
                                         </label>
                                         <div class="input-group">
-                                            <span class="input-group-text">twitter.com/</span>
-                                            <input type="text" class="form-control" name="twitter" value="johndoe">
+                                            <span class="input-group-text">https://twitter.com/</span>
+                                            <input type="text" class="form-control" name="twitter"
+                                                value="{{ old('twitter', $socialMedia['twitter'] ?? '') }}">
                                         </div>
+                                        @error('twitter')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                     <div class="mb-3">
                                         <label class="form-label">
                                             <i class="ti ti-brand-youtube text-red me-2"></i>YouTube
                                         </label>
                                         <div class="input-group">
-                                            <span class="input-group-text">youtube.com/</span>
+                                            <span class="input-group-text">https://youtube.com/</span>
                                             <input type="text" class="form-control" name="youtube"
-                                                value="johndoemusic">
+                                                value="{{ old('youtube', $socialMedia['youtube'] ?? '') }}">
                                         </div>
+                                        @error('youtube')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                     <div class="mb-3">
                                         <label class="form-label">
                                             <i class="ti ti-brand-soundcloud text-orange me-2"></i>SoundCloud
                                         </label>
                                         <div class="input-group">
-                                            <span class="input-group-text">soundcloud.com/</span>
+                                            <span class="input-group-text">https://soundcloud.com/</span>
                                             <input type="text" class="form-control" name="soundcloud"
-                                                value="johndoemusic">
+                                                value="{{ old('soundcloud', $socialMedia['soundcloud'] ?? '') }}">
                                         </div>
+                                        @error('soundcloud')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                     <div class="mb-3">
                                         <label class="form-label">
                                             <i class="ti ti-brand-facebook text-blue me-2"></i>Facebook
                                         </label>
                                         <div class="input-group">
-                                            <span class="input-group-text">facebook.com/</span>
+                                            <span class="input-group-text">https://facebook.com/</span>
                                             <input type="text" class="form-control" name="facebook"
-                                                value="johndoemusic">
+                                                value="{{ old('facebook', $socialMedia['facebook'] ?? '') }}">
                                         </div>
+                                        @error('facebook')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                     <div class="mb-3">
                                         <label class="form-label">
                                             <i class="ti ti-world me-2"></i>Website
                                         </label>
                                         <input type="url" class="form-control" name="website"
-                                            value="https://johndoe-music.com">
+                                            value="{{ old('website', $socialMedia['website'] ?? '') }}">
+                                        @error('website')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                     <div class="form-footer">
                                         <button type="submit" class="btn btn-primary">Save Social Profiles</button>

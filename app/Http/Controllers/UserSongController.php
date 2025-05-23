@@ -71,7 +71,7 @@ class UserSongController extends Controller
 
         $songs = $query->latest()->paginate($perPage)->appends($request->only('search', 'status', 'perPage'));
 
-        return view('admin.songs.index', compact('songs', 'genre', 'album'));
+        return view('users.songs.index', compact('songs', 'genre', 'album'));
     }
 
 
@@ -310,7 +310,7 @@ class UserSongController extends Controller
             ->withProperties(['ip' => request()->ip()])
             ->log($authUser->name . ' visited edit song form for song: ' . $song->title);
 
-        return view('admin.songs.edit', compact('song', 'socialMedias', 'songLinks', 'songLicences', 'composers', 'composer_ids', 'genres', 'album', 'localZonesJson'));
+        return view('user.songs.edit', compact('song', 'socialMedias', 'songLinks', 'songLicences', 'composers', 'composer_ids', 'genres', 'album', 'localZonesJson'));
     }
 
     public function update(Request $request, $id)
@@ -469,7 +469,7 @@ class UserSongController extends Controller
 
             DB::commit();
 
-            return redirect()->route('admin.songs.index')->with('success', 'Song successfully updated.');
+            return redirect()->route('user.songs.index')->with('success', 'Song successfully updated.');
         } catch (\Exception $e) {
             DB::rollBack();
 
@@ -518,7 +518,7 @@ class UserSongController extends Controller
             ->withProperties(['ip' => request()->ip()])
             ->log($authUser->name . ' visited show song form for song: ' . $song->title);
 
-        return view('users.songs.show', compact('song', 'coverVersions', 'artistName', 'youtubeEmbedLink'));
+        return view('users.songs.show', compact('song', 'coverVersions', 'artistName', 'youtubeEmbedLink', 'authUser'));
     }
 
     public function bulkAction(Request $request)
@@ -644,7 +644,7 @@ class UserSongController extends Controller
                 ->withProperties(['ip' => request()->ip()])
                 ->log(Auth::user()->name . ' deleted a song');
 
-            return redirect()->route('admin.songs.index')->with('success', 'Song successfully deleted.');
+            return redirect()->route('users.songs.index')->with('success', 'Song successfully deleted.');
         } catch (\Exception $e) {
             DB::rollBack();
 

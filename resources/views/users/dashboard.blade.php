@@ -14,7 +14,8 @@
                         <div class="d-flex align-items-center">
 
                             <div class="btn-list me-2">
-                                <a href="{{ route('profile.my-assets') }}" class="btn btn-primary d-none d-sm-inline-block">
+                                <a href="{{ route('user.profile.my-assets') }}"
+                                    class="btn btn-primary d-none d-sm-inline-block">
                                     <i class="ti ti-music me-2"></i> My Assets
                                 </a>
                                 <a href="#" class="btn btn-primary d-sm-none btn-icon">
@@ -47,7 +48,7 @@
                         <div class="card">
                             <div class="card-body p-4 text-center">
                                 <span class="avatar avatar-xl mb-3 avatar-rounded"
-                                    style="background-image: url(https://ui-avatars.com/api/?name={{ auth()->user()->name }}&background=e53935&color=fff&size=100)"></span>
+                                    style="background-image: url({{ $user->profile_picture ? asset('storage/' . $user->profile_picture) : 'https://ui-avatars.com/api/?name=' . urlencode($user->name) . '&background=e53935&color=fff&size=100' }}); background-size: cover; background-position: center;"></span>
                                 <h3 class="m-0 mb-1">{{ auth()->user()->name }}</h3>
                                 <div class="text-muted">{{ auth()->user()->email }}</div>
                                 <div class="mt-3">
@@ -74,7 +75,7 @@
                                 @endif
 
                                 <div class="mt-3">
-                                    <a href="{{ route('profile.my-assets') }}" class="btn btn-outline-primary w-100">
+                                    <a href="{{ route('user.profile.my-assets') }}" class="btn btn-outline-primary w-100">
                                         <i class="ti ti-music me-2"></i> My Music Assets
                                     </a>
                                 </div>
@@ -744,8 +745,5 @@
             // Example of using SweetAlert for a welcome message
 
         });
-
-
-
     </script>
 @endsection

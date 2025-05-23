@@ -14,10 +14,10 @@ return new class extends Migration
     public function up()
     {
         Schema::create('social_medias', function (Blueprint $table) {
-             $table->uuid('id')->primary()->comment('Primary Key UUID');
-             $table->string('name')->unique()->comment('Nama platform social media');
-             $table->string('slug')->unique()->comment('Slug unik untuk platform');
-             $table->timestamps();
+            $table->uuid('id')->primary()->comment('Primary Key UUID');
+            $table->string('name')->unique()->comment('Nama platform social media');
+            $table->string('slug')->unique()->comment('Slug unik untuk platform');
+            $table->timestamps();
         });
     }
 

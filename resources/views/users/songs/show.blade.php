@@ -32,7 +32,7 @@
                             <div class="mt-4">
                                 @php
                                     $filename = $song->file_path ? basename($song->file_path) : null;
-                                    $audioUrl = $filename ? route('admin.songs.audio', ['filename' => $filename]) : null;
+                                    $audioUrl = $filename ? route('songs.audio', ['filename' => $filename]) : null;
                                 @endphp
 
                                 @if ($audioUrl)
@@ -65,7 +65,7 @@
 
                                         $filename = $smallCoverFile ? basename($smallCoverFile) : null;
 
-                                        $imageUrl = $filename ? route('admin.songs.image', ['filename' => $filename]) : 'https://via.placeholder.com/300';
+                                        $imageUrl = $filename ? route('songs.image', ['filename' => $filename]) : 'https://via.placeholder.com/300';
                                     @endphp
 
                                     {{-- <img src="{{ $imageUrl }}" class="rounded" width="200" height="200"
@@ -438,7 +438,7 @@
                                                 </span>
                                             </td>
                                             <td>
-                                                <a href="{{ route('admin.songs.show', $cover->id) }}"
+                                                <a href="{{ route('user.songs.show', $cover->id) }}"
                                                     class="btn btn-icon btn-ghost-secondary">
                                                     <i class="ti ti-eye"></i>
                                                 </a>
