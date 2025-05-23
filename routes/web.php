@@ -259,7 +259,8 @@ Route::middleware(['auth', 'role:User,Cover Creator,Artist,Composer', 'verified'
     // Penambahan update profile from all user
     Route::get('/profile/edit', [UserController::class, 'editProfile'])->name('profile.edit');
     Route::post('/profile/update', [UserController::class, 'updateProfile'])->name('user.profile.update');
-
+    Route::post('/profile/change-password', [UserController::class, 'changePassword'])->name('user.change-password');
+    Route::post('/profile/social-media/update', [UserController::class, 'updateSocialMedia'])->name('user.socialmedia.update'); // Route baru untuk media sosial
     // MyAsset Profile Route
     Route::get('/profile/my-assets', function () {
         return view('users.profile.my-assets');

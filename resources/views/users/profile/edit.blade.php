@@ -152,17 +152,23 @@
                                 <h3 class="card-title">Account & Security</h3>
                             </div>
                             <div class="card-body">
-                                <form action="#" method="POST">
+                                <form action="{{ route('user.change-password') }}" method="POST">
                                     @csrf
                                     <h4 class="mb-3">Change Password</h4>
                                     <div class="mb-3">
                                         <label class="form-label">Current Password</label>
                                         <input type="password" class="form-control" name="current_password">
+                                        @error('current_password')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                     <div class="row mb-3">
                                         <div class="col-md-6">
                                             <label class="form-label">New Password</label>
                                             <input type="password" class="form-control" name="new_password">
+                                            @error('new_password')
+                                                <div class="text-danger">{{ $message }}</div>
+                                            @enderror
                                         </div>
                                         <div class="col-md-6">
                                             <label class="form-label">Confirm New Password</label>
@@ -267,63 +273,84 @@
                                 <h3 class="card-title">Social Profiles</h3>
                             </div>
                             <div class="card-body">
-                                <form action="#" method="POST">
+                                <form action="{{ route('user.socialmedia.update') }}" method="POST">
                                     @csrf
+
                                     <div class="mb-3">
                                         <label class="form-label">
                                             <i class="ti ti-brand-instagram text-pink me-2"></i>Instagram
                                         </label>
                                         <div class="input-group">
-                                            <span class="input-group-text">instagram.com/</span>
+                                            <span class="input-group-text">https://instagram.com/</span>
                                             <input type="text" class="form-control" name="instagram"
-                                                value="johndoemusic">
+                                                value="{{ old('instagram', $socialMedia['instagram'] ?? '') }}">
+
                                         </div>
+                                        @error('instagram')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                     <div class="mb-3">
                                         <label class="form-label">
                                             <i class="ti ti-brand-twitter text-blue me-2"></i>Twitter
                                         </label>
                                         <div class="input-group">
-                                            <span class="input-group-text">twitter.com/</span>
-                                            <input type="text" class="form-control" name="twitter" value="johndoe">
+                                            <span class="input-group-text">https://twitter.com/</span>
+                                            <input type="text" class="form-control" name="twitter"
+                                                value="{{ old('twitter', $socialMedia['twitter'] ?? '') }}">
                                         </div>
+                                        @error('twitter')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                     <div class="mb-3">
                                         <label class="form-label">
                                             <i class="ti ti-brand-youtube text-red me-2"></i>YouTube
                                         </label>
                                         <div class="input-group">
-                                            <span class="input-group-text">youtube.com/</span>
+                                            <span class="input-group-text">https://youtube.com/</span>
                                             <input type="text" class="form-control" name="youtube"
-                                                value="johndoemusic">
+                                                value="{{ old('youtube', $socialMedia['youtube'] ?? '') }}">
                                         </div>
+                                        @error('youtube')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                     <div class="mb-3">
                                         <label class="form-label">
                                             <i class="ti ti-brand-soundcloud text-orange me-2"></i>SoundCloud
                                         </label>
                                         <div class="input-group">
-                                            <span class="input-group-text">soundcloud.com/</span>
+                                            <span class="input-group-text">https://soundcloud.com/</span>
                                             <input type="text" class="form-control" name="soundcloud"
-                                                value="johndoemusic">
+                                                value="{{ old('soundcloud', $socialMedia['soundcloud'] ?? '') }}">
                                         </div>
+                                        @error('soundcloud')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                     <div class="mb-3">
                                         <label class="form-label">
                                             <i class="ti ti-brand-facebook text-blue me-2"></i>Facebook
                                         </label>
                                         <div class="input-group">
-                                            <span class="input-group-text">facebook.com/</span>
+                                            <span class="input-group-text">https://facebook.com/</span>
                                             <input type="text" class="form-control" name="facebook"
-                                                value="johndoemusic">
+                                                value="{{ old('facebook', $socialMedia['facebook'] ?? '') }}">
                                         </div>
+                                        @error('facebook')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                     <div class="mb-3">
                                         <label class="form-label">
                                             <i class="ti ti-world me-2"></i>Website
                                         </label>
                                         <input type="url" class="form-control" name="website"
-                                            value="https://johndoe-music.com">
+                                            value="{{ old('website', $socialMedia['website'] ?? '') }}">
+                                        @error('website')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                     <div class="form-footer">
                                         <button type="submit" class="btn btn-primary">Save Social Profiles</button>

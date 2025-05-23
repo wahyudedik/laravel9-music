@@ -12,7 +12,7 @@
                     <div class="col-auto ms-auto">
                         <div class="btn-list">
                             @if (auth()->user()->hasRole('Composer'))
-                                <a href="{{route('user.songs.create')}}" class="btn btn-primary d-none d-sm-inline-block">
+                                <a href="{{ route('user.songs.create') }}" class="btn btn-primary d-none d-sm-inline-block">
                                     <i class="ti ti-upload me-2"></i>Upload New Song
                                 </a>
                             @endif
@@ -98,7 +98,8 @@
                                             <i class="ti ti-shopping-cart me-2"></i>Purchased
                                         </a>
                                     </li>
-                                    @if (auth()->user()->hasRole('Cover Creator') || auth()->user()->hasRole('Artist'))
+                                    @if (auth()->user()->hasRole('Cover Creator') ||
+                                            auth()->user()->hasRole('Artist'))
                                         <li class="nav-item">
                                             <a href="#covers" class="nav-link" data-bs-toggle="tab">
                                                 <i class="ti ti-microphone-2 me-2"></i>My Covers
@@ -707,15 +708,7 @@
                                                 </thead>
                                                 <tbody>
                                                     @php
-                                                        $genres = [
-                                                            'Pop',
-                                                            'Rock',
-                                                            'Hip Hop',
-                                                            'R&B',
-                                                            'Jazz',
-                                                            'Electronic',
-                                                            'Classical',
-                                                        ];
+                                                        $genres = ['Pop', 'Rock', 'Hip Hop', 'R&B', 'Jazz', 'Electronic', 'Classical'];
                                                         $statuses = ['Published', 'Draft', 'Pending Review'];
                                                         $licenses = ['Standard', 'Premium', 'Exclusive'];
                                                     @endphp
