@@ -12,7 +12,8 @@
                 </div>
                 <div class="col-auto ms-auto d-print-none">
                     <div class="btn-list">
-                        <a href="{{ route('profile.my-assets') }}" class="btn btn-outline-primary d-none d-sm-inline-block">
+                        <a href="{{ route('user.profile.my-assets') }}"
+                            class="btn btn-outline-primary d-none d-sm-inline-block">
                             <i class="ti ti-arrow-left me-2"></i>
                             Kembali ke MyAsset
                         </a>
@@ -461,7 +462,7 @@
                         </div>
                         <div class="card-footer text-end">
                             <div class="d-flex">
-                                <a href="{{ route('profile.my-assets') }}" class="btn btn-link">Batal</a>
+                                <a href="{{ route('user.profile.my-assets') }}" class="btn btn-link">Batal</a>
                                 <button type="submit" class="btn btn-primary ms-auto">
                                     <i class="ti ti-device-floppy me-2"></i>Simpan Lagu
                                 </button>
@@ -547,7 +548,7 @@
                         confirmButtonColor: '#e53935'
                     }).then((result) => {
                         if (result.isConfirmed) {
-                            window.location.href = "{{ route('profile.my-assets') }}";
+                            window.location.href = "{{ route('user.profile.my-assets') }}";
                         }
                     });
                 }, 1500);

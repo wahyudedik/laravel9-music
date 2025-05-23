@@ -518,7 +518,7 @@ class UserSongController extends Controller
             ->withProperties(['ip' => request()->ip()])
             ->log($authUser->name . ' visited show song form for song: ' . $song->title);
 
-        return view('users.songs.show', compact('song', 'coverVersions', 'artistName', 'youtubeEmbedLink'));
+        return view('users.songs.show', compact('song', 'coverVersions', 'artistName', 'youtubeEmbedLink', 'authUser'));
     }
 
     public function bulkAction(Request $request)

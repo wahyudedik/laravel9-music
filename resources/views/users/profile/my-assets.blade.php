@@ -32,8 +32,8 @@
                     <div class="col-md-4">
                         <div class="card">
                             <div class="card-body p-4 text-center">
-                                <span class="avatar avatar-xl mb-3 avatar-rounded"
-                                    style="background-image: url(https://ui-avatars.com/api/?name={{ auth()->user()->name }}&background=e53935&color=fff&size=100)"></span>
+                                <span class="avatar avatar-xl mb-3 avatar-rounded" <span
+                                    style="background-image: url({{ $user->profile_picture ? asset('storage/' . $user->profile_picture) : 'https://ui-avatars.com/api/?name=' . urlencode($user->name) . '&background=e53935&color=fff&size=100' }}); background-size: cover; background-position: center;"></span>
                                 <h3 class="m-0 mb-1">{{ auth()->user()->name }}</h3>
                                 <div class="text-muted">{{ auth()->user()->email }}</div>
                                 <div class="mt-3">

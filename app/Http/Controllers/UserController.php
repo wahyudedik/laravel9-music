@@ -21,8 +21,10 @@ class UserController extends Controller
 {
     public function dashboard(Request $request)
     {
+        $user = Auth::user();
         $query = $request->input('q');
         $results = [];
+
 
         if ($query) {
             $results = Song::where('title', 'like', "%$query%")
@@ -77,6 +79,7 @@ class UserController extends Controller
             ->get();
 
         return view('users.dashboard', [
+            'user' => $user,
             'results' => $results,
             'query' => $query,
             'allSongs' => $allSongs,
@@ -111,6 +114,13 @@ class UserController extends Controller
         }
         $userProfile = UserProfile::where('user_id', $user->id)->first();
         return view('users.profile.edit', compact('user', 'userProfile', 'socialMedia'));
+    }
+
+
+    public function myAssets()
+    {
+        $user = Auth::user();
+        return view('users.profile.my-assets', compact('user'));
     }
 
     public function updateProfile(Request $request)

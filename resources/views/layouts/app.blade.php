@@ -241,7 +241,7 @@
                             </div>
                         </a>
                         <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                            <a href="{{ route('profile.my-assets') }}" class="dropdown-item">
+                            <a href="{{ route('user.profile.my-assets') }}" class="dropdown-item">
                                 <i class="ti ti-user me-2"></i>Profile
                             </a>
                             @if (!auth()->user()->email_verified_at)
