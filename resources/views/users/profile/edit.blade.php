@@ -57,74 +57,91 @@
                                 <h3 class="card-title">Basic Information</h3>
                             </div>
                             <div class="card-body">
-                                <form action="#" method="POST" enctype="multipart/form-data">
+                                <form action="{{ route('user.profile.update') }}" method="POST"
+                                    enctype="multipart/form-data">
                                     @csrf
                                     <div class="row mb-4">
                                         <div class="col-12 text-center mb-3">
                                             <div class="avatar avatar-xl mb-3 mx-auto position-relative"
-                                                style="background-image: url(https://ui-avatars.com/api/?name=John+Doe&background=e53935&color=fff&size=200)">
+                                                style="background-image: url({{ $user->profile_picture ? asset('storage/' . $user->profile_picture) : 'https://ui-avatars.com/api/?name=' . urlencode($user->name) . '&background=e53935&color=fff' }})">
                                                 <div class="position-absolute bottom-0 end-0">
                                                     <label for="avatar-upload" class="btn btn-sm btn-primary rounded-circle"
                                                         style="width: 32px; height: 32px; padding: 0; line-height: 32px;">
                                                         <i class="ti ti-pencil"></i>
                                                     </label>
-                                                    <input type="file" id="avatar-upload" name="avatar" class="d-none">
+                                                    <input type="file" id="avatar-upload" name="profile_picture"
+                                                        class="d-none">
                                                 </div>
                                             </div>
-                                            <p class="text-muted small">Click the pencil icon to change your profile picture
+                                            <p class="text-muted small">Click the pencil icon to change your profile
+                                                picture
                                             </p>
                                         </div>
                                     </div>
                                     <div class="row mb-3">
-                                        <div class="col-md-6">
-                                            <label class="form-label">First Name</label>
-                                            <input type="text" class="form-control" name="first_name" value="John">
+                                        <div class="col-lg-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">First Name</label>
+                                                <input type="text" class="form-control" name="first_name"
+                                                    value="{{ explode(' ', $user->name)[0] ?? '' }}">
+                                            </div>
                                         </div>
-                                        <div class="col-md-6">
-                                            <label class="form-label">Last Name</label>
-                                            <input type="text" class="form-control" name="last_name" value="Doe">
+                                        <div class="col-lg-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Last Name</label>
+                                                <input type="text" class="form-control" name="last_name"
+                                                    value="{{ isset(explode(' ', $user->name)[1]) ? implode(' ', array_slice(explode(' ', $user->name), 1)) : '' }}">
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="row mb-3">
-                                        <div class="col-md-6">
-                                            <label class="form-label">Email</label>
-                                            <input type="email" class="form-control" name="email"
-                                                value="john.doe@example.com" disabled>
-                                            <small class="form-hint">Email cannot be changed</small>
+                                        <div class="row mb-3">
+                                            <div class="col-md-6">
+                                                <label class="form-label">Email</label>
+                                                <input type="email" class="form-control" name="email"
+                                                    value="{{ old('email', $user->email) }}" disabled>
+                                                <small class="form-hint">Email cannot be changed</small>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label">Phone Number</label>
+                                                <input type="tel" class="form-control" name="phone"
+                                                    value="{{ old('phone', $user->phone) }}">
+                                            </div>
                                         </div>
-                                        <div class="col-md-6">
-                                            <label class="form-label">Phone Number</label>
-                                            <input type="tel" class="form-control" name="phone"
-                                                value="+62 812 3456 7890">
+
+                                        <div class="col-lg-12">
+                                            <div class="mb-3">
+                                                <label class="form-label">Bio</label>
+
+                                                <textarea class="form-control" name="bio" rows="3">{{ $userProfile ? $userProfile->bio : '' }}</textarea>
+
+
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label class="form-label">Bio</label>
-                                        <textarea class="form-control" name="bio" rows="4">Music enthusiast with a passion for creating and sharing amazing sounds. I've been playing guitar for over 10 years and producing music for the last 5.</textarea>
-                                    </div>
-                                    <div class="row mb-3">
-                                        <div class="col-md-6">
-                                            <label class="form-label">Date of Birth</label>
-                                            <input type="date" class="form-control" name="birth_date" value="1990-01-15">
+                                        <div class="row mb-3">
+                                            <div class="col-md-6">
+                                                <label class="form-label">Date of Birth</label>
+                                                <input type="date" class="form-control" name="birthdate"
+                                                    value="{{ $userProfile ? $userProfile->birthdate : '' }}">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label">Gender</label>
+                                                <select class="form-select" name="gender">
+                                                    <option value="male"
+                                                        {{ $userProfile && $userProfile->gender == 'male' ? 'selected' : '' }}>
+                                                        Male</option>
+                                                    <option value="female"
+                                                        {{ $userProfile && $userProfile->gender == 'female' ? 'selected' : '' }}>
+                                                        Female</option>
+                                                </select>
+                                            </div>
                                         </div>
-                                        <div class="col-md-6">
-                                            <label class="form-label">Gender</label>
-                                            <select class="form-select" name="gender">
-                                                <option value="male" selected>Male</option>
-                                                <option value="female">Female</option>
-                                                <option value="other">Other</option>
-                                                <option value="prefer_not_to_say">Prefer not to say</option>
-                                            </select>
+                                        <div class="mb-3">
+                                            <label class="form-label">Location</label>
+                                            <input type="text" class="form-control" name="location"
+                                                value="{{ old('region', $user->region) }}">
                                         </div>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label class="form-label">Location</label>
-                                        <input type="text" class="form-control" name="location"
-                                            value="Jakarta, Indonesia">
-                                    </div>
-                                    <div class="form-footer">
-                                        <button type="submit" class="btn btn-primary">Save Changes</button>
-                                    </div>
+                                        <div class="form-footer">
+                                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                                        </div>
                                 </form>
                             </div>
                         </div>

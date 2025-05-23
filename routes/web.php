@@ -256,10 +256,9 @@ Route::middleware(['auth', 'role:User,Cover Creator,Artist,Composer', 'verified'
     // Untuk memutar lagu di halaman user setelah login dan menu search
     Route::get('/user/dashboard/play/{id}', [UserController::class, 'play'])->name('user.dashboard.play');
 
-    // Profile
-    Route::get('/profile/edit', function () {
-        return view('users.profile.edit');
-    })->name('profile.edit');
+    // Penambahan update profile from all user
+    Route::get('/profile/edit', [UserController::class, 'editProfile'])->name('profile.edit');
+    Route::post('/profile/update', [UserController::class, 'updateProfile'])->name('user.profile.update');
 
     // MyAsset Profile Route
     Route::get('/profile/my-assets', function () {
