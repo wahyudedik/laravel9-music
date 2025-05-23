@@ -316,6 +316,7 @@
                                     <i class="ti ti-playlist me-1"></i>Playlist
                                 </a>
                             </li>
+
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('wishlist.index') }}">
                                     <i class="ti ti-heart me-1"></i>Wishlist
