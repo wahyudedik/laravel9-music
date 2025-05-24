@@ -260,14 +260,10 @@ Route::middleware(['auth', 'role:User,Cover Creator,Artist,Composer', 'verified'
     Route::get('/profile/edit', [UserController::class, 'editProfile'])->name('profile.edit');
     Route::post('/profile/update', [UserController::class, 'updateProfile'])->name('user.profile.update');
     Route::post('/profile/change-password', [UserController::class, 'changePassword'])->name('user.change-password');
-    Route::post('/profile/social-media/update', [UserController::class, 'updateSocialMedia'])->name('user.socialmedia.update'); // Route baru untuk media sosial
+    Route::post('/profile/social-media/update', [UserController::class, 'updateSocialMedia'])->name('user.socialmedia.update');
 
 
     Route::get('/profile/my-assets', [UserController::class, 'myAssets'])->name('user.profile.my-assets');
-
-    // Route::get('/profile/my-assets', function () {
-    //     return view('users.profile.my-assets');
-    // })->name('profile.my-assets');
 
     Route::get('/profile/my-assets/purchased', function () {
         return view('users.profile.purchased-songs');
@@ -309,6 +305,13 @@ Route::middleware(['auth', 'role:User,Cover Creator,Artist,Composer', 'verified'
         Route::post('/songs/bulk-action', [UserSongController::class, 'bulkAction'])->name('user.songs.bulk-action');
         Route::get('/{id}', [UserSongController::class, 'show'])->name('user.songs.show');
         Route::delete('/{song}', [UserSongController::class, 'destroy'])->name('user.songs.destroy');
+        Route::get('/image/{filename}', function ($filename) {
+            $path = storage_path('app/public/songs/' . $filename);
+            if (!File::exists($path)) {
+                return redirect('https://via.placeholder.com/40');
+            }
+            return response()->file($path);
+        })->where('filename', '.*')->name('user.songs.image');
 
         Route::get('/audio/{filename}', function ($filename) {
             $path = storage_path('app/public/songs/audio/' . $filename);

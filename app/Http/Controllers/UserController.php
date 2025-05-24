@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Song;
+use App\Models\SongContributor;
 use App\Models\Stream;
 use App\Models\User;
 use App\Models\UserProfile;
@@ -120,7 +121,11 @@ class UserController extends Controller
     public function myAssets()
     {
         $user = Auth::user();
-        return view('users.profile.my-assets', compact('user'));
+
+        $songs = SongContributor::where('user_id', $user->id)->with('song', 'user')->get();
+        $uploadedsongs = Song::where('created_by', $user->id)->with('genre', 'creator')->get();
+
+        return view('users.profile.my-assets', compact('user', 'songs', 'uploadedsongs'));
     }
 
     public function updateProfile(Request $request)

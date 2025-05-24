@@ -65,7 +65,7 @@
 
                                         $filename = $smallCoverFile ? basename($smallCoverFile) : null;
 
-                                        $imageUrl = $filename ? route('songs.image', ['filename' => $filename]) : 'https://via.placeholder.com/300';
+                                        $imageUrl = $filename ? route('user.songs.image', ['filename' => $filename]) : 'https://via.placeholder.com/300';
                                     @endphp
 
                                     {{-- <img src="{{ $imageUrl }}" class="rounded" width="200" height="200"

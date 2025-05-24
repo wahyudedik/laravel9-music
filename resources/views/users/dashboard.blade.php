@@ -172,12 +172,19 @@
                                             </thead>
                                             <tbody>
                                                 @foreach ($allSongs ?? [] as $index => $song)
+                                                    @php
+
+                                                        $coverImages = explode(',', $song->cover_image ?? '');
+                                                        $smallCoverFile = $coverImages[2] ?? null;
+                                                        $filename = $smallCoverFile ? basename($smallCoverFile) : null;
+                                                        $imageUrl = $filename ? route('user.songs.image', ['filename' => $filename]) : 'https://via.placeholder.com/40';
+                                                    @endphp
                                                     <tr>
                                                         <td>{{ $index + 1 }}</td>
                                                         <td>
                                                             <div class="d-flex align-items-center">
                                                                 <span class="avatar me-2"
-                                                                    style="background-image: url(https://picsum.photos/40/40?random={{ $index + 30 }})"></span>
+                                                                    style="background-image: url('{{ $imageUrl }}')"></span>
                                                                 <div>{{ $song->title }}</div>
                                                             </div>
                                                         </td>
@@ -672,12 +679,19 @@
                             </thead>
                             <tbody>
                                 @foreach ($allSongs ?? [] as $index => $song)
+                                    @php
+
+                                        $coverImages = explode(',', $song->cover_image ?? '');
+                                        $smallCoverFile = $coverImages[2] ?? null;
+                                        $filename = $smallCoverFile ? basename($smallCoverFile) : null;
+                                        $imageUrl = $filename ? route('user.songs.image', ['filename' => $filename]) : 'https://via.placeholder.com/40';
+                                    @endphp
                                     <tr>
                                         <td>{{ $index + 1 }}</td>
                                         <td>
                                             <div class="d-flex align-items-center">
                                                 <span class="avatar me-2"
-                                                    style="background-image: url(https://picsum.photos/40/40?random={{ $index + 30 }})"></span>
+                                                    style="background-image: url('{{ $imageUrl }}')"></span>
                                                 <div>{{ $song->title }}</div>
                                             </div>
                                         </td>
