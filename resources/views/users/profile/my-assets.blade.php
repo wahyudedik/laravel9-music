@@ -32,7 +32,7 @@
                     <div class="col-md-4">
                         <div class="card">
                             <div class="card-body p-4 text-center">
-                                <span class="avatar avatar-xl mb-3 avatar-rounded" <span
+                                <span class="avatar avatar-xl mb-3 avatar-rounded"
                                     style="background-image: url({{ $user->profile_picture ? asset('storage/' . $user->profile_picture) : 'https://ui-avatars.com/api/?name=' . urlencode($user->name) . '&background=e53935&color=fff&size=100' }}); background-size: cover; background-position: center;"></span>
                                 <h3 class="m-0 mb-1">{{ auth()->user()->name }}</h3>
                                 <div class="text-muted">{{ auth()->user()->email }}</div>
@@ -165,72 +165,107 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    @php
-                                                        $types = ['Purchased', 'Cover', 'Release', 'Draft', 'Upload'];
-                                                        $statuses = ['Active', 'Pending', 'Published', 'Draft'];
-                                                    @endphp
-
-                                                    @for ($i = 1; $i <= 10; $i++)
-                                                        <tr>
-                                                            <td>
-                                                                <div class="d-flex align-items-center">
-                                                                    <span class="avatar me-2"
-                                                                        style="background-image: url(https://picsum.photos/40/40?random={{ $i }})"></span>
-                                                                    <div>
-                                                                        <div class="font-weight-medium">Song Title
-                                                                            {{ $i }}</div>
-                                                                        <div class="text-muted">Artist Name</div>
-                                                                    </div>
-                                                                </div>
-                                                            </td>
-                                                            <td>{{ $types[array_rand($types)] }}</td>
-                                                            <td>{{ now()->subDays(rand(1, 30))->format('M d, Y') }}</td>
-                                                            <td>
-                                                                @php
-                                                                    $status = $statuses[array_rand($statuses)];
-                                                                    $statusClass = [
-                                                                        'Active' => 'bg-success',
-                                                                        'Pending' => 'bg-warning',
-                                                                        'Published' => 'bg-primary',
-                                                                        'Draft' => 'bg-secondary',
-                                                                    ][$status];
-                                                                @endphp
-                                                                <span
-                                                                    class="badge {{ $statusClass }}">{{ $status }}</span>
-                                                            </td>
-                                                            <td>
-                                                                <div class="btn-list flex-nowrap">
-                                                                    <button class="btn btn-icon btn-sm btn-primary"
-                                                                        data-bs-toggle="tooltip" title="Play">
-                                                                        <i class="ti ti-player-play"></i>
-                                                                    </button>
-                                                                    <div class="dropdown">
-                                                                        <button
-                                                                            class="btn btn-icon btn-sm btn-ghost-secondary"
-                                                                            data-bs-toggle="dropdown">
-                                                                            <i class="ti ti-dots-vertical"></i>
-                                                                        </button>
-                                                                        <div class="dropdown-menu dropdown-menu-end">
-                                                                            <a href="#" class="dropdown-item">
-                                                                                <i class="ti ti-edit me-2"></i>Edit
-                                                                            </a>
-                                                                            <a href="#" class="dropdown-item">
-                                                                                <i class="ti ti-share me-2"></i>Share
-                                                                            </a>
-                                                                            <a href="#" class="dropdown-item">
-                                                                                <i class="ti ti-download me-2"></i>Download
-                                                                            </a>
-                                                                            <div class="dropdown-divider"></div>
-                                                                            <a href="#"
-                                                                                class="dropdown-item text-danger">
-                                                                                <i class="ti ti-trash me-2"></i>Delete
-                                                                            </a>
+                                                    <div class="list-group list-group-flush">
+                                                        @foreach ($songs as $songContributor)
+                                                            @php
+                                                                $coverImages = explode(',', $songContributor->song->cover_image ?? '');
+                                                                $smallCoverFile = $coverImages[2] ?? null;
+                                                                $filename = $smallCoverFile ? basename($smallCoverFile) : null;
+                                                                $imageUrl = $filename ? route('user.songs.image', ['filename' => $filename]) : 'https://via.placeholder.com/40';
+                                                            @endphp
+                                                            <tr>
+                                                                <td>
+                                                                    <div class="d-flex align-items-center">
+                                                                        <span class="avatar me-2"
+                                                                            style="background-image: url('{{ $imageUrl }}')"></span>
+                                                                        <div>
+                                                                            <div class="font-weight-medium">
+                                                                                {{ $songContributor->song->title }}
+                                                                            </div>
+                                                                            <div class="text-muted">
+                                                                                {{ $songContributor->user->name ?? 'Unknown Artist' }}
+                                                                            </div>
                                                                         </div>
                                                                     </div>
-                                                                </div>
-                                                            </td>
+                                                                </td>
+
+                                                                <td>{{ $songContributor->song->license_type ?? 'N/A' }}
+                                                                </td>
+                                                                <td>{{ $songContributor->created_at->format('M d, Y') }}
+                                                                </td>
+
+                                                                <td>
+                                                                    @php
+
+                                                                        $status = $songContributor->song->status ?? 'Draft';
+                                                                        $statusClass =
+                                                                            [
+                                                                                'Active' => 'bg-success',
+                                                                                'Pending' => 'bg-warning',
+                                                                                'Published' => 'bg-primary',
+                                                                                'Draft' => 'bg-secondary',
+                                                                            ][$status] ?? 'bg-secondary';
+                                                                    @endphp
+                                                                    <span
+                                                                        class="badge {{ $statusClass }}">{{ $status }}</span>
+                                                                </td>
+                                                                <td>
+                                                                    <div class="btn-list flex-nowrap">
+                                                                        <button class="btn btn-icon btn-sm btn-primary"
+                                                                            data-bs-toggle="tooltip" title="Play">
+                                                                            <a href="{{ route('user.songs.show', $songContributor->song->id) }}"
+                                                                                style="color: inherit; text-decoration: none; display: block; width: 100%; height: 100%;">
+                                                                                <i class="ti ti-player-play"></i>
+                                                                            </a>
+                                                                        </button>
+
+                                                                        <div class="dropdown">
+                                                                            <button
+                                                                                class="btn btn-icon btn-sm btn-ghost-secondary"
+                                                                                data-bs-toggle="dropdown">
+                                                                                <i class="ti ti-dots-vertical"></i>
+                                                                            </button>
+                                                                            <div class="dropdown-menu dropdown-menu-end">
+
+                                                                                <a href="{{ route('user.songs.edit', $songContributor->song->id) }}"
+                                                                                    class="dropdown-item">
+                                                                                    <i class="ti ti-edit me-2"></i>Edit
+                                                                                </a>
+                                                                                <a href="#" class="dropdown-item">
+                                                                                    <i class="ti ti-share me-2"></i>Share
+                                                                                </a>
+                                                                                <a href="#" class="dropdown-item">
+                                                                                    <i
+                                                                                        class="ti ti-download me-2"></i>Download
+                                                                                </a>
+                                                                                <div class="dropdown-divider"></div>
+                                                                                <a href="javascript:void(0)"
+                                                                                    class="dropdown-item text-danger delete-song"
+                                                                                    onclick="confirmDelete('{{ $songContributor->song->id }}')"
+                                                                                    data-id="{{ $songContributor->song->id }}">
+                                                                                    <i class="ti ti-trash me-2"></i>Delete
+                                                                                </a>
+                                                                                <form
+                                                                                    id="delete-song-{{ $songContributor->song->id }}"
+                                                                                    action="{{ route('user.songs.destroy', $songContributor->song) }}"
+                                                                                    method="POST" style="display: none;">
+                                                                                    #
+                                                                                    @csrf
+                                                                                    @method('DELETE')
+                                                                                </form>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                        @endforeach
+                                                    </div>
+                                                    @if ($songs->isEmpty())
+                                                        <tr>
+                                                            <td colspan="5" class="text-center">Tidak ada lagu yang
+                                                                ditemukan.</td>
                                                         </tr>
-                                                    @endfor
+                                                    @endif
                                                 </tbody>
                                             </table>
                                         </div>
@@ -971,6 +1006,21 @@
 
 @section('scripts')
     <script>
+        function confirmDelete(id) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#e53935',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('delete-song-' + id).submit();
+                }
+            });
+        }
         document.addEventListener('DOMContentLoaded', function() {
             // Example of using SweetAlert for a welcome message
             // Uncomment to enable

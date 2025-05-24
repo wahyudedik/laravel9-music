@@ -127,8 +127,6 @@
                             </tr>
                         </thead>
                         <tbody id="songs-table-body">
-
-
                             @foreach ($songs as $song)
                                 @php
                                     // Extract filename from the 3rd image variant (small)

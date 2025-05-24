@@ -140,8 +140,6 @@ class UserSongController extends Controller
                 ->with('composer_names', $composerNames);
         }
 
-
-
         // List path file yang di-upload, untuk nanti dihapus kalau error
         $uploadedFiles = [];
 
@@ -253,7 +251,7 @@ class UserSongController extends Controller
 
             DB::commit();
 
-            return redirect()->route('profile.my-assets')->with('success', 'Song successfully added.');
+            return redirect()->route('user.profile.my-assets')->with('success', 'Song successfully added.');
         } catch (\Exception $e) {
             DB::rollBack();
 
@@ -267,9 +265,6 @@ class UserSongController extends Controller
                 ->withInput();
         }
     }
-
-
-
 
     public function edit(Request $request, $id)
     {
@@ -310,7 +305,7 @@ class UserSongController extends Controller
             ->withProperties(['ip' => request()->ip()])
             ->log($authUser->name . ' visited edit song form for song: ' . $song->title);
 
-        return view('user.songs.edit', compact('song', 'socialMedias', 'songLinks', 'songLicences', 'composers', 'composer_ids', 'genres', 'album', 'localZonesJson'));
+        return view('users.songs.edit', compact('song', 'socialMedias', 'songLinks', 'songLicences', 'composers', 'composer_ids', 'genres', 'album', 'localZonesJson'));
     }
 
     public function update(Request $request, $id)
@@ -644,7 +639,7 @@ class UserSongController extends Controller
                 ->withProperties(['ip' => request()->ip()])
                 ->log(Auth::user()->name . ' deleted a song');
 
-            return redirect()->route('users.songs.index')->with('success', 'Song successfully deleted.');
+            return redirect()->route('user.songs.index')->with('success', 'Song successfully deleted.');
         } catch (\Exception $e) {
             DB::rollBack();
 

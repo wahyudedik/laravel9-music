@@ -304,7 +304,7 @@
                                                 $filename = $smallCoverFile ? basename($smallCoverFile) : null;
 
                                                 // Generate image URL via route
-                                                $imageUrl = $filename ? route('songs.image', ['filename' => $filename]) : 'https://via.placeholder.com/40';
+                                                $imageUrl = $filename ? route('user.songs.image', ['filename' => $filename]) : 'https://via.placeholder.com/40';
                                             @endphp
 
                                             <img src="{{ $imageUrl }}" class="rounded" width="100"
@@ -566,7 +566,7 @@
                         </div>
                         <div class="card-footer text-end">
                             <div class="d-flex">
-                                <a href="{{ route('songs.index') }}" class="btn btn-link">Cancel</a>
+                                <a href="{{ route('user.songs.index') }}" class="btn btn-link">Cancel</a>
                                 <button type="submit" class="btn btn-primary ms-auto">
                                     <i class="ti ti-device-floppy me-2"></i>Update Song
                                 </button>
@@ -706,7 +706,7 @@
 
             // Step 2: Fetch and merge new data (like search results)
             $.ajax({
-                url: "/admin/data/composers",
+                url: "/user/data/composers",
                 type: "GET",
                 data: {
                     search: search,
@@ -731,7 +731,7 @@
         }
 
         function fetchCity(selector, selectedLocalZone) {
-            fetch('/admin/data/cities')
+            fetch('/user/data/cities')
                 .then(response => response.json())
                 .then(data => {
                     let select = document.querySelector(selector);

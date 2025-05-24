@@ -131,15 +131,11 @@
 
                             @foreach ($songs as $song)
                                 @php
-                                    // Extract filename from the 3rd image variant (small)
+
                                     $coverImages = explode(',', $song->cover_image ?? '');
                                     $smallCoverFile = $coverImages[2] ?? null;
-
-                                    // Get just the filename from the path (e.g. "cover_abc_sm.jpeg")
                                     $filename = $smallCoverFile ? basename($smallCoverFile) : null;
-
-                                    // Generate image URL via route
-                                    $imageUrl = $filename ? route('songs.image', ['filename' => $filename]) : 'https://via.placeholder.com/40';
+                                    $imageUrl = $filename ? route('user.songs.image', ['filename' => $filename]) : 'https://via.placeholder.com/40';
                                 @endphp
 
                                 <tr class="song-row" data-album="{{ $song->album->title ?? '-' }}"
