@@ -705,10 +705,9 @@
                                         <h4 class="mb-3">My Uploads (Composer)</h4>
 
                                         <div class="d-flex mb-3">
-                                            <button class="btn btn-primary">
+                                            {{-- <button class="btn btn-primary">
                                                 <i class="ti ti-upload me-2"></i>Upload New Song
-                                            </button>
-
+                                            </button> --}}
                                             <div class="ms-auto">
                                                 <div class="input-icon">
                                                     <span class="input-icon-addon">
@@ -742,45 +741,51 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    @php
-                                                        $genres = ['Pop', 'Rock', 'Hip Hop', 'R&B', 'Jazz', 'Electronic', 'Classical'];
-                                                        $statuses = ['Published', 'Draft', 'Pending Review'];
-                                                        $licenses = ['Standard', 'Premium', 'Exclusive'];
-                                                    @endphp
-
-                                                    @for ($i = 1; $i <= 5; $i++)
+                                                    @foreach ($uploadedsongs as $uploadsongs)
+                                                        @php
+                                                            $coverImages = explode(',', $uploadsongs->cover_image ?? '');
+                                                            $smallCoverFile = $coverImages[2] ?? null;
+                                                            $filename = $smallCoverFile ? basename($smallCoverFile) : null;
+                                                            $imageUrl = $filename ? route('user.songs.image', ['filename' => $filename]) : 'https://via.placeholder.com/40';
+                                                        @endphp
                                                         <tr>
                                                             <td>
                                                                 <div class="d-flex align-items-center">
                                                                     <span class="avatar me-2"
-                                                                        style="background-image: url(https://picsum.photos/40/40?random={{ $i + 50 }})"></span>
+                                                                        style="background-image: url('{{ $imageUrl }}')"></span>
                                                                     <div>
-                                                                        <div class="font-weight-medium">Composed Song
-                                                                            {{ $i }}</div>
+                                                                        <div class="font-weight-medium">
+                                                                            {{ $uploadsongs->title }}
+                                                                        </div>
                                                                         <div class="text-muted">
-                                                                            {{ rand(1, 5) }}:{{ sprintf('%02d', rand(0, 59)) }}
+                                                                            {{ $uploadsongs->creator->name ?? 'Unknown Composer' }}
                                                                         </div>
                                                                     </div>
                                                                 </div>
                                                             </td>
-                                                            <td>{{ $genres[array_rand($genres)] }}</td>
-                                                            <td>{{ now()->subDays(rand(1, 60))->format('M d, Y') }}</td>
+                                                            <td>{{ $uploadsongs->genre->name }}</td>
+                                                            <td>{{ $uploadsongs->created_at->format('M d, Y') }}</td>
+
                                                             <td>
                                                                 @php
-                                                                    $status = $statuses[array_rand($statuses)];
-                                                                    $statusClass = [
-                                                                        'Published' => 'bg-success',
-                                                                        'Draft' => 'bg-secondary',
-                                                                        'Pending Review' => 'bg-warning',
-                                                                    ][$status];
+
+                                                                    $status = $uploadsongs->license_status ?? 'Draft';
+                                                                    $statusClass =
+                                                                        [
+                                                                            'Active' => 'bg-success',
+                                                                            'Pending' => 'bg-warning',
+                                                                            'Published' => 'bg-primary',
+                                                                            'Draft' => 'bg-secondary',
+                                                                        ][$status] ?? 'bg-secondary';
                                                                 @endphp
                                                                 <span
                                                                     class="badge {{ $statusClass }}">{{ $status }}</span>
                                                             </td>
                                                             <td>
                                                                 @php
-                                                                    $license = $licenses[array_rand($licenses)];
+                                                                    $license = $uploadsongs->license_type ?? 'Free';
                                                                     $licenseClass = [
+                                                                        'Free' => 'bg-green-lt',
                                                                         'Standard' => 'bg-blue-lt',
                                                                         'Premium' => 'bg-purple-lt',
                                                                         'Exclusive' => 'bg-gold-lt',
@@ -796,6 +801,8 @@
                                                                     {{ rand(0, 50) }}
                                                                 </div>
                                                             </td>
+
+
                                                             <td>
                                                                 <div class="btn-list flex-nowrap">
                                                                     <button class="btn btn-icon btn-sm btn-primary"
@@ -809,7 +816,8 @@
                                                                             <i class="ti ti-dots-vertical"></i>
                                                                         </button>
                                                                         <div class="dropdown-menu dropdown-menu-end">
-                                                                            <a href="#" class="dropdown-item">
+                                                                            <a href="{{ route('user.songs.edit', $uploadsongs->id) }}"
+                                                                                class="dropdown-item">
                                                                                 <i class="ti ti-edit me-2"></i>Edit
                                                                             </a>
                                                                             <a href="#" class="dropdown-item">
@@ -821,16 +829,25 @@
                                                                                 Stats
                                                                             </a>
                                                                             <div class="dropdown-divider"></div>
-                                                                            <a href="#"
-                                                                                class="dropdown-item text-danger">
+                                                                            <a href="javascript:void(0)"
+                                                                                class="dropdown-item text-danger delete-song"
+                                                                                onclick="confirmDelete('{{ $uploadsongs->id }}')"
+                                                                                data-id="{{ $uploadsongs->id }}">
                                                                                 <i class="ti ti-trash me-2"></i>Delete
                                                                             </a>
+                                                                            <form id="delete-song-{{ $uploadsongs->id }}"
+                                                                                action="{{ route('user.songs.destroy', $uploadsongs->id) }}"
+                                                                                method="POST" style="display: none;">
+                                                                                #
+                                                                                @csrf
+                                                                                @method('DELETE')
+                                                                            </form>
                                                                         </div>
                                                                     </div>
                                                                 </div>
                                                             </td>
                                                         </tr>
-                                                    @endfor
+                                                    @endforeach
                                                 </tbody>
                                             </table>
                                         </div>

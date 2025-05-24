@@ -123,8 +123,9 @@ class UserController extends Controller
         $user = Auth::user();
 
         $songs = SongContributor::where('user_id', $user->id)->with('song', 'user')->get();
+        $uploadedsongs = Song::where('created_by', $user->id)->with('genre', 'creator')->get();
 
-        return view('users.profile.my-assets', compact('user', 'songs'));
+        return view('users.profile.my-assets', compact('user', 'songs', 'uploadedsongs'));
     }
 
     public function updateProfile(Request $request)

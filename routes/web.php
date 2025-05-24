@@ -260,14 +260,10 @@ Route::middleware(['auth', 'role:User,Cover Creator,Artist,Composer', 'verified'
     Route::get('/profile/edit', [UserController::class, 'editProfile'])->name('profile.edit');
     Route::post('/profile/update', [UserController::class, 'updateProfile'])->name('user.profile.update');
     Route::post('/profile/change-password', [UserController::class, 'changePassword'])->name('user.change-password');
-    Route::post('/profile/social-media/update', [UserController::class, 'updateSocialMedia'])->name('user.socialmedia.update'); // Route baru untuk media sosial
+    Route::post('/profile/social-media/update', [UserController::class, 'updateSocialMedia'])->name('user.socialmedia.update');
 
 
     Route::get('/profile/my-assets', [UserController::class, 'myAssets'])->name('user.profile.my-assets');
-
-    // Route::get('/profile/my-assets', function () {
-    //     return view('users.profile.my-assets');
-    // })->name('profile.my-assets');
 
     Route::get('/profile/my-assets/purchased', function () {
         return view('users.profile.purchased-songs');

@@ -112,4 +112,9 @@ class Song extends Model
     {
         return $this->hasMany(SongLink::class, 'song_id');
     }
+
+    public function creator()
+    {
+        return $this->belongsTo(User::class, 'created_by'); // 'created_by' adalah foreign key di tabel songs
+    }
 }
